@@ -2,15 +2,12 @@ package com.yasinkacmaz.playground.application
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-object UtilityModule  {
-    @Provides
-    @Singleton
-    fun provideGson(): Gson {
-        return GsonBuilder().setLenient().create()
+val utilityModule = module {
+    single<Gson> {
+        GsonBuilder()
+            .setLenient()
+            .create()
     }
 }

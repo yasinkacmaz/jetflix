@@ -23,9 +23,9 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
-//  kotlinOptions {
-//    jvmTarget = "1.8"
-//  }
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
 
   buildFeatures {
     // Enables Jetpack Compose for this module
@@ -55,7 +55,7 @@ kapt {
   correctErrorTypes = true
 }
 
-def daggerVersion="2.25.2"
+def koinVersion="2.0.1"
 def retrofitVersion="2.6.2"
 def lifecycleVersion="2.1.0"
 
@@ -75,12 +75,10 @@ dependencies {
   implementation 'androidx.ui:ui-layout:0.1.0-dev02'
   implementation 'androidx.ui:ui-material:0.1.0-dev02'
 
-  // dagger
-  implementation "com.google.dagger:dagger:$daggerVersion"
-  implementation "com.google.dagger:dagger-android:$daggerVersion"
-  implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-  kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-  kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+  // koin
+  implementation "org.koin:koin-android:$koinVersion"
+  implementation "org.koin:koin-android-scope:$koinVersion"
+  implementation "org.koin:koin-android-viewmodel:$koinVersion"
 
   // network
   implementation "com.squareup.okhttp3:okhttp:4.2.2"

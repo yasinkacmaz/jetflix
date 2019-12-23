@@ -1,19 +1,17 @@
 package com.yasinkacmaz.playground.application
 
 import android.app.Application
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import javax.inject.Inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
-class PlaygroundApplication : Application(), HasAndroidInjector {
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
+class PlaygroundApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        DaggerApplicationComponent.
+        startKoin {
+            androidLogger()
+            androidContext(this@PlaygroundApplication)
+            modules(listOf(netWorkModule, utilityModule))
+        }
     }
-
-    override fun androidInjector(): AndroidInjector<Any> = androidInjector
 }
