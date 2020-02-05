@@ -14,9 +14,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         print(mainViewModel)
         setContent {
-            PlaygroundTheme {
-                Text("Hello World")
-            }
+            Text("Hello World")
         }
     }
 }

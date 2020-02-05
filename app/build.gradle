@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion 29
-  buildToolsVersion "29.0.2"
+  buildToolsVersion "29.0.3"
 
   defaultConfig {
     applicationId "com.yasinkacmaz.playground"
@@ -56,8 +56,8 @@ kapt {
 }
 
 def koinVersion="2.0.1"
-def retrofitVersion="2.6.2"
-def lifecycleVersion="2.1.0"
+def lifecycleVersion="2.2.0"
+def fuelVersion="2.2.1"
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -81,9 +81,9 @@ dependencies {
   implementation "org.koin:koin-android-viewmodel:$koinVersion"
 
   // network
-  implementation "com.squareup.okhttp3:okhttp:4.2.2"
-  implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-  implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+  implementation "com.github.kittinunf.fuel:fuel:$fuelVersion"
+  implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
+  implementation "com.github.kittinunf.fuel:fuel-gson:$fuelVersion"
 
   // io
   implementation "com.google.code.gson:gson:2.8.6"
