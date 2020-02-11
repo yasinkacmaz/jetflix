@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion 29
-  buildToolsVersion "29.0.2"
+  buildToolsVersion "29.0.3"
 
   defaultConfig {
     applicationId "com.yasinkacmaz.playground"
@@ -25,6 +25,11 @@ android {
 
   kotlinOptions {
     jvmTarget = "1.8"
+  }
+
+  composeOptions {
+    kotlinCompilerVersion "1.3.61-dev-withExperimentalGoogleExtensions-20200129"
+    kotlinCompilerExtensionVersion "0.1.0-dev04"
   }
 
   buildFeatures {
@@ -55,9 +60,10 @@ kapt {
   correctErrorTypes = true
 }
 
-def koinVersion="2.0.1"
-def retrofitVersion="2.6.2"
-def lifecycleVersion="2.1.0"
+def daggerVersion = "2.26"
+def retrofitVersion = "2.7.1"
+def lifecycleVersion = "2.2.0"
+def composeVersion = "0.1.0-dev04"
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -71,17 +77,18 @@ dependencies {
   implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
 
   // compose
-  implementation 'androidx.ui:ui-tooling:0.1.0-dev02'
-  implementation 'androidx.ui:ui-layout:0.1.0-dev02'
-  implementation 'androidx.ui:ui-material:0.1.0-dev02'
+  implementation "androidx.ui:ui-tooling:$composeVersion"
+  implementation "androidx.ui:ui-layout:$composeVersion"
+  implementation "androidx.ui:ui-material:$composeVersion"
 
-  // koin
-  implementation "org.koin:koin-android:$koinVersion"
-  implementation "org.koin:koin-android-scope:$koinVersion"
-  implementation "org.koin:koin-android-viewmodel:$koinVersion"
+  // dagger
+  implementation "com.google.dagger:dagger:$daggerVersion"
+  kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+  implementation "com.google.dagger:dagger-android:$daggerVersion"
+  kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
   // network
-  implementation "com.squareup.okhttp3:okhttp:4.2.2"
+  implementation "com.squareup.okhttp3:okhttp:4.3.1"
   implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
   implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
@@ -89,7 +96,7 @@ dependencies {
   implementation "com.google.code.gson:gson:2.8.6"
 
   // test
-  testImplementation 'junit:junit:4.12'
+  testImplementation 'junit:junit:4.13'
   androidTestImplementation 'androidx.test.ext:junit:1.1.1'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
