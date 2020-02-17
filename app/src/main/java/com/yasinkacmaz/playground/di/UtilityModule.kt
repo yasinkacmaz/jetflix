@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.di.module
+package com.yasinkacmaz.playground.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

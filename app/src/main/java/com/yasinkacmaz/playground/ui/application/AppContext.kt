@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.di
+package com.yasinkacmaz.playground.ui.application
 
 import javax.inject.Qualifier
 

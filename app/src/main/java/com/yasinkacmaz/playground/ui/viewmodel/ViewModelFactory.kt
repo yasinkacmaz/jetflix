@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.viewmodel
+package com.yasinkacmaz.playground.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

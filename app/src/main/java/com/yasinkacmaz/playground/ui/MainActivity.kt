@@ -1,11 +1,11 @@
-package com.yasinkacmaz.playground
+package com.yasinkacmaz.playground.ui
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.ui.core.Text
 import androidx.ui.core.setContent
-import com.yasinkacmaz.playground.activity.BaseActivity
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     //private val mainViewModel: MainViewModel by viewModel()
 

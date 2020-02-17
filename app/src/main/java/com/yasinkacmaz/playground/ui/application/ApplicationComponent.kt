@@ -1,8 +1,8 @@
-package com.yasinkacmaz.playground.application
+package com.yasinkacmaz.playground.ui.application
 
-import com.yasinkacmaz.playground.di.module.NetworkModule
-import com.yasinkacmaz.playground.di.module.UtilityModule
-import com.yasinkacmaz.playground.viewmodel.ViewModelModule
+import com.yasinkacmaz.playground.di.NetworkModule
+import com.yasinkacmaz.playground.di.UtilityModule
+import com.yasinkacmaz.playground.ui.viewmodel.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
