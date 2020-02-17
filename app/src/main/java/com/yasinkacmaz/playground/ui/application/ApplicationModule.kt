@@ -1,7 +1,6 @@
-package com.yasinkacmaz.playground.application
+package com.yasinkacmaz.playground.ui.application
 
 import android.content.Context
-import com.yasinkacmaz.playground.di.AppContext
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
