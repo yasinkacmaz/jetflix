@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.api
+package com.yasinkacmaz.playground.service
 
 import com.yasinkacmaz.playground.data.MoviesResponse
 import retrofit2.http.GET
