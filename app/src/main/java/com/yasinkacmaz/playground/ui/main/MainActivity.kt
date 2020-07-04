@@ -1,26 +1,26 @@
-package com.yasinkacmaz.playground.ui
+package com.yasinkacmaz.playground.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Text
 import com.yasinkacmaz.playground.data.Movie
-import dagger.android.AndroidInjection
+import com.yasinkacmaz.playground.service.MovieService
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+   private val mainViewModel: MainViewModel by viewModels()
 
-    private val mainViewModel: MainViewModel by viewModels { viewModelFactory }
+    @Inject
+    lateinit var movieService: MovieService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidInjection.inject(this)
         observeViewModel()
         mainViewModel.fetchMovies()
     }

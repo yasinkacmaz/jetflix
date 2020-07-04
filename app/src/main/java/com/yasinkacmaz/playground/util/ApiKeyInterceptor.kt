@@ -3,9 +3,8 @@ package com.yasinkacmaz.playground.util
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
 import okhttp3.Response
-import javax.inject.Inject
 
-class ApiKeyInterceptor @Inject constructor(private val apiKey: String) : Interceptor {
+class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
     override fun intercept(chain: Chain): Response {
         val request = chain.request()
         val url = request.url.newBuilder().addQueryParameter(API_KEY, apiKey).build()

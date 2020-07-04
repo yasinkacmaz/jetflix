@@ -1,24 +1,29 @@
-package com.yasinkacmaz.playground.di
+package com.yasinkacmaz.playground.module
 
 import android.content.Context
 import com.google.gson.Gson
 import com.yasinkacmaz.playground.R
-import com.yasinkacmaz.playground.api.MovieService
-import com.yasinkacmaz.playground.ui.application.AppContext
+import com.yasinkacmaz.playground.service.MovieService
 import com.yasinkacmaz.playground.util.ApiKeyInterceptor
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
+private const val BASE_URL = "https://api.themoviedb.org/3/"
+
 @Module
-class NetworkModule {
+@InstallIn(ApplicationComponent::class)
+object NetworkModule {
     @Provides
     @Singleton
-    fun provideApiKeyInterceptor(@AppContext context: Context): ApiKeyInterceptor {
+    fun provideApiKeyInterceptor(@ApplicationContext context: Context): ApiKeyInterceptor {
         return ApiKeyInterceptor(context.getString(R.string.api_key))
     }
 
@@ -43,8 +48,4 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideMovieService(retrofit: Retrofit): MovieService = retrofit.create()
-
-    companion object {
-        private const val BASE_URL = "https://api.themoviedb.org/3/"
-    }
 }
