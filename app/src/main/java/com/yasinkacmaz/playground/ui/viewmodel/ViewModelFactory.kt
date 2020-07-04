@@ -8,12 +8,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ViewModelFactory @Inject constructor(
-    private val viewModels: Map<Class<out ViewModel>, Provider<ViewModel>>
+    private val viewModels: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return requireNotNull(viewModels[modelClass]?.get() as T) {
-            "unable to find ViewModel for class ${modelClass.javaClass.name}"
-        }
-    }
+    override fun <T : ViewModel> create(modelClass: Class<T>) = viewModels[modelClass]?.get() as T
 }

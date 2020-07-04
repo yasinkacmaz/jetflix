@@ -2,6 +2,7 @@ package com.yasinkacmaz.playground.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.yasinkacmaz.playground.ui.MainViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -10,8 +11,9 @@ import dagger.multibindings.IntoMap
 interface ViewModelModule  {
     @Binds
     @IntoMap
-    @ViewModelKey(BaseViewModel::class)
-    fun bindBaseViewModel(baseViewModel: BaseViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
 
+    @Binds
     fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
