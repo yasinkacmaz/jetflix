@@ -1,6 +1,7 @@
 package com.yasinkacmaz.playground.ui.application
 
 import com.yasinkacmaz.playground.di.NetworkModule
+import com.yasinkacmaz.playground.di.ServiceModule
 import com.yasinkacmaz.playground.di.UtilityModule
 import com.yasinkacmaz.playground.ui.viewmodel.ViewModelModule
 import dagger.BindsInstance
@@ -11,8 +12,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        ApplicationModule::class, AndroidInjectionModule::class, ViewModelModule::class, NetworkModule::class,
-        UtilityModule::class
+        ApplicationModule::class, AndroidInjectionModule::class, ActivityModule::class,
+        ViewModelModule::class, NetworkModule::class, ServiceModule::class, UtilityModule::class
     ]
 )
 interface ApplicationComponent {

@@ -1,7 +1,10 @@
 package com.yasinkacmaz.playground.di
 
+import android.content.Context
 import com.google.gson.Gson
+import com.yasinkacmaz.playground.R
 import com.yasinkacmaz.playground.api.MovieService
+import com.yasinkacmaz.playground.ui.application.AppContext
 import com.yasinkacmaz.playground.util.ApiKeyInterceptor
 import dagger.Module
 import dagger.Provides
@@ -13,6 +16,12 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
+    @Provides
+    @Singleton
+    fun provideApiKeyInterceptor(@AppContext context: Context): ApiKeyInterceptor {
+        return ApiKeyInterceptor(context.getString(R.string.api_key))
+    }
+
     @Provides
     @Singleton
     fun provideOkHttpClient(apiKeyInterceptor: ApiKeyInterceptor): OkHttpClient {
