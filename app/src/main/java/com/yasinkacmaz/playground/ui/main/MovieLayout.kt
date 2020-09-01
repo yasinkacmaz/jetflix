@@ -1,5 +1,6 @@
 package com.yasinkacmaz.playground.ui.main
 
+import androidx.compose.foundation.Box
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
@@ -22,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,19 +34,31 @@ import com.yasinkacmaz.playground.data.Movie
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
+fun Movies(movies: List<Movie>) {
+    LazyColumnFor(items = movies, modifier = Modifier) { movie ->
+        Box(modifier = Modifier.padding(8.dp)) {
+            MovieLayout(movie)
+        }
+    }
+}
+
+@Composable
 fun MovieLayout(movie: Movie) {
-    Stack(modifier = Modifier.width(160.dp).height(213.dp)) {
+    Stack(modifier = Modifier.width(200.dp).height(300.dp)) {
         MovieRate(movie.voteAverage, modifier = Modifier.gravity(Companion.TopCenter))
-        Card(modifier = Modifier.width(160.dp).height(213.dp).offset(y = 8.dp), elevation = 4.dp) {
+        Card(
+            modifier = Modifier.fillMaxSize().offset(y = 8.dp),
+            shape = RoundedCornerShape(size = 6.dp),
+            elevation = 8.dp
+        ) {
             Stack {
                 MoviePoster(movie.posterPath.orEmpty())
                 MovieName(
                     name = movie.name,
-                    modifier = Modifier.gravity(Alignment.BottomStart).fillMaxWidth()
+                    modifier = Modifier.gravity(Alignment.BottomCenter).fillMaxWidth()
                 )
             }
         }
-
     }
 }
 
@@ -66,14 +81,14 @@ fun MoviePoster(posterPath: String) {
 @Composable
 fun MovieRate(rate: Double, modifier: Modifier) {
     Surface(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(10.dp),
         color = Color(255, 177, 10),
-        elevation = 8.dp,
+        elevation = 12.dp,
         modifier = modifier
     ) {
         Text(
             text = rate.toString(),
-            style = TextStyle(fontSize = 12.sp),
+            style = TextStyle(fontSize = 14.sp),
             color = Color.White,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 1.dp)
         )
@@ -82,17 +97,19 @@ fun MovieRate(rate: Double, modifier: Modifier) {
 
 @Composable
 fun MovieName(name: String, modifier: Modifier) {
-    Surface(color = Color(0x66000000), modifier = modifier) {
+    Surface(color = Color(0x78000000), modifier = modifier) {
         Text(
             text = name,
             style = TextStyle(
                 color = Color.White,
                 fontSize = 14.sp,
-                letterSpacing = 3.sp,
-                fontFamily = FontFamily.SansSerif
+                letterSpacing = 2.sp,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.W400
             ),
-            overflow = TextOverflow.Clip,
-            maxLines = 1
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
     }
 }

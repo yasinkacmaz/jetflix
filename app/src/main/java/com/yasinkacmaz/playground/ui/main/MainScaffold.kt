@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.playground.R
 
 @Composable
-fun topAppBar() {
+fun TopAppBar() {
     TopAppBar(
         title = {
             Text(
@@ -52,7 +52,7 @@ private fun TopAppBarIcon(@DrawableRes id: Int) {
 }
 
 @Composable
-fun bottomNavigation() {
+fun BottomNavigation() {
     BottomNavigation {
         BottomNavigationTab(R.drawable.ic_movie)
         BottomNavigationTab(R.drawable.ic_search)
