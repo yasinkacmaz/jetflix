@@ -1,28 +1,38 @@
 package com.yasinkacmaz.playground.ui.main
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinkacmaz.playground.service.MovieService
 import com.yasinkacmaz.playground.data.Movie
+import com.yasinkacmaz.playground.service.MovieService
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModel @ViewModelInject constructor(private val movieService: MovieService) : ViewModel() {
 
-    val movies = MutableLiveData<List<Movie>>()
-    val showLoading = MutableLiveData<Boolean>()
+    val uiState = MutableStateFlow(UiState())
+
+    private val uiValue get() = uiState.value
 
     fun fetchMovies() {
         viewModelScope.launch {
-            showLoading.value = true
+            uiState.value = uiValue.copy(loading = true)
             try {
-            movies.value = movieService.fetchPopularMovies(1).movies
+                val movies =
+                    movieService.fetchPopularMovies(1).movies.map { it.copy(posterPath = "https://image.tmdb.org/t/p/w342${it.posterPath.orEmpty()}") }
+                uiState.value = uiValue.copy(movies = movies)
             } catch (exception: Exception) {
-                // TODO show error dialog l8r
+                uiState.value = uiValue.copy(error = exception)
             }
-            showLoading.value = false
+            uiState.value = uiValue.copy(loading = false)
         }
     }
+
+    data class UiState(
+        val movies: List<Movie> = listOf(),
+        val loading: Boolean = false,
+        val error: Throwable? = null
+    )
 }
