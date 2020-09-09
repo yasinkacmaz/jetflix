@@ -3,25 +3,23 @@ package com.yasinkacmaz.playground.ui.main
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Switch
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle.Normal
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign.Center
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.playground.R
 
 @Composable
-fun TopAppBar() {
+fun TopAppBar(initialTheme: Boolean, onThemeChanged: (Boolean) -> Unit) {
     TopAppBar(
         title = {
             Text(
@@ -35,20 +33,15 @@ fun TopAppBar() {
             )
         },
         actions = {
-            TopAppBarIcon(R.drawable.ic_movie)
-            TopAppBarIcon(R.drawable.ic_search)
-            TopAppBarIcon(R.drawable.ic_toys)
-        },
-        backgroundColor = Color.White
+            ChangeTheme(initialTheme, onThemeChanged)
+        }
     )
 }
 
 @Composable
-private fun TopAppBarIcon(@DrawableRes id: Int) {
-    Icon(
-        asset = vectorResource(id = id),
-        modifier = Modifier.padding(start = 8.dp, end = 10.dp)
-    )
+private fun ChangeTheme(initialTheme: Boolean, onThemeChanged: (Boolean) -> Unit) {
+    Text(text = stringResource(id = R.string.change_theme))
+    Switch(checked = initialTheme, onCheckedChange = onThemeChanged)
 }
 
 @Composable

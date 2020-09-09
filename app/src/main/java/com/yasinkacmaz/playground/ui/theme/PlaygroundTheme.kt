@@ -7,10 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val lightThemeColors = lightColors(
-    primary = Color(0xFF855446),
-    primaryVariant = Color(0xFF9C684B),
-    secondary = Color(0xFF03DAC5),
-    secondaryVariant = Color(0xFF0AC9F0),
+    primary = Color(0xFFE50914),
+    primaryVariant = Color(0xFF7D0A10),
+    secondary = Color(0xFFD9D4D5),
+    secondaryVariant = Color(0xFFB8B0B2),
     background = Color.White,
     surface = Color.White,
     error = Color(0xFFB00020),
@@ -22,9 +22,9 @@ val lightThemeColors = lightColors(
 )
 
 val darkThemeColors = darkColors(
-    primary = Color(0xFF1F1F1F),
-    primaryVariant = Color(0xFF3E2723),
-    secondary = Color(0xFF03DAC5),
+    primary = Color(0xFF6441A5),
+    primaryVariant = Color(0xFF4C327D),
+    secondary = Color(0xFFA429BA),
     background = Color(0xFF121212),
     surface = Color.Black,
     error = Color(0xFFCF6679),
@@ -36,5 +36,7 @@ val darkThemeColors = darkColors(
 )
 
 @Composable
-fun PlayGroundTheme(isDarkTheme: Boolean = false, content: @Composable () -> Unit) =
-    MaterialTheme(colors = if (isDarkTheme) darkThemeColors else lightThemeColors, content = content)
+fun PlayGroundTheme(isDarkTheme: Boolean = false, content: @Composable () -> Unit) {
+    val colors = if (isDarkTheme) darkThemeColors else lightThemeColors
+    MaterialTheme(colors = colors, content = content)
+}
