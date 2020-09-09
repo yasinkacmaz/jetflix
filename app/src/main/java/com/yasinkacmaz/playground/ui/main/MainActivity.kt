@@ -14,6 +14,8 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
@@ -38,10 +40,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderUi() {
         setContent {
-            PlayGroundTheme {
+            val isDarkTheme = remember { mutableStateOf(false) }
+            PlayGroundTheme(isDarkTheme = isDarkTheme.value) {
                 Scaffold(
                     topBar = {
-                        TopAppBar()
+                        TopAppBar(isDarkTheme.value) {
+                            isDarkTheme.value = it
+                        }
                     },
                     bottomBar = {
                         BottomNavigation()
