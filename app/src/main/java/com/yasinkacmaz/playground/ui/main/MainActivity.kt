@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.playground.R
+import com.yasinkacmaz.playground.ui.main.movie.MovieList
 import com.yasinkacmaz.playground.ui.theme.PlayGroundTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         if (uiState.loading) {
             Loading()
         } else {
-            Movies(uiState.movies)
+            MovieList(uiState.movies)
         }
     }
 
