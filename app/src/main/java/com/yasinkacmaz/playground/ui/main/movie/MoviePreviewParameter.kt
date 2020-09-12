@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.ui.main
+package com.yasinkacmaz.playground.ui.main.movie
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -8,7 +8,7 @@ import androidx.ui.tooling.preview.PreviewParameterProvider
 import androidx.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import com.yasinkacmaz.playground.data.Movie
 
-val fakeMovie = Movie("", "", "", "", "", 9.24, 1337)
+val fakeMovie = Movie("01.03.1337", "Movie Name", "", "", "", 9.24, 1337)
 
 class MovieProvider : PreviewParameterProvider<Movie> {
     override val values: Sequence<Movie>
@@ -21,7 +21,7 @@ class MovieProvider : PreviewParameterProvider<Movie> {
 @Preview(group = "Series")
 fun Series(@PreviewParameter(MovieProvider::class) movie: Movie) {
     MaterialTheme {
-        MovieLayout(movie)
+        MovieItem(movie)
     }
 }
 
@@ -35,6 +35,6 @@ class MovieCollectionProvider : CollectionPreviewParameterProvider<Movie>(
 @Preview(group = "Films")
 fun Films(@PreviewParameter(MovieCollectionProvider::class) movie: Movie) {
     MaterialTheme {
-        MovieLayout(movie)
+        MovieItem(movie)
     }
 }
