@@ -19,25 +19,57 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextOverflow.Ellipsis
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.viewModel
 import androidx.ui.tooling.preview.Preview
-import com.yasinkacmaz.playground.R
+import com.yasinkacmaz.playground.R.drawable
+import com.yasinkacmaz.playground.R.string
+import com.yasinkacmaz.playground.data.Genre
 import com.yasinkacmaz.playground.data.Movie
+import com.yasinkacmaz.playground.ui.main.MoviesViewModel
+import com.yasinkacmaz.playground.ui.main.common.ErrorContent
+import com.yasinkacmaz.playground.ui.main.common.Loading
 import com.yasinkacmaz.playground.ui.widget.SpacedColumn
+import com.yasinkacmaz.playground.util.toPosterUrl
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@Composable
+fun Movies(genre: Genre) {
+    val moviesViewModel: MoviesViewModel = viewModel(key = genre.id.toString())
+    val movieUiState = moviesViewModel.uiState.collectAsState().value
+    if (movieUiState.shouldFetchMovies()) {
+        moviesViewModel.fetchMovies(genre.id)
+    }
+    when {
+        movieUiState.loading -> {
+            val title = stringResource(id = string.fetching_movies, genre.name)
+            Loading(title)
+        }
+        movieUiState.error != null -> {
+            ErrorContent(movieUiState.error.message.orEmpty())
+        }
+        movieUiState.movies.isNotEmpty() -> {
+            LazyMovies(movieUiState.movies)
+        }
+    }
+}
 
 @Composable
-fun MovieList(movies: List<Movie>) {
+fun LazyMovies(movies: List<Movie>) {
     LazyColumnFor(items = movies, modifier = Modifier.fillMaxWidth(0.5f)) { movie ->
         MovieItem(movie)
     }
@@ -53,7 +85,7 @@ fun MovieItem(movie: Movie) {
             elevation = 8.dp
         ) {
             Stack {
-                MoviePoster(movie.posterPath.orEmpty())
+                MoviePoster(movie.posterPath.orEmpty().toPosterUrl())
                 MovieInfo(
                     movie,
                     modifier = Modifier.gravity(Alignment.BottomCenter).fillMaxWidth()
@@ -71,7 +103,7 @@ fun MoviePoster(posterPath: String) {
         modifier = Modifier.fillMaxSize(),
         loading = {
             Icon(
-                asset = vectorResource(id = R.drawable.ic_movie),
+                asset = vectorResource(id = drawable.ic_movie),
                 tint = Color.DarkGray,
                 modifier = Modifier.background(color = Color.LightGray).fillMaxSize()
             )
@@ -102,8 +134,8 @@ fun MovieInfo(movie: Movie, modifier: Modifier) {
         SpacedColumn(spaceBetween = 8.dp, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
             MovieName(name = movie.name)
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                MovieFeature(R.drawable.ic_date, movie.firstAirDate)
-                MovieFeature(R.drawable.ic_thumb_up, movie.voteCount.toString())
+                MovieFeature(drawable.ic_date, movie.firstAirDate.orEmpty())
+                MovieFeature(drawable.ic_thumb_up, movie.voteCount.toString())
             }
         }
     }
@@ -140,7 +172,7 @@ fun MovieFeature(@DrawableRes iconResId: Int, field: String) {
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.W400
             ),
-            overflow = TextOverflow.Ellipsis,
+            overflow = Ellipsis,
             maxLines = 1,
             modifier = Modifier.padding(horizontal = 4.dp)
         )

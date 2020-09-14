@@ -8,7 +8,7 @@ import androidx.ui.tooling.preview.PreviewParameterProvider
 import androidx.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import com.yasinkacmaz.playground.data.Movie
 
-val fakeMovie = Movie("01.03.1337", "Movie Name", "", "", "", 9.24, 1337)
+val fakeMovie = Movie("01.03.1337", "Movie Name", "", "", "","", 9.24, 1337)
 
 class MovieProvider : PreviewParameterProvider<Movie> {
     override val values: Sequence<Movie>
