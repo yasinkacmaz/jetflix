@@ -1,6 +1,7 @@
 <resources>
   <string name="app_name">Playground</string>
   <string name="api_key">5d967c7c335764f39b1efbe9c5de9760</string>
-  <string name="fetching_movies">Fetching Movies</string>
+  <string name="fetching_genres">Fetching Movie Genres</string>
+  <string name="fetching_movies">Fetching %1$s Movies</string>
   <string name="change_theme">Change Theme</string>
 </resources>
