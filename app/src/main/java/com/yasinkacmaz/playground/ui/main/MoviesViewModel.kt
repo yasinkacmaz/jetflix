@@ -10,8 +10,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class MoviesViewModel @ViewModelInject constructor(private val movieService: MovieService) : ViewModel() {
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalStdlibApi::class)
+class MoviesViewModel @ViewModelInject constructor(private val movieService: MovieService) :
+    ViewModel() {
 
     val uiState = MutableStateFlow(MovieUiState())
     private val uiValue get() = uiState.value
@@ -20,7 +21,11 @@ class MoviesViewModel @ViewModelInject constructor(private val movieService: Mov
         viewModelScope.launch {
             uiState.value = uiValue.copy(loading = true)
             try {
-                val movies = movieService.fetchMovies(genreId, 1).movies
+                val movies = buildList {
+                    repeat(4) {
+                        addAll(fetchMovies(genreId, it + 1))
+                    }
+                }.sortedByDescending(Movie::voteCount).toMoviePairs()
                 delay(1000)
                 uiState.value = uiValue.copy(movies = movies, fetchMovies = false)
             } catch (exception: Exception) {
@@ -30,9 +35,20 @@ class MoviesViewModel @ViewModelInject constructor(private val movieService: Mov
         }
     }
 
+    private fun List<Movie>.toMoviePairs(): List<Pair<Movie, Movie>> = buildList {
+        for (index in this@toMoviePairs.indices.step(2)) {
+            add(this@toMoviePairs[index] to this@toMoviePairs[index + 1])
+        }
+    }
+
+    private suspend fun fetchMovies(
+        genreId: Int,
+        page: Int
+    ) = movieService.fetchMovies(genreId, page).movies
+
     data class MovieUiState(
         val fetchMovies: Boolean = true,
-        val movies: List<Movie> = listOf(),
+        val movies: List<Pair<Movie, Movie>> = listOf(),
         val loading: Boolean = false,
         val error: Throwable? = null
     ) {

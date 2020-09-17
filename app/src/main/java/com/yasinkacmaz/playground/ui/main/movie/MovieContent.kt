@@ -5,15 +5,7 @@ import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Stack
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -63,21 +55,31 @@ fun Movies(genre: Genre) {
             ErrorContent(movieUiState.error.message.orEmpty())
         }
         movieUiState.movies.isNotEmpty() -> {
-            LazyMovies(movieUiState.movies)
+            LazyMoviesGrid(movieUiState.movies)
         }
     }
 }
 
 @Composable
-fun LazyMovies(movies: List<Movie>) {
-    LazyColumnFor(items = movies, modifier = Modifier.fillMaxWidth(0.5f)) { movie ->
-        MovieItem(movie)
+fun LazyMoviesGrid(movies: List<Pair<Movie, Movie>>) {
+    LazyColumnFor(items = movies) { (firstMovie, secondMovie) ->
+        MovieRow(firstMovie, secondMovie)
     }
 }
 
 @Composable
-fun MovieItem(movie: Movie) {
-    Stack(modifier = Modifier.fillMaxWidth().height(300.dp).padding(8.dp)) {
+fun MovieRow(firstMovie: Movie, secondMovie: Movie) {
+    Row(modifier = Modifier.padding(8.dp)) {
+        val modifier = Modifier.weight(1f).preferredHeight(320.dp)
+        MovieItem(firstMovie, modifier)
+        Spacer(modifier = Modifier.width(8.dp))
+        MovieItem(secondMovie, modifier)
+    }
+}
+
+@Composable
+fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
+    Stack(modifier = modifier) {
         MovieRate(movie.voteAverage, modifier = Modifier.gravity(Alignment.TopCenter))
         Card(
             modifier = Modifier.fillMaxSize().offset(y = 8.dp),
@@ -100,7 +102,7 @@ fun MoviePoster(posterPath: String) {
     CoilImage(
         data = posterPath,
         contentScale = ContentScale.None,
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().aspectRatio(0.75f),
         loading = {
             Icon(
                 asset = vectorResource(id = drawable.ic_movie),
@@ -131,10 +133,13 @@ fun MovieRate(rate: Double, modifier: Modifier) {
 @Composable
 fun MovieInfo(movie: Movie, modifier: Modifier) {
     Surface(color = Color(0x97000000), modifier = modifier) {
-        SpacedColumn(spaceBetween = 8.dp, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
+        SpacedColumn(
+            spaceBetween = 8.dp,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
             MovieName(name = movie.name)
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                MovieFeature(drawable.ic_date, movie.firstAirDate.orEmpty())
+                MovieFeature(drawable.ic_date, movie.firstAirDate)
                 MovieFeature(drawable.ic_thumb_up, movie.voteCount.toString())
             }
         }
@@ -184,5 +189,13 @@ fun MovieFeature(@DrawableRes iconResId: Int, field: String) {
 fun MoviePreview() {
     Surface(color = Color.White, modifier = Modifier.fillMaxSize()) {
         MovieItem(fakeMovie)
+    }
+}
+
+@Composable
+@Preview
+fun MovieRowPreview() {
+    Surface(color = Color.White, modifier = Modifier.fillMaxSize()) {
+        MovieRow(fakeMovie, fakeMovie)
     }
 }
