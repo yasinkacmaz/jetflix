@@ -1,22 +1,26 @@
 package com.yasinkacmaz.playground.ui.main
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.animation.Crossfade
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.platform.setContent
-import com.yasinkacmaz.playground.R
-import com.yasinkacmaz.playground.ui.main.common.ErrorContent
-import com.yasinkacmaz.playground.ui.main.common.Loading
+import com.yasinkacmaz.playground.ui.main.genres.FetchGenresContent
+import com.yasinkacmaz.playground.ui.main.genres.GenresContent
+import com.yasinkacmaz.playground.ui.main.moviedetail.MovieDetailContent
+import com.yasinkacmaz.playground.ui.navigation.Navigator
+import com.yasinkacmaz.playground.ui.navigation.NavigatorAmbient
+import com.yasinkacmaz.playground.ui.navigation.Screen
+import com.yasinkacmaz.playground.ui.navigation.Screen.FetchGenresScreen
+import com.yasinkacmaz.playground.ui.navigation.Screen.GenresScreen
+import com.yasinkacmaz.playground.ui.navigation.Screen.MovieDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @AndroidEntryPoint
-@OptIn(ExperimentalCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
-
-    private val genresViewModel: GenresViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,26 +29,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderUi() {
         setContent {
-            val genresUiState = genresViewModel.uiState.collectAsState().value
-            if (genresUiState.shouldFetchGenres()) {
-                genresViewModel.fetchGenres()
+            val lifecycleOwner = LifecycleOwnerAmbient.current
+            val navigator = remember {
+                Navigator<Screen>(FetchGenresScreen, lifecycleOwner, onBackPressedDispatcher)
             }
-            when {
-                genresUiState.loading -> {
-                    val context = ContextAmbient.current
-                    val title = context.getString(R.string.fetching_genres)
-                    Loading(title)
-                }
-                genresUiState.error != null -> {
-                    ErrorContent(genresUiState.error.message.orEmpty())
-                }
-                genresUiState.genres.isNotEmpty() -> {
-                    MainContent(genresUiState.genres)
+            MainContent(navigator)
+        }
+    }
+
+    @Composable
+    private fun MainContent(navigator: Navigator<Screen>) {
+        Providers(NavigatorAmbient provides navigator) {
+            Crossfade(current = navigator.currentScreen) { screen ->
+                when (screen) {
+                    FetchGenresScreen -> FetchGenresContent()
+                    is GenresScreen -> GenresContent(screen.genres)
+                    is MovieDetailScreen -> MovieDetailContent()
                 }
             }
         }
     }
-
-
-
 }
