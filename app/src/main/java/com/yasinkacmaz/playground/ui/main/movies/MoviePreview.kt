@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.ui.main.movie
+package com.yasinkacmaz.playground.ui.main.movies
 
 import androidx.compose.runtime.Composable
 import androidx.ui.tooling.preview.Devices

@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.ui.main
+package com.yasinkacmaz.playground.ui.main.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel

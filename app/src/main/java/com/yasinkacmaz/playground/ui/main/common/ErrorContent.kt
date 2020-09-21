@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,23 +17,11 @@ import androidx.ui.tooling.preview.Preview
 import com.yasinkacmaz.playground.R.drawable
 
 @Composable
-fun Loading(title: String) {
-    Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalGravity = Alignment.CenterHorizontally
-    ) {
-        Text(title)
-        CircularProgressIndicator(modifier = Modifier.preferredSize(40.dp).padding(top = 16.dp))
-    }
-}
-
-@Composable
 fun ErrorContent(message: String) {
     Column(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
-        horizontalGravity = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(message)
         Icon(
@@ -42,12 +29,6 @@ fun ErrorContent(message: String) {
             modifier = Modifier.preferredSize(40.dp).padding(top = 16.dp)
         )
     }
-}
-
-@Preview(showDecoration = true)
-@Composable
-fun LoadingPreview() {
-    Loading(title = "Please wait...")
 }
 
 @Preview(showDecoration = true)

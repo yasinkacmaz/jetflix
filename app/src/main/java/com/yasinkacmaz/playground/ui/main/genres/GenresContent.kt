@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.ui.main
+package com.yasinkacmaz.playground.ui.main.genres
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Icon
@@ -11,6 +11,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,18 +24,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign.Center
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.viewModel
 import androidx.ui.tooling.preview.Preview
 import com.yasinkacmaz.playground.R
 import com.yasinkacmaz.playground.data.Genre
-import com.yasinkacmaz.playground.ui.main.movie.Movies
+import com.yasinkacmaz.playground.ui.main.movies.MoviesContent
 import com.yasinkacmaz.playground.ui.theme.PlayGroundTheme
 
 @Composable
-fun MainContent(genres: List<Genre>) {
+fun GenresContent(genres: List<Genre>) {
     val isDarkTheme = remember { mutableStateOf(false) }
-    val navigationViewModel: NavigationViewModel = viewModel()
-    navigationViewModel.currentGenre.value = genres.first()
+    val selectedGenre = remember { mutableStateOf(genres.first()) }
     PlayGroundTheme(isDarkTheme = isDarkTheme.value) {
         Scaffold(
             topBar = {
@@ -43,14 +42,14 @@ fun MainContent(genres: List<Genre>) {
                 }
             },
             bottomBar = {
-                BottomNavigation(genres, navigationViewModel)
+                BottomNavigation(genres, selectedGenre)
             },
-            bodyContent = { innerPadding ->
+            bodyContent = { paddingValues ->
                 Crossfade(
-                    modifier = Modifier.padding(innerPadding).fillMaxSize(),
-                    current = navigationViewModel.currentGenre.value
+                    modifier = Modifier.padding(paddingValues).fillMaxSize(),
+                    current = selectedGenre.value
                 ) { genre ->
-                    Movies(genre!!)
+                    MoviesContent(genre)
                 }
             })
     }
@@ -83,16 +82,16 @@ private fun ChangeTheme(initialTheme: Boolean, onThemeChanged: (Boolean) -> Unit
 }
 
 @Composable
-fun BottomNavigation(genres: List<Genre>, navigationViewModel: NavigationViewModel) {
+fun BottomNavigation(genres: List<Genre>, selectedGenre: MutableState<Genre>) {
     BottomNavigation {
         genres.forEach { genre ->
-            val selected = genre == navigationViewModel.currentGenre.value
+            val selected = genre == selectedGenre.value
             BottomNavigationItem(
                 label = { Text(genre.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 icon = { Icon(asset = vectorResource(id = R.drawable.ic_movie)) },
                 selected = selected,
-                onSelect = {
-                    navigationViewModel.onMovieCatalogSelected(genre)
+                onClick = {
+                    selectedGenre.value = genre
                 }
             )
         }
@@ -101,6 +100,6 @@ fun BottomNavigation(genres: List<Genre>, navigationViewModel: NavigationViewMod
 
 @Preview
 @Composable
-fun MainContentPreview() {
-    MainContent(genres = listOf(Genre(1, "Action")))
+fun GenresContentPreview() {
+    GenresContent(genres = listOf(Genre(1, "Action")))
 }

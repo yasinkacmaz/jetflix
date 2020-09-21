@@ -31,7 +31,7 @@ android {
 
   composeOptions {
     kotlinCompilerVersion "1.4.10"
-    kotlinCompilerExtensionVersion "1.0.0-alpha02"
+    kotlinCompilerExtensionVersion "1.0.0-alpha03"
   }
 
   buildTypes {
@@ -44,7 +44,8 @@ android {
   tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
       jvmTarget = "1.8"
-      freeCompilerArgs += ["-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check", "-Xopt-in=kotlin.RequiresOptIn"]
+      freeCompilerArgs +=
+          ["-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check", "-Xopt-in=kotlin.RequiresOptIn"]
     }
   }
 }
@@ -61,7 +62,7 @@ def daggerHiltVersion = "2.28-alpha"
 def daggerHiltViewModelVersion = "1.0.0-alpha02"
 def retrofitVersion = "2.7.1"
 def lifecycleVersion = "2.2.0"
-def composeVersion = "1.0.0-alpha02"
+def composeVersion = "1.0.0-alpha03"
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -88,7 +89,7 @@ dependencies {
   implementation "androidx.ui:ui-tooling:$composeVersion"
 
   // image
-  implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.1"
+  implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.2"
 
   // dagger hilt
   implementation "com.google.dagger:hilt-android:$daggerHiltVersion"

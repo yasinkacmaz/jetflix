@@ -1,11 +1,22 @@
-package com.yasinkacmaz.playground.ui.main.movie
+package com.yasinkacmaz.playground.ui.main.movies
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Stack
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -21,7 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow.Ellipsis
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.viewModel
@@ -30,9 +41,11 @@ import com.yasinkacmaz.playground.R.drawable
 import com.yasinkacmaz.playground.R.string
 import com.yasinkacmaz.playground.data.Genre
 import com.yasinkacmaz.playground.data.Movie
-import com.yasinkacmaz.playground.ui.main.MoviesViewModel
 import com.yasinkacmaz.playground.ui.main.common.ErrorContent
 import com.yasinkacmaz.playground.ui.main.common.Loading
+import com.yasinkacmaz.playground.ui.main.viewmodel.MoviesViewModel
+import com.yasinkacmaz.playground.ui.navigation.NavigatorAmbient
+import com.yasinkacmaz.playground.ui.navigation.Screen.MovieDetailScreen
 import com.yasinkacmaz.playground.ui.widget.SpacedColumn
 import com.yasinkacmaz.playground.util.toPosterUrl
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -40,7 +53,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun Movies(genre: Genre) {
+fun MoviesContent(genre: Genre) {
     val moviesViewModel: MoviesViewModel = viewModel(key = genre.id.toString())
     val movieUiState = moviesViewModel.uiState.collectAsState().value
     if (movieUiState.shouldFetchMovies()) {
@@ -55,13 +68,13 @@ fun Movies(genre: Genre) {
             ErrorContent(movieUiState.error.message.orEmpty())
         }
         movieUiState.movies.isNotEmpty() -> {
-            LazyMoviesGrid(movieUiState.movies)
+            LazyMovies(movieUiState.movies)
         }
     }
 }
 
 @Composable
-fun LazyMoviesGrid(movies: List<Pair<Movie, Movie>>) {
+fun LazyMovies(movies: List<Pair<Movie, Movie>>) {
     LazyColumnFor(items = movies) { (firstMovie, secondMovie) ->
         MovieRow(firstMovie, secondMovie)
     }
@@ -69,10 +82,11 @@ fun LazyMoviesGrid(movies: List<Pair<Movie, Movie>>) {
 
 @Composable
 fun MovieRow(firstMovie: Movie, secondMovie: Movie) {
-    Row(modifier = Modifier.padding(8.dp)) {
+    val padding = 8.dp
+    Row(modifier = Modifier.padding(padding)) {
         val modifier = Modifier.weight(1f).preferredHeight(320.dp)
         MovieItem(firstMovie, modifier)
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(padding))
         MovieItem(secondMovie, modifier)
     }
 }
@@ -80,9 +94,12 @@ fun MovieRow(firstMovie: Movie, secondMovie: Movie) {
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
     Stack(modifier = modifier) {
-        MovieRate(movie.voteAverage, modifier = Modifier.gravity(Alignment.TopCenter))
+        MovieRate(movie.voteAverage, modifier = Modifier.align(Alignment.TopCenter))
+        val navigator = NavigatorAmbient.current
         Card(
-            modifier = Modifier.fillMaxSize().offset(y = 8.dp),
+            modifier = Modifier.fillMaxSize().offset(y = 8.dp).clickable(onClick = {
+                navigator.navigateTo(MovieDetailScreen(movie.name))
+            }),
             shape = RoundedCornerShape(size = 8.dp),
             elevation = 8.dp
         ) {
@@ -90,7 +107,7 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
                 MoviePoster(movie.posterPath.orEmpty().toPosterUrl())
                 MovieInfo(
                     movie,
-                    modifier = Modifier.gravity(Alignment.BottomCenter).fillMaxWidth()
+                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
                 )
             }
         }
@@ -102,7 +119,7 @@ fun MoviePoster(posterPath: String) {
     CoilImage(
         data = posterPath,
         contentScale = ContentScale.None,
-        modifier = Modifier.fillMaxSize().aspectRatio(0.75f),
+        modifier = Modifier.fillMaxSize(),
         loading = {
             Icon(
                 asset = vectorResource(id = drawable.ic_movie),
@@ -153,17 +170,18 @@ fun MovieName(name: String) {
         style = TextStyle(
             color = Color.White,
             fontSize = 14.sp,
-            letterSpacing = 4.sp,
+            letterSpacing = 2.sp,
             fontFamily = FontFamily.Serif,
-            fontWeight = FontWeight.W500
+            fontWeight = FontWeight.W500,
         ),
-        maxLines = 1
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
 @Composable
 fun MovieFeature(@DrawableRes iconResId: Int, field: String) {
-    Row(verticalGravity = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
             asset = vectorResource(id = iconResId),
             modifier = Modifier.size(14.dp)
@@ -177,7 +195,7 @@ fun MovieFeature(@DrawableRes iconResId: Int, field: String) {
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.W400
             ),
-            overflow = Ellipsis,
+            overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             modifier = Modifier.padding(horizontal = 4.dp)
         )
