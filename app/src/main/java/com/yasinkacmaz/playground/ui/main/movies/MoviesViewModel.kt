@@ -1,4 +1,4 @@
-package com.yasinkacmaz.playground.ui.main.viewmodel
+package com.yasinkacmaz.playground.ui.main.movies
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.playground.data.Movie
 import com.yasinkacmaz.playground.service.MovieService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -22,16 +21,14 @@ class MoviesViewModel @ViewModelInject constructor(private val movieService: Mov
             uiState.value = uiValue.copy(loading = true)
             try {
                 val movies = buildList {
-                    repeat(4) {
+                    repeat(6) {
                         addAll(fetchMovies(genreId, it + 1))
                     }
                 }.sortedByDescending(Movie::voteCount).toMoviePairs()
-                delay(1000)
-                uiState.value = uiValue.copy(movies = movies, fetchMovies = false)
+                uiState.value = uiValue.copy(movies = movies, fetchMovies = false, loading = false)
             } catch (exception: Exception) {
-                uiState.value = uiValue.copy(error = exception, fetchMovies = false)
+                uiState.value = uiValue.copy(error = exception, fetchMovies = false, loading = false)
             }
-            uiState.value = uiValue.copy(loading = false)
         }
     }
 

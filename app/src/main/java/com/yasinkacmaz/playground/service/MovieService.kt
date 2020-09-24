@@ -1,6 +1,7 @@
 package com.yasinkacmaz.playground.service
 
 import com.yasinkacmaz.playground.data.GenresResponse
+import com.yasinkacmaz.playground.data.MovieDetailResponse
 import com.yasinkacmaz.playground.data.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,4 +17,7 @@ interface MovieService {
 
     @GET("genre/movie/list")
     suspend fun fetchGenres(): GenresResponse
+
+    @GET("movie/{movie_id}")
+    suspend fun fetchMovieDetail(@Path("movie_id") movieId: Int): MovieDetailResponse
 }

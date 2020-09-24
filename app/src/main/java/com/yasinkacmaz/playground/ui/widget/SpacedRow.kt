@@ -8,19 +8,19 @@ import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun SpacedColumn(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
+fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
     val space = (spaceBetween.value * DensityAmbient.current.density).toInt()
     Layout(children, modifier) { measurables, constraints ->
         val placeables = measurables.map { measurable ->
             measurable.measure(constraints)
         }
-        val height = placeables.sumOf(Placeable::height) + (placeables.size - 1) * space
-        var yPosition = 0
+        val width = placeables.sumOf(Placeable::width) + (placeables.size - 1) * space
+        var xPosition = 0
 
-        layout(constraints.maxWidth, height) {
+        layout(width, placeables.maxOf(Placeable::height)) {
             placeables.forEach { placeable ->
-                placeable.placeRelative(x = 0, y = yPosition)
-                yPosition += placeable.height + space
+                placeable.placeRelative(x = xPosition, y = 0)
+                xPosition += placeable.width + space
             }
         }
     }

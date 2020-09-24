@@ -10,6 +10,7 @@ data class MoviesResponse(
 )
 
 data class Movie(
+    @SerializedName("id") val id: Int,
     @SerializedName("release_date") val firstAirDate: String,
     @SerializedName("title") val name: String,
     @SerializedName("original_title") val originalTitle: String,
