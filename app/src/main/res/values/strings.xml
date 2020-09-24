@@ -3,5 +3,13 @@
   <string name="api_key">5d967c7c335764f39b1efbe9c5de9760</string>
   <string name="fetching_genres">Fetching Movie Genres</string>
   <string name="fetching_movies">Fetching %1$s Movies</string>
+  <string name="fetching_movie_detail">Fetching Movie Detail</string>
   <string name="change_theme">Change Theme</string>
+
+  <!-- movie detail -->
+  <string name="release_date">Release Date</string>
+  <string name="duration">Duration</string>
+  <string name="duration_minutes">%1$s min</string>
+  <string name="vote_average">Vote Avg</string>
+  <string name="votes">Votes</string>
 </resources>

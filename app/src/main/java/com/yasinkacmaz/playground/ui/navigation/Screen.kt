@@ -7,5 +7,5 @@ sealed class Screen {
 
     data class GenresScreen(val genres: List<Genre>) : Screen()
 
-    data class MovieDetailScreen(val movieId: String) : Screen()
+    data class MovieDetailScreen(val movieId: Int) : Screen()
 }

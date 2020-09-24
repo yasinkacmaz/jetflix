@@ -7,7 +7,6 @@ import androidx.compose.ui.viewinterop.viewModel
 import com.yasinkacmaz.playground.R
 import com.yasinkacmaz.playground.ui.main.common.ErrorContent
 import com.yasinkacmaz.playground.ui.main.common.Loading
-import com.yasinkacmaz.playground.ui.main.viewmodel.GenresViewModel
 import com.yasinkacmaz.playground.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.playground.ui.navigation.Screen.GenresScreen
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -14,7 +14,7 @@ import androidx.ui.tooling.preview.Preview
 import androidx.ui.tooling.preview.PreviewParameter
 import androidx.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 
-class SpacedColumnProvider : CollectionPreviewParameterProvider<Int>(listOf(0, 100))
+class SpacedColumnProvider : CollectionPreviewParameterProvider<Int>(listOf(0, 60))
 
 @Composable
 @Preview

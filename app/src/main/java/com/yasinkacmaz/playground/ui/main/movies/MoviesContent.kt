@@ -43,7 +43,6 @@ import com.yasinkacmaz.playground.data.Genre
 import com.yasinkacmaz.playground.data.Movie
 import com.yasinkacmaz.playground.ui.main.common.ErrorContent
 import com.yasinkacmaz.playground.ui.main.common.Loading
-import com.yasinkacmaz.playground.ui.main.viewmodel.MoviesViewModel
 import com.yasinkacmaz.playground.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.playground.ui.navigation.Screen.MovieDetailScreen
 import com.yasinkacmaz.playground.ui.widget.SpacedColumn
@@ -75,30 +74,33 @@ fun MoviesContent(genre: Genre) {
 
 @Composable
 fun LazyMovies(movies: List<Pair<Movie, Movie>>) {
+    val navigator = NavigatorAmbient.current
+    val onMovieClicked: (Int) -> Unit = { movieId ->
+        navigator.navigateTo(MovieDetailScreen(movieId))
+    }
     LazyColumnFor(items = movies) { (firstMovie, secondMovie) ->
-        MovieRow(firstMovie, secondMovie)
+        MovieRow(firstMovie, secondMovie, onMovieClicked)
     }
 }
 
 @Composable
-fun MovieRow(firstMovie: Movie, secondMovie: Movie) {
+fun MovieRow(firstMovie: Movie, secondMovie: Movie, onMovieClicked: (Int) -> Unit= {}) {
     val padding = 8.dp
     Row(modifier = Modifier.padding(padding)) {
         val modifier = Modifier.weight(1f).preferredHeight(320.dp)
-        MovieItem(firstMovie, modifier)
+        MovieItem(firstMovie, modifier, onMovieClicked)
         Spacer(modifier = Modifier.width(padding))
-        MovieItem(secondMovie, modifier)
+        MovieItem(secondMovie, modifier, onMovieClicked)
     }
 }
 
 @Composable
-fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
+fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
     Stack(modifier = modifier) {
         MovieRate(movie.voteAverage, modifier = Modifier.align(Alignment.TopCenter))
-        val navigator = NavigatorAmbient.current
         Card(
             modifier = Modifier.fillMaxSize().offset(y = 8.dp).clickable(onClick = {
-                navigator.navigateTo(MovieDetailScreen(movie.name))
+                onMovieClicked(movie.id)
             }),
             shape = RoundedCornerShape(size = 8.dp),
             elevation = 8.dp
@@ -151,7 +153,7 @@ fun MovieRate(rate: Double, modifier: Modifier) {
 fun MovieInfo(movie: Movie, modifier: Modifier) {
     Surface(color = Color(0x97000000), modifier = modifier) {
         SpacedColumn(
-            spaceBetween = 8.dp,
+            spaceBetween = 4.dp,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
             MovieName(name = movie.name)

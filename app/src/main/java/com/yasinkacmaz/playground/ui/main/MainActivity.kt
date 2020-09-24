@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 when (screen) {
                     FetchGenresScreen -> FetchGenresContent()
                     is GenresScreen -> GenresContent(screen.genres)
-                    is MovieDetailScreen -> MovieDetailContent()
+                    is MovieDetailScreen -> MovieDetailContent(screen.movieId)
                 }
             }
         }
