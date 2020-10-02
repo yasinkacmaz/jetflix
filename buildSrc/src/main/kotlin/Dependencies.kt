@@ -6,7 +6,7 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:2.8.6"
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:4.2.0-alpha12"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:4.2.0-alpha13"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
     }
@@ -26,7 +26,7 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        private const val version = "1.0.0-alpha03"
+        const val version = "1.0.0-alpha04"
         const val ui = "androidx.compose.ui:ui:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"

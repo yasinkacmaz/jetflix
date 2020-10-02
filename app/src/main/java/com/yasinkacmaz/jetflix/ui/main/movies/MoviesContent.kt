@@ -4,17 +4,7 @@ import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.Stack
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -97,7 +87,7 @@ fun MovieRow(firstMovie: Movie, secondMovie: Movie, onMovieClicked: (Int) -> Uni
 
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
-    Stack(modifier = modifier) {
+    Box(modifier = modifier) {
         MovieRate(movie.voteAverage, modifier = Modifier.align(Alignment.TopCenter))
         Card(
             modifier = Modifier.fillMaxSize().offset(y = 8.dp).clickable(onClick = {
@@ -106,7 +96,7 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int)
             shape = RoundedCornerShape(size = 8.dp),
             elevation = 8.dp
         ) {
-            Stack {
+            Box {
                 MoviePoster(movie.posterPath.orEmpty().toPosterUrl())
                 MovieInfo(
                     movie,

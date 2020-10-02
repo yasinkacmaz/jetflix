@@ -132,8 +132,7 @@ fun PosterAndInformation(movieDetail: MovieDetailResponse, modifier: Modifier) =
                 fontSize = 22.sp,
                 letterSpacing = 4.sp,
                 fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colors.onError
+                textAlign = TextAlign.Center
             ),
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(poster.bottom, 16.dp)
