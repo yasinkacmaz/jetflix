@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.onActive
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
@@ -44,14 +45,11 @@ import androidx.compose.ui.viewinterop.viewModel
 import androidx.compose.ui.zIndex
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.data.MovieDetailResponse
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.toBackdropUrl
-import com.yasinkacmaz.jetflix.util.toPosterUrl
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
@@ -61,7 +59,7 @@ import java.util.Locale
 fun MovieDetailContent(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
     val movieDetailUiState = movieDetailViewModel.uiState.collectAsState().value
-    if (movieDetailUiState.shouldFetchMovieDetail()) {
+    onActive {
         movieDetailViewModel.fetchMovieDetail(movieId)
     }
     when {
@@ -79,21 +77,21 @@ fun MovieDetailContent(movieId: Int) {
 }
 
 @Composable
-fun MovieDetail(movieDetail: MovieDetailResponse) {
+private fun MovieDetail(movieDetail: MovieDetail) {
     val navigator = NavigatorAmbient.current
-    BackIcon() { navigator.goBack() }
+    BackIcon { navigator.goBack() }
     ScrollableColumn(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.surface)) {
-        Backdrop(movieDetail.backdropPath)
+        Backdrop(movieDetail.backdropUrl)
         PosterAndInformation(movieDetail, Modifier.offset(y = (-80).dp))
     }
 }
 
 @Composable
-fun Backdrop(backdropPath: String?) {
+private fun Backdrop(backdropUrl: String) {
     val arcHeight = 240.dp.value * DensityAmbient.current.density
     Card(elevation = 16.dp, shape = BottomArcShape(arcHeight = arcHeight)) {
         CoilImage(
-            data = backdropPath?.toBackdropUrl().orEmpty(),
+            data = backdropUrl,
             contentScale = ContentScale.FillHeight,
             colorFilter = ColorFilter(Color(0x14000000), BlendMode.SrcOver),
             modifier = Modifier.fillMaxWidth().height(300.dp)
@@ -102,14 +100,14 @@ fun Backdrop(backdropPath: String?) {
 }
 
 @Composable
-fun BackIcon(onClick: () -> Unit) {
+private fun BackIcon(onClick: () -> Unit) {
     IconButton(onClick = onClick, modifier = Modifier.zIndex(4f)) {
         Icon(Icons.Filled.ArrowBack, tint = Color.White)
     }
 }
 
 @Composable
-fun PosterAndInformation(movieDetail: MovieDetailResponse, modifier: Modifier) =
+private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
     ConstraintLayout(modifier.fillMaxWidth().wrapContentHeight().zIndex(17f)) {
         val (poster, title, originalTitle, genres, specs, rateStars, overview) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
@@ -123,7 +121,7 @@ fun PosterAndInformation(movieDetail: MovieDetailResponse, modifier: Modifier) =
                 end.linkTo(endGuideline)
             }
         ) {
-            CoilImage(data = movieDetail.posterPath.toPosterUrl(), contentScale = ContentScale.FillWidth)
+            CoilImage(data = movieDetail.posterUrl, contentScale = ContentScale.FillWidth)
         }
 
         Text(
@@ -193,7 +191,7 @@ fun PosterAndInformation(movieDetail: MovieDetailResponse, modifier: Modifier) =
     }
 
 @Composable
-fun RateStars(voteAverage: Double, modifier: Modifier) {
+private fun RateStars(voteAverage: Double, modifier: Modifier) {
     SpacedRow(spaceBetween = 4.dp, modifier) {
         val maxVote = 10
         val starCount = 5
@@ -216,13 +214,13 @@ fun RateStars(voteAverage: Double, modifier: Modifier) {
 }
 
 @Composable
-fun MovieFields(movieDetail: MovieDetailResponse, modifier: Modifier) {
+private fun MovieFields(movieDetail: MovieDetail, modifier: Modifier) {
     SpacedRow(spaceBetween = 16.dp, modifier = modifier) {
         val context = ContextAmbient.current
         MovieField(context.getString(R.string.release_date), movieDetail.releaseDate)
         MovieField(
             context.getString(R.string.duration),
-            context.getString(R.string.duration_minutes, movieDetail.runtime.toString())
+            context.getString(R.string.duration_minutes, movieDetail.duration.toString())
         )
         MovieField(context.getString(R.string.vote_average), movieDetail.voteAverage.toString())
         MovieField(context.getString(R.string.votes), movieDetail.voteCount.toString())
@@ -230,7 +228,7 @@ fun MovieFields(movieDetail: MovieDetailResponse, modifier: Modifier) {
 }
 
 @Composable
-fun MovieField(name: String, value: String) {
+private fun MovieField(name: String, value: String) {
     Column {
         Text(
             text = name,
