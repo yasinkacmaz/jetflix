@@ -40,9 +40,8 @@ fun GenresContent(genres: List<Genre>, isDarkTheme: MutableState<Boolean>) {
             ) { genre ->
                 MoviesContent(genre)
             }
-        })
-
-
+        }
+    )
 }
 
 @Composable
@@ -82,6 +81,6 @@ fun BottomNavigation(genres: List<Genre>, selectedGenre: MutableState<Genre>) {
 
 @Preview
 @Composable
-fun GenresContentPreview() {
+private fun GenresContentPreview() {
     GenresContent(genres = listOf(Genre(1, "Action")), mutableStateOf(false))
 }

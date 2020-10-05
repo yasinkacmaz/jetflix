@@ -30,11 +30,11 @@ import androidx.compose.ui.viewinterop.viewModel
 import androidx.ui.tooling.preview.Preview
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.main.common.ErrorContent
-import com.yasinkacmaz.jetflix.ui.main.common.Loading
-import com.yasinkacmaz.jetflix.ui.main.common.LoadingRow
+import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
+import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
+import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
-import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetailScreen
+import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import com.yasinkacmaz.jetflix.ui.widget.SpacedColumn
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,17 +45,17 @@ fun MoviesContent(genre: Genre) {
     val moviesViewModel: MoviesViewModel = viewModel(key = genre.id.toString())
     val movieUiState = moviesViewModel.uiState.collectAsState().value
 
-    onActive() {
+    onActive {
         moviesViewModel.fetchMovies(genre.id)
     }
 
     when {
         movieUiState.loading && movieUiState.movies.isEmpty() -> {
             val title = stringResource(id = R.string.fetching_movies, genre.name)
-            Loading(title)
+            LoadingColumn(title)
         }
         movieUiState.error != null && movieUiState.movies.isEmpty() -> {
-            ErrorContent(movieUiState.error.message.orEmpty())
+            ErrorColumn(movieUiState.error.message.orEmpty())
         }
         movieUiState.movies.isNotEmpty() -> {
             LazyMovies(
@@ -80,7 +80,7 @@ fun LazyMovies(
 ) {
     val navigator = NavigatorAmbient.current
     val onMovieClicked: (Int) -> Unit = { movieId ->
-        navigator.navigateTo(MovieDetailScreen(movieId))
+        navigator.navigateTo(MovieDetail(movieId))
     }
     LazyColumnForIndexed(items = movies) { index, moviePair ->
         MovieRow(moviePair, onMovieClicked)

@@ -45,8 +45,8 @@ import androidx.compose.ui.zIndex
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.data.MovieDetailResponse
-import com.yasinkacmaz.jetflix.ui.main.common.ErrorContent
-import com.yasinkacmaz.jetflix.ui.main.common.Loading
+import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
+import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
@@ -67,10 +67,10 @@ fun MovieDetailContent(movieId: Int) {
     when {
         movieDetailUiState.loading -> {
             val title = stringResource(id = R.string.fetching_movie_detail)
-            Loading(title)
+            LoadingColumn(title)
         }
         movieDetailUiState.error != null -> {
-            ErrorContent(movieDetailUiState.error.message.orEmpty())
+            ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
             MovieDetail(movieDetailUiState.movieDetail)

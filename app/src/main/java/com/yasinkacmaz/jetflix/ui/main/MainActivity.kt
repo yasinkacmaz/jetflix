@@ -16,9 +16,9 @@ import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailContent
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
-import com.yasinkacmaz.jetflix.ui.navigation.Screen.FetchGenresScreen
-import com.yasinkacmaz.jetflix.ui.navigation.Screen.GenresScreen
-import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetailScreen
+import com.yasinkacmaz.jetflix.ui.navigation.Screen.FetchGenres
+import com.yasinkacmaz.jetflix.ui.navigation.Screen.Genres
+import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val lifecycleOwner = LifecycleOwnerAmbient.current
             val navigator = remember {
-                Navigator<Screen>(FetchGenresScreen, lifecycleOwner, onBackPressedDispatcher)
+                Navigator<Screen>(FetchGenres, lifecycleOwner, onBackPressedDispatcher)
             }
             val isDarkTheme = remember { mutableStateOf(false) }
             MainContent(navigator, isDarkTheme)
@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
             JetflixTheme(isDarkTheme = isDarkTheme.value) {
                 Crossfade(current = navigator.currentScreen) { screen ->
                     when (screen) {
-                        FetchGenresScreen -> FetchGenresContent()
-                        is GenresScreen -> GenresContent(screen.genres, isDarkTheme)
-                        is MovieDetailScreen -> MovieDetailContent(screen.movieId)
+                        FetchGenres -> FetchGenresContent()
+                        is Genres -> GenresContent(screen.genres, isDarkTheme)
+                        is MovieDetail -> MovieDetailContent(screen.movieId)
                     }
                 }
             }
