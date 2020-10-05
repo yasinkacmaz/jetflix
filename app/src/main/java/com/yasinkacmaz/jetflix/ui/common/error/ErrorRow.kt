@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.common
+package com.yasinkacmaz.jetflix.ui.common.error
 
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
@@ -14,7 +14,7 @@ import androidx.ui.tooling.preview.Preview
 @Composable
 fun ErrorRow(title: String) {
     Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(8.dp),
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -25,6 +25,6 @@ fun ErrorRow(title: String) {
 
 @Preview(showDecoration = true)
 @Composable
-fun ErrorRowPreview() {
+private fun ErrorRowPreview() {
     ErrorRow(title = "Oopsie!")
 }

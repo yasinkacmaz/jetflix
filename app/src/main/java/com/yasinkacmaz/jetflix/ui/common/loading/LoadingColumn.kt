@@ -1,12 +1,7 @@
-package com.yasinkacmaz.jetflix.ui.main.common
+package com.yasinkacmaz.jetflix.ui.common.loading
 
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,9 +10,9 @@ import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 
 @Composable
-fun Loading(title: String) {
+fun LoadingColumn(title: String, modifier: Modifier = Modifier.fillMaxSize()) {
     Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -28,6 +23,6 @@ fun Loading(title: String) {
 
 @Preview(showDecoration = true)
 @Composable
-fun LoadingPreview() {
-    Loading(title = "Please wait...")
+private fun LoadingColumnPreview() {
+    LoadingColumn(title = "Please wait...")
 }

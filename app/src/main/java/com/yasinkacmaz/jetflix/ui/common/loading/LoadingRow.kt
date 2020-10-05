@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.common
+package com.yasinkacmaz.jetflix.ui.common.loading
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
@@ -23,6 +23,6 @@ fun LoadingRow(title: String) {
 
 @Preview(showDecoration = true)
 @Composable
-fun LoadingRowPreview() {
+private fun LoadingRowPreview() {
     LoadingRow(title = "Please wait...")
 }
