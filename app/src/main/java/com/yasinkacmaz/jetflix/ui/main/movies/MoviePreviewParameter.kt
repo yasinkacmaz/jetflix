@@ -6,9 +6,8 @@ import androidx.ui.tooling.preview.Preview
 import androidx.ui.tooling.preview.PreviewParameter
 import androidx.ui.tooling.preview.PreviewParameterProvider
 import androidx.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
-import com.yasinkacmaz.jetflix.data.Movie
 
-val fakeMovie = Movie(1337, "01.03.1337", "Movie Name", "", "", "", "", 9.24, 1337)
+val fakeMovie = Movie(1337, "01.03.1337", "Movie Name", "", "", "", 9.24, 1337)
 
 class MovieProvider : PreviewParameterProvider<Movie> {
     override val values: Sequence<Movie>
