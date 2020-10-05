@@ -20,19 +20,16 @@ class GenresViewModel @ViewModelInject constructor(private val movieService: Mov
             uiState.value = uiValue.copy(loading = true)
             try {
                 val genres = movieService.fetchGenres().genres.shuffled().take(5)
-                uiState.value = uiValue.copy(genres = genres, fetchGenres = false, loading = false)
+                uiState.value = uiValue.copy(genres = genres, loading = false)
             } catch (exception: Exception) {
-                uiState.value = uiValue.copy(error = exception, fetchGenres = false, loading = false)
+                uiState.value = uiValue.copy(error = exception, loading = false)
             }
         }
     }
 
     data class GenresUiState(
-        val fetchGenres: Boolean = true,
         val genres: List<Genre> = listOf(),
         val loading: Boolean = false,
         val error: Throwable? = null
-    ) {
-        fun shouldFetchGenres() = fetchGenres && genres.isEmpty() && !loading
-    }
+    )
 }
