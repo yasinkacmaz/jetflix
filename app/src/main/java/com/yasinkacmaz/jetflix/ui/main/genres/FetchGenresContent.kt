@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.ui.main.genres
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.onActive
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.viewinterop.viewModel
 import com.yasinkacmaz.jetflix.R
@@ -16,9 +17,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun FetchGenresContent() {
     val genresViewModel: GenresViewModel = viewModel()
     val genresUiState = genresViewModel.uiState.collectAsState().value
-    if (genresUiState.shouldFetchGenres()) {
+
+    onActive {
         genresViewModel.fetchGenres()
     }
+
     when {
         genresUiState.loading -> {
             val context = ContextAmbient.current
