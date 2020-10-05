@@ -3,52 +3,54 @@ package com.yasinkacmaz.jetflix.ui.main.movies
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinkacmaz.jetflix.data.Movie
 import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.util.toPairs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalStdlibApi::class)
-class MoviesViewModel @ViewModelInject constructor(private val movieService: MovieService) :
-    ViewModel() {
+@OptIn(ExperimentalCoroutinesApi::class)
+class MoviesViewModel @ViewModelInject constructor(
+    private val movieService: MovieService,
+    private val movieMapper: MovieMapper
+) : ViewModel() {
 
     val uiState = MutableStateFlow(MovieUiState())
     private val uiValue get() = uiState.value
 
     fun fetchMovies(genreId: Int) {
+        if (uiValue.shouldFetchMovies().not()) return
         viewModelScope.launch {
             uiState.value = uiValue.copy(loading = true)
             try {
-                val movies = buildList {
-                    repeat(6) {
-                        addAll(fetchMovies(genreId, it + 1))
-                    }
-                }.sortedByDescending(Movie::voteCount).toMoviePairs()
-                uiState.value = uiValue.copy(movies = movies, fetchMovies = false, loading = false)
+                val moviesResponse = movieService.fetchMovies(genreId, uiValue.page)
+                val movies = uiValue.movies.apply {
+                    addAll(movieMapper.map(moviesResponse.movies))
+                    sortedByDescending(Movie::voteCount)
+                }
+                val page = if (uiValue.page >= moviesResponse.totalPages) {
+                    PAGE_INVALID
+                } else {
+                    uiValue.page + 1
+                }
+                uiState.value = uiValue.copy(movies = movies, page = page, loading = false)
             } catch (exception: Exception) {
-                uiState.value = uiValue.copy(error = exception, fetchMovies = false, loading = false)
+                uiState.value = uiValue.copy(error = exception, loading = false)
             }
         }
     }
 
-    private fun List<Movie>.toMoviePairs(): List<Pair<Movie, Movie>> = buildList {
-        for (index in this@toMoviePairs.indices.step(2)) {
-            add(this@toMoviePairs[index] to this@toMoviePairs[index + 1])
-        }
+    data class MovieUiState(
+        val movies: MutableList<Movie> = mutableListOf(),
+        val loading: Boolean = false,
+        val error: Throwable? = null,
+        val page: Int = 1
+    ) {
+        fun shouldFetchMovies() = !loading && page != PAGE_INVALID
+        val moviePairs get() = movies.toPairs()
     }
 
-    private suspend fun fetchMovies(
-        genreId: Int,
-        page: Int
-    ) = movieService.fetchMovies(genreId, page).movies
-
-    data class MovieUiState(
-        val fetchMovies: Boolean = true,
-        val movies: List<Pair<Movie, Movie>> = listOf(),
-        val loading: Boolean = false,
-        val error: Throwable? = null
-    ) {
-        fun shouldFetchMovies() = fetchMovies && movies.isEmpty() && !loading
+    companion object {
+        private const val PAGE_INVALID = -1
     }
 }

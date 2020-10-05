@@ -81,12 +81,12 @@ dependencies {
     implementation(Dependencies.AndroidX.Ktx.livedata)
 
     // Compose
-    implementation(Dependencies.Compose.ui)
+    implementation(Dependencies.Compose.runtime)
     implementation(Dependencies.Compose.foundation)
     implementation(Dependencies.Compose.layout)
+    implementation(Dependencies.Compose.ui)
     implementation(Dependencies.Compose.material)
     implementation(Dependencies.Compose.icons)
-    implementation(Dependencies.Compose.runtime)
     implementation(Dependencies.Compose.animation)
     implementation(Dependencies.Compose.tooling)
 
