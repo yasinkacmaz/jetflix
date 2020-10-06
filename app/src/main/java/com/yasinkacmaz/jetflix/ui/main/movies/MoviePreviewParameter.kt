@@ -7,7 +7,7 @@ import androidx.ui.tooling.preview.PreviewParameter
 import androidx.ui.tooling.preview.PreviewParameterProvider
 import androidx.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 
-val fakeMovie = Movie(1337, "01.03.1337", "Movie Name", "", "", "", 9.24, 1337)
+val fakeMovie = Movie(1337, "Movie Name", "", "", "01.03.1337", "", 9.24, 1337)
 
 class MovieProvider : PreviewParameterProvider<Movie> {
     override val values: Sequence<Movie>
@@ -20,7 +20,7 @@ class MovieProvider : PreviewParameterProvider<Movie> {
 @Preview(group = "Series")
 fun Series(@PreviewParameter(MovieProvider::class) movie: Movie) {
     MaterialTheme {
-        MovieItem(movie)
+        MovieContent(movie)
     }
 }
 
@@ -34,6 +34,6 @@ class MovieCollectionProvider : CollectionPreviewParameterProvider<Movie>(
 @Preview(group = "Films")
 fun Films(@PreviewParameter(MovieCollectionProvider::class) movie: Movie) {
     MaterialTheme {
-        MovieItem(movie)
+        MovieContent(movie)
     }
 }

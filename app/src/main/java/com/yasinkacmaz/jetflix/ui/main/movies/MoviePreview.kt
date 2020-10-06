@@ -10,5 +10,5 @@ import androidx.ui.tooling.preview.Preview
 @Preview(name = "Wide", widthDp = 400, group = "Size")
 @Composable
 fun MovieMultiPreview() {
-    MovieItem(fakeMovie)
+    MovieContent(fakeMovie)
 }

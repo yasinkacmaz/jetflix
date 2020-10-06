@@ -80,7 +80,7 @@ fun MovieDetailContent(movieId: Int) {
 private fun MovieDetail(movieDetail: MovieDetail) {
     val navigator = NavigatorAmbient.current
     BackIcon { navigator.goBack() }
-    ScrollableColumn(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.surface)) {
+    ScrollableColumn(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
         Backdrop(movieDetail.backdropUrl)
         PosterAndInformation(movieDetail, Modifier.offset(y = (-80).dp))
     }
@@ -126,7 +126,7 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
 
         Text(
             text = movieDetail.title.toUpperCase(Locale.getDefault()),
-            style = TextStyle(
+            style = MaterialTheme.typography.h2.copy(
                 fontSize = 22.sp,
                 letterSpacing = 4.sp,
                 fontWeight = FontWeight.Medium,
@@ -138,10 +138,10 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
                 end.linkTo(endGuideline)
             }
         )
+
         Text(
             text = "(${movieDetail.originalTitle})",
-            style = TextStyle(
-                fontSize = 12.sp,
+            style = MaterialTheme.typography.subtitle2.copy(
                 fontStyle = FontStyle.Italic,
                 letterSpacing = 2.sp
             ),
@@ -154,7 +154,7 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
 
         Text(
             text = movieDetail.genres.take(4).map(Genre::name).joinToString(),
-            style = TextStyle(fontSize = 14.sp, letterSpacing = 2.sp),
+            style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
             modifier = Modifier.constrainAs(genres) {
                 top.linkTo(originalTitle.bottom, 12.dp)
                 start.linkTo(startGuideline)
@@ -176,8 +176,7 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
 
         Text(
             text = movieDetail.overview,
-            style = TextStyle(
-                fontSize = 16.sp,
+            style = MaterialTheme.typography.body2.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 30.sp,
                 fontFamily = FontFamily.SansSerif,
@@ -232,13 +231,12 @@ private fun MovieField(name: String, value: String) {
     Column {
         Text(
             text = name,
-            style = TextStyle(fontSize = 13.sp),
+            style = MaterialTheme.typography.subtitle2.copy(fontSize = 13.sp, letterSpacing = 1.sp),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-
         Text(
             text = value,
-            style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold),
+            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
         )
     }

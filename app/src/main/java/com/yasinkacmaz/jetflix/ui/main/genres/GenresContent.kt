@@ -6,11 +6,7 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Switch
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.runtime.Composable
@@ -56,7 +52,7 @@ fun TopAppBar(initialTheme: Boolean, onThemeChanged: (Boolean) -> Unit) {
 
 @Composable
 private fun ChangeTheme(initialTheme: Boolean, onThemeChanged: (Boolean) -> Unit) {
-    Text(text = stringResource(id = R.string.change_theme))
+    Text(text = stringResource(id = R.string.change_theme), color = MaterialTheme.colors.onPrimary)
     Switch(checked = initialTheme, onCheckedChange = onThemeChanged)
 }
 
@@ -66,7 +62,14 @@ fun BottomNavigation(genres: List<Genre>, selectedGenre: MutableState<Genre>) {
         genres.forEach { genre ->
             val selected = genre == selectedGenre.value
             BottomNavigationItem(
-                label = { Text(genre.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                label = {
+                    Text(
+                        genre.name,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                },
                 icon = { Icon(Icons.Default.Movie) },
                 selected = selected,
                 onClick = {
