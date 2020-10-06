@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.platform.setContent
+import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.genres.FetchGenresContent
 import com.yasinkacmaz.jetflix.ui.main.genres.GenresContent
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailContent
@@ -33,22 +34,25 @@ class MainActivity : AppCompatActivity() {
     private fun renderUi() {
         setContent {
             val lifecycleOwner = LifecycleOwnerAmbient.current
-            val navigator = remember {
-                Navigator<Screen>(FetchGenres, lifecycleOwner, onBackPressedDispatcher)
-            }
+            val navigator = remember { Navigator<Screen>(FetchGenres, lifecycleOwner, onBackPressedDispatcher) }
             val isDarkTheme = remember { mutableStateOf(false) }
-            MainContent(navigator, isDarkTheme)
+            val selectedGenre = remember { mutableStateOf(Genre(-1, "")) }
+            MainContent(navigator, selectedGenre, isDarkTheme)
         }
     }
 
     @Composable
-    private fun MainContent(navigator: Navigator<Screen>, isDarkTheme: MutableState<Boolean>) {
+    private fun MainContent(
+        navigator: Navigator<Screen>,
+        selectedGenre: MutableState<Genre>,
+        isDarkTheme: MutableState<Boolean>
+    ) {
         Providers(NavigatorAmbient provides navigator) {
             JetflixTheme(isDarkTheme = isDarkTheme.value) {
                 Crossfade(current = navigator.currentScreen) { screen ->
                     when (screen) {
-                        FetchGenres -> FetchGenresContent()
-                        is Genres -> GenresContent(screen.genres, isDarkTheme)
+                        FetchGenres -> FetchGenresContent(selectedGenre)
+                        is Genres -> GenresContent(screen.genres, selectedGenre, isDarkTheme)
                         is MovieDetail -> MovieDetailContent(screen.movieId)
                     }
                 }

@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.Movie
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -28,8 +27,7 @@ import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.movies.MoviesContent
 
 @Composable
-fun GenresContent(genres: List<Genre>, isDarkTheme: MutableState<Boolean>) {
-    val selectedGenre = remember { mutableStateOf(genres.first()) }
+fun GenresContent(genres: List<Genre>, selectedGenre: MutableState<Genre>, isDarkTheme: MutableState<Boolean>) {
     Scaffold(
         topBar = { TopAppBar(isDarkTheme.value) { isDarkTheme.value = it } },
         bottomBar = { BottomNavigation(genres, selectedGenre) },
@@ -82,5 +80,6 @@ fun BottomNavigation(genres: List<Genre>, selectedGenre: MutableState<Genre>) {
 @Preview
 @Composable
 private fun GenresContentPreview() {
-    GenresContent(genres = listOf(Genre(1, "Action")), mutableStateOf(false))
+    val genre = Genre(1, "Action")
+    GenresContent(genres = listOf(genre), mutableStateOf(genre), mutableStateOf(false))
 }
