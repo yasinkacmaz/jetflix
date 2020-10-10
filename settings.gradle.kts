@@ -1,2 +1,2 @@
-rootProject.name="Jetflix"
+rootProject.name = "Jetflix"
 include(":app")
