@@ -9,6 +9,11 @@ object Dependencies {
         const val androidBuildPlugin = "com.android.tools.build:gradle:4.2.0-alpha13"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
+
+        object Ktlint {
+            const val plugin = "org.jlleitschuh.gradle.ktlint"
+            const val pluginVersion = "9.4.1"
+        }
     }
 
     object AndroidX {
