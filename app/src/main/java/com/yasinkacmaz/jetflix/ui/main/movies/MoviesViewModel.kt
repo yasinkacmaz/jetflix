@@ -25,7 +25,7 @@ class MoviesViewModel @ViewModelInject constructor(
             try {
                 val moviesResponse = movieService.fetchMovies(genreId, uiValue.page)
                 val movies = uiValue.movies.apply {
-                    addAll(movieMapper.map(moviesResponse.movies))
+                    addAll(moviesResponse.movies.map(movieMapper::map))
                     sortedByDescending(Movie::voteCount)
                 }
                 val page = if (uiValue.page >= moviesResponse.totalPages) {

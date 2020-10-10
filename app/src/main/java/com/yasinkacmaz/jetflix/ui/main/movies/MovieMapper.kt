@@ -1,22 +1,21 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
 import com.yasinkacmaz.jetflix.data.MovieResponse
+import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toPosterUrl
 import javax.inject.Inject
 
-class MovieMapper @Inject constructor() {
-    fun map(movieResponses: List<MovieResponse>): List<Movie> {
-        return movieResponses.map { movieResponse ->
-            Movie(
-                id = movieResponse.id,
-                name = movieResponse.name,
-                originalName = movieResponse.originalTitle,
-                overview = movieResponse.overview,
-                releaseDate = movieResponse.firstAirDate,
-                posterPath = movieResponse.posterPath.orEmpty().toPosterUrl(),
-                voteAverage = movieResponse.voteAverage,
-                voteCount = movieResponse.voteCount
-            )
-        }
+class MovieMapper @Inject constructor() : Mapper<MovieResponse, Movie> {
+    override fun map(input: MovieResponse): Movie {
+        return Movie(
+            id = input.id,
+            name = input.name,
+            originalName = input.originalTitle,
+            overview = input.overview,
+            releaseDate = input.firstAirDate,
+            posterPath = input.posterPath.orEmpty().toPosterUrl(),
+            voteAverage = input.voteAverage,
+            voteCount = input.voteCount
+        )
     }
 }
