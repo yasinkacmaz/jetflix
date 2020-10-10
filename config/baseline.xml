@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<!--a way of suppressing issues before introducing detekt-->
+<SmellBaseline>
+</SmellBaseline>

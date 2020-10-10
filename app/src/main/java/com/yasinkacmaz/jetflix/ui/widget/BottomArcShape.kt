@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.IndicationAmbient
 import androidx.ui.tooling.preview.Preview
 
 class BottomArcShape(private val arcHeight: Float) : Shape {

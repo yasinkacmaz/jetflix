@@ -1,10 +1,10 @@
-name: Ktlint
+name: Quality Checks
 
 on: push
 
 jobs:
-  ktlint:
-    name: Ktlint Checker
+  check:
+    name: Quality Checker
     runs-on: ubuntu-latest
 
     steps:
@@ -12,5 +12,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
-      - name: Build with Gradle
+      - name: Check Ktlint
         run: ./gradlew ktlintCheck
+      - name: Check Detekt
+        run: ./gradlew detekt

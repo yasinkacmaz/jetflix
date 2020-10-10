@@ -1,4 +1,5 @@
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import io.gitlab.arturbosch.detekt.Detekt
 
 buildscript {
     repositories {
@@ -26,7 +27,8 @@ task("clean", Delete::class) {
 }
 
 plugins {
-    id(Dependencies.Gradle.Ktlint.plugin) version (Dependencies.Gradle.Ktlint.pluginVersion)
+    id(Dependencies.Gradle.Ktlint.plugin).version(Dependencies.Gradle.Ktlint.pluginVersion)
+    id(Dependencies.Gradle.Detekt.plugin).version(Dependencies.Gradle.Detekt.pluginVersion)
 }
 
 ktlint {
@@ -37,5 +39,22 @@ ktlint {
     filter {
         exclude("**/generated/**")
         include("**/kotlin/**")
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config = files("$projectDir/config/detekt.yml")
+    baseline = file("$projectDir/config/baseline.xml")
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+}
+
+tasks {
+    withType<Detekt> {
+        this.jvmTarget = "1.8"
     }
 }

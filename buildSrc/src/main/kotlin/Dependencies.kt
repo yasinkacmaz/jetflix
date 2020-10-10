@@ -14,6 +14,10 @@ object Dependencies {
             const val plugin = "org.jlleitschuh.gradle.ktlint"
             const val pluginVersion = "9.4.1"
         }
+        object Detekt {
+            const val plugin = "io.gitlab.arturbosch.detekt"
+            const val pluginVersion = "1.14.1"
+        }
     }
 
     object AndroidX {

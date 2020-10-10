@@ -1,0 +1,3 @@
+# point to your custom config defining rules to run, overwriting default behavior
+NoUnusedImports:
+  active: true
