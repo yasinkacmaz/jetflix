@@ -19,7 +19,7 @@ fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Compos
 
         layout(width, placeables.maxOf(Placeable::height)) {
             placeables.forEach { placeable ->
-                placeable.placeRelative(x = xPosition, y = 0)
+                placeable.place(x = xPosition, y = 0)
                 xPosition += placeable.width + space
             }
         }
