@@ -40,7 +40,7 @@ fun MoviesContent(genre: Genre) {
         movieUiState.movies.isNotEmpty() -> {
             LazyMovies(
                 movieUiState.moviePairs,
-                genre.name,
+                genre,
                 movieUiState.loading,
                 movieUiState.error
             ) {
@@ -53,7 +53,7 @@ fun MoviesContent(genre: Genre) {
 @Composable
 private fun LazyMovies(
     movies: List<Pair<Movie, Movie>>,
-    genreName: String,
+    genre: Genre,
     loading: Boolean,
     error: Throwable?,
     onLoadMore: () -> Unit
@@ -70,7 +70,7 @@ private fun LazyMovies(
             }
 
             if (loading) {
-                LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genreName))
+                LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genre.name))
             }
 
             if (error != null) {

@@ -34,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +49,7 @@ import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
+import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
@@ -101,7 +101,7 @@ private fun Backdrop(backdropUrl: String) {
 
 @Composable
 private fun BackIcon(onClick: () -> Unit) {
-    IconButton(onClick = onClick, modifier = Modifier.zIndex(4f)) {
+    IconButton(onClick = onClick, modifier = Modifier.zIndex(8f).statusBarsPadding()) {
         Icon(Icons.Filled.ArrowBack, tint = Color.White)
     }
 }

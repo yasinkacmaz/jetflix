@@ -25,7 +25,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
+import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
+import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
@@ -63,16 +65,19 @@ private fun MoviePoster(posterPath: String) {
 
 @Composable
 private fun MovieRate(rate: Double, modifier: Modifier) {
+    val shape = RoundedCornerShape(percent = 50)
+    val selectedGenre = SelectedGenreAmbient.current.value
     Surface(
-        shape = RoundedCornerShape(10.dp),
-        color = Color(255, 177, 10),
+        shape = shape,
         elevation = 12.dp,
         modifier = modifier
     ) {
         Text(
             text = rate.toString(),
-            style = MaterialTheme.typography.body2.copy(color = Color.White),
-            modifier = Modifier.padding(horizontal = 8.dp)
+            style = MaterialTheme.typography.body1.copy(color = Color.White),
+            modifier = Modifier
+                .gradientBackground(listOf(selectedGenre.primaryColor, selectedGenre.secondaryColor), shape)
+                .padding(horizontal = 10.dp)
         )
     }
 }
