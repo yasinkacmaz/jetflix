@@ -24,10 +24,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
     buildFeatures {
         compose = true
     }
@@ -53,11 +49,7 @@ android {
     tasks.withType(KotlinCompile::class).configureEach {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs = listOf(
-                "-Xallow-jvm-ir-dependencies",
-                "-Xskip-prerelease-check",
-                "-Xopt-in=kotlin.RequiresOptIn"
-            )
+            freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
         }
     }
 }
