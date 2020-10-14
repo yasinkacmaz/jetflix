@@ -29,7 +29,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = Dependencies.kotlin
+        kotlinCompilerVersion = "1.4.0"
         kotlinCompilerExtensionVersion = Dependencies.Compose.version
     }
 
@@ -44,13 +44,13 @@ android {
             )
         }
     }
+}
 
-
-    tasks.withType(KotlinCompile::class).configureEach {
-        kotlinOptions {
-            jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")
-        }
+tasks.withType(KotlinCompile::class).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs =
+            listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check", "-Xopt-in=kotlin.RequiresOptIn")
     }
 }
 
@@ -68,6 +68,7 @@ dependencies {
 
     // AndroidX
     implementation(Dependencies.AndroidX.appcompat)
+    implementation(Dependencies.AndroidX.palette)
     implementation(Dependencies.AndroidX.Ktx.core)
     implementation(Dependencies.AndroidX.Ktx.viewmodel)
     implementation(Dependencies.AndroidX.Ktx.livedata)

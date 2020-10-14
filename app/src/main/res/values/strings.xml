@@ -13,4 +13,5 @@
   <string name="duration_minutes">%1$s min</string>
   <string name="vote_average">Vote Avg</string>
   <string name="votes">Votes</string>
+  <string name="production_companies">Production Companies</string>
 </resources>
