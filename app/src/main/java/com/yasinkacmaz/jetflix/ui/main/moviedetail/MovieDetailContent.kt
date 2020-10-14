@@ -60,7 +60,9 @@ fun MovieDetailContent(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
     val movieDetailUiState = movieDetailViewModel.uiState.collectAsState().value
     onActive {
-        movieDetailViewModel.fetchMovieDetail(movieId)
+        if (movieDetailUiState.movieDetail == null) {
+            movieDetailViewModel.fetchMovieDetail(movieId)
+        }
     }
     when {
         movieDetailUiState.loading -> {

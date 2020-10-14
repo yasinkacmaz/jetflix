@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
 import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
-import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import dev.chrisbanes.accompanist.coil.CoilImage
 
