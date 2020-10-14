@@ -26,7 +26,9 @@ fun MoviesContent(genre: Genre) {
     val movieUiState = moviesViewModel.uiState.collectAsState().value
 
     onActive {
-        moviesViewModel.fetchMovies(genre.id)
+        if (movieUiState.movies.isEmpty()) {
+            moviesViewModel.fetchMovies(genre.id)
+        }
     }
 
     when {
