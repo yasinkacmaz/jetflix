@@ -13,5 +13,8 @@ data class MovieDetail(
    val releaseDate: String,
    val voteAverage: Double,
    val voteCount: Int,
-   val duration: Int
+   val duration: Int,
+   val productionCompanies: List<ProductionCompany>
 )
+
+data class ProductionCompany(val name: String, val logoUrl: String)

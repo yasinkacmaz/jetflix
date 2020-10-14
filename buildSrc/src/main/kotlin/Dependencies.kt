@@ -1,7 +1,7 @@
 object Dependencies {
     const val kotlin = "1.4.10"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
-    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.2.2"
+    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.0"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
     const val gson = "com.google.code.gson:gson:2.8.6"
 
@@ -18,6 +18,7 @@ object Dependencies {
 
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.2.0"
+        const val palette = "androidx.palette:palette:1.0.0"
 
         object Ktx {
             private const val lifecycleVersion = "2.2.0"

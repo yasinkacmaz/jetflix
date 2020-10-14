@@ -14,9 +14,9 @@ data class MovieDetailResponse(
     @SerializedName("overview") val overview: String,
     @SerializedName("popularity") val popularity: Double,
     @SerializedName("poster_path") val posterPath: String,
-    @SerializedName("production_companies") val productionCompanies: List<ProductionCompany>,
+    @SerializedName("production_companies") val productionCompanies: List<ProductionCompanyResponse>,
     @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("revenue") val revenue: Int,
+    @SerializedName("revenue") val revenue: Double,
     @SerializedName("runtime") val runtime: Int?,
     @SerializedName("spoken_languages") val spokenLanguages: List<SpokenLanguage>,
     @SerializedName("status") val status: String,
@@ -25,9 +25,9 @@ data class MovieDetailResponse(
     @SerializedName("vote_count") val voteCount: Int
 )
 
-data class ProductionCompany(
+data class ProductionCompanyResponse(
     @SerializedName("id") val id: Int,
-    @SerializedName("logo_path") val logoPath: String,
+    @SerializedName("logo_path") val logoPath: String?,
     @SerializedName("name") val name: String,
     @SerializedName("origin_country") val originCountry: String
 )

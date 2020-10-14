@@ -4,12 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Placeable
-import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.unit.Dp
+import com.yasinkacmaz.jetflix.util.toPx
 
+// TODO: Why I cant use DominantColorAmbient with this layout?
 @Composable
 fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
-    val space = (spaceBetween.value * DensityAmbient.current.density).toInt()
+    val space = spaceBetween.toPx().toInt()
     Layout(children, modifier) { measurables, constraints ->
         val placeables = measurables.map { measurable ->
             measurable.measure(constraints)

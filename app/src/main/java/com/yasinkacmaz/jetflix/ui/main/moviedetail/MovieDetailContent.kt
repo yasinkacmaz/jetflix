@@ -1,30 +1,15 @@
 package com.yasinkacmaz.jetflix.ui.main.moviedetail
 
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ConstraintLayout
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarHalf
-import androidx.compose.material.icons.filled.StarOutline
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.onActive
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
@@ -38,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.viewModel
@@ -46,13 +32,18 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
+import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
+import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
+import com.yasinkacmaz.jetflix.util.navigationBarsHeight
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.Locale
+import java.util.*
+
+val DominantColorAmbient = ambientOf<MutableState<Color>> { error("No dominant color") }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -73,31 +64,16 @@ fun MovieDetailContent(movieId: Int) {
             ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
-            MovieDetail(movieDetailUiState.movieDetail)
+            val navigator = NavigatorAmbient.current
+            val primaryColor = SelectedGenreAmbient.current.value.primaryColor
+            val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
+            Providers(DominantColorAmbient provides dominantColor) {
+                Stack(Modifier.fillMaxSize()) {
+                    BackIcon { navigator.goBack() }
+                    MovieDetail(movieDetailUiState.movieDetail)
+                }
+            }
         }
-    }
-}
-
-@Composable
-private fun MovieDetail(movieDetail: MovieDetail) {
-    val navigator = NavigatorAmbient.current
-    BackIcon { navigator.goBack() }
-    ScrollableColumn(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background)) {
-        Backdrop(movieDetail.backdropUrl)
-        PosterAndInformation(movieDetail, Modifier.offset(y = (-80).dp))
-    }
-}
-
-@Composable
-private fun Backdrop(backdropUrl: String) {
-    val arcHeight = 240.dp.value * DensityAmbient.current.density
-    Card(elevation = 16.dp, shape = BottomArcShape(arcHeight = arcHeight)) {
-        CoilImage(
-            data = backdropUrl,
-            contentScale = ContentScale.FillHeight,
-            colorFilter = ColorFilter(Color(0x14000000), BlendMode.SrcOver),
-            modifier = Modifier.fillMaxWidth().height(300.dp)
-        )
     }
 }
 
@@ -109,22 +85,18 @@ private fun BackIcon(onClick: () -> Unit) {
 }
 
 @Composable
-private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
-    ConstraintLayout(modifier.fillMaxWidth().wrapContentHeight().zIndex(17f)) {
-        val (poster, title, originalTitle, genres, specs, rateStars, overview) = createRefs()
+private fun MovieDetail(movieDetail: MovieDetail) {
+    ConstraintLayout(Modifier.background(MaterialTheme.colors.surface).verticalScroll(rememberScrollState())) {
+        val (backdrop, poster, title, originalTitle, genres, specs, rateStars, overview, productionCompanies, space) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
-        Card(
-            elevation = 16.dp,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.width(120.dp).constrainAs(poster) {
-                top.linkTo(parent.top)
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-            }
-        ) {
-            CoilImage(data = movieDetail.posterUrl, contentScale = ContentScale.FillWidth)
-        }
+
+        fetchDominantColorFromPoster(movieDetail.posterUrl, DominantColorAmbient.current)
+        Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
+        Poster(movieDetail.posterUrl, Modifier.zIndex(17f).width(120.dp).constrainAs(poster) {
+            top.linkTo(backdrop.top)
+            linkTo(startGuideline, endGuideline)
+        }.padding(top = 210.dp))
 
         Text(
             text = movieDetail.title.toUpperCase(Locale.getDefault()),
@@ -136,8 +108,7 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
             ),
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(poster.bottom, 16.dp)
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
+                linkTo(startGuideline, endGuideline)
             }
         )
 
@@ -149,8 +120,7 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
             ),
             modifier = Modifier.constrainAs(originalTitle) {
                 top.linkTo(title.bottom)
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
+                linkTo(startGuideline, endGuideline)
             }
         )
 
@@ -159,21 +129,18 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
             style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
             modifier = Modifier.constrainAs(genres) {
                 top.linkTo(originalTitle.bottom, 12.dp)
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
+                linkTo(startGuideline, endGuideline)
             }
         )
 
         MovieFields(movieDetail, modifier = Modifier.constrainAs(specs) {
             top.linkTo(genres.bottom, 12.dp)
-            start.linkTo(startGuideline)
-            end.linkTo(endGuideline)
+            linkTo(startGuideline, endGuideline)
         })
 
         RateStars(movieDetail.voteAverage, modifier = Modifier.constrainAs(rateStars) {
             top.linkTo(specs.bottom, 12.dp)
-            start.linkTo(startGuideline)
-            end.linkTo(endGuideline)
+            linkTo(startGuideline, endGuideline)
         })
 
         Text(
@@ -184,32 +151,68 @@ private fun PosterAndInformation(movieDetail: MovieDetail, modifier: Modifier) =
                 fontFamily = FontFamily.SansSerif,
                 textAlign = TextAlign.Justify
             ),
-            modifier = Modifier.padding(horizontal = 24.dp).constrainAs(overview) {
+            modifier = Modifier.padding(horizontal = 16.dp).constrainAs(overview) {
                 top.linkTo(rateStars.bottom, 32.dp)
-                start.linkTo(startGuideline)
-                end.linkTo(endGuideline)
-            })
+                linkTo(startGuideline, endGuideline)
+            }
+        )
+
+        ProductionCompanies(movieDetail.productionCompanies, Modifier.constrainAs(productionCompanies) {
+            top.linkTo(overview.bottom, 16.dp)
+            linkTo(startGuideline, endGuideline)
+        })
+
+        Spacer(modifier = Modifier.navigationBarsHeight().constrainAs(space) {
+            top.linkTo(productionCompanies.bottom)
+        })
     }
+}
+
+@Composable
+private fun Backdrop(backdropUrl: String, modifier: Modifier) {
+    val arcHeight = 240.dp.value * DensityAmbient.current.density
+    Card(
+        elevation = 16.dp,
+        shape = BottomArcShape(arcHeight = arcHeight),
+        modifier = modifier.fillMaxWidth().height(300.dp)
+    ) {
+        CoilImage(
+            data = backdropUrl,
+            contentScale = ContentScale.FillHeight,
+            colorFilter = ColorFilter(Color(0x14000000), BlendMode.SrcOver),
+            modifier = modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun Poster(posterUrl: String, modifier: Modifier) {
+    Card(elevation = 16.dp, shape = RoundedCornerShape(8.dp), modifier = modifier) {
+        CoilImage(data = posterUrl, contentScale = ContentScale.FillWidth)
+    }
+}
 
 @Composable
 private fun RateStars(voteAverage: Double, modifier: Modifier) {
-    SpacedRow(spaceBetween = 4.dp, modifier) {
+    val dominantColor = DominantColorAmbient.current.value
+    Row(modifier.padding(start = 4.dp)) {
         val maxVote = 10
         val starCount = 5
         repeat(starCount) { starIndex ->
             val voteStarCount = voteAverage / (maxVote / starCount)
             val (tint, asset) = when {
                 voteStarCount >= starIndex + 1 -> {
-                    Color.Magenta to Icons.Filled.Star
+                    dominantColor to Icons.Filled.Star
                 }
                 voteStarCount in starIndex.toDouble()..(starIndex + 1).toDouble() -> {
-                    Color.Magenta to Icons.Filled.StarHalf
+                    dominantColor to Icons.Filled.StarHalf
                 }
                 else -> {
-                    Color.DarkGray to Icons.Filled.StarOutline
+                    dominantColor to Icons.Filled.StarOutline
                 }
             }
             Icon(asset = asset, tint = tint)
+            Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }
@@ -241,5 +244,49 @@ private fun MovieField(name: String, value: String) {
             style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
         )
+    }
+}
+
+@Composable
+private fun ProductionCompanies(companies: List<ProductionCompany>, modifier: Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(id = R.string.production_companies),
+            color = DominantColorAmbient.current.value,
+            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(start = 16.dp)
+        )
+        LazyRowFor(
+            items = companies,
+            contentPadding = PaddingValues(start = 16.dp, top = 16.dp, bottom = 16.dp)
+        ) { company ->
+            ProductionCompany(company = company)
+            Spacer(modifier = Modifier.width(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun ProductionCompany(company: ProductionCompany) {
+    Card(
+        Modifier.width(160.dp).height(100.dp),
+        shape = RoundedCornerShape(12.dp),
+        backgroundColor = DominantColorAmbient.current.value,
+        elevation = 8.dp
+    ) {
+        Column(Modifier.padding(4.dp)) {
+            CoilImage(
+                data = company.logoUrl,
+                modifier = Modifier.size(85.dp, 67.dp).align(Alignment.CenterHorizontally),
+                error = { Icon(asset = Icons.Default.Movie, tint = Color.DarkGray) }
+            )
+            Text(
+                text = company.name,
+                style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
+            )
+        }
     }
 }
