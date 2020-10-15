@@ -20,6 +20,7 @@ data class MovieDetailResponse(
     @SerializedName("runtime") val runtime: Int?,
     @SerializedName("spoken_languages") val spokenLanguages: List<SpokenLanguage>,
     @SerializedName("status") val status: String,
+    @SerializedName("tagline") val tagline: String,
     @SerializedName("title") val title: String,
     @SerializedName("vote_average") val voteAverage: Double,
     @SerializedName("vote_count") val voteCount: Int

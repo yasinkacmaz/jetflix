@@ -15,6 +15,7 @@ class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailResponse, Movi
             title = input.title,
             originalTitle = input.originalTitle,
             overview = input.overview,
+            tagline = input.tagline.dropLastWhile { it == '.' },
             backdropUrl = input.backdropPath.orEmpty().toBackdropUrl(),
             posterUrl = input.posterPath.toPosterUrl(),
             genres = input.genres,
