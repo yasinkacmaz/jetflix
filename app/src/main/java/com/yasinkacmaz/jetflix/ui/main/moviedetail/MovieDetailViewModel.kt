@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieDetailViewModel @ViewModelInject constructor(
     private val movieService: MovieService,
-    private val movieDetailMapper: MovieDetailMapper
+    private val movieDetailMapper: MovieDetailMapper,
+    private val creditsMapper: CreditsMapper
 ) : ViewModel() {
 
     val uiState = MutableStateFlow(MovieDetailUiState())
@@ -23,7 +24,9 @@ class MovieDetailViewModel @ViewModelInject constructor(
             try {
                 val movieDetailResponse = movieService.fetchMovieDetail(movieId)
                 val movieDetail = movieDetailMapper.map(movieDetailResponse)
-                uiState.value = uiValue.copy(movieDetail = movieDetail, loading = false)
+                val creditsResponse = movieService.fetchMovieCredits(movieId)
+                val credits = creditsMapper.map(creditsResponse)
+                uiState.value = uiValue.copy(movieDetail = movieDetail, credits = credits, loading = false)
             } catch (exception: Exception) {
                 uiState.value = uiValue.copy(error = exception, loading = false)
             }
@@ -32,6 +35,7 @@ class MovieDetailViewModel @ViewModelInject constructor(
 
     data class MovieDetailUiState(
         val movieDetail: MovieDetail? = null,
+        val credits: Credits = Credits(listOf(), listOf()),
         val loading: Boolean = false,
         val error: Throwable? = null
     )

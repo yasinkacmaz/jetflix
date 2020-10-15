@@ -7,6 +7,7 @@ data class MovieDetail(
    val title: String,
    val originalTitle: String,
    val overview: String,
+   val tagline: String,
    val backdropUrl: String,
    val posterUrl: String,
    val genres: List<Genre>,

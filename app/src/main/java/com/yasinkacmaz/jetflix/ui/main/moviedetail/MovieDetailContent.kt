@@ -1,8 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.main.moviedetail
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawShadow
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -23,6 +26,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +40,7 @@ import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
+import com.yasinkacmaz.jetflix.util.CircleTopCropTransformation
 import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
 import com.yasinkacmaz.jetflix.util.navigationBarsHeight
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
@@ -68,10 +73,8 @@ fun MovieDetailContent(movieId: Int) {
             val primaryColor = SelectedGenreAmbient.current.value.primaryColor
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
             Providers(DominantColorAmbient provides dominantColor) {
-                Stack(Modifier.fillMaxSize()) {
-                    BackIcon { navigator.goBack() }
-                    MovieDetail(movieDetailUiState.movieDetail)
-                }
+                BackIcon { navigator.goBack() }
+                MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits)
             }
         }
     }
@@ -85,9 +88,10 @@ private fun BackIcon(onClick: () -> Unit) {
 }
 
 @Composable
-private fun MovieDetail(movieDetail: MovieDetail) {
+private fun MovieDetail(movieDetail: MovieDetail, credits: Credits) {
     ConstraintLayout(Modifier.background(MaterialTheme.colors.surface).verticalScroll(rememberScrollState())) {
-        val (backdrop, poster, title, originalTitle, genres, specs, rateStars, overview, productionCompanies, space) = createRefs()
+        val (backdrop, poster, title, originalTitle, genres,
+            specs, rateStars, tagline, overview, cast, crew, productionCompanies, space) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
@@ -106,7 +110,7 @@ private fun MovieDetail(movieDetail: MovieDetail) {
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             ),
-            modifier = Modifier.constrainAs(title) {
+            modifier = Modifier.padding(horizontal = 16.dp).constrainAs(title) {
                 top.linkTo(poster.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
@@ -144,6 +148,20 @@ private fun MovieDetail(movieDetail: MovieDetail) {
         })
 
         Text(
+            text = movieDetail.tagline,
+            color = DominantColorAmbient.current.value,
+            style = MaterialTheme.typography.body2.copy(
+                letterSpacing = 2.sp,
+                lineHeight = 30.sp,
+                fontFamily = FontFamily.Serif,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.padding(horizontal = 16.dp).constrainAs(tagline) {
+                top.linkTo(rateStars.bottom, 32.dp)
+            }
+        )
+
+        Text(
             text = movieDetail.overview,
             style = MaterialTheme.typography.body2.copy(
                 letterSpacing = 2.sp,
@@ -152,15 +170,40 @@ private fun MovieDetail(movieDetail: MovieDetail) {
                 textAlign = TextAlign.Justify
             ),
             modifier = Modifier.padding(horizontal = 16.dp).constrainAs(overview) {
-                top.linkTo(rateStars.bottom, 32.dp)
+                top.linkTo(tagline.bottom, 8.dp)
                 linkTo(startGuideline, endGuideline)
             }
         )
 
-        ProductionCompanies(movieDetail.productionCompanies, Modifier.constrainAs(productionCompanies) {
-            top.linkTo(overview.bottom, 16.dp)
-            linkTo(startGuideline, endGuideline)
-        })
+        MovieSection(
+            R.string.cast,
+            credits.cast,
+            { Person(it.profilePhotoUrl, it.name, it.character, it.gender) },
+            Modifier.constrainAs(cast) {
+                top.linkTo(overview.bottom, 16.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
+
+        MovieSection(
+            R.string.crew,
+            credits.crew,
+            { Person(it.profilePhotoUrl, it.name, it.job, it.gender) },
+            Modifier.constrainAs(crew) {
+                top.linkTo(cast.bottom, 16.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
+
+        MovieSection(
+            R.string.production_companies,
+            movieDetail.productionCompanies,
+            { ProductionCompany(it) },
+            Modifier.constrainAs(productionCompanies) {
+                top.linkTo(crew.bottom, 16.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
 
         Spacer(modifier = Modifier.navigationBarsHeight().constrainAs(space) {
             top.linkTo(productionCompanies.bottom)
@@ -248,21 +291,56 @@ private fun MovieField(name: String, value: String) {
 }
 
 @Composable
-private fun ProductionCompanies(companies: List<ProductionCompany>, modifier: Modifier) {
+private fun <T : Any> MovieSection(
+    @StringRes titleResId: Int,
+    items: List<T>,
+    itemContent: @Composable (T) -> Unit,
+    modifier: Modifier
+) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = stringResource(id = R.string.production_companies),
+            text = stringResource(id = titleResId),
             color = DominantColorAmbient.current.value,
             style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(start = 16.dp)
         )
         LazyRowFor(
-            items = companies,
-            contentPadding = PaddingValues(start = 16.dp, top = 16.dp, bottom = 16.dp)
-        ) { company ->
-            ProductionCompany(company = company)
+            items = items,
+            contentPadding = PaddingValues(start = 16.dp, top = 8.dp, bottom = 8.dp)
+        ) { item ->
+            itemContent(item)
             Spacer(modifier = Modifier.width(16.dp))
         }
+    }
+}
+
+@Composable
+private fun Person(profilePhotoUrl: String?, name: String, job: String, gender: Gender) {
+    Column(Modifier.padding(4.dp).width(140.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        CoilImage(
+            data = profilePhotoUrl ?: gender.toPlaceholderImageRes(),
+            modifier = Modifier.size(120.dp).drawShadow(8.dp, CircleShape, false),
+            fadeIn = true,
+            requestBuilder = { transformations(CircleTopCropTransformation()) }
+        )
+        Text(
+            text = name,
+            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+
+        Text(
+            text = job,
+            style = MaterialTheme.typography.subtitle2.copy(
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Italic
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 2.dp)
+        )
     }
 }
 

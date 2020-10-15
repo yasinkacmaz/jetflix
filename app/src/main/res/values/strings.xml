@@ -14,4 +14,6 @@
   <string name="vote_average">Vote Avg</string>
   <string name="votes">Votes</string>
   <string name="production_companies">Production Companies</string>
+  <string name="cast">Cast</string>
+  <string name="crew">Crew</string>
 </resources>
