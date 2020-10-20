@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.util
+package com.yasinkacmaz.jetflix.util.transformation
 
 import android.graphics.Bitmap
 import android.graphics.Paint

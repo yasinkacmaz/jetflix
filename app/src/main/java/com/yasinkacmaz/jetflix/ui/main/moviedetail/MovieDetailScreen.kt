@@ -46,9 +46,10 @@ import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.toPlaceholderImageRes
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
+import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.CircleTopCropTransformation
+import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
 import com.yasinkacmaz.jetflix.util.navigationBarsHeight
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
@@ -225,9 +226,10 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
             }
         )
 
+        val navigator = NavigatorAmbient.current
         MovieSection(
             images,
-            { ImagesSectionHeader() },
+            { ImagesSectionHeader { navigator.navigateTo(Screen.Images(images = images)) } },
             { Image(it) },
             Modifier.constrainAs(imagesSection) {
                 top.linkTo(crew.bottom, 16.dp)
@@ -388,18 +390,25 @@ private fun Person(profilePhotoUrl: String?, name: String, job: String, gender: 
 }
 
 @Composable
-private fun ImagesSectionHeader() {
-    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+private fun ImagesSectionHeader(onClick: () -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+    ) {
         Text(
             text = stringResource(R.string.images),
             color = DominantColorAmbient.current.value,
             style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
         )
-        Text(
-            text = stringResource(R.string.see_all),
-            color = DominantColorAmbient.current.value,
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
-        )
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable(onClick = onClick)) {
+            Text(
+                text = stringResource(R.string.see_all),
+                color = DominantColorAmbient.current.value,
+                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(end = 4.dp)
+            )
+            Icon(Icons.Filled.ArrowForward, tint = DominantColorAmbient.current.value)
+        }
     }
 }
 
