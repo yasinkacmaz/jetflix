@@ -4,7 +4,12 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.CreditsMapper
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.ImageMapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -12,7 +17,8 @@ import kotlinx.coroutines.launch
 class MovieDetailViewModel @ViewModelInject constructor(
     private val movieService: MovieService,
     private val movieDetailMapper: MovieDetailMapper,
-    private val creditsMapper: CreditsMapper
+    private val creditsMapper: CreditsMapper,
+    private val imageMapper: ImageMapper
 ) : ViewModel() {
 
     val uiState = MutableStateFlow(MovieDetailUiState())
@@ -22,11 +28,24 @@ class MovieDetailViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             uiState.value = uiValue.copy(loading = true)
             try {
-                val movieDetailResponse = movieService.fetchMovieDetail(movieId)
-                val movieDetail = movieDetailMapper.map(movieDetailResponse)
-                val creditsResponse = movieService.fetchMovieCredits(movieId)
-                val credits = creditsMapper.map(creditsResponse)
-                uiState.value = uiValue.copy(movieDetail = movieDetail, credits = credits, loading = false)
+                val movieDetail = async {
+                    val movieDetailResponse = movieService.fetchMovieDetail(movieId)
+                    movieDetailMapper.map(movieDetailResponse)
+                }
+                val credits = async {
+                    val creditsResponse = movieService.fetchMovieCredits(movieId)
+                    creditsMapper.map(creditsResponse)
+                }
+                val images = async {
+                    val imagesResponse = movieService.fetchMovieImages(movieId)
+                    imageMapper.map(imagesResponse)
+                }
+                uiState.value = uiValue.copy(
+                    movieDetail = movieDetail.await(),
+                    credits = credits.await(),
+                    images = images.await(),
+                    loading = false
+                )
             } catch (exception: Exception) {
                 uiState.value = uiValue.copy(error = exception, loading = false)
             }
@@ -36,6 +55,7 @@ class MovieDetailViewModel @ViewModelInject constructor(
     data class MovieDetailUiState(
         val movieDetail: MovieDetail? = null,
         val credits: Credits = Credits(listOf(), listOf()),
+        val images: List<Image> = listOf(),
         val loading: Boolean = false,
         val error: Throwable? = null
     )
