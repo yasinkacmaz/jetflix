@@ -21,7 +21,7 @@ import com.yasinkacmaz.jetflix.util.modifier.gradientBorder
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
 
 @Composable
-fun GenresContent(genreUiModels: List<GenreUiModel>, isDarkTheme: MutableState<Boolean>) {
+fun GenresScreen(genreUiModels: List<GenreUiModel>, isDarkTheme: MutableState<Boolean>) {
     val selectedGenre = SelectedGenreAmbient.current
     Surface(modifier = Modifier.fillMaxSize(), elevation = 0.dp) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {

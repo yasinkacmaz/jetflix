@@ -7,7 +7,7 @@ data class MovieDetailResponse(
     @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("budget") val budget: Int,
     @SerializedName("genres") val genres: List<Genre>,
-    @SerializedName("homepage") val homepage: String,
+    @SerializedName("homepage") val homepage: String?,
     @SerializedName("id") val id: Int,
     @SerializedName("original_language") val originalLanguage: String,
     @SerializedName("original_title") val originalTitle: String,

@@ -15,7 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun FetchGenresContent() {
+fun FetchGenresScreen() {
     val fetchGenresViewModel: FetchGenresViewModel = viewModel()
     val fetchGenresUiState = fetchGenresViewModel.uiState.collectAsState().value
 
