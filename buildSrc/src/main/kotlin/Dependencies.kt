@@ -6,7 +6,7 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:2.8.6"
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:4.2.0-alpha13"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:4.2.0-alpha14"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
 

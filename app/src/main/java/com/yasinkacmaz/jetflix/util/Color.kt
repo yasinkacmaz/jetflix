@@ -27,10 +27,11 @@ fun fetchDominantColorFromPoster(
         val loader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data(posterUrl)
+            .size(128,128)
             .allowHardware(false)
             .build()
 
-        val bitmap = (loader.execute(request) as? SuccessResult)?.drawable?.toBitmap(128, 128) ?: return@LaunchedTask
+        val bitmap = (loader.execute(request) as? SuccessResult)?.drawable?.toBitmap() ?: return@LaunchedTask
         val dominantColor = Palette.from(bitmap).generate().getVibrantColor(defaultColor.toArgb())
         colorState.value = Color(dominantColor)
     }
