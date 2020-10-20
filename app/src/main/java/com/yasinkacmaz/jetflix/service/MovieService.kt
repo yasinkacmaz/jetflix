@@ -1,9 +1,6 @@
 package com.yasinkacmaz.jetflix.service
 
-import com.yasinkacmaz.jetflix.data.CreditsResponse
-import com.yasinkacmaz.jetflix.data.GenresResponse
-import com.yasinkacmaz.jetflix.data.MovieDetailResponse
-import com.yasinkacmaz.jetflix.data.MoviesResponse
+import com.yasinkacmaz.jetflix.data.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -24,4 +21,7 @@ interface MovieService {
 
     @GET("movie/{movie_id}/credits")
     suspend fun fetchMovieCredits(@Path("movie_id") movieId: Int): CreditsResponse
+
+    @GET("movie/{movie_id}/images")
+    suspend fun fetchMovieImages(@Path("movie_id") movieId: Int): ImagesResponse
 }

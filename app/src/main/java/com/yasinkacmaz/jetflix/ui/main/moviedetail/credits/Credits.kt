@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.moviedetail
+package com.yasinkacmaz.jetflix.ui.main.moviedetail.credits
 
 import androidx.annotation.DrawableRes
 import com.yasinkacmaz.jetflix.R

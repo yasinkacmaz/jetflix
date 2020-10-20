@@ -13,7 +13,9 @@
   <string name="duration_minutes">%1$s min</string>
   <string name="vote_average">Vote Avg</string>
   <string name="votes">Votes</string>
-  <string name="production_companies">Production Companies</string>
   <string name="cast">Cast</string>
   <string name="crew">Crew</string>
+  <string name="images">Images</string>
+  <string name="see_all">See All</string>
+  <string name="production_companies">Production Companies</string>
 </resources>

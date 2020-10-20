@@ -41,6 +41,10 @@ import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.toPlaceholderImageRes
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
@@ -50,8 +54,7 @@ import com.yasinkacmaz.jetflix.util.navigationBarsHeight
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.*
-
+import java.util.Locale
 
 val DominantColorAmbient = ambientOf<MutableState<Color>> { error("No dominant color") }
 
@@ -78,7 +81,7 @@ fun MovieDetailScreen(movieId: Int) {
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
             Providers(DominantColorAmbient provides dominantColor) {
                 AppBar(movieDetailUiState.movieDetail.homepage)
-                MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits)
+                MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
             }
         }
     }
@@ -115,10 +118,10 @@ private fun openHomepage(context: Context, homepage: String, dominantColor: Colo
 }
 
 @Composable
-private fun MovieDetail(movieDetail: MovieDetail, credits: Credits) {
+private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>) {
     ConstraintLayout(Modifier.background(MaterialTheme.colors.surface).verticalScroll(rememberScrollState())) {
-        val (backdrop, poster, title, originalTitle, genres,
-            specs, rateStars, tagline, overview, cast, crew, productionCompanies, space) = createRefs()
+        val (backdrop, poster, title, originalTitle, genres, specs, rateStars, tagline, overview) = createRefs()
+        val (cast, crew, imagesSection, productionCompanies, space) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
@@ -203,8 +206,8 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits) {
         )
 
         MovieSection(
-            R.string.cast,
             credits.cast,
+            { MovieSectionHeader(titleResId = R.string.cast) },
             { Person(it.profilePhotoUrl, it.name, it.character, it.gender) },
             Modifier.constrainAs(cast) {
                 top.linkTo(overview.bottom, 16.dp)
@@ -213,8 +216,8 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits) {
         )
 
         MovieSection(
-            R.string.crew,
             credits.crew,
+            { MovieSectionHeader(titleResId = R.string.crew) },
             { Person(it.profilePhotoUrl, it.name, it.job, it.gender) },
             Modifier.constrainAs(crew) {
                 top.linkTo(cast.bottom, 16.dp)
@@ -223,11 +226,21 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits) {
         )
 
         MovieSection(
-            R.string.production_companies,
+            images,
+            { ImagesSectionHeader() },
+            { Image(it) },
+            Modifier.constrainAs(imagesSection) {
+                top.linkTo(crew.bottom, 16.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
+
+        MovieSection(
             movieDetail.productionCompanies,
+            { MovieSectionHeader(titleResId = R.string.production_companies) },
             { ProductionCompany(it) },
             Modifier.constrainAs(productionCompanies) {
-                top.linkTo(crew.bottom, 16.dp)
+                top.linkTo(imagesSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
         )
@@ -319,18 +332,13 @@ private fun MovieField(name: String, value: String) {
 
 @Composable
 private fun <T : Any> MovieSection(
-    @StringRes titleResId: Int,
     items: List<T>,
+    header: @Composable () -> Unit,
     itemContent: @Composable (T) -> Unit,
     modifier: Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = stringResource(id = titleResId),
-            color = DominantColorAmbient.current.value,
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(start = 16.dp)
-        )
+        header()
         LazyRowFor(
             items = items,
             contentPadding = PaddingValues(start = 16.dp, top = 8.dp, bottom = 8.dp)
@@ -340,6 +348,14 @@ private fun <T : Any> MovieSection(
         }
     }
 }
+
+@Composable
+private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
+    text = stringResource(titleResId),
+    color = DominantColorAmbient.current.value,
+    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+    modifier = Modifier.padding(start = 16.dp)
+)
 
 @Composable
 private fun Person(profilePhotoUrl: String?, name: String, job: String, gender: Gender) {
@@ -367,6 +383,37 @@ private fun Person(profilePhotoUrl: String?, name: String, job: String, gender: 
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 2.dp)
+        )
+    }
+}
+
+@Composable
+private fun ImagesSectionHeader() {
+    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Text(
+            text = stringResource(R.string.images),
+            color = DominantColorAmbient.current.value,
+            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+        )
+        Text(
+            text = stringResource(R.string.see_all),
+            color = DominantColorAmbient.current.value,
+            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+        )
+    }
+}
+
+@Composable
+private fun Image(image: Image) {
+    Card(
+        Modifier.width(200.dp).height(110.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = 8.dp
+    ) {
+        CoilImage(
+            data = image.url,
+            contentScale = ContentScale.FillWidth,
+            error = { Icon(asset = Icons.Default.Movie, tint = Color.DarkGray) }
         )
     }
 }
