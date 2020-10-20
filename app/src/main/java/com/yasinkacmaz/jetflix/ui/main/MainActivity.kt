@@ -11,11 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LifecycleOwnerAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.core.view.WindowCompat
-import com.yasinkacmaz.jetflix.ui.main.fetchgenres.FetchGenresContent
-import com.yasinkacmaz.jetflix.ui.main.genres.GenresContent
+import com.yasinkacmaz.jetflix.ui.main.fetchgenres.FetchGenresScreen
 import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
+import com.yasinkacmaz.jetflix.ui.main.genres.GenresScreen
 import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailContent
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
@@ -56,9 +56,9 @@ class MainActivity : AppCompatActivity() {
                 JetflixTheme(isDarkTheme = isDarkTheme.value) {
                     Crossfade(current = navigator.currentScreen) { screen ->
                         when (screen) {
-                            FetchGenres -> FetchGenresContent()
-                            is Genres -> GenresContent(screen.genreUiModels, isDarkTheme)
-                            is MovieDetail -> MovieDetailContent(screen.movieId)
+                            FetchGenres -> FetchGenresScreen()
+                            is Genres -> GenresScreen(screen.genreUiModels, isDarkTheme)
+                            is MovieDetail -> MovieDetailScreen(screen.movieId)
                         }
                     }
                 }

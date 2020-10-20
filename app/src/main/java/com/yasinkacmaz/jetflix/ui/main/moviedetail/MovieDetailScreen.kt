@@ -1,6 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.main.moviedetail
 
+import android.content.Context
+import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRowFor
@@ -11,6 +14,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Public
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +22,7 @@ import androidx.compose.ui.draw.drawShadow
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.DensityAmbient
@@ -26,7 +31,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,11 +52,12 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 
+
 val DominantColorAmbient = ambientOf<MutableState<Color>> { error("No dominant color") }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun MovieDetailContent(movieId: Int) {
+fun MovieDetailScreen(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
     val movieDetailUiState = movieDetailViewModel.uiState.collectAsState().value
     onActive {
@@ -69,11 +74,10 @@ fun MovieDetailContent(movieId: Int) {
             ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
-            val navigator = NavigatorAmbient.current
             val primaryColor = SelectedGenreAmbient.current.value.primaryColor
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
             Providers(DominantColorAmbient provides dominantColor) {
-                BackIcon { navigator.goBack() }
+                AppBar(movieDetailUiState.movieDetail.homepage)
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits)
             }
         }
@@ -81,10 +85,33 @@ fun MovieDetailContent(movieId: Int) {
 }
 
 @Composable
-private fun BackIcon(onClick: () -> Unit) {
-    IconButton(onClick = onClick, modifier = Modifier.zIndex(8f).statusBarsPadding()) {
-        Icon(Icons.Filled.ArrowBack, tint = Color.White)
+private fun AppBar(homepage: String?) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth().statusBarsPadding()
+            .padding(horizontal = 4.dp, vertical = 2.dp).zIndex(8f)
+    ) {
+        val navigator = NavigatorAmbient.current
+        IconButton(onClick = { navigator.goBack() }) {
+            Icon(Icons.Filled.ArrowBack, tint = Color.White)
+        }
+        if (homepage != null) {
+            val dominantColor = DominantColorAmbient.current.value
+            val context = ContextAmbient.current
+            IconButton(onClick = {
+                openHomepage(context, homepage, dominantColor)
+            }) {
+                Icon(Icons.Rounded.Public, tint = Color.White)
+            }
+        }
     }
+}
+
+
+private fun openHomepage(context: Context, homepage: String, dominantColor: Color) {
+    val builder = CustomTabsIntent.Builder()
+    val customTabsIntent = builder.setToolbarColor(dominantColor.toArgb()).build()
+    customTabsIntent.launchUrl(context, Uri.parse(homepage))
 }
 
 @Composable

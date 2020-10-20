@@ -69,6 +69,7 @@ dependencies {
     // AndroidX
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.palette)
+    implementation(Dependencies.AndroidX.browser)
     implementation(Dependencies.AndroidX.Ktx.core)
     implementation(Dependencies.AndroidX.Ktx.viewmodel)
     implementation(Dependencies.AndroidX.Ktx.livedata)

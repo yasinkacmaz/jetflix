@@ -19,6 +19,7 @@ object Dependencies {
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.2.0"
         const val palette = "androidx.palette:palette:1.0.0"
+        const val browser = "androidx.browser:browser:1.2.0"
 
         object Ktx {
             private const val lifecycleVersion = "2.2.0"

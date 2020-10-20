@@ -8,8 +8,9 @@ import javax.inject.Inject
 
 class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailResponse, MovieDetail> {
     override fun map(input: MovieDetailResponse): MovieDetail {
-        val productionCompanies =
-            input.productionCompanies.map { ProductionCompany(it.name, it.logoPath.orEmpty().toPosterUrl()) }
+        val productionCompanies = input.productionCompanies.map {
+            ProductionCompany(it.name, it.logoPath.orEmpty().toPosterUrl())
+        }
         return MovieDetail(
             id = input.id,
             title = input.title,
@@ -23,7 +24,8 @@ class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailResponse, Movi
             voteAverage = input.voteAverage,
             voteCount = input.voteCount,
             duration = input.runtime ?: -1,
-            productionCompanies = productionCompanies
+            productionCompanies = productionCompanies,
+            homepage = input.homepage
         )
     }
 }
