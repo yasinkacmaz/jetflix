@@ -18,7 +18,6 @@ import androidx.compose.material.icons.rounded.Public
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawShadow
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -49,13 +48,12 @@ import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
-import com.yasinkacmaz.jetflix.util.navigationBarsHeight
+import com.yasinkacmaz.jetflix.util.navigationBarsHeightPlus
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
+import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.Locale
 
 val DominantColorAmbient = ambientOf<MutableState<Color>> { error("No dominant color") }
 
@@ -92,20 +90,18 @@ fun MovieDetailScreen(movieId: Int) {
 private fun AppBar(homepage: String?) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().statusBarsPadding()
-            .padding(horizontal = 4.dp, vertical = 2.dp).zIndex(8f)
+        modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 4.dp, vertical = 2.dp).zIndex(8f)
     ) {
         val navigator = NavigatorAmbient.current
+        val tint = Color.White
         IconButton(onClick = { navigator.goBack() }) {
-            Icon(Icons.Filled.ArrowBack, tint = Color.White)
+            Icon(Icons.Filled.ArrowBack, tint = tint)
         }
         if (homepage != null) {
             val dominantColor = DominantColorAmbient.current.value
             val context = ContextAmbient.current
-            IconButton(onClick = {
-                openHomepage(context, homepage, dominantColor)
-            }) {
-                Icon(Icons.Rounded.Public, tint = Color.White)
+            IconButton(onClick = { openHomepage(context, homepage, dominantColor) }) {
+                Icon(Icons.Rounded.Public, tint = tint)
             }
         }
     }
@@ -128,45 +124,48 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
 
         fetchDominantColorFromPoster(movieDetail.posterUrl, DominantColorAmbient.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
-        Poster(movieDetail.posterUrl, Modifier.zIndex(17f).width(120.dp).constrainAs(poster) {
+        Poster(movieDetail.posterUrl, Modifier.zIndex(17f).width(150.dp).constrainAs(poster) {
             top.linkTo(backdrop.top)
             linkTo(startGuideline, endGuideline)
-        }.padding(top = 210.dp))
+        }.padding(top = 240.dp))
 
         Text(
-            text = movieDetail.title.toUpperCase(Locale.getDefault()),
-            style = MaterialTheme.typography.h2.copy(
-                fontSize = 22.sp,
-                letterSpacing = 4.sp,
-                fontWeight = FontWeight.Medium,
+            text = movieDetail.title,
+            style = MaterialTheme.typography.h1.copy(
+                fontSize = 26.sp,
+                letterSpacing = 3.sp,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
             ),
             modifier = Modifier.padding(horizontal = 16.dp).constrainAs(title) {
-                top.linkTo(poster.bottom, 16.dp)
+                top.linkTo(poster.bottom, 8.dp)
                 linkTo(startGuideline, endGuideline)
             }
         )
 
-        Text(
-            text = "(${movieDetail.originalTitle})",
-            style = MaterialTheme.typography.subtitle2.copy(
-                fontStyle = FontStyle.Italic,
-                letterSpacing = 2.sp
-            ),
-            modifier = Modifier.constrainAs(originalTitle) {
+        if (movieDetail.title != movieDetail.originalTitle) {
+            Text(
+                text = "(${movieDetail.originalTitle})",
+                style = MaterialTheme.typography.subtitle2.copy(
+                    fontStyle = FontStyle.Italic,
+                    letterSpacing = 2.sp
+                ),
+                modifier = Modifier.padding(horizontal = 16.dp).constrainAs(originalTitle) {
+                    top.linkTo(title.bottom)
+                    linkTo(startGuideline, endGuideline)
+                }
+            )
+        } else {
+            Spacer(modifier = Modifier.constrainAs(originalTitle) {
                 top.linkTo(title.bottom)
                 linkTo(startGuideline, endGuideline)
-            }
-        )
+            })
+        }
 
-        Text(
-            text = movieDetail.genres.take(4).map(Genre::name).joinToString(),
-            style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
-            modifier = Modifier.constrainAs(genres) {
-                top.linkTo(originalTitle.bottom, 12.dp)
-                linkTo(startGuideline, endGuideline)
-            }
-        )
+        GenreChips(movieDetail.genres.take(4), modifier = Modifier.Companion.constrainAs(genres) {
+            top.linkTo(originalTitle.bottom, 16.dp)
+            linkTo(startGuideline, endGuideline)
+        })
 
         MovieFields(movieDetail, modifier = Modifier.constrainAs(specs) {
             top.linkTo(genres.bottom, 12.dp)
@@ -181,11 +180,12 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
         Text(
             text = movieDetail.tagline,
             color = DominantColorAmbient.current.value,
-            style = MaterialTheme.typography.body2.copy(
+            style = MaterialTheme.typography.body1.copy(
                 letterSpacing = 2.sp,
-                lineHeight = 30.sp,
+                lineHeight = 24.sp,
                 fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Justify
             ),
             modifier = Modifier.padding(horizontal = 16.dp).constrainAs(tagline) {
                 top.linkTo(rateStars.bottom, 32.dp)
@@ -247,7 +247,7 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
             }
         )
 
-        Spacer(modifier = Modifier.navigationBarsHeight().constrainAs(space) {
+        Spacer(modifier = Modifier.navigationBarsHeightPlus(16.dp).constrainAs(space) {
             top.linkTo(productionCompanies.bottom)
         })
     }
@@ -259,12 +259,12 @@ private fun Backdrop(backdropUrl: String, modifier: Modifier) {
     Card(
         elevation = 16.dp,
         shape = BottomArcShape(arcHeight = arcHeight),
-        modifier = modifier.fillMaxWidth().height(300.dp)
+        modifier = modifier.fillMaxWidth().height(360.dp)
     ) {
         CoilImage(
             data = backdropUrl,
             contentScale = ContentScale.FillHeight,
-            colorFilter = ColorFilter(Color(0x14000000), BlendMode.SrcOver),
+            colorFilter = ColorFilter(Color(0x23000000), BlendMode.SrcOver),
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -272,8 +272,25 @@ private fun Backdrop(backdropUrl: String, modifier: Modifier) {
 
 @Composable
 private fun Poster(posterUrl: String, modifier: Modifier) {
-    Card(elevation = 16.dp, shape = RoundedCornerShape(8.dp), modifier = modifier) {
+    Card(elevation = 24.dp, shape = RoundedCornerShape(8.dp), modifier = modifier) {
         CoilImage(data = posterUrl, contentScale = ContentScale.FillWidth)
+    }
+}
+
+@Composable
+private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
+    SpacedRow(spaceBetween = 8.dp, modifier = modifier) {
+        genres.map(Genre::name).forEach {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
+                modifier = Modifier.border(
+                    1.25.dp,
+                    DominantColorAmbient.current.value,
+                    RoundedCornerShape(50)
+                ).padding(horizontal = 6.dp, vertical = 3.dp)
+            )
+        }
     }
 }
 
@@ -304,7 +321,7 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
 
 @Composable
 private fun MovieFields(movieDetail: MovieDetail, modifier: Modifier) {
-    SpacedRow(spaceBetween = 16.dp, modifier = modifier) {
+    SpacedRow(spaceBetween = 20.dp, modifier = modifier) {
         val context = ContextAmbient.current
         MovieField(context.getString(R.string.release_date), movieDetail.releaseDate)
         MovieField(
@@ -341,10 +358,7 @@ private fun <T : Any> MovieSection(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         header()
-        LazyRowFor(
-            items = items,
-            contentPadding = PaddingValues(start = 16.dp, top = 8.dp, bottom = 8.dp)
-        ) { item ->
+        LazyRowFor(items = items, contentPadding = PaddingValues(16.dp)) { item ->
             itemContent(item)
             Spacer(modifier = Modifier.width(16.dp))
         }
@@ -355,19 +369,20 @@ private fun <T : Any> MovieSection(
 private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
     text = stringResource(titleResId),
     color = DominantColorAmbient.current.value,
-    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     modifier = Modifier.padding(start = 16.dp)
 )
 
 @Composable
 private fun Person(profilePhotoUrl: String?, name: String, job: String, gender: Gender) {
     Column(Modifier.padding(4.dp).width(140.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        CoilImage(
-            data = profilePhotoUrl ?: gender.toPlaceholderImageRes(),
-            modifier = Modifier.size(120.dp).drawShadow(8.dp, CircleShape, false),
-            fadeIn = true,
-            requestBuilder = { transformations(CircleTopCropTransformation()) }
-        )
+        Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
+            CoilImage(
+                data = profilePhotoUrl ?: gender.toPlaceholderImageRes(),
+                fadeIn = true,
+                requestBuilder = { transformations(CircleTopCropTransformation()) }
+            )
+        }
         Text(
             text = name,
             style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
@@ -398,9 +413,12 @@ private fun ImagesSectionHeader(onClick: () -> Unit) {
         Text(
             text = stringResource(R.string.images),
             color = DominantColorAmbient.current.value,
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
         )
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable(onClick = onClick)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable(onClick = onClick).padding(4.dp)
+        ) {
             Text(
                 text = stringResource(R.string.see_all),
                 color = DominantColorAmbient.current.value,
@@ -415,13 +433,13 @@ private fun ImagesSectionHeader(onClick: () -> Unit) {
 @Composable
 private fun Image(image: Image) {
     Card(
-        Modifier.width(200.dp).height(110.dp),
+        Modifier.width(240.dp).height(160.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
         CoilImage(
             data = image.url,
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.Crop,
             error = { Icon(asset = Icons.Default.Movie, tint = Color.DarkGray) }
         )
     }
@@ -430,15 +448,15 @@ private fun Image(image: Image) {
 @Composable
 private fun ProductionCompany(company: ProductionCompany) {
     Card(
-        Modifier.width(160.dp).height(100.dp),
+        Modifier.width(160.dp).height(120.dp),
         shape = RoundedCornerShape(12.dp),
-        backgroundColor = DominantColorAmbient.current.value,
         elevation = 8.dp
     ) {
-        Column(Modifier.padding(4.dp)) {
+        Column(Modifier.background(DominantColorAmbient.current.value.copy(alpha = 0.7f)).padding(4.dp)) {
             CoilImage(
                 data = company.logoUrl,
-                modifier = Modifier.size(85.dp, 67.dp).align(Alignment.CenterHorizontally),
+                contentScale = ContentScale.Inside,
+                modifier = Modifier.size(150.dp, 85.dp).align(Alignment.CenterHorizontally),
                 error = { Icon(asset = Icons.Default.Movie, tint = Color.DarkGray) }
             )
             Text(

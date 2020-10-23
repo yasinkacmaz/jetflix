@@ -13,6 +13,6 @@ enum class Gender { MALE, FEMALE }
 
 @DrawableRes
 fun Gender.toPlaceholderImageRes() = when(this) {
-    Gender.MALE -> R.drawable.ic_male
-    Gender.FEMALE -> R.drawable.ic_female
+    Gender.MALE -> R.drawable.ic_man
+    Gender.FEMALE -> R.drawable.ic_woman
 }
