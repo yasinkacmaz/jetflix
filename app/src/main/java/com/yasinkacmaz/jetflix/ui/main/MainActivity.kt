@@ -18,6 +18,7 @@ import com.yasinkacmaz.jetflix.ui.main.genres.GenresScreen
 import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.main.images.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailScreen
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
                             is Genres -> GenresScreen(screen.genreUiModels, isDarkTheme)
                             is MovieDetail -> MovieDetailScreen(screen.movieId)
                             is Screen.Images -> ImagesScreen(screen.images)
+                            is Screen.PeopleGrid -> PeopleGridScreen(screen.people)
                         }
                     }
                 }

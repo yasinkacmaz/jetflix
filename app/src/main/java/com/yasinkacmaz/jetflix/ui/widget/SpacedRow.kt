@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Dp
 import com.yasinkacmaz.jetflix.util.toPx
 
 // TODO: Why I cant use DominantColorAmbient with this layout?
+// TODO: Maybe use placeable.placeRelative
 @Composable
 fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
     val space = spaceBetween.toPx().toInt()

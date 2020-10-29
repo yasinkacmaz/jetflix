@@ -9,7 +9,6 @@ import androidx.compose.animation.animatedFloat
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRowFor
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
@@ -44,18 +43,18 @@ import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.toPlaceholderImageRes
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.Person
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.animation.*
+import com.yasinkacmaz.jetflix.util.animation.AnimationType
+import com.yasinkacmaz.jetflix.util.animation.ScaleAnimation
+import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
 import com.yasinkacmaz.jetflix.util.navigationBarsHeightPlus
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
-import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -210,10 +209,11 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
             }
         )
 
+        val navigator = NavigatorAmbient.current
         MovieSection(
             credits.cast,
-            { MovieSectionHeader(titleResId = R.string.cast) },
-            { Person(it.profilePhotoUrl, it.name, it.character, it.gender) },
+            { SectionHeaderWithDetail(R.string.cast) { navigator.navigateTo(Screen.PeopleGrid(credits.cast)) } },
+            { Person(it.profilePhotoUrl, it.name, it.character, it.gender, Modifier.width(140.dp)) },
             Modifier.constrainAs(cast) {
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -222,18 +222,17 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
 
         MovieSection(
             credits.crew,
-            { MovieSectionHeader(titleResId = R.string.crew) },
-            { Person(it.profilePhotoUrl, it.name, it.job, it.gender) },
+            { SectionHeaderWithDetail(R.string.crew) { navigator.navigateTo(Screen.PeopleGrid(credits.crew)) } },
+            { Person(it.profilePhotoUrl, it.name, it.character, it.gender, Modifier.width(140.dp)) },
             Modifier.constrainAs(crew) {
                 top.linkTo(cast.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
         )
 
-        val navigator = NavigatorAmbient.current
         MovieSection(
             images,
-            { ImagesSectionHeader { navigator.navigateTo(Screen.Images(images = images)) } },
+            { SectionHeaderWithDetail(R.string.images) { navigator.navigateTo(Screen.Images(images = images)) } },
             { Image(it) },
             Modifier.constrainAs(imagesSection) {
                 top.linkTo(crew.bottom, 16.dp)
@@ -409,44 +408,13 @@ private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
 )
 
 @Composable
-private fun Person(profilePhotoUrl: String?, name: String, job: String, gender: Gender) {
-    Column(Modifier.padding(4.dp).width(140.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
-            CoilImage(
-                data = profilePhotoUrl ?: gender.toPlaceholderImageRes(),
-                fadeIn = true,
-                requestBuilder = { transformations(CircleTopCropTransformation()) }
-            )
-        }
-        Text(
-            text = name,
-            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-
-        Text(
-            text = job,
-            style = MaterialTheme.typography.subtitle2.copy(
-                fontWeight = FontWeight.Normal,
-                fontStyle = FontStyle.Italic
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 2.dp)
-        )
-    }
-}
-
-@Composable
-private fun ImagesSectionHeader(onClick: () -> Unit) {
+private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     ) {
         Text(
-            text = stringResource(R.string.images),
+            text = stringResource(textRes),
             color = DominantColorAmbient.current.value,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
         )

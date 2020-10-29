@@ -24,8 +24,8 @@ import androidx.compose.ui.zIndex
 import coil.transform.BlurTransformation
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.util.navigationBarsPadding
-import com.yasinkacmaz.jetflix.util.Pager
-import com.yasinkacmaz.jetflix.util.PagerState
+import com.yasinkacmaz.jetflix.ui.widget.Pager
+import com.yasinkacmaz.jetflix.ui.widget.PagerState
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
 

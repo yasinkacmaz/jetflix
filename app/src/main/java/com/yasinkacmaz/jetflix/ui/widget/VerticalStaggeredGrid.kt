@@ -1,42 +1,61 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaAnimation
+import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaArgs
 import com.yasinkacmaz.jetflix.util.randomColor
 import kotlin.math.ceil
 
 @Composable
 fun VerticalStaggeredGrid(
-    modifier: Modifier = Modifier,
+    itemCount: Int,
     columnCount: Int,
     columnSpacing: Dp = 0.dp,
     rowSpacing: Dp = 0.dp,
-    children: @Composable () -> Unit
+    contentPadding: PaddingValues = PaddingValues(),
+    modifier: Modifier = Modifier,
+    itemContent: @Composable (Int, Modifier) -> Unit
 ) {
     Layout(
-        children = children,
+        children = {
+            for (index in 0..itemCount) {
+                val scaleAndAlphaAnimation = remember(index) {
+                    val animation =
+                        tween<Float>(durationMillis = 500, delayMillis = 120 * index, easing = FastOutSlowInEasing)
+                    val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
+                    ScaleAndAlphaAnimation(args = args, animation = animation)
+                }
+                val (scale, alpha) = scaleAndAlphaAnimation.scaleAndAlpha()
+                itemContent(index, Modifier.drawLayer(alpha = alpha, scaleX = scale, scaleY = scale))
+            }
+        },
         modifier = modifier.verticalScroll(rememberScrollState())
     ) { measurables, constraints ->
         val rowSpacingPx = rowSpacing.toIntPx()
         val columnSpacingPx = columnSpacing.toIntPx()
         val totalColumnSpacing = (columnCount - 1) * columnSpacingPx
+        val horizontalPadding = contentPadding.start.toIntPx() + contentPadding.end.toIntPx()
         val rowCount = ceil(measurables.count() / columnCount.toFloat()).toInt()
-        val itemWidth = (constraints.maxWidth - totalColumnSpacing) / columnCount
+        val itemWidth = (constraints.maxWidth - totalColumnSpacing - horizontalPadding) / columnCount
         val itemConstraints = constraints.copy(maxWidth = itemWidth)
         val columnHeights = IntArray(columnCount) { 0 }
         val placeables = measurables.mapIndexed { index, measurable ->
+            measurable.parentData
             val column = shortestColumnIndex(columnHeights)
             val placeable = measurable.measure(itemConstraints)
             columnHeights[column] += placeable.height
@@ -44,13 +63,14 @@ fun VerticalStaggeredGrid(
             placeable
         }
 
-        val height = columnHeights.maxOrNull()?.coerceIn(constraints.minHeight, constraints.maxHeight)
-        layout(constraints.maxWidth, height ?: constraints.minHeight) {
-            val columnY = IntArray(columnCount) { 0 }
+        val height = columnHeights.maxOrNull()!!.plus(contentPadding.top.toIntPx() + contentPadding.bottom.toIntPx())
+            .coerceIn(constraints.minHeight, constraints.maxHeight)
+        layout(constraints.maxWidth, height) {
+            val columnY = IntArray(columnCount) { contentPadding.top.toIntPx() }
             placeables.forEachIndexed { index, placeable ->
                 val columnIndex = shortestColumnIndex(columnY)
-                val columnPadding = (index % columnCount) * columnSpacingPx
-                val placeableX = (itemWidth * columnIndex) + columnPadding
+                val columnPadding = (columnIndex % columnCount) * columnSpacingPx
+                val placeableX = (itemWidth * columnIndex) + columnPadding + contentPadding.start.toIntPx()
                 placeable.placeRelative(x = placeableX, y = columnY[columnIndex])
                 columnY[columnIndex] += placeable.height
                 columnY[columnIndex] += if (placingToLastRow(index, rowCount, columnCount)) 0 else rowSpacingPx
@@ -75,19 +95,19 @@ private fun placingToLastRow(index: Int, rowCount: Int, columnCount: Int): Boole
     return ceil((index + 1).toFloat() / columnCount).toInt() >= rowCount
 }
 
-
 @Preview(showDecoration = true)
 @Composable
 private fun VerticalGridPreview() {
     VerticalStaggeredGrid(
+        itemCount = 180,
         columnCount = 4,
         columnSpacing = 4.dp,
         rowSpacing = 4.dp
-    ) {
-        (1..100).forEach { number ->
-            Box(modifier = Modifier.fillMaxSize().background(Color.randomColor())) {
-                Text(text = number.toString(), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
-            }
+    ) { index, modifier ->
+        val height = remember(index) { (40..200).random().dp }
+        val color = remember(index) { Color.randomColor() }
+        Box(modifier = modifier.fillMaxSize().height(height).background(color)) {
+            Text(text = index.toString(), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
         }
     }
 }
