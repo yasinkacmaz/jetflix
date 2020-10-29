@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.util
+package com.yasinkacmaz.jetflix.ui.widget
 
 import androidx.compose.animation.AnimatedFloatModel
 import androidx.compose.animation.core.AnimationClockObservable
