@@ -55,7 +55,6 @@ fun VerticalStaggeredGrid(
         val itemConstraints = constraints.copy(maxWidth = itemWidth)
         val columnHeights = IntArray(columnCount) { 0 }
         val placeables = measurables.mapIndexed { index, measurable ->
-            measurable.parentData
             val column = shortestColumnIndex(columnHeights)
             val placeable = measurable.measure(itemConstraints)
             columnHeights[column] += placeable.height
