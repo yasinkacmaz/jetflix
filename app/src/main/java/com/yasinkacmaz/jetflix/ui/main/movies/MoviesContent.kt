@@ -85,7 +85,7 @@ private fun LazyMovies(
 @Composable
 private fun MovieRow(moviePair: Pair<Movie, Movie>, onMovieClicked: (Int) -> Unit = {}) {
     val padding = 8.dp
-    Row(modifier = Modifier.padding(padding)) {
+    Row(modifier = Modifier.padding(horizontal = padding, vertical = padding * 1.2f)) {
         val modifier = Modifier.weight(1f).preferredHeight(320.dp)
         MovieContent(moviePair.first, modifier, onMovieClicked)
         Spacer(modifier = Modifier.width(padding))
