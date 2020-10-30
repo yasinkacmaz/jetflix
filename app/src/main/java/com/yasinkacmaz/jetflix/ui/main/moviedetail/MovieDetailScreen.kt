@@ -118,7 +118,7 @@ private fun openHomepage(context: Context, homepage: String, dominantColor: Colo
 }
 
 @Composable
-private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>) {
+fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>) {
     ConstraintLayout(Modifier.background(MaterialTheme.colors.surface).verticalScroll(rememberScrollState())) {
         val (backdrop, poster, title, originalTitle, genres, specs, rateStars, tagline, overview) = createRefs()
         val (cast, crew, imagesSection, productionCompanies, space) = createRefs()
@@ -127,10 +127,13 @@ private fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List
 
         fetchDominantColorFromPoster(movieDetail.posterUrl, DominantColorAmbient.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
-        Poster(movieDetail.posterUrl, Modifier.zIndex(17f).width(150.dp).constrainAs(poster) {
-            top.linkTo(backdrop.top)
-            linkTo(startGuideline, endGuideline)
-        }.padding(top = 240.dp))
+        Poster(
+            movieDetail.posterUrl,
+            Modifier.padding(top = 240.dp).zIndex(17f).width(160.dp).height(240.dp).constrainAs(poster) {
+                top.linkTo(backdrop.top)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
 
         Text(
             text = movieDetail.title,
@@ -307,7 +310,7 @@ private fun Poster(posterUrl: String, _modifier: Modifier) {
         shape = RoundedCornerShape(8.dp),
         modifier = modifier.drawLayer(scaleX = scale, scaleY = scale)
     ) {
-        CoilImage(data = posterUrl, contentScale = ContentScale.FillWidth)
+        CoilImage(data = posterUrl, contentScale = ContentScale.FillHeight)
     }
 }
 
