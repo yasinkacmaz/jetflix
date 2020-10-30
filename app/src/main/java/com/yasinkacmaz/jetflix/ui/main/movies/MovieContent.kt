@@ -34,7 +34,7 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
     Box(modifier = modifier) {
         MovieRate(movie.voteAverage, modifier = Modifier.align(Alignment.TopCenter))
         Card(
-            modifier = Modifier.fillMaxSize().offset(y = 8.dp).clickable(onClick = { onMovieClicked(movie.id) }),
+            modifier = Modifier.fillMaxSize().offset(y = 12.dp).clickable(onClick = { onMovieClicked(movie.id) }),
             shape = RoundedCornerShape(size = 8.dp),
             elevation = 8.dp
         ) {
