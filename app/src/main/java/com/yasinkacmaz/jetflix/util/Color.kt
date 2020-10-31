@@ -27,7 +27,7 @@ fun fetchDominantColorFromPoster(
         val loader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data(posterUrl)
-            .size(128,128)
+            .size(128, 128)
             .allowHardware(false)
             .build()
 

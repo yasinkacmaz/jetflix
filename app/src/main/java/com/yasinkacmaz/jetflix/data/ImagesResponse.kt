@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.data
 import com.google.gson.annotations.SerializedName
 
-
 data class ImagesResponse(
     @SerializedName("backdrops") val backdrops: List<ImageResponse>,
     @SerializedName("id") val id: Int,

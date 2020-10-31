@@ -2,11 +2,26 @@ package com.yasinkacmaz.jetflix.ui.main.genres
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animate
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.WbSunny
@@ -54,8 +69,7 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>) {
                 Icon(icon, tint = tint)
             }
         },
-        elevation = 0.dp,
-        backgroundColor = MaterialTheme.colors.surface
+        elevation = 0.dp, backgroundColor = MaterialTheme.colors.surface
     )
 }
 
@@ -63,10 +77,7 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>) {
 fun GenreChips(genreUiModels: List<GenreUiModel>) {
     val space = 8.dp
     Row(
-        Modifier
-            .background(MaterialTheme.colors.surface)
-            .horizontalScroll(rememberScrollState())
-            .padding(start = space)
+        Modifier.background(MaterialTheme.colors.surface).horizontalScroll(rememberScrollState()).padding(start = space)
             .padding(vertical = space * 1.5f)
     ) {
         genreUiModels.forEach { genreUiModel ->
@@ -89,11 +100,7 @@ fun GenreChip(genreUiModel: GenreUiModel) {
         .background(MaterialTheme.colors.surface)
         .gradientBorder(colors, shape, 2.dp, selected)
         .gradientBackground(colors, shape = shape, selected)
-        .clickable(onClick = {
-            if (!selected) {
-                selectedGenre.value = genreUiModel
-            }
-        })
+        .clickable(onClick = { if (!selected) selectedGenre.value = genreUiModel })
         .padding(horizontal = 8.dp, vertical = 2.dp)
 
     Text(text = genreUiModel.genre.name, style = MaterialTheme.typography.body2, modifier = modifier)

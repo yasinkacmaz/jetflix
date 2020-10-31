@@ -31,21 +31,21 @@ class TopNotchShape(private val notchSize: Size, private val cornerRadius: Float
         val notchWidthMinusCorners = notchSize.width - (2 * cornerRadius)
         val path = Path().apply {
             moveTo(0f, 0f + cornerRadius)
-            relativeQuadraticBezierTo(0f, -cornerRadius, cornerRadius, -cornerRadius) //1
+            relativeQuadraticBezierTo(0f, -cornerRadius, cornerRadius, -cornerRadius) // 1
             relativeLineTo(notchSideWidth, 0f)
-            relativeQuadraticBezierTo(cornerRadius, 0f, cornerRadius, cornerRadius) //2
+            relativeQuadraticBezierTo(cornerRadius, 0f, cornerRadius, cornerRadius) // 2
             relativeLineTo(0f, notchHeightMinusCorners)
-            relativeQuadraticBezierTo(0f, cornerRadius, cornerRadius, cornerRadius) //3
+            relativeQuadraticBezierTo(0f, cornerRadius, cornerRadius, cornerRadius) // 3
             relativeLineTo(notchWidthMinusCorners, 0f)
-            relativeQuadraticBezierTo(cornerRadius, 0f, cornerRadius, -cornerRadius) //4
+            relativeQuadraticBezierTo(cornerRadius, 0f, cornerRadius, -cornerRadius) // 4
             relativeLineTo(0f, -notchHeightMinusCorners)
-            relativeQuadraticBezierTo(0f, -cornerRadius, cornerRadius, -cornerRadius) //5
+            relativeQuadraticBezierTo(0f, -cornerRadius, cornerRadius, -cornerRadius) // 5
             relativeLineTo(notchSideWidth, 0f)
-            relativeQuadraticBezierTo(cornerRadius, 0f, cornerRadius, cornerRadius) //6
+            relativeQuadraticBezierTo(cornerRadius, 0f, cornerRadius, cornerRadius) // 6
             relativeLineTo(0f, heightMinusCorners)
-            relativeQuadraticBezierTo(0f, cornerRadius, -cornerRadius, cornerRadius) //7
+            relativeQuadraticBezierTo(0f, cornerRadius, -cornerRadius, cornerRadius) // 7
             relativeLineTo(-widthMinusCorners, 0f)
-            relativeQuadraticBezierTo(-cornerRadius, 0f, -cornerRadius, -cornerRadius) //8
+            relativeQuadraticBezierTo(-cornerRadius, 0f, -cornerRadius, -cornerRadius) // 8
             relativeLineTo(0f, -heightMinusCorners)
             close()
         }
@@ -61,6 +61,5 @@ fun TopNotchShapePreview() {
         color = Color.Magenta,
         modifier = Modifier.size(300.dp, 400.dp)
     ) {
-
     }
 }

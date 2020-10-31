@@ -1,6 +1,13 @@
 package com.yasinkacmaz.jetflix.util.animation
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FloatPropKey
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.transitionDefinition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -67,7 +74,8 @@ private fun ScaleAndAlphaAnimationPreview() {
                 toScale = 1f,
                 fromAlpha = 0f,
                 toAlpha = 1f
-            ), animation = defaultScaleAnimation
+            ),
+            animation = defaultScaleAnimation
         )
     }
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -80,8 +88,6 @@ private fun ScaleAndAlphaAnimationPreview() {
                 alpha = anim.scaleAndAlpha().second
             )
         ) {
-
         }
-
     }
 }

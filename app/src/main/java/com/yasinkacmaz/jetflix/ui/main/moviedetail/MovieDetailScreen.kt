@@ -6,18 +6,45 @@ import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animate
 import androidx.compose.animation.animatedFloat
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarHalf
+import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.rounded.Public
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onActive
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawLayer
@@ -111,7 +138,6 @@ private fun AppBar(homepage: String?) {
     }
 }
 
-
 private fun openHomepage(context: Context, homepage: String, dominantColor: Color) {
     val builder = CustomTabsIntent.Builder()
     val customTabsIntent = builder.setToolbarColor(dominantColor.toArgb()).build()
@@ -163,26 +189,37 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
                 }
             )
         } else {
-            Spacer(modifier = Modifier.constrainAs(originalTitle) {
-                top.linkTo(title.bottom)
-                linkTo(startGuideline, endGuideline)
-            })
+            Spacer(
+                modifier = Modifier.constrainAs(originalTitle) {
+                    top.linkTo(title.bottom)
+                    linkTo(startGuideline, endGuideline)
+                }
+            )
         }
 
-        GenreChips(movieDetail.genres.take(4), modifier = Modifier.Companion.constrainAs(genres) {
-            top.linkTo(originalTitle.bottom, 16.dp)
-            linkTo(startGuideline, endGuideline)
-        })
+        GenreChips(
+            movieDetail.genres.take(4),
+            modifier = Modifier.Companion.constrainAs(genres) {
+                top.linkTo(originalTitle.bottom, 16.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
 
-        MovieFields(movieDetail, modifier = Modifier.constrainAs(specs) {
-            top.linkTo(genres.bottom, 12.dp)
-            linkTo(startGuideline, endGuideline)
-        })
+        MovieFields(
+            movieDetail,
+            modifier = Modifier.constrainAs(specs) {
+                top.linkTo(genres.bottom, 12.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
 
-        RateStars(movieDetail.voteAverage, modifier = Modifier.constrainAs(rateStars) {
-            top.linkTo(specs.bottom, 12.dp)
-            linkTo(startGuideline, endGuideline)
-        })
+        RateStars(
+            movieDetail.voteAverage,
+            modifier = Modifier.constrainAs(rateStars) {
+                top.linkTo(specs.bottom, 12.dp)
+                linkTo(startGuideline, endGuideline)
+            }
+        )
 
         Text(
             text = movieDetail.tagline,
@@ -254,9 +291,10 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             }
         )
 
-        Spacer(modifier = Modifier.navigationBarsHeightPlus(16.dp).constrainAs(space) {
-            top.linkTo(productionCompanies.bottom)
-        })
+        Spacer(
+            modifier = Modifier.navigationBarsHeightPlus(16.dp)
+                .constrainAs(space) { top.linkTo(productionCompanies.bottom) }
+        )
     }
 }
 
