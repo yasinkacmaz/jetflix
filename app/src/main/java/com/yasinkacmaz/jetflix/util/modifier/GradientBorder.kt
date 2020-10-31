@@ -6,13 +6,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.LinearGradient
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
-//TODO: Is there any other way to use brush(gradient) without knowing size
+// TODO: Is there any other way to use brush(gradient) without knowing size
 fun Modifier.gradientBorder(
     colors: List<Color>,
     shape: Shape,
@@ -55,7 +59,7 @@ private fun Modifier.gradientBorder(
 ) = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
     val gradient = remember(colors, size) { brushProvider(colors, size) }
-    val sizeProvider = onPositioned { size = it.size }
+    val sizeProvider = onGloballyPositioned { size = it.size }
     sizeProvider then border(
         width = borderSize,
         brush = gradient,

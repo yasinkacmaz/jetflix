@@ -1,6 +1,14 @@
 package com.yasinkacmaz.jetflix.util.animation
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 
 val linearAnimation: AnimationSpec<Float> = repeatable(
     AnimationConstants.Infinite,

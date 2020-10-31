@@ -5,7 +5,7 @@ import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
 import javax.inject.Inject
 
-class ImageMapper @Inject constructor(): Mapper<ImagesResponse, List<Image>> {
+class ImageMapper @Inject constructor() : Mapper<ImagesResponse, List<Image>> {
     @OptIn(ExperimentalStdlibApi::class)
     override fun map(input: ImagesResponse): List<Image> {
         return buildList {
