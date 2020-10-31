@@ -5,10 +5,10 @@ import androidx.compose.animation.animate
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Switch
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NightsStay
+import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -48,7 +48,10 @@ fun TopAppBar(isDarkTheme: MutableState<Boolean>) {
             Icon(asset = vectorResource(id = R.drawable.ic_jetflix), tint = tint, modifier = Modifier.size(90.dp))
         },
         actions = {
-            Switch(checked = isDarkTheme.value, onCheckedChange = { isDarkTheme.value = it })
+            val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
+            IconButton(onClick = { isDarkTheme.value = isDarkTheme.value.not() }) {
+                Icon(icon, tint = tint)
+            }
         },
         elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.surface
