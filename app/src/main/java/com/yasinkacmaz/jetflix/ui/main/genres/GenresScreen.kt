@@ -6,6 +6,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.WbSunny
@@ -29,7 +30,7 @@ fun GenresScreen(genreUiModels: List<GenreUiModel>, isDarkTheme: MutableState<Bo
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             Surface(modifier = Modifier.fillMaxWidth().wrapContentHeight(), elevation = 16.dp) {
                 Column(Modifier.fillMaxWidth()) {
-                    TopAppBar(isDarkTheme)
+                    JetflixAppBar(isDarkTheme)
                     GenreChips(genreUiModels)
                 }
             }
@@ -41,7 +42,7 @@ fun GenresScreen(genreUiModels: List<GenreUiModel>, isDarkTheme: MutableState<Bo
 }
 
 @Composable
-fun TopAppBar(isDarkTheme: MutableState<Boolean>) {
+private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>) {
     val tint = animate(if (isDarkTheme.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.primary)
     TopAppBar(
         title = {
