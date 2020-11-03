@@ -1,7 +1,7 @@
 object Dependencies {
     const val kotlin = "1.4.10"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
-    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.0"
+    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
     const val gson = "com.google.code.gson:gson:2.8.6"
     const val ktlint = "com.pinterest:ktlint:0.39.0"
@@ -38,6 +38,7 @@ object Dependencies {
         const val icons = "androidx.compose.material:material-icons-extended:$version"
         const val animation = "androidx.compose.animation:animation:$version"
         const val tooling = "androidx.ui:ui-tooling:$version"
+        const val test = "androidx.ui:ui-test:$version"
     }
 
     object Hilt {
@@ -58,10 +59,5 @@ object Dependencies {
 
     object Test {
         const val junit = "junit:junit:4.13"
-    }
-
-    object AndroidTest {
-        const val junitExtension = "androidx.test.ext:junit:1.1.2"
-        const val espresso = "androidx.test.espresso:espresso-core:3.3.0"
     }
 }
