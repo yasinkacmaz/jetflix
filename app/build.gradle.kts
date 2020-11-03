@@ -101,6 +101,5 @@ dependencies {
 
     // Test
     testImplementation(Dependencies.Test.junit)
-    androidTestImplementation(Dependencies.AndroidTest.junitExtension)
-    androidTestImplementation(Dependencies.AndroidTest.espresso)
+    androidTestImplementation(Dependencies.Compose.test)
 }
