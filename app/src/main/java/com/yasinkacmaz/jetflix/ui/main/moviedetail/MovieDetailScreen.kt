@@ -56,6 +56,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -156,8 +158,8 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
         Poster(
             movieDetail.posterUrl,
-            Modifier.padding(top = 240.dp).zIndex(17f).width(160.dp).height(240.dp).constrainAs(poster) {
-                top.linkTo(backdrop.top)
+            Modifier.zIndex(17f).width(160.dp).height(240.dp).constrainAs(poster) {
+                centerAround(backdrop.bottom)
                 linkTo(startGuideline, endGuideline)
             }
         )
@@ -258,7 +260,8 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             Modifier.constrainAs(cast) {
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
-            }
+            },
+            tag = "Cast"
         )
 
         MovieSection(
@@ -268,7 +271,8 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             Modifier.constrainAs(crew) {
                 top.linkTo(cast.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
-            }
+            },
+            tag = "crew"
         )
 
         MovieSection(
@@ -430,11 +434,16 @@ private fun <T : Any> MovieSection(
     items: List<T>,
     header: @Composable () -> Unit,
     itemContent: @Composable (T) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    tag: String = ""
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         header()
-        LazyRowFor(items = items, contentPadding = PaddingValues(16.dp)) { item ->
+        LazyRowFor(
+            items = items,
+            contentPadding = PaddingValues(16.dp),
+            modifier = Modifier.semantics { testTag = tag }
+        ) { item ->
             itemContent(item)
             Spacer(modifier = Modifier.width(16.dp))
         }

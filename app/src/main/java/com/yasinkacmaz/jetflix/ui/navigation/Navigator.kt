@@ -10,8 +10,8 @@ val NavigatorAmbient = staticAmbientOf<Navigator<Screen>> { error("No navigator 
 
 class Navigator<T : Screen>(
     initialScreen: T,
-    lifecycleOwner: LifecycleOwner,
-    dispatcher: OnBackPressedDispatcher
+    lifecycleOwner: LifecycleOwner? = null,
+    dispatcher: OnBackPressedDispatcher? = null
 ) {
     private val stack = mutableStateListOf(initialScreen)
     private val callback = object : OnBackPressedCallback(canGoBack()) {
@@ -19,7 +19,9 @@ class Navigator<T : Screen>(
             goBack()
         }
     }.also { callback ->
-        dispatcher.addCallback(lifecycleOwner, callback)
+        if (dispatcher != null && lifecycleOwner != null) {
+            dispatcher.addCallback(lifecycleOwner, callback)
+        }
     }
 
     private fun canGoBack() = stack.size > 1

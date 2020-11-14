@@ -13,6 +13,9 @@ import com.yasinkacmaz.jetflix.util.toPx
 fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
     val space = spaceBetween.toPx().toInt()
     Layout(children, modifier) { measurables, constraints ->
+        if (measurables.isEmpty()) {
+            return@Layout layout(0, 0) { }
+        }
         val placeables = measurables.map { measurable ->
             measurable.measure(constraints)
         }

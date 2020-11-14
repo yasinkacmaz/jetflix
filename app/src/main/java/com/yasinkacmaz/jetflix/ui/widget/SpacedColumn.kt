@@ -11,6 +11,9 @@ import androidx.compose.ui.unit.Dp
 fun SpacedColumn(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
     val space = (spaceBetween.value * DensityAmbient.current.density).toInt()
     Layout(children, modifier) { measurables, constraints ->
+        if (measurables.isEmpty()) {
+            return@Layout layout(0, 0) { }
+        }
         val placeables = measurables.map { measurable ->
             measurable.measure(constraints)
         }
