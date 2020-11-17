@@ -33,3 +33,9 @@ val springAnimation: AnimationSpec<Float> = spring(
     stiffness = Spring.StiffnessLow,
     visibilityThreshold = 0.001f
 )
+
+val defaultScaleAnimation: AnimationSpec<Float> = repeatable(
+    AnimationConstants.Infinite,
+    tween(3000, easing = LinearEasing),
+    repeatMode = RepeatMode.Reverse
+)

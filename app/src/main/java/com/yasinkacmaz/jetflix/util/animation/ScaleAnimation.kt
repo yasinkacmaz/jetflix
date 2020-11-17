@@ -1,14 +1,9 @@
 package com.yasinkacmaz.jetflix.util.animation
 
 import androidx.compose.animation.animatedFloat
-import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FloatPropKey
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.transitionDefinition
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -54,12 +49,6 @@ class ScaleAnimation(private val toScale: Float, private val animation: Animatio
     fun scale() = getTransition()[scale]
 }
 
-private val defaultScaleAnimation: AnimationSpec<Float> = repeatable(
-    AnimationConstants.Infinite,
-    tween(3000, easing = LinearEasing),
-    repeatMode = RepeatMode.Reverse
-)
-
 @Preview(name = "Use animation preview")
 @Composable
 private fun ScalePulseAnimationPreview() {
@@ -77,14 +66,9 @@ private fun ScalePulseAnimationPreview() {
 @Preview(name = "Run on device to see animation")
 @Composable
 private fun ScalePulseAnimationPreview2() {
-    val animation: AnimationSpec<Float> = repeatable(
-        AnimationConstants.Infinite,
-        tween(3000, easing = LinearEasing),
-        repeatMode = RepeatMode.Reverse
-    )
     val animatedScale = animatedFloat(1f)
     onActive {
-        animatedScale.animateTo(targetValue = 2f, anim = animation)
+        animatedScale.animateTo(targetValue = 2f, anim = defaultScaleAnimation)
     }
     Surface(modifier = Modifier.fillMaxSize()) {
         Surface(
