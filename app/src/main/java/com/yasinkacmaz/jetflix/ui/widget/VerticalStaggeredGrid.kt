@@ -40,7 +40,7 @@ fun VerticalStaggeredGrid(
             for (index in 0..itemCount) {
                 val scaleAndAlphaAnimation = remember(index) {
                     val animation =
-                        tween<Float>(durationMillis = 500, delayMillis = 120 * index, easing = FastOutSlowInEasing)
+                        tween<Float>(durationMillis = 500, delayMillis = 100 * index, easing = FastOutSlowInEasing)
                     val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
                     ScaleAndAlphaAnimation(args = args, animation = animation)
                 }
