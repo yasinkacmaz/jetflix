@@ -25,8 +25,6 @@ import androidx.ui.tooling.preview.Preview
 
 enum class ScaleState { DEFAULT, SCALED }
 
-enum class AnimationType { TRANSITION, ANIMATE, ANIMATEDVALUE }
-
 class ScaleAnimation(private val toScale: Float, private val animation: AnimationSpec<Float>) {
     private val scale = FloatPropKey()
 

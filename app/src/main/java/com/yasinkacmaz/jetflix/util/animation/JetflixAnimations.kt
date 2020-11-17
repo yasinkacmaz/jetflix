@@ -29,7 +29,7 @@ val keyframeAnimation: AnimationSpec<Float> = repeatable(
 )
 
 val springAnimation: AnimationSpec<Float> = spring(
-    dampingRatio = Spring.DampingRatioHighBouncy,
-    stiffness = Spring.StiffnessVeryLow,
+    dampingRatio = Spring.DampingRatioMediumBouncy,
+    stiffness = Spring.StiffnessLow,
     visibilityThreshold = 0.001f
 )

@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animate
-import androidx.compose.animation.animatedFloat
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -79,8 +78,6 @@ import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.animation.AnimationType
-import com.yasinkacmaz.jetflix.util.animation.ScaleAnimation
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
 import com.yasinkacmaz.jetflix.util.navigationBarsHeightPlus
@@ -320,38 +317,16 @@ private fun Backdrop(backdropUrl: String, modifier: Modifier) {
 }
 
 @Composable
-private fun Poster(posterUrl: String, _modifier: Modifier) {
-    // TODO: Remove excessive animations
-    val type = AnimationType.ANIMATE
-    var modifier = _modifier
-    val animation = springAnimation
-
-    val scale: Float = when (type) {
-        AnimationType.ANIMATEDVALUE -> {
-            // Animated Value, AnimatedFloatModel
-            val animatedScale = animatedFloat(1f)
-            onActive {
-                animatedScale.animateTo(targetValue = 2f, anim = animation)
-            }
-            animatedScale.value
-        }
-        AnimationType.ANIMATE -> {
-            // Animate, AnimatedFloatModel
-            val isScaled = remember { mutableStateOf(false) }
-            modifier = modifier.clickable(onClick = { isScaled.value = !isScaled.value })
-            animate(target = if (isScaled.value) 2f else 1f, animSpec = animation)
-        }
-        AnimationType.TRANSITION -> {
-            // Transition
-            val scaleAnimation = remember { ScaleAnimation(toScale = 2f, animation = animation) }
-            scaleAnimation.scale()
-        }
-    }
+private fun Poster(posterUrl: String, modifier: Modifier) {
+    val isScaled = remember { mutableStateOf(false) }
+    val scale = animate(target = if (isScaled.value) 2.2f else 1f, animSpec = springAnimation)
 
     Card(
         elevation = 24.dp,
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier.drawLayer(scaleX = scale, scaleY = scale)
+        modifier = modifier
+            .drawLayer(scaleX = scale, scaleY = scale)
+            .clickable(onClick = { isScaled.value = !isScaled.value })
     ) {
         CoilImage(data = posterUrl, contentScale = ContentScale.FillHeight)
     }
