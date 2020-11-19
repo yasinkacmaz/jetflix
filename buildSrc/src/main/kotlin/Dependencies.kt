@@ -1,5 +1,5 @@
 object Dependencies {
-    const val kotlin = "1.4.10"
+    const val kotlin = "1.4.20"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
     const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
