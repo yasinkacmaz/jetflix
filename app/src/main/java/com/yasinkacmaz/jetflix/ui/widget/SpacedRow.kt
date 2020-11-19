@@ -1,9 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Layout
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Placeable
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Dp
 import com.yasinkacmaz.jetflix.util.toPx
 

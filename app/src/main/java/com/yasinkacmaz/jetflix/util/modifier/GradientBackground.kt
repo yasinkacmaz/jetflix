@@ -11,7 +11,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.onPositioned
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 
 fun Modifier.gradientBackground(colors: List<Color>, shape: Shape, showBackground: Boolean = true) = composed {
@@ -39,6 +39,6 @@ private fun Modifier.gradientBackground(
 ) = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
     val gradient = remember(colors, size) { brushProvider(colors, size) }
-    val sizeProvider = onPositioned { size = it.size }
+    val sizeProvider = onGloballyPositioned { size = it.size }
     sizeProvider then background(brush = gradient, shape = shape)
 }
