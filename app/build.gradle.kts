@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
@@ -57,10 +56,6 @@ tasks.withType<KotlinCompile>().configureEach {
             "-Xopt-in=kotlin.RequiresOptIn"
         )
     }
-}
-
-androidExtensions {
-    isExperimental = true
 }
 
 kapt {

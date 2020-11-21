@@ -1,21 +1,24 @@
 <resources>
-  <string name="app_name">Jetflix</string>
-  <string name="api_key">9487082a53af88e1866c341355155846</string>
-  <string name="fetching_genres">Fetching Movie Genres</string>
-  <string name="fetching_movies">Fetching %1$s Movies</string>
-  <string name="fetching_more_movies">Fetching More %1$s Movies</string>
-  <string name="fetching_movie_detail">Fetching Movie Detail</string>
-  <string name="change_theme">Change Theme</string>
+    <string name="app_name">Jetflix</string>
+    <string name="api_key">9487082a53af88e1866c341355155846</string>
+    <string name="fetching_genres">Fetching Movie Genres</string>
+    <string name="fetching_movies">Fetching %1$s Movies</string>
+    <string name="fetching_more_movies">Fetching More %1$s Movies</string>
+    <string name="fetching_movie_detail">Fetching Movie Detail</string>
 
-  <!-- movie detail -->
-  <string name="release_date">Release Date</string>
-  <string name="duration">Duration</string>
-  <string name="duration_minutes">%1$s min</string>
-  <string name="vote_average">Vote Avg</string>
-  <string name="votes">Votes</string>
-  <string name="cast">Cast</string>
-  <string name="crew">Crew</string>
-  <string name="images">Images</string>
-  <string name="see_all">See All</string>
-  <string name="production_companies">Production Companies</string>
+    <!-- settings -->
+    <string name="language">Language:</string>
+    <string name="country">Country:</string>
+
+    <!-- movie detail -->
+    <string name="release_date">Release Date</string>
+    <string name="duration">Duration</string>
+    <string name="duration_minutes">%1$s min</string>
+    <string name="vote_average">Vote Avg</string>
+    <string name="votes">Votes</string>
+    <string name="cast">Cast</string>
+    <string name="crew">Crew</string>
+    <string name="images">Images</string>
+    <string name="see_all">See All</string>
+    <string name="production_companies">Production Companies</string>
 </resources>
