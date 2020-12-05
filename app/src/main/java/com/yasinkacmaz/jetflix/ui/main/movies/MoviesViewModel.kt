@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.util.toPairs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ class MoviesViewModel @ViewModelInject constructor(
         val page: Int = 1
     ) {
         fun shouldFetchMovies() = !loading && page != PAGE_INVALID
-        val moviePairs get() = movies.sortedByDescending(Movie::voteCount).chunked(2)
+        val moviePairs get() = movies.sortedByDescending(Movie::voteCount).toPairs()
     }
 
     companion object {
