@@ -16,6 +16,7 @@ object Dependencies {
         const val appcompat = "androidx.appcompat:appcompat:1.2.0"
         const val palette = "androidx.palette:palette:1.0.0"
         const val browser = "androidx.browser:browser:1.2.0"
+        const val dataStore = "androidx.datastore:datastore-preferences:1.0.0-alpha04"
 
         object Ktx {
             private const val lifecycleVersion = "2.2.0"
@@ -23,6 +24,7 @@ object Dependencies {
             const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
             const val core = "androidx.core:core-ktx:1.5.0-alpha02"
+            const val activity = "androidx.activity:activity-ktx:1.1.0"
         }
     }
 
@@ -59,5 +61,8 @@ object Dependencies {
 
     object Test {
         const val junit = "junit:junit:4.13"
+        const val mockk = "io.mockk:mockk:1.10.2"
+        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9"
+        const val strikt = "io.strikt:strikt-core:0.28.0"
     }
 }

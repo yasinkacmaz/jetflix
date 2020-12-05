@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.util
+package com.yasinkacmaz.jetflix.util.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
