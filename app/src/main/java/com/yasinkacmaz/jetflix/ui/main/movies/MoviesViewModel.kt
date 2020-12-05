@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.MovieService
-import com.yasinkacmaz.jetflix.util.toPairs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -16,26 +15,29 @@ class MoviesViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val uiState = MutableStateFlow(MovieUiState())
-    private val uiValue get() = uiState.value
+    var uiValue
+        get() = uiState.value
+        set(value) {
+            uiState.value = value
+        }
 
     fun fetchMovies(genreId: Int) {
         if (uiValue.shouldFetchMovies().not()) return
         viewModelScope.launch {
-            uiState.value = uiValue.copy(loading = true)
-            try {
+            uiValue = uiValue.copy(loading = true)
+            uiValue = try {
                 val moviesResponse = movieService.fetchMovies(genreId, uiValue.page)
                 val movies = uiValue.movies.apply {
                     addAll(moviesResponse.movies.map(movieMapper::map))
-                    sortedByDescending(Movie::voteCount)
                 }
                 val page = if (uiValue.page >= moviesResponse.totalPages) {
                     PAGE_INVALID
                 } else {
                     uiValue.page + 1
                 }
-                uiState.value = uiValue.copy(movies = movies, page = page, loading = false)
+                uiValue.copy(movies = movies, page = page, loading = false)
             } catch (exception: Exception) {
-                uiState.value = uiValue.copy(error = exception, loading = false)
+                uiValue.copy(error = exception, loading = false)
             }
         }
     }
@@ -47,7 +49,7 @@ class MoviesViewModel @ViewModelInject constructor(
         val page: Int = 1
     ) {
         fun shouldFetchMovies() = !loading && page != PAGE_INVALID
-        val moviePairs get() = movies.toPairs()
+        val moviePairs get() = movies.sortedByDescending(Movie::voteCount).chunked(2)
     }
 
     companion object {

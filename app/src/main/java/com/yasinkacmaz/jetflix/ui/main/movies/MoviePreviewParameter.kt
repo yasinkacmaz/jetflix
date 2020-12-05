@@ -6,7 +6,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 
-val fakeMovie = Movie(1337, "Movie Name", "", "", "01.03.1337", "", 9.24, 1337)
+val fakeMovie = Movie(1337, "Movie Name", "01.03.1337", "Poster", 9.24, 1337)
 
 class MovieProvider : PreviewParameterProvider<Movie> {
     override val values: Sequence<Movie>

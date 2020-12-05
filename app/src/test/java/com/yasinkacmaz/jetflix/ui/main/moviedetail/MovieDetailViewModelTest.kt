@@ -13,7 +13,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.spyk
-import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -54,10 +53,8 @@ class MovieDetailViewModelTest {
         movieDetailViewModel.fetchMovieDetail(movieId)
 
         verifyServices()
-        verify {
+        verifyOrder {
             movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(loading = true)
-        }
-        verify {
             movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(
                 movieDetailMapper.map(movieDetailResponse),
                 creditsMapper.map(creditsResponse),
