@@ -70,7 +70,7 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
+import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.Person
@@ -106,7 +106,7 @@ fun MovieDetailScreen(movieId: Int) {
             ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
-            val primaryColor = SelectedGenreAmbient.current.value.primaryColor
+            val primaryColor = AmbientSelectedGenre.current.value.primaryColor
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
             Providers(AmbientDominantColor provides dominantColor) {
                 AppBar(movieDetailUiState.movieDetail.homepage)

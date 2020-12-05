@@ -17,7 +17,7 @@ import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
-import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
+import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
 import com.yasinkacmaz.jetflix.ui.main.movies.Movie
 import com.yasinkacmaz.jetflix.ui.main.movies.MovieContent
 import org.junit.Rule
@@ -60,7 +60,7 @@ class MovieContentTest {
     }
 
     private fun ComposeTestRule.setMovieContent() = setContent {
-        Providers(SelectedGenreAmbient provides mutableStateOf(GenreUiModel(Genre(-1, "Genre")))) {
+        Providers(AmbientSelectedGenre provides mutableStateOf(GenreUiModel(Genre(-1, "Genre")))) {
             Box(Modifier.fillMaxHeight(0.5f).fillMaxWidth().padding(48.dp), contentAlignment = Alignment.Center) {
                 MovieContent(movie)
             }

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.util.randomColor
 
-val SelectedGenreAmbient = staticAmbientOf<MutableState<GenreUiModel>> { error("No genre available") }
+val AmbientSelectedGenre = staticAmbientOf<MutableState<GenreUiModel>> { error("No genre available") }
 
 data class GenreUiModel(
     val genre: Genre = Genre(-1, ""),
