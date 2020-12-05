@@ -22,11 +22,15 @@ class MovieDetailViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val uiState = MutableStateFlow(MovieDetailUiState())
-    private val uiValue get() = uiState.value
+    var uiValue
+        get() = uiState.value
+        set(value) {
+            uiState.value = value
+        }
 
     fun fetchMovieDetail(movieId: Int) {
         viewModelScope.launch {
-            uiState.value = uiValue.copy(loading = true)
+            uiValue = uiValue.copy(loading = true)
             try {
                 val movieDetail = async {
                     val movieDetailResponse = movieService.fetchMovieDetail(movieId)
@@ -40,14 +44,14 @@ class MovieDetailViewModel @ViewModelInject constructor(
                     val imagesResponse = movieService.fetchMovieImages(movieId)
                     imageMapper.map(imagesResponse)
                 }
-                uiState.value = uiValue.copy(
+                uiValue = uiValue.copy(
                     movieDetail = movieDetail.await(),
                     credits = credits.await(),
                     images = images.await(),
                     loading = false
                 )
             } catch (exception: Exception) {
-                uiState.value = uiValue.copy(error = exception, loading = false)
+                uiValue = uiValue.copy(error = exception, loading = false)
             }
         }
     }
