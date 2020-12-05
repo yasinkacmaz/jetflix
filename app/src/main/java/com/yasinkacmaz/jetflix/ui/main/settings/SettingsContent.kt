@@ -28,7 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -180,14 +180,14 @@ private fun DropdownItem(text: String, flagUrl: String, selected: Boolean, onCli
     }
 }
 
-private fun iconContent(id: String, icon: VectorAsset) = id to InlineTextContent(
+private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent(
     placeholder = Placeholder(
         width = 2.em,
         height = 1.em,
         placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
     ),
     children = {
-        Image(asset = icon, colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface))
+        Image(imageVector = icon, colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface))
     }
 )
 

@@ -12,15 +12,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onActive
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
-import androidx.ui.tooling.preview.Preview
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
-import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
+import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -65,7 +65,7 @@ private fun LazyMovies(
     error: Throwable?,
     onLoadMore: () -> Unit
 ) {
-    val navigator = NavigatorAmbient.current
+    val navigator = AmbientNavigator.current
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
     }

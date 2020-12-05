@@ -10,9 +10,9 @@ import com.yasinkacmaz.jetflix.util.toPx
 // TODO: Why I cant use DominantColorAmbient with this layout?
 // TODO: Maybe use placeable.placeRelative
 @Composable
-fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, children: @Composable () -> Unit) {
+fun SpacedRow(spaceBetween: Dp, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val space = spaceBetween.toPx().toInt()
-    Layout(children, modifier) { measurables, constraints ->
+    Layout(content, modifier) { measurables, constraints ->
         if (measurables.isEmpty()) {
             return@Layout layout(0, 0) { }
         }

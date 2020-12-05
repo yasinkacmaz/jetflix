@@ -1,16 +1,20 @@
 package com.yasinkacmaz.jetflix.movie
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
-import androidx.ui.test.createComposeRule
+import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
@@ -57,7 +61,7 @@ class MovieContentTest {
 
     private fun ComposeTestRule.setMovieContent() = setContent {
         Providers(SelectedGenreAmbient provides mutableStateOf(GenreUiModel(Genre(-1, "Genre")))) {
-            Box(Modifier.fillMaxSize()) {
+            Box(Modifier.fillMaxHeight(0.5f).fillMaxWidth().padding(48.dp), contentAlignment = Alignment.Center) {
                 MovieContent(movie)
             }
         }

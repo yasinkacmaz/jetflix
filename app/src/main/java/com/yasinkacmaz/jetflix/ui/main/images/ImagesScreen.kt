@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.main.images
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,17 +14,18 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawShadow
-import androidx.compose.ui.drawLayer
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AnimationClockAmbient
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientAnimationClock
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.transform.BlurTransformation
@@ -39,7 +39,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun ImagesScreen(images: List<Image>) {
     val pagerState: PagerState = run {
-        val clock = AnimationClockAmbient.current
+        val clock = AmbientAnimationClock.current
         remember(clock) { PagerState(clock, maxPage = (images.size - 1).coerceAtLeast(0)) }
     }
     if (images.isNotEmpty()) {
@@ -53,11 +53,11 @@ fun ImagesScreen(images: List<Image>) {
 private fun Image(image: Image) {
     val sizeTransformation = remember { SizeTransformation(percent = 50) }
     Box(modifier = Modifier.fillMaxSize()) {
-        val context = ContextAmbient.current
+        val context = AmbientContext.current
         CoilImage(
             data = image.url,
             contentScale = ContentScale.FillHeight,
-            modifier = Modifier.fillMaxSize().drawLayer(alpha = 0.85f),
+            modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.85f),
             requestBuilder = { transformations(BlurTransformation(context = context, radius = 12f, sampling = 4f)) }
         )
         FloatingActionButton(
@@ -72,7 +72,7 @@ private fun Image(image: Image) {
         }
         Card(
             modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(horizontal = 12.dp)
-                .drawShadow(48.dp, clip = false).zIndex(48f).align(Alignment.Center),
+                .shadow(48.dp, clip = false).zIndex(48f).align(Alignment.Center),
             shape = RoundedCornerShape(12.dp), elevation = 24.dp
         ) {
             CoilImage(

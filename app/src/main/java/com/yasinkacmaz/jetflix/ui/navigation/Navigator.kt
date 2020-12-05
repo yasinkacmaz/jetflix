@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.staticAmbientOf
 import androidx.lifecycle.LifecycleOwner
 
-val NavigatorAmbient = staticAmbientOf<Navigator<Screen>> { error("No navigator instance available") }
+val AmbientNavigator = staticAmbientOf<Navigator<Screen>> { error("No navigator instance available") }
 
 class Navigator<T : Screen>(
     initialScreen: T,

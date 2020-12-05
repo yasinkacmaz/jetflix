@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedFloatModel
 import androidx.compose.animation.core.AnimationClockObservable
 import androidx.compose.animation.core.AnimationEndReason
@@ -28,15 +29,16 @@ Taken from:
 https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Jetcaster/app/src/main/java/com/example/jetcaster/util/Pager.kt
  */
 @Composable
+@SuppressLint("ComposableLambdaParameterNaming")
 fun Pager(
+    modifier: Modifier = Modifier,
     state: PagerState,
     offscreenLimit: Int = 2,
-    modifier: Modifier = Modifier,
     pageContent: @Composable PagerScope.() -> Unit
 ) {
     var currentPageWidth by remember { mutableStateOf(0) }
     Layout(
-        children = {
+        content = {
             val startPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
             val endPage = (state.currentPage + offscreenLimit).coerceAtMost(state.maxPage)
 
@@ -44,7 +46,7 @@ fun Pager(
                 val pageData = PageData(page)
                 val scope = PagerScope(state, page)
                 key(pageData) {
-                    Box(alignment = Alignment.Center, modifier = pageData) {
+                    Box(contentAlignment = Alignment.Center, modifier = pageData) {
                         scope.pageContent()
                     }
                 }

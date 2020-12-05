@@ -10,13 +10,13 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 
 @Composable
-fun LoadingColumn(title: String, modifier: Modifier = Modifier.fillMaxSize()) {
+fun LoadingColumn(title: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -25,7 +25,7 @@ fun LoadingColumn(title: String, modifier: Modifier = Modifier.fillMaxSize()) {
     }
 }
 
-@Preview(showDecoration = true)
+@Preview(showSystemUi = true)
 @Composable
 private fun LoadingColumnPreview() {
     LoadingColumn(title = "Please wait...")
