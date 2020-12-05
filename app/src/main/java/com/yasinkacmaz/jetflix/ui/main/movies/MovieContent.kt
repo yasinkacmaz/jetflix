@@ -58,6 +58,8 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
 
 @Composable
 private fun MoviePoster(posterPath: String) {
+    val backgroundColor = if (MaterialTheme.colors.isLight) Color.LightGray else MaterialTheme.colors.background
+    val tint = if (MaterialTheme.colors.isLight) Color.DarkGray else MaterialTheme.colors.onBackground
     CoilImage(
         data = posterPath,
         contentScale = ContentScale.None,
@@ -65,8 +67,8 @@ private fun MoviePoster(posterPath: String) {
         loading = {
             Icon(
                 imageVector = Icons.Default.Movie,
-                tint = Color.DarkGray,
-                modifier = Modifier.background(color = Color.LightGray).fillMaxSize()
+                tint = tint,
+                modifier = Modifier.background(color = backgroundColor).fillMaxSize()
             )
         }
     )
