@@ -38,7 +38,7 @@ fun MoviesContent(genre: Genre) {
 
     when {
         movieUiState.loading && movieUiState.movies.isEmpty() -> {
-            val title = stringResource(id = R.string.fetching_movies, genre.name)
+            val title = stringResource(id = R.string.fetching_movies, genre.name.orEmpty())
             LoadingColumn(title)
         }
         movieUiState.error != null && movieUiState.movies.isEmpty() -> {
@@ -77,7 +77,7 @@ private fun LazyMovies(
             }
 
             if (loading) {
-                LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genre.name))
+                LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genre.name.orEmpty()))
             }
 
             if (error != null) {

@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -19,6 +20,8 @@ import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.main.images.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.PeopleGridScreen
+import com.yasinkacmaz.jetflix.ui.main.settings.SettingsContent
+import com.yasinkacmaz.jetflix.ui.main.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
@@ -32,10 +35,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private val settingsViewModel: SettingsViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, true)
         renderUi()
+        settingsViewModel.onSettingsChanged.observe(this) {
+            finish()
+            startActivity(intent)
+        }
     }
 
     private fun renderUi() {
@@ -44,8 +53,9 @@ class MainActivity : AppCompatActivity() {
             val navigator = remember { Navigator<Screen>(FetchGenres, lifecycleOwner, onBackPressedDispatcher) }
             val systemTheme = isSystemInDarkTheme()
             val isDarkTheme = remember { mutableStateOf(systemTheme) }
+            val showSettingsDialog = remember { mutableStateOf(false) }
             val selectedGenre = remember { mutableStateOf(GenreUiModel()) }
-            MainContent(navigator, selectedGenre, isDarkTheme)
+            MainContent(navigator, selectedGenre, isDarkTheme, showSettingsDialog)
         }
     }
 
@@ -53,7 +63,8 @@ class MainActivity : AppCompatActivity() {
     private fun MainContent(
         navigator: Navigator<Screen>,
         genreUiModel: MutableState<GenreUiModel>,
-        isDarkTheme: MutableState<Boolean>
+        isDarkTheme: MutableState<Boolean>,
+        showSettingsDialog: MutableState<Boolean>
     ) {
         Providers(NavigatorAmbient provides navigator, SelectedGenreAmbient provides genreUiModel) {
             ProvideDisplayInsets {
@@ -61,10 +72,15 @@ class MainActivity : AppCompatActivity() {
                     Crossfade(current = navigator.currentScreen) { screen ->
                         when (screen) {
                             FetchGenres -> FetchGenresScreen()
-                            is Genres -> GenresScreen(screen.genreUiModels, isDarkTheme)
+                            is Genres -> GenresScreen(screen.genreUiModels, isDarkTheme, showSettingsDialog)
                             is MovieDetail -> MovieDetailScreen(screen.movieId)
                             is Screen.Images -> ImagesScreen(screen.images)
                             is Screen.PeopleGrid -> PeopleGridScreen(screen.people)
+                        }
+                    }
+                    if (showSettingsDialog.value) {
+                        SettingsContent() {
+                            showSettingsDialog.value = false
                         }
                     }
                 }

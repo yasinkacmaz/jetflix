@@ -42,8 +42,10 @@ fun ImagesScreen(images: List<Image>) {
         val clock = AnimationClockAmbient.current
         remember(clock) { PagerState(clock, maxPage = (images.size - 1).coerceAtLeast(0)) }
     }
-    Pager(state = pagerState) {
-        Image(images[page])
+    if (images.isNotEmpty()) {
+        Pager(state = pagerState) {
+            Image(images[page])
+        }
     }
 }
 

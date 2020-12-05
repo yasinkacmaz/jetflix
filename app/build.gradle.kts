@@ -43,6 +43,23 @@ android {
             )
         }
     }
+
+    testOptions {
+        unitTests.apply {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+        testOptions {
+            animationsDisabled = true
+        }
+    }
+
+    packagingOptions {
+        exclude("**/attach_hotspot_windows.dll")
+        exclude("META-INF/licenses/**")
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+    }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -70,9 +87,11 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.palette)
     implementation(Dependencies.AndroidX.browser)
+    implementation(Dependencies.AndroidX.dataStore)
     implementation(Dependencies.AndroidX.Ktx.core)
     implementation(Dependencies.AndroidX.Ktx.viewmodel)
     implementation(Dependencies.AndroidX.Ktx.livedata)
+    implementation(Dependencies.AndroidX.Ktx.activity)
 
     // Compose
     implementation(Dependencies.Compose.runtime)
@@ -101,5 +120,8 @@ dependencies {
 
     // Test
     testImplementation(Dependencies.Test.junit)
+    testImplementation(Dependencies.Test.mockk)
+    testImplementation(Dependencies.Test.coroutines)
+    testImplementation(Dependencies.Test.strikt)
     androidTestImplementation(Dependencies.Compose.test)
 }

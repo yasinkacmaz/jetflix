@@ -3,13 +3,18 @@ package com.yasinkacmaz.jetflix.module
 import android.content.Context
 import com.google.gson.Gson
 import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.service.ConfigurationService
 import com.yasinkacmaz.jetflix.service.MovieService
-import com.yasinkacmaz.jetflix.util.ApiKeyInterceptor
+import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore
+import com.yasinkacmaz.jetflix.util.interceptor.ApiKeyInterceptor
+import com.yasinkacmaz.jetflix.util.interceptor.LanguageInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.multibindings.IntoSet
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,16 +28,24 @@ private const val BASE_URL = "https://api.themoviedb.org/3/"
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideApiKeyInterceptor(@ApplicationContext context: Context): ApiKeyInterceptor {
+    @IntoSet
+    fun provideApiKeyInterceptor(@ApplicationContext context: Context): Interceptor {
         return ApiKeyInterceptor(context.getString(R.string.api_key))
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(apiKeyInterceptor: ApiKeyInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(apiKeyInterceptor)
-            .build()
+    @IntoSet
+    fun provideLanguageInterceptor(languageDataStore: LanguageDataStore): Interceptor {
+        return LanguageInterceptor(languageDataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(interceptors: Set<@JvmSuppressWildcards Interceptor>): OkHttpClient {
+        return OkHttpClient.Builder().apply {
+            interceptors().addAll(interceptors)
+        }.build()
     }
 
     @Provides
@@ -48,4 +61,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMovieService(retrofit: Retrofit): MovieService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideConfigurationService(retrofit: Retrofit): ConfigurationService = retrofit.create()
 }

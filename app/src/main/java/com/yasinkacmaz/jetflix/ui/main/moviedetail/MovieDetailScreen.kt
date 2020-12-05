@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animate
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,6 +27,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -337,7 +337,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
     SpacedRow(spaceBetween = 8.dp, modifier = modifier) {
         genres.map(Genre::name).forEach {
             Text(
-                text = it,
+                text = it.orEmpty(),
                 style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
                 modifier = Modifier.border(
                     1.25.dp,
