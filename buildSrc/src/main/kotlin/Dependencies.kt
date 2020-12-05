@@ -1,5 +1,5 @@
 object Dependencies {
-    const val kotlin = "1.4.10"
+    const val kotlin = "1.4.20"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
     const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.3.3.1"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
@@ -31,16 +31,18 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.0.0-alpha07"
+        const val version = "1.0.0-alpha08"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
         const val ui = "androidx.compose.ui:ui:$version"
+        const val uiUtil = "androidx.compose.ui:ui-util:$version"
         const val material = "androidx.compose.material:material:$version"
         const val icons = "androidx.compose.material:material-icons-extended:$version"
         const val animation = "androidx.compose.animation:animation:$version"
-        const val tooling = "androidx.ui:ui-tooling:$version"
-        const val test = "androidx.ui:ui-test:$version"
+        const val tooling = "androidx.compose.ui:ui-tooling:$version"
+        const val uiTest = "androidx.compose.ui:ui-test:$version"
+        const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
     }
 
     object Hilt {

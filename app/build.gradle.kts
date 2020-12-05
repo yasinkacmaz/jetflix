@@ -98,6 +98,7 @@ dependencies {
     implementation(Dependencies.Compose.foundation)
     implementation(Dependencies.Compose.layout)
     implementation(Dependencies.Compose.ui)
+    implementation(Dependencies.Compose.uiUtil)
     implementation(Dependencies.Compose.material)
     implementation(Dependencies.Compose.icons)
     implementation(Dependencies.Compose.animation)
@@ -123,5 +124,6 @@ dependencies {
     testImplementation(Dependencies.Test.mockk)
     testImplementation(Dependencies.Test.coroutines)
     testImplementation(Dependencies.Test.strikt)
-    androidTestImplementation(Dependencies.Compose.test)
+    androidTestImplementation(Dependencies.Compose.uiTest)
+    androidTestImplementation(Dependencies.Compose.uiTestJunit)
 }

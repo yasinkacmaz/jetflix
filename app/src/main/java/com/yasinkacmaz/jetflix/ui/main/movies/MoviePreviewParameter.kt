@@ -1,10 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
 import androidx.compose.runtime.Composable
-import androidx.ui.tooling.preview.Preview
-import androidx.ui.tooling.preview.PreviewParameter
-import androidx.ui.tooling.preview.PreviewParameterProvider
-import androidx.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 
 val fakeMovie = Movie(1337, "Movie Name", "", "", "01.03.1337", "", 9.24, 1337)
 

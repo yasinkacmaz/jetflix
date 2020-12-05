@@ -9,6 +9,7 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.center
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -16,15 +17,14 @@ import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.swipe
 import androidx.compose.ui.unit.milliseconds
-import androidx.ui.test.createComposeRule
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.DominantColorAmbient
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.AmbientDominantColor
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetail
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
-import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
+import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.util.randomColor
 import org.junit.Rule
@@ -160,7 +160,7 @@ class MovieDetailScreenTest {
         setContent {
             val navigator = remember { Navigator<Screen>(Screen.FetchGenres) }
             val dominantColor = remember(movieDetail.id) { mutableStateOf(Color.randomColor()) }
-            Providers(NavigatorAmbient provides navigator, DominantColorAmbient provides dominantColor) {
+            Providers(AmbientNavigator provides navigator, AmbientDominantColor provides dominantColor) {
                 MovieDetail(movieDetail, credits, listOf())
             }
         }

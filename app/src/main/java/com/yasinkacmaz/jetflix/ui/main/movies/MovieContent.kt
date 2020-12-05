@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +18,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Movie
@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +64,7 @@ private fun MoviePoster(posterPath: String) {
         modifier = Modifier.fillMaxSize(),
         loading = {
             Icon(
-                asset = Icons.Default.Movie,
+                imageVector = Icons.Default.Movie,
                 tint = Color.DarkGray,
                 modifier = Modifier.background(color = Color.LightGray).fillMaxSize()
             )
@@ -119,9 +119,9 @@ private fun MovieName(name: String) {
 }
 
 @Composable
-private fun MovieFeature(icon: VectorAsset, field: String) {
+private fun MovieFeature(icon: ImageVector, field: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(asset = icon, tint = Color.White, modifier = Modifier.size(14.dp))
+        Icon(imageVector = icon, tint = Color.White, modifier = Modifier.size(14.dp))
         Text(
             text = field,
             style = MaterialTheme.typography.subtitle2.copy(

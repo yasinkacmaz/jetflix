@@ -46,14 +46,14 @@ import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.AmbientDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -74,7 +74,7 @@ import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.Person
-import com.yasinkacmaz.jetflix.ui.navigation.NavigatorAmbient
+import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
@@ -85,7 +85,7 @@ import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-val DominantColorAmbient = ambientOf<MutableState<Color>> { error("No dominant color") }
+val AmbientDominantColor = ambientOf<MutableState<Color>> { error("No dominant color") }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -108,7 +108,7 @@ fun MovieDetailScreen(movieId: Int) {
         movieDetailUiState.movieDetail != null -> {
             val primaryColor = SelectedGenreAmbient.current.value.primaryColor
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
-            Providers(DominantColorAmbient provides dominantColor) {
+            Providers(AmbientDominantColor provides dominantColor) {
                 AppBar(movieDetailUiState.movieDetail.homepage)
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
             }
@@ -122,14 +122,14 @@ private fun AppBar(homepage: String?) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 4.dp, vertical = 2.dp).zIndex(8f)
     ) {
-        val navigator = NavigatorAmbient.current
+        val navigator = AmbientNavigator.current
         val tint = Color.White
         IconButton(onClick = { navigator.goBack() }) {
             Icon(Icons.Filled.ArrowBack, tint = tint)
         }
         if (homepage != null) {
-            val dominantColor = DominantColorAmbient.current.value
-            val context = ContextAmbient.current
+            val dominantColor = AmbientDominantColor.current.value
+            val context = AmbientContext.current
             IconButton(onClick = { openHomepage(context, homepage, dominantColor) }) {
                 Icon(Icons.Rounded.Public, tint = tint)
             }
@@ -151,7 +151,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
-        fetchDominantColorFromPoster(movieDetail.posterUrl, DominantColorAmbient.current)
+        fetchDominantColorFromPoster(movieDetail.posterUrl, AmbientDominantColor.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
         Poster(
             movieDetail.posterUrl,
@@ -222,7 +222,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         Text(
             text = movieDetail.tagline,
-            color = DominantColorAmbient.current.value,
+            color = AmbientDominantColor.current.value,
             style = MaterialTheme.typography.body1.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 24.sp,
@@ -249,7 +249,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             }
         )
 
-        val navigator = NavigatorAmbient.current
+        val navigator = AmbientNavigator.current
         MovieSection(
             credits.cast,
             { SectionHeaderWithDetail(R.string.cast) { navigator.navigateTo(Screen.PeopleGrid(credits.cast)) } },
@@ -258,7 +258,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             },
-            tag = "Cast"
+            tag = "cast"
         )
 
         MovieSection(
@@ -301,7 +301,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
 @Composable
 private fun Backdrop(backdropUrl: String, modifier: Modifier) {
-    val arcHeight = 240.dp.value * DensityAmbient.current.density
+    val arcHeight = 240.dp.value * AmbientDensity.current.density
     Card(
         elevation = 16.dp,
         shape = BottomArcShape(arcHeight = arcHeight),
@@ -325,7 +325,7 @@ private fun Poster(posterUrl: String, modifier: Modifier) {
         elevation = 24.dp,
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
-            .drawLayer(scaleX = scale, scaleY = scale)
+            .graphicsLayer(scaleX = scale, scaleY = scale)
             .clickable(onClick = { isScaled.value = !isScaled.value })
     ) {
         CoilImage(data = posterUrl, contentScale = ContentScale.FillHeight)
@@ -341,7 +341,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
                 style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
                 modifier = Modifier.border(
                     1.25.dp,
-                    DominantColorAmbient.current.value,
+                    AmbientDominantColor.current.value,
                     RoundedCornerShape(50)
                 ).padding(horizontal = 6.dp, vertical = 3.dp)
             )
@@ -351,7 +351,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
 
 @Composable
 private fun RateStars(voteAverage: Double, modifier: Modifier) {
-    val dominantColor = DominantColorAmbient.current.value
+    val dominantColor = AmbientDominantColor.current.value
     Row(modifier.padding(start = 4.dp)) {
         val maxVote = 10
         val starCount = 5
@@ -368,7 +368,7 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
                     dominantColor to Icons.Filled.StarOutline
                 }
             }
-            Icon(asset = asset, tint = tint)
+            Icon(imageVector = asset, tint = tint)
             Spacer(modifier = Modifier.width(4.dp))
         }
     }
@@ -377,7 +377,7 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
 @Composable
 private fun MovieFields(movieDetail: MovieDetail, modifier: Modifier) {
     SpacedRow(spaceBetween = 20.dp, modifier = modifier) {
-        val context = ContextAmbient.current
+        val context = AmbientContext.current
         MovieField(context.getString(R.string.release_date), movieDetail.releaseDate)
         MovieField(
             context.getString(R.string.duration),
@@ -428,7 +428,7 @@ private fun <T : Any> MovieSection(
 @Composable
 private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
     text = stringResource(titleResId),
-    color = DominantColorAmbient.current.value,
+    color = AmbientDominantColor.current.value,
     style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     modifier = Modifier.padding(start = 16.dp)
 )
@@ -441,7 +441,7 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
     ) {
         Text(
             text = stringResource(textRes),
-            color = DominantColorAmbient.current.value,
+            color = AmbientDominantColor.current.value,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
         )
         Row(
@@ -450,11 +450,11 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
         ) {
             Text(
                 text = stringResource(R.string.see_all),
-                color = DominantColorAmbient.current.value,
+                color = AmbientDominantColor.current.value,
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(end = 4.dp)
             )
-            Icon(Icons.Filled.ArrowForward, tint = DominantColorAmbient.current.value)
+            Icon(Icons.Filled.ArrowForward, tint = AmbientDominantColor.current.value)
         }
     }
 }
@@ -469,7 +469,7 @@ private fun Image(image: Image) {
         CoilImage(
             data = image.url,
             contentScale = ContentScale.Crop,
-            error = { Icon(asset = Icons.Default.Movie, tint = Color.DarkGray) }
+            error = { Icon(imageVector = Icons.Default.Movie, tint = Color.DarkGray) }
         )
     }
 }
@@ -481,12 +481,12 @@ private fun ProductionCompany(company: ProductionCompany) {
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
-        Column(Modifier.background(DominantColorAmbient.current.value.copy(alpha = 0.7f)).padding(4.dp)) {
+        Column(Modifier.background(AmbientDominantColor.current.value.copy(alpha = 0.7f)).padding(4.dp)) {
             CoilImage(
                 data = company.logoUrl,
                 contentScale = ContentScale.Inside,
                 modifier = Modifier.size(150.dp, 85.dp).align(Alignment.CenterHorizontally),
-                error = { Icon(asset = Icons.Default.Movie, tint = Color.DarkGray) }
+                error = { Icon(imageVector = Icons.Default.Movie, tint = Color.DarkGray) }
             )
             Text(
                 text = company.name,

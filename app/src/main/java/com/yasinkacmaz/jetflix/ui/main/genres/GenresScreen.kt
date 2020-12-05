@@ -31,8 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawShadow
-import androidx.compose.ui.drawLayer
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.R
@@ -76,7 +76,7 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
             Icon(Icons.Default.Settings, tint = tint)
         }
 
-        Icon(asset = vectorResource(id = R.drawable.ic_jetflix), tint = tint, modifier = Modifier.size(90.dp))
+        Icon(imageVector = vectorResource(id = R.drawable.ic_jetflix), tint = tint, modifier = Modifier.size(90.dp))
 
         val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
         IconButton(onClick = isDarkTheme::toggle) {
@@ -109,8 +109,8 @@ fun GenreChip(genreUiModel: GenreUiModel) {
     val shape = RoundedCornerShape(percent = 50)
     val scale = animate(if (selected) 1.1f else 1f)
     val modifier = Modifier
-        .drawLayer(scaleX = scale, scaleY = scale)
-        .drawShadow(animate(if (selected) 8.dp else 4.dp), shape)
+        .graphicsLayer(scaleX = scale, scaleY = scale)
+        .shadow(animate(if (selected) 8.dp else 4.dp), shape)
         .background(MaterialTheme.colors.surface)
         .gradientBorder(colors, shape, 2.dp, selected)
         .gradientBackground(colors, shape = shape, selected)

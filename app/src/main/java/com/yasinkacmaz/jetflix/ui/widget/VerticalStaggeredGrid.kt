@@ -2,7 +2,6 @@ package com.yasinkacmaz.jetflix.ui.widget
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,15 +10,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaAnimation
 import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaArgs
 import com.yasinkacmaz.jetflix.util.randomColor
@@ -27,16 +27,16 @@ import kotlin.math.ceil
 
 @Composable
 fun VerticalStaggeredGrid(
+    modifier: Modifier = Modifier,
     itemCount: Int,
     columnCount: Int,
     columnSpacing: Dp = 0.dp,
     rowSpacing: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(),
-    modifier: Modifier = Modifier,
     itemContent: @Composable (Int, Modifier) -> Unit
 ) {
     Layout(
-        children = {
+        content = {
             for (index in 0..itemCount) {
                 val scaleAndAlphaAnimation = remember(index) {
                     val animation =
@@ -98,7 +98,7 @@ private fun placingToLastRow(index: Int, rowCount: Int, columnCount: Int): Boole
     return ceil((index + 1).toFloat() / columnCount).toInt() >= rowCount
 }
 
-@Preview(showDecoration = true)
+@Preview(showSystemUi = true)
 @Composable
 private fun VerticalGridPreview() {
     VerticalStaggeredGrid(
