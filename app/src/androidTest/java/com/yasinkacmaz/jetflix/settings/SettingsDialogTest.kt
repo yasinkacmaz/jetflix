@@ -62,7 +62,6 @@ class SettingsDialogTest {
 
         showSettingsDialog(uiState, selectedLanguage)
 
-
         onNodeWithTag(SETTINGS_DIALOG_TAG).printToLog(TAG)
         onNodeWithSubstring(defaultLanguage.englishName, useUnmergedTree = true).performClick()
         onNodeWithSubstring(firstLanguageName, useUnmergedTree = true).assertIsDisplayed()

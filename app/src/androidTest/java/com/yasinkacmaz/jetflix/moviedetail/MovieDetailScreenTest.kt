@@ -99,7 +99,7 @@ class MovieDetailScreenTest {
             movieDetail.copy(tagline = tagline, overview = overview)
         )
 
-        onNodeWithText(tagline,useUnmergedTree = false).assertIsDisplayed()
+        onNodeWithText(tagline, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(overview, useUnmergedTree = false).assertIsDisplayed()
     }
 

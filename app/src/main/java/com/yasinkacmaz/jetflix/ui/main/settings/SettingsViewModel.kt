@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.main.settings
 
-import androidx.annotation.VisibleForTesting
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,15 +29,14 @@ class SettingsViewModel @ViewModelInject constructor(
     fun fetchLanguages() {
         val canFetchLanguages = uiValue.languages.isEmpty() && uiValue.showLoading.not()
         if (canFetchLanguages) {
-            uiValue = uiValue.copy(showLoading = true)
             viewModelScope.launch {
+                uiValue = uiValue.copy(showLoading = true)
                 uiValue = try {
                     val languages = configurationService.fetchLanguages().sortedBy(Language::englishName)
                     uiValue.copy(showLoading = false, languages = languages)
                 } catch (exception: Exception) {
                     uiValue.copy(showLoading = false)
                 }
-
             }
         }
     }

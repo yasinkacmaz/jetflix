@@ -54,9 +54,12 @@ fun SettingsContent(onDialogDismiss: () -> Unit) {
     settingsViewModel.fetchLanguages()
     val uiState = settingsViewModel.uiState.collectAsState().value
     val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default)
-    SettingsDialog(uiState, selectedLanguage, onDialogDismiss = onDialogDismiss, onLanguageSelected =  {
-        settingsViewModel.onLanguageSelected(it)
-    })
+    SettingsDialog(
+        uiState,
+        selectedLanguage,
+        onDialogDismiss = onDialogDismiss,
+        onLanguageSelected = { settingsViewModel.onLanguageSelected(it) }
+    )
 }
 
 @Composable
