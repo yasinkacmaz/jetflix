@@ -24,8 +24,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -82,7 +80,6 @@ fun SettingsDialog(
                 } else {
                     LanguageRow(uiState.languages, selectedLanguage.value, onLanguageSelected)
                     Spacer(modifier = Modifier.height(16.dp))
-                    CountryRow()
                 }
             }
         }
@@ -114,29 +111,6 @@ private fun LanguageRow(
                 DropdownItem(language.englishName, language.flagUrl, selected) {
                     onLanguageSelected(language)
                     showLanguageDropdown.value = false
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun CountryRow() {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(stringResource(R.string.country))
-        val showCountryDropdown = remember { mutableStateOf(false) }
-        var selectedCountry by remember { mutableStateOf("Turkey") }
-        val countries = listOf("Turkey", "England", "Germany", "China")
-        DropdownMenu(
-            toggle = { ToggleContent(title = selectedCountry, "", onClick = { showCountryDropdown.toggle() }) },
-            expanded = showCountryDropdown.value,
-            onDismissRequest = { showCountryDropdown.value = false }
-        ) {
-            countries.forEach { country ->
-                val selected = country == selectedCountry
-                DropdownItem(country, "", selected) {
-                    selectedCountry = country
-                    showCountryDropdown.value = false
                 }
             }
         }
