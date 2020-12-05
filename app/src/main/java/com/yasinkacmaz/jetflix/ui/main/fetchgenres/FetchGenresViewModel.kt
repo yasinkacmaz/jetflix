@@ -16,16 +16,20 @@ class FetchGenresViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val uiState = MutableStateFlow(FetchGenresUiState())
-    private val uiValue get() = uiState.value
+    var uiValue
+        get() = uiState.value
+        set(value) {
+            uiState.value = value
+        }
 
     fun fetchGenres() {
         viewModelScope.launch {
-            uiState.value = uiValue.copy(loading = true)
-            try {
+            uiValue = uiValue.copy(loading = true)
+            uiValue = try {
                 val genres = movieService.fetchGenres().genres.map(genreUiModelMapper::map)
-                uiState.value = uiValue.copy(genreUiModels = genres, loading = false)
+                uiValue.copy(genreUiModels = genres, loading = false)
             } catch (exception: Exception) {
-                uiState.value = uiValue.copy(error = exception, loading = false)
+                uiValue.copy(error = exception, loading = false)
             }
         }
     }

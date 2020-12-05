@@ -8,7 +8,7 @@ import androidx.compose.ui.viewinterop.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
+import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
 import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.Genres
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +33,7 @@ fun FetchGenresScreen() {
             ErrorColumn(fetchGenresUiState.error.message.orEmpty())
         }
         fetchGenresUiState.genreUiModels.isNotEmpty() -> {
-            SelectedGenreAmbient.current.value = fetchGenresUiState.genreUiModels.first()
+            AmbientSelectedGenre.current.value = fetchGenresUiState.genreUiModels.first()
             AmbientNavigator.current.navigateTo(Genres(fetchGenresUiState.genreUiModels), keepCurrentScreen = false)
         }
     }

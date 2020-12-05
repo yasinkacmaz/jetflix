@@ -16,7 +16,7 @@ import androidx.core.view.WindowCompat
 import com.yasinkacmaz.jetflix.ui.main.fetchgenres.FetchGenresScreen
 import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.main.genres.GenresScreen
-import com.yasinkacmaz.jetflix.ui.main.genres.SelectedGenreAmbient
+import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
 import com.yasinkacmaz.jetflix.ui.main.images.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.PeopleGridScreen
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         isDarkTheme: MutableState<Boolean>,
         showSettingsDialog: MutableState<Boolean>
     ) {
-        Providers(AmbientNavigator provides navigator, SelectedGenreAmbient provides genreUiModel) {
+        Providers(AmbientNavigator provides navigator, AmbientSelectedGenre provides genreUiModel) {
             ProvideDisplayInsets {
                 JetflixTheme(isDarkTheme = isDarkTheme.value) {
                     Crossfade(current = navigator.currentScreen) { screen ->

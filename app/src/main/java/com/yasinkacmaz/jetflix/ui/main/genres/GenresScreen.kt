@@ -48,7 +48,7 @@ fun GenresScreen(
     isDarkTheme: MutableState<Boolean>,
     showSettingsDialog: MutableState<Boolean>
 ) {
-    val selectedGenre = SelectedGenreAmbient.current
+    val selectedGenre = AmbientSelectedGenre.current
     Surface(modifier = Modifier.fillMaxSize(), elevation = 0.dp) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             Surface(modifier = Modifier.fillMaxWidth().wrapContentHeight(), elevation = 16.dp) {
@@ -103,7 +103,7 @@ fun GenreChips(genreUiModels: List<GenreUiModel>) {
 
 @Composable
 fun GenreChip(genreUiModel: GenreUiModel) {
-    val selectedGenre = SelectedGenreAmbient.current
+    val selectedGenre = AmbientSelectedGenre.current
     val selected = selectedGenre.value == genreUiModel
     val colors = listOf(genreUiModel.primaryColor, genreUiModel.secondaryColor)
     val shape = RoundedCornerShape(percent = 50)
