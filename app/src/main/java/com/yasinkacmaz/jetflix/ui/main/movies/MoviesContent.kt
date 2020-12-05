@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -59,7 +60,7 @@ fun MoviesContent(genre: Genre) {
 
 @Composable
 private fun LazyMovies(
-    movies: List<Pair<Movie, Movie>>,
+    movies: List<List<Movie>>,
     genre: Genre,
     loading: Boolean,
     error: Throwable?,
@@ -69,8 +70,8 @@ private fun LazyMovies(
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
     }
-    LazyColumnForIndexed(items = movies) { index, moviePair ->
-        MovieRow(moviePair, onMovieClicked)
+    LazyColumnForIndexed(items = movies) { index, movies ->
+        MovieRow(movies, onMovieClicked)
         if (index == movies.lastIndex) {
             onActive {
                 onLoadMore()
@@ -88,13 +89,14 @@ private fun LazyMovies(
 }
 
 @Composable
-private fun MovieRow(moviePair: Pair<Movie, Movie>, onMovieClicked: (Int) -> Unit = {}) {
+private fun MovieRow(movies: List<Movie>, onMovieClicked: (Int) -> Unit = {}) {
     val padding = 8.dp
-    Row(modifier = Modifier.padding(horizontal = padding, vertical = padding * 1.2f)) {
+    Row(modifier = Modifier.padding(start = padding).padding(vertical = padding * 1.2f)) {
         val modifier = Modifier.weight(1f).preferredHeight(320.dp)
-        MovieContent(moviePair.first, modifier, onMovieClicked)
-        Spacer(modifier = Modifier.width(padding))
-        MovieContent(moviePair.second, modifier, onMovieClicked)
+        movies.forEach { movie ->
+            MovieContent(movie, modifier, onMovieClicked)
+            Spacer(modifier = Modifier.width(padding))
+        }
     }
 }
 
@@ -102,15 +104,16 @@ private fun MovieRow(moviePair: Pair<Movie, Movie>, onMovieClicked: (Int) -> Uni
 @Preview
 private fun MovieRowPreview() {
     Column {
-        MovieRow(fakeMovie to fakeMovie)
+        MovieRow(listOf(fakeMovie, fakeMovie))
     }
 }
 
 @Composable
 @Preview
 private fun MoviesPreview() {
-    Column {
-        MovieRow(fakeMovie to fakeMovie)
-        MovieRow(fakeMovie to fakeMovie)
+    ScrollableColumn {
+        MovieRow(listOf(fakeMovie, fakeMovie))
+        MovieRow(listOf(fakeMovie, fakeMovie))
+        MovieRow(listOf(fakeMovie))
     }
 }
