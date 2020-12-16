@@ -84,7 +84,6 @@ dependencies {
     implementation(Dependencies.kotlinStdLib)
 
     // AndroidX
-    implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.palette)
     implementation(Dependencies.AndroidX.browser)
     implementation(Dependencies.AndroidX.dataStore)
