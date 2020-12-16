@@ -108,7 +108,7 @@ class MovieDetailScreenTest {
         val tony = Person("Al Pacino", "Tony Montana", "", Gender.MALE)
         val natasha = Person("Scarlett Johansson", "Natasha Romanoff", "", Gender.FEMALE)
         val hermione = Person("Emma Watson", "Hermione Granger", "", Gender.FEMALE)
-        val sparrow = Person("Johhny Depp", "Jack Sparrow", "", Gender.MALE)
+        val sparrow = Person("Johnny Depp", "Jack Sparrow", "", Gender.MALE)
         val cast = listOf(tony, natasha, hermione, sparrow)
         val credits = Credits(cast = cast, crew = emptyList())
 
@@ -122,7 +122,7 @@ class MovieDetailScreenTest {
         val klaus = Person("Klaus Badelt", "Composer", "", Gender.MALE)
         val rowling = Person("J.K. Rowling", "Novel", "", Gender.FEMALE)
         val hans = Person("Hans Zimmer", "Music Composer", "", Gender.MALE)
-        // stan and quentin is at offscreen. We should scroll them to assert.
+        // Stan and Quentin is at offscreen. We should scroll them to assert.
         val stan = Person("Stan Lee", "Characters", "", Gender.MALE)
         val quentin = Person("Quentin Tarantino", "Director", "", Gender.MALE)
         val crew = listOf(klaus, rowling, hans, stan, quentin)
@@ -146,7 +146,6 @@ class MovieDetailScreenTest {
                 val start = Offset(x + width, y)
                 val end = Offset(x, y)
                 swipe(start, end, 1000.milliseconds)
-                waitForIdle()
             }
             onNodeWithText(person.name, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
             onNodeWithText(person.character, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()

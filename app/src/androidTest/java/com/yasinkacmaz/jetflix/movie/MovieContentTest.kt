@@ -31,8 +31,6 @@ class MovieContentTest {
     private val movie = Movie(
         id = 1337,
         name = "Movie Name",
-        originalName = "",
-        overview = "",
         releaseDate = "01.03.1337",
         posterPath = "",
         voteAverage = 9.24,
