@@ -31,8 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.R
@@ -109,7 +109,7 @@ fun GenreChip(genreUiModel: GenreUiModel) {
     val shape = RoundedCornerShape(percent = 50)
     val scale = animate(if (selected) 1.1f else 1f)
     val modifier = Modifier
-        .graphicsLayer(scaleX = scale, scaleY = scale)
+        .scale(scale)
         .shadow(animate(if (selected) 8.dp else 4.dp), shape)
         .background(MaterialTheme.colors.surface)
         .gradientBorder(colors, shape, 2.dp, selected)

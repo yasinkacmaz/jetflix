@@ -8,8 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
@@ -23,22 +24,20 @@ fun Modifier.gradientBackground(colors: List<Color>, shape: Shape, showBackgroun
 
 private fun Modifier.gradientBackground(colors: List<Color>, shape: Shape) =
     gradientBackground(colors = colors, shape = shape) { gradientColors, size ->
-        LinearGradient(
+        Brush.linearGradient(
             colors = gradientColors,
-            startX = 0f,
-            startY = 0f,
-            endX = size.width.toFloat(),
-            endY = size.height.toFloat()
+            start = Offset(0f, 0f),
+            end = Offset(size.width.toFloat(), size.height.toFloat())
         )
     }
 
 private fun Modifier.gradientBackground(
     colors: List<Color>,
     shape: Shape,
-    brushProvider: (List<Color>, IntSize) -> LinearGradient
+    brushProvider: (List<Color>, IntSize) -> Brush
 ) = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
-    val gradient = remember(colors, size) { brushProvider(colors, size) }
+    val gradientBrush = remember(colors, size) { brushProvider(colors, size) }
     val sizeProvider = onGloballyPositioned { size = it.size }
-    sizeProvider then background(brush = gradient, shape = shape)
+    sizeProvider then background(brush = gradientBrush, shape = shape)
 }

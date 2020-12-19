@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.widget.VerticalStaggeredGrid
-import com.yasinkacmaz.jetflix.util.InsetsAmbient
+import com.yasinkacmaz.jetflix.util.AmbientInsets
 import com.yasinkacmaz.jetflix.util.toDp
 
 @Composable
 fun PeopleGridScreen(people: List<Person>) {
-    val insets = InsetsAmbient.current
+    val insets = AmbientInsets.current
     val statusBarPadding = insets.statusBars.top.toDp().dp
     val navigationBarPadding = insets.navigationBars.bottom.toDp().dp
     Box(modifier = Modifier.fillMaxHeight().background(MaterialTheme.colors.surface)) {

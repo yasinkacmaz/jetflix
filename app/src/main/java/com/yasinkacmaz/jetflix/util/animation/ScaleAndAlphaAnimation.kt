@@ -11,8 +11,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -71,7 +71,7 @@ private fun ScaleAndAlphaAnimationPreview() {
         Surface(
             color = Color.Red,
             shape = CircleShape,
-            modifier = Modifier.size(60.dp).drawLayer(
+            modifier = Modifier.size(60.dp).graphicsLayer(
                 scaleX = anim.scaleAndAlpha().first,
                 scaleY = anim.scaleAndAlpha().first,
                 alpha = anim.scaleAndAlpha().second
