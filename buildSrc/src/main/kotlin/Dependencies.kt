@@ -7,7 +7,7 @@ object Dependencies {
     const val ktlint = "com.pinterest:ktlint:0.39.0"
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:4.2.0-alpha15"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha03"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
     }
