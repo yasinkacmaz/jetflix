@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumnForIndexed
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onActive
@@ -69,21 +69,26 @@ private fun LazyMovies(
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
     }
-    LazyColumnForIndexed(items = movies) { index, moviePair ->
-        MovieRow(moviePair, onMovieClicked)
-        if (index == movies.lastIndex) {
-            onActive {
-                onLoadMore()
-            }
+    LazyColumn {
+        itemsIndexed(
+            items = movies,
+            itemContent = { index, moviePair ->
+                MovieRow(moviePair, onMovieClicked)
+                if (index == movies.lastIndex) {
+                    onActive {
+                        onLoadMore()
+                    }
 
-            if (loading) {
-                LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genre.name.orEmpty()))
-            }
+                    if (loading) {
+                        LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genre.name.orEmpty()))
+                    }
 
-            if (error != null) {
-                LoadingRow(title = error.message!!)
+                    if (error != null) {
+                        LoadingRow(title = error.message!!)
+                    }
+                }
             }
-        }
+        )
     }
 }
 

@@ -14,8 +14,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -45,7 +45,7 @@ fun VerticalStaggeredGrid(
                     ScaleAndAlphaAnimation(args = args, animation = animation)
                 }
                 val (scale, alpha) = scaleAndAlphaAnimation.scaleAndAlpha()
-                itemContent(index, Modifier.drawLayer(alpha = alpha, scaleX = scale, scaleY = scale))
+                itemContent(index, Modifier.graphicsLayer(alpha = alpha, scaleX = scale, scaleY = scale))
             }
         },
         modifier = modifier.verticalScroll(rememberScrollState())

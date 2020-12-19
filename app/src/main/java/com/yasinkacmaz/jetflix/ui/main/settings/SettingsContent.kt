@@ -32,7 +32,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.annotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.viewinterop.viewModel
@@ -124,7 +124,7 @@ private fun ToggleContent(title: String, flagUrl: String, onClick: () -> Unit) {
     val flagContent = flagContent(flagId, flagUrl)
     val dropdownContent = iconContent(dropdownId, Icons.Default.ArrowDropDown)
     Text(
-        text = annotatedString {
+        text = buildAnnotatedString {
             appendInlineContent(flagId)
             append(title)
             appendInlineContent(dropdownId)
@@ -142,7 +142,7 @@ private fun DropdownItem(text: String, flagUrl: String, selected: Boolean, onCli
         val tickIconContent = iconContent(tickIconId, Icons.Default.Done)
         val flagContent = flagContent(flagId, flagUrl)
         Text(
-            text = annotatedString {
+            text = buildAnnotatedString {
                 appendInlineContent(flagId)
                 if (selected) {
                     appendInlineContent(tickIconId)

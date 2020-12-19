@@ -21,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.platform.AmbientContext
@@ -57,7 +57,7 @@ private fun Image(image: Image) {
         CoilImage(
             data = image.url,
             contentScale = ContentScale.FillHeight,
-            modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.85f),
+            modifier = Modifier.fillMaxSize().alpha(alpha = 0.85f),
             requestBuilder = { transformations(BlurTransformation(context = context, radius = 12f, sampling = 4f)) }
         )
         FloatingActionButton(

@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRowFor
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -46,10 +46,10 @@ import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
@@ -79,7 +79,7 @@ import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
-import com.yasinkacmaz.jetflix.util.fetchDominantColorFromPoster
+import com.yasinkacmaz.jetflix.util.FetchDominantColorFromPoster
 import com.yasinkacmaz.jetflix.util.navigationBarsHeightPlus
 import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -151,7 +151,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
-        fetchDominantColorFromPoster(movieDetail.posterUrl, AmbientDominantColor.current)
+        FetchDominantColorFromPoster(movieDetail.posterUrl, AmbientDominantColor.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
         Poster(
             movieDetail.posterUrl,
@@ -325,7 +325,7 @@ private fun Poster(posterUrl: String, modifier: Modifier) {
         elevation = 24.dp,
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
-            .graphicsLayer(scaleX = scale, scaleY = scale)
+            .scale(scale)
             .clickable(onClick = { isScaled.value = !isScaled.value })
     ) {
         CoilImage(data = posterUrl, contentScale = ContentScale.FillHeight)
@@ -414,13 +414,17 @@ private fun <T : Any> MovieSection(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         header()
-        LazyRowFor(
-            items = items,
-            contentPadding = PaddingValues(16.dp),
-            modifier = Modifier.semantics { testTag = tag }
-        ) { item ->
-            itemContent(item)
-            Spacer(modifier = Modifier.width(16.dp))
+        LazyRow(
+            modifier = Modifier.semantics { testTag = tag },
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            items(
+                items = items,
+                itemContent = { item ->
+                    itemContent(item)
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+            )
         }
     }
 }

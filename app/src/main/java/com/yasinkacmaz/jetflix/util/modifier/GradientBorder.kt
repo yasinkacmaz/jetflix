@@ -8,8 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.LinearGradient
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
@@ -26,11 +27,7 @@ fun Modifier.gradientBorder(
     val animatedColors = List(colors.size) { i ->
         animate(if (showBorder) colors[i] else colors[i])
     }
-    gradientBorder(
-        colors = animatedColors,
-        borderSize = borderSize,
-        shape = shape
-    )
+    gradientBorder(colors = animatedColors, borderSize = borderSize, shape = shape)
 }
 
 private fun Modifier.gradientBorder(
@@ -42,12 +39,10 @@ private fun Modifier.gradientBorder(
     borderSize = borderSize,
     shape = shape
 ) { gradientColors, size ->
-    LinearGradient(
+    Brush.linearGradient(
         colors = gradientColors,
-        startX = 0f,
-        startY = 0f,
-        endX = size.width.toFloat(),
-        endY = size.height.toFloat()
+        start = Offset(0f, 0f),
+        end = Offset(size.width.toFloat(), size.height.toFloat())
     )
 }
 
@@ -55,14 +50,10 @@ private fun Modifier.gradientBorder(
     colors: List<Color>,
     borderSize: Dp = 2.dp,
     shape: Shape,
-    brushProvider: (List<Color>, IntSize) -> LinearGradient
+    brushProvider: (List<Color>, IntSize) -> Brush
 ) = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
-    val gradient = remember(colors, size) { brushProvider(colors, size) }
+    val gradientBrush = remember(colors, size) { brushProvider(colors, size) }
     val sizeProvider = onGloballyPositioned { size = it.size }
-    sizeProvider then border(
-        width = borderSize,
-        brush = gradient,
-        shape = shape
-    )
+    sizeProvider then border(width = borderSize, brush = gradientBrush, shape = shape)
 }

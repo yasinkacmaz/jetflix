@@ -10,7 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LifecycleOwnerAmbient
+import androidx.compose.ui.platform.AmbientLifecycleOwner
 import androidx.compose.ui.platform.setContent
 import androidx.core.view.WindowCompat
 import com.yasinkacmaz.jetflix.ui.main.fetchgenres.FetchGenresScreen
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
     private fun renderUi() {
         setContent {
-            val lifecycleOwner = LifecycleOwnerAmbient.current
+            val lifecycleOwner = AmbientLifecycleOwner.current
             val navigator = remember { Navigator<Screen>(FetchGenres, lifecycleOwner, onBackPressedDispatcher) }
             val systemTheme = isSystemInDarkTheme()
             val isDarkTheme = remember { mutableStateOf(systemTheme) }
