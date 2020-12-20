@@ -1,16 +1,16 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onActive
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,10 +18,12 @@ import androidx.compose.ui.viewinterop.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
+import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
+import com.yasinkacmaz.jetflix.util.AmbientInsets
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,77 +47,72 @@ fun MoviesContent(genre: Genre) {
             ErrorColumn(movieUiState.error.message.orEmpty())
         }
         movieUiState.movies.isNotEmpty() -> {
-            LazyMovies(
-                movieUiState.moviePairs,
-                genre,
-                movieUiState.loading,
-                movieUiState.error
-            ) {
+            LazyMoviesGrid(movieUiState, genre) {
                 moviesViewModel.fetchMovies(genre.id)
             }
         }
     }
 }
 
+// TODO: LazyVerticalGrid does not have span strategy.
+//  Find a way to display loading item at full width.
+//  Find a way to add padding between items without modifying all items.
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun LazyMovies(
-    movies: List<Pair<Movie, Movie>>,
+private fun LazyMoviesGrid(
+    uiState: MoviesViewModel.MovieUiState,
     genre: Genre,
-    loading: Boolean,
-    error: Throwable?,
     onLoadMore: () -> Unit
 ) {
     val navigator = AmbientNavigator.current
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
     }
-    LazyColumn {
-        itemsIndexed(
-            items = movies,
-            itemContent = { index, moviePair ->
-                MovieRow(moviePair, onMovieClicked)
-                if (index == movies.lastIndex) {
-                    onActive {
-                        onLoadMore()
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(2),
+        contentPadding = PaddingValues(start = 8.dp, bottom = AmbientInsets.current.navigationBars.top.dp),
+        content = {
+            itemsIndexed(
+                uiState.movies,
+                itemContent = { index, movie ->
+                    WithConstraints(Modifier.padding(end = 8.dp).padding(vertical = 8.dp)) {
+                        MovieContent(movie, Modifier.preferredHeight(320.dp), onMovieClicked)
                     }
-
-                    if (loading) {
-                        LoadingRow(title = stringResource(id = R.string.fetching_more_movies, genre.name.orEmpty()))
-                    }
-
-                    if (error != null) {
-                        LoadingRow(title = error.message!!)
-                    }
+                    val lastIndex = index == uiState.movies.lastIndex
+                    LazyMovieGridPagingContent(lastIndex, onLoadMore, uiState.loading, genre, uiState.error)
                 }
-            }
-        )
-    }
+            )
+        }
+    )
 }
 
 @Composable
-private fun MovieRow(moviePair: Pair<Movie, Movie>, onMovieClicked: (Int) -> Unit = {}) {
-    val padding = 8.dp
-    Row(modifier = Modifier.padding(horizontal = padding, vertical = padding * 1.2f)) {
-        val modifier = Modifier.weight(1f).preferredHeight(320.dp)
-        MovieContent(moviePair.first, modifier, onMovieClicked)
-        Spacer(modifier = Modifier.width(padding))
-        MovieContent(moviePair.second, modifier, onMovieClicked)
+private fun LazyMovieGridPagingContent(
+    lastIndex: Boolean,
+    onLoadMore: () -> Unit,
+    loading: Boolean,
+    genre: Genre,
+    error: Throwable?
+) {
+
+    if (lastIndex) {
+        onActive {
+            onLoadMore()
+        }
+
+        if (loading) {
+            val title = stringResource(R.string.fetching_more_movies, genre.name.orEmpty())
+            LoadingRow(title = title)
+        }
+
+        if (error != null) {
+            ErrorRow(title = error.message!!)
+        }
     }
 }
 
 @Composable
 @Preview
-private fun MovieRowPreview() {
-    Column {
-        MovieRow(fakeMovie to fakeMovie)
-    }
-}
-
-@Composable
-@Preview
-private fun MoviesPreview() {
-    Column {
-        MovieRow(fakeMovie to fakeMovie)
-        MovieRow(fakeMovie to fakeMovie)
-    }
+private fun MoviesGridPreview() {
+    LazyMoviesGrid(MoviesViewModel.MovieUiState(listOf(fakeMovie, fakeMovie, fakeMovie)), Genre(1, "Genre")) {}
 }

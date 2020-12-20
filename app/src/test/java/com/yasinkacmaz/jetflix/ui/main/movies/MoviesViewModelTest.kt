@@ -46,7 +46,7 @@ class MoviesViewModelTest {
         verifyOrder {
             moviesViewModel.uiValue = MoviesViewModel.MovieUiState(loading = true)
             moviesViewModel.uiValue =
-                MoviesViewModel.MovieUiState(loading = false, movies = mutableListOf(movieMapper.map(movieResponse)))
+                MoviesViewModel.MovieUiState(loading = false, movies = listOf(movieMapper.map(movieResponse)))
         }
     }
 
