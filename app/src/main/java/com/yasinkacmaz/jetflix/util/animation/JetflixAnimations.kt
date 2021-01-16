@@ -1,23 +1,21 @@
 package com.yasinkacmaz.jetflix.util.animation
 
-import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 
-val linearAnimation: AnimationSpec<Float> = repeatable(
-    AnimationConstants.Infinite,
-    tween(3000, easing = LinearEasing),
+val linearAnimation = InfiniteRepeatableSpec<Float>(
+    animation = tween(3000, easing = LinearEasing),
     repeatMode = RepeatMode.Reverse
 )
 
-val keyframeAnimation: AnimationSpec<Float> = repeatable(
-    AnimationConstants.Infinite,
+val keyframeAnimation: AnimationSpec<Float> = infiniteRepeatable(
     keyframes {
         durationMillis = 3000
         1f at 0
@@ -34,8 +32,7 @@ val springAnimation: AnimationSpec<Float> = spring(
     visibilityThreshold = 0.001f
 )
 
-val defaultScaleAnimation: AnimationSpec<Float> = repeatable(
-    AnimationConstants.Infinite,
+val defaultScaleAnimation: AnimationSpec<Float> = infiniteRepeatable(
     tween(3000, easing = LinearEasing),
     repeatMode = RepeatMode.Reverse
 )

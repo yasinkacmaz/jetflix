@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.util.modifier
 
-import androidx.compose.animation.animate
+import androidx.compose.animation.animateAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.border
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +26,7 @@ fun Modifier.gradientBorder(
     showBorder: Boolean
 ) = composed {
     val animatedColors = List(colors.size) { i ->
-        animate(if (showBorder) colors[i] else colors[i])
+        animateAsState(if (showBorder) colors[i] else colors[i], remember { spring() }, null).value
     }
     gradientBorder(colors = animatedColors, borderSize = borderSize, shape = shape)
 }

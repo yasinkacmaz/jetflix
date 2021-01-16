@@ -99,17 +99,13 @@ fun Pager(
 
 @Immutable
 private data class PageData(val page: Int) : ParentDataModifier {
-    override fun Density.modifyParentData(parentData: Any?): Any? = this@PageData
+    override fun Density.modifyParentData(parentData: Any?): Any = this@PageData
 }
 
 private val Measurable.page: Int
     get() = (parentData as? PageData)?.page ?: error("no PageData for measurable $this")
 
 class PagerScope(private val state: PagerState, val page: Int) {
-    val currentPage: Int get() = state.currentPage
-
-    val currentPageOffset: Float get() = state.currentPageOffset
-
     val selectionState: PagerState.SelectionState get() = state.selectionState
 }
 
@@ -146,14 +142,7 @@ class PagerState(
 
     var selectionState by mutableStateOf(SelectionState.Selected)
 
-    inline fun <R> selectPage(block: PagerState.() -> R): R = try {
-        selectionState = SelectionState.Undecided
-        block()
-    } finally {
-        selectPage()
-    }
-
-    fun selectPage() {
+    private fun selectPage() {
         currentPage -= currentPageOffset.roundToInt()
         currentPageOffset = 0f
         selectionState = SelectionState.Selected

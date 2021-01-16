@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.animation.animate
+import androidx.compose.animation.core.animateAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -319,7 +319,7 @@ private fun Backdrop(backdropUrl: String, modifier: Modifier) {
 @Composable
 private fun Poster(posterUrl: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
-    val scale = animate(target = if (isScaled.value) 2.2f else 1f, animSpec = springAnimation)
+    val scale = animateAsState(targetValue = if (isScaled.value) 2.2f else 1f, animationSpec = springAnimation).value
 
     Card(
         elevation = 24.dp,

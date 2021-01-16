@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     if (showSettingsDialog.value) {
-                        SettingsContent() {
+                        SettingsContent {
                             showSettingsDialog.value = false
                         }
                     }

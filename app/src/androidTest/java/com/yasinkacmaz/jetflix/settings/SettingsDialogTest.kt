@@ -24,7 +24,6 @@ class SettingsDialogTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val TAG = "SettingsDialogTestTag"
     private val defaultLanguage = Language("Turkish", "tr", "")
 
     @Test
@@ -83,5 +82,9 @@ class SettingsDialogTest {
                 )
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "SettingsDialogTestTag"
     }
 }

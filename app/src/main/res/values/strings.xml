@@ -8,7 +8,6 @@
 
     <!-- settings -->
     <string name="language">Language:</string>
-    <string name="country">Country:</string>
     <string name="fetching_languages">Fetching Languages</string>
 
     <!-- movie detail -->

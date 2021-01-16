@@ -21,8 +21,8 @@ private enum class State { PLACING, PLACED }
 data class ScaleAndAlphaArgs(val fromScale: Float, val toScale: Float, val fromAlpha: Float, val toAlpha: Float)
 
 class ScaleAndAlphaAnimation(private val args: ScaleAndAlphaArgs, private val animation: AnimationSpec<Float>) {
-    private val scale = FloatPropKey()
-    private val alpha = FloatPropKey()
+    private val scale = FloatPropKey(label = "Scale Key")
+    private val alpha = FloatPropKey(label = "Alpha Key")
 
     private val transitionDefinition = transitionDefinition<State> {
 
