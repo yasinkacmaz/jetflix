@@ -7,7 +7,7 @@ object Dependencies {
     const val ktlint = "com.pinterest:ktlint:0.39.0"
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha03"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha04"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
     }
@@ -40,6 +40,7 @@ object Dependencies {
         const val icons = "androidx.compose.material:material-icons-extended:$version"
         const val animation = "androidx.compose.animation:animation:$version"
         const val tooling = "androidx.compose.ui:ui-tooling:$version"
+        const val paging = "androidx.paging:paging-compose:1.0.0-alpha04"
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
     }

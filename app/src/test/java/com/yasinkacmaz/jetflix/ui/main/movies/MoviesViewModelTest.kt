@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
+import androidx.paging.PagingSource
 import com.yasinkacmaz.jetflix.data.MovieResponse
 import com.yasinkacmaz.jetflix.data.MoviesResponse
 import com.yasinkacmaz.jetflix.service.MovieService
@@ -7,9 +8,9 @@ import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.spyk
-import io.mockk.verifyOrder
+import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,11 +28,15 @@ class MoviesViewModelTest {
     private lateinit var moviesViewModel: MoviesViewModel
 
     private val genreId = 1337
+    private val loadParams = mockk<PagingSource.LoadParams<Int>>() {
+        every { key } returns 1
+    }
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        moviesViewModel = spyk(MoviesViewModel(movieService, movieMapper))
+        moviesViewModel = MoviesViewModel(movieService, movieMapper)
+        moviesViewModel.createPagingSource(genreId)
     }
 
     @Test
@@ -40,14 +45,9 @@ class MoviesViewModelTest {
         val response = MoviesResponse(1, listOf(movieResponse), 1, 1)
         coEvery { movieService.fetchMovies(eq(genreId), any(), any()) } returns response
 
-        moviesViewModel.fetchMovies(genreId)
+        moviesViewModel.pagingSource.load(loadParams)
 
-        coVerify { movieService.fetchMovies(eq(genreId), any(), any()) }
-        verifyOrder {
-            moviesViewModel.uiValue = MoviesViewModel.MovieUiState(loading = true)
-            moviesViewModel.uiValue =
-                MoviesViewModel.MovieUiState(loading = false, movies = listOf(movieMapper.map(movieResponse)))
-        }
+        coVerify { movieService.fetchMovies(eq(genreId), eq(1), any()) }
     }
 
     @Test
@@ -55,12 +55,8 @@ class MoviesViewModelTest {
         val exception = IOException()
         coEvery { movieService.fetchMovies(eq(genreId), any(), any()) } throws exception
 
-        moviesViewModel.fetchMovies(genreId)
+        moviesViewModel.pagingSource.load(loadParams)
 
-        coVerify { movieService.fetchMovies(eq(genreId), any(), any()) }
-        verifyOrder {
-            moviesViewModel.uiValue = MoviesViewModel.MovieUiState(loading = true)
-            moviesViewModel.uiValue = MoviesViewModel.MovieUiState(loading = false, error = exception)
-        }
+        coVerify { movieService.fetchMovies(eq(genreId), eq(1), any()) }
     }
 }

@@ -5,16 +5,20 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyGridScope
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.onActive
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
@@ -24,46 +28,20 @@ import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import com.yasinkacmaz.jetflix.util.AmbientInsets
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun MoviesContent(genre: Genre) {
-    val moviesViewModel: MoviesViewModel = viewModel(key = genre.id.toString())
-    val movieUiState = moviesViewModel.uiState.collectAsState().value
-
+    val moviesViewModel = viewModel<MoviesViewModel>(key = genre.id.toString())
     onActive {
-        if (movieUiState.movies.isEmpty()) {
-            moviesViewModel.fetchMovies(genre.id)
-        }
+        moviesViewModel.createPagingSource(genre.id)
     }
-
-    when {
-        movieUiState.loading && movieUiState.movies.isEmpty() -> {
-            val title = stringResource(id = R.string.fetching_movies, genre.name.orEmpty())
-            LoadingColumn(title)
-        }
-        movieUiState.error != null && movieUiState.movies.isEmpty() -> {
-            ErrorColumn(movieUiState.error.message.orEmpty())
-        }
-        movieUiState.movies.isNotEmpty() -> {
-            LazyMoviesGrid(movieUiState, genre) {
-                moviesViewModel.fetchMovies(genre.id)
-            }
-        }
-    }
+    val movies = moviesViewModel.movies.collectAsLazyPagingItems()
+    LazyMoviesGrid(movies, genre)
 }
 
-// TODO: LazyVerticalGrid does not have span strategy.
-//  Find a way to display loading item at full width.
-//  Find a way to add padding between items without modifying all items.
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun LazyMoviesGrid(
-    uiState: MoviesViewModel.MovieUiState,
-    genre: Genre,
-    onLoadMore: () -> Unit
-) {
+private fun LazyMoviesGrid(moviePagingItems: LazyPagingItems<Movie>, genre: Genre) {
     val navigator = AmbientNavigator.current
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
@@ -72,47 +50,70 @@ private fun LazyMoviesGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(start = 8.dp, bottom = AmbientInsets.current.navigationBars.top.dp),
         content = {
-            itemsIndexed(
-                uiState.movies,
-                itemContent = { index, movie ->
-                    WithConstraints(Modifier.padding(end = 8.dp).padding(vertical = 8.dp)) {
-                        MovieContent(movie, Modifier.preferredHeight(320.dp), onMovieClicked)
-                    }
-                    val lastIndex = index == uiState.movies.lastIndex
-                    LazyMovieGridPagingContent(lastIndex, onLoadMore, uiState.loading, genre, uiState.error)
+            lazyPagingItems(moviePagingItems) { movie ->
+                if (movie == null) return@lazyPagingItems
+                val modifier = Modifier
+                    .padding(end = 8.dp)
+                    .padding(vertical = 8.dp)
+                WithConstraints(modifier) {
+                    MovieContent(movie, Modifier.preferredHeight(320.dp), onMovieClicked)
                 }
-            )
+            }
+
+            // TODO: LazyVerticalGrid does not have span strategy.
+            //  Find a way to display loading and error items at full width or size.
+            renderLoading(moviePagingItems.loadState, genre.name.orEmpty())
+            renderError(moviePagingItems.loadState)
         }
     )
 }
 
-@Composable
-private fun LazyMovieGridPagingContent(
-    lastIndex: Boolean,
-    onLoadMore: () -> Unit,
-    loading: Boolean,
-    genre: Genre,
-    error: Throwable?
-) {
-
-    if (lastIndex) {
-        onActive {
-            onLoadMore()
+private fun LazyGridScope.renderLoading(loadState: CombinedLoadStates, genreName: String) {
+    when {
+        loadState.refresh is LoadState.Loading -> {
+            item {
+                val title = stringResource(id = R.string.fetching_movies, genreName)
+                // TODO: Find a way to fill max size
+                LoadingColumn(title)
+            }
         }
-
-        if (loading) {
-            val title = stringResource(R.string.fetching_more_movies, genre.name.orEmpty())
-            LoadingRow(title = title)
-        }
-
-        if (error != null) {
-            ErrorRow(title = error.message!!)
+        loadState.append is LoadState.Loading -> {
+            item {
+                val title = stringResource(R.string.fetching_more_movies, genreName)
+                // TODO: Find a way to fill max width
+                LoadingRow(title = title)
+            }
         }
     }
 }
 
-@Composable
-@Preview
-private fun MoviesGridPreview() {
-    LazyMoviesGrid(MoviesViewModel.MovieUiState(listOf(fakeMovie, fakeMovie, fakeMovie)), Genre(1, "Genre")) {}
+private fun LazyGridScope.renderError(loadState: CombinedLoadStates) {
+    when {
+        loadState.refresh is LoadState.Error -> {
+            val error = loadState.refresh as LoadState.Error
+            item {
+                // TODO: Find a way to fill max size
+                ErrorColumn(error.error.message.orEmpty())
+            }
+        }
+        loadState.append is LoadState.Error -> {
+            val error = loadState.append as LoadState.Error
+            item {
+                // TODO: Find a way to fill max width
+                ErrorRow(title = error.error.message.orEmpty())
+            }
+        }
+    }
+}
+
+// TODO: Lazy grid does not support LazyPagingItems directly.
+//  This is a workaround until it supports LazyPagingItems like LazyRow or LazyColumn
+private fun <T : Any> LazyGridScope.lazyPagingItems(
+    lazyPagingItems: LazyPagingItems<T>,
+    itemContent: @Composable LazyItemScope.(value: T?) -> Unit
+) {
+    items((0 until lazyPagingItems.itemCount).toList()) { index ->
+        val item = lazyPagingItems[index]
+        itemContent(item)
+    }
 }

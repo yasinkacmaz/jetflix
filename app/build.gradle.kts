@@ -102,6 +102,7 @@ dependencies {
     implementation(Dependencies.Compose.icons)
     implementation(Dependencies.Compose.animation)
     implementation(Dependencies.Compose.tooling)
+    implementation(Dependencies.Compose.paging)
 
     // Hilt
     implementation(Dependencies.Hilt.android)
