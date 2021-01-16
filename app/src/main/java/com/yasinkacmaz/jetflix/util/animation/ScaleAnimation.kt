@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 enum class ScaleState { DEFAULT, SCALED }
 
 class ScaleAnimation(private val toScale: Float, private val animation: AnimationSpec<Float>) {
-    private val scale = FloatPropKey()
+    private val scale = FloatPropKey(label = "Scale Key")
 
     private val transitionDefinition = transitionDefinition<ScaleState> {
 

@@ -28,7 +28,7 @@ class MoviesViewModelTest {
     private lateinit var moviesViewModel: MoviesViewModel
 
     private val genreId = 1337
-    private val loadParams = mockk<PagingSource.LoadParams<Int>>() {
+    private val loadParams = mockk<PagingSource.LoadParams<Int>> {
         every { key } returns 1
     }
 

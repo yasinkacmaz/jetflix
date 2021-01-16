@@ -27,7 +27,6 @@ class MovieContentTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val TAG = "MovieContentTest"
     private val movie = Movie(
         id = 1337,
         name = "Movie Name",
@@ -63,5 +62,9 @@ class MovieContentTest {
                 MovieContent(movie)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MovieContentTest"
     }
 }

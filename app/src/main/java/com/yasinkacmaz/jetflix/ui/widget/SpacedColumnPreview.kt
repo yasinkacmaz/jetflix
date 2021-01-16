@@ -22,7 +22,7 @@ fun EyeTestPreview(@PreviewParameter(SpacedColumnProvider::class) spaceBetween: 
     SpacedColumn(spaceBetween.dp, Modifier.background(Color.White)) {
         var fontSize = 64
         fun reduceFont(): Int {
-            fontSize = fontSize / 2
+            fontSize /= 2
             return fontSize
         }
 
