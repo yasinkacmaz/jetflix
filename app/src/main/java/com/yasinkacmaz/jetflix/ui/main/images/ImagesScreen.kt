@@ -58,6 +58,7 @@ private fun Image(image: Image) {
         val context = AmbientContext.current
         CoilImage(
             data = image.url,
+            contentDescription = stringResource(id = R.string.poster_content_description),
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
                 .fillMaxSize()
@@ -93,6 +94,7 @@ private fun Image(image: Image) {
         ) {
             CoilImage(
                 data = image.url,
+                contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 requestBuilder = { transformations(sizeTransformation) },
                 loading = {
@@ -101,7 +103,7 @@ private fun Image(image: Image) {
                             .size(120.dp)
                             .fillMaxHeight()
                     )
-                },
+                }
             )
         }
     }

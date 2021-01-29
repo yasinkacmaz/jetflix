@@ -1,7 +1,7 @@
 object Dependencies {
     const val kotlin = "1.4.21-2"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
-    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.4.1"
+    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.5.0"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
     const val gson = "com.google.code.gson:gson:2.8.6"
     const val ktlint = "com.pinterest:ktlint:0.39.0"
