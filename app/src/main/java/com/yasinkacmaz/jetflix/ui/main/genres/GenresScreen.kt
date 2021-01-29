@@ -1,8 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.main.genres
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateAsState
-import androidx.compose.animation.core.animateAsState
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -77,8 +78,9 @@ fun GenresScreen(
 
 @Composable
 private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog: MutableState<Boolean>) {
-    val tint =
-        animateAsState(if (isDarkTheme.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.primary).value
+    val tint = animateColorAsState(
+        if (isDarkTheme.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.primary
+    ).value
     Row(
         Modifier
             .background(MaterialTheme.colors.surface)
@@ -137,10 +139,10 @@ fun GenreChip(genreUiModel: GenreUiModel) {
     val selected = selectedGenre.value == genreUiModel
     val colors = listOf(genreUiModel.primaryColor, genreUiModel.secondaryColor)
     val shape = RoundedCornerShape(percent = 50)
-    val scale = animateAsState(if (selected) 1.1f else 1f).value
+    val scale = animateFloatAsState(if (selected) 1.1f else 1f).value
     val modifier = Modifier
         .scale(scale)
-        .shadow(animateAsState(if (selected) 8.dp else 4.dp).value, shape)
+        .shadow(animateDpAsState(if (selected) 8.dp else 4.dp).value, shape)
         .background(MaterialTheme.colors.surface)
         .gradientBorder(colors, shape, 2.dp, selected)
         .gradientBackground(colors, shape = shape, selected)

@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -56,7 +56,7 @@ class MovieContentTest {
         onNodeWithText(1337.toString(), useUnmergedTree = true).assertIsDisplayed()
     }
 
-    private fun ComposeTestRule.setMovieContent() = setContent {
+    private fun ComposeContentTestRule.setMovieContent() = setContent {
         Providers(AmbientSelectedGenre provides mutableStateOf(GenreUiModel(Genre(-1, "Genre")))) {
             Box(Modifier.fillMaxHeight(0.5f).fillMaxWidth().padding(48.dp), contentAlignment = Alignment.Center) {
                 MovieContent(movie)

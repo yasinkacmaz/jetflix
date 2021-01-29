@@ -1,8 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.main.fetchgenres
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.onActive
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.viewinterop.viewModel
 import com.yasinkacmaz.jetflix.R
@@ -19,8 +19,10 @@ fun FetchGenresScreen() {
     val fetchGenresViewModel: FetchGenresViewModel = viewModel()
     val fetchGenresUiState = fetchGenresViewModel.uiState.collectAsState().value
 
-    onActive {
+    DisposableEffect(Unit) {
         fetchGenresViewModel.fetchGenres()
+        onDispose {
+        }
     }
 
     when {

@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
@@ -8,9 +9,8 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyGridScope
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
@@ -31,8 +31,10 @@ import com.yasinkacmaz.jetflix.util.AmbientInsets
 @Composable
 fun MoviesContent(genre: Genre) {
     val moviesViewModel = viewModel<MoviesViewModel>(key = genre.id.toString())
-    onActive {
+    DisposableEffect(genre.id) {
         moviesViewModel.createPagingSource(genre.id)
+        onDispose {
+        }
     }
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
     LazyMoviesGrid(movies, genre)
@@ -50,11 +52,11 @@ private fun LazyMoviesGrid(moviePagingItems: LazyPagingItems<Movie>, genre: Genr
         contentPadding = PaddingValues(start = 8.dp, bottom = AmbientInsets.current.navigationBars.top.dp),
         content = {
             items(moviePagingItems.itemCount) { index ->
-                val movie = moviePagingItems.get(index) ?: return@items
+                val movie = moviePagingItems[index] ?: return@items
                 val modifier = Modifier
                     .padding(end = 8.dp)
                     .padding(vertical = 8.dp)
-                WithConstraints(modifier) {
+                BoxWithConstraints(modifier) {
                     MovieContent(movie, Modifier.preferredHeight(320.dp), onMovieClicked)
                 }
             }
