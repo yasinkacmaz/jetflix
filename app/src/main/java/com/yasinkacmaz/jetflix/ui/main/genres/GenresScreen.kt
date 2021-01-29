@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.R
@@ -51,8 +52,16 @@ fun GenresScreen(
 ) {
     val selectedGenre = AmbientSelectedGenre.current
     Surface(modifier = Modifier.fillMaxSize(), elevation = 0.dp) {
-        Column(Modifier.fillMaxSize().statusBarsPadding()) {
-            Surface(modifier = Modifier.fillMaxWidth().wrapContentHeight(), elevation = 16.dp) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(), elevation = 16.dp
+            ) {
                 Column(Modifier.fillMaxWidth()) {
                     JetflixAppBar(isDarkTheme, showSettingsDialog)
                     GenreChips(genreUiModels)
@@ -70,19 +79,36 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
     val tint =
         animateAsState(if (isDarkTheme.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.primary).value
     Row(
-        Modifier.background(MaterialTheme.colors.surface).fillMaxWidth().height(56.dp),
+        Modifier
+            .background(MaterialTheme.colors.surface)
+            .fillMaxWidth()
+            .height(56.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(onClick = { showSettingsDialog.value = true }) {
-            Icon(Icons.Default.Settings, tint = tint)
+            Icon(
+                Icons.Default.Settings,
+                contentDescription = stringResource(id = R.string.settings_content_description),
+                tint = tint
+            )
         }
 
-        Icon(imageVector = vectorResource(id = R.drawable.ic_jetflix), tint = tint, modifier = Modifier.size(90.dp))
+        Icon(
+            imageVector = vectorResource(id = R.drawable.ic_jetflix),
+            contentDescription = null,
+            tint = tint,
+            modifier = Modifier.size(90.dp)
+        )
 
         val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
         IconButton(onClick = isDarkTheme::toggle) {
-            Icon(icon, tint = tint)
+            val contentDescriptionResId = if (isDarkTheme.value) {
+                R.string.light_theme_content_description
+            } else {
+                R.string.dark_theme_content_description
+            }
+            Icon(icon, contentDescription = stringResource(id = contentDescriptionResId), tint = tint)
         }
     }
 }
@@ -91,7 +117,8 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
 fun GenreChips(genreUiModels: List<GenreUiModel>) {
     val space = 8.dp
     Row(
-        Modifier.background(MaterialTheme.colors.surface)
+        Modifier
+            .background(MaterialTheme.colors.surface)
             .horizontalScroll(rememberScrollState())
             .padding(start = space)
             .padding(vertical = space * 1.5f)
