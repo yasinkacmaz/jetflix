@@ -454,9 +454,9 @@ private fun <T : Any> MovieSection(
             contentPadding = PaddingValues(16.dp)
         ) {
             items(
-                items = items,
-                itemContent = { item ->
-                    itemContent(item)
+                count = items.size,
+                itemContent = { index ->
+                    itemContent(items[index])
                     Spacer(modifier = Modifier.width(16.dp))
                 }
             )

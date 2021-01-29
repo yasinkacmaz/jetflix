@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyGridScope
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onActive
@@ -50,8 +49,8 @@ private fun LazyMoviesGrid(moviePagingItems: LazyPagingItems<Movie>, genre: Genr
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(start = 8.dp, bottom = AmbientInsets.current.navigationBars.top.dp),
         content = {
-            lazyPagingItems(moviePagingItems) { movie ->
-                if (movie == null) return@lazyPagingItems
+            items(moviePagingItems.itemCount) { index ->
+                val movie = moviePagingItems.get(index) ?: return@items
                 val modifier = Modifier
                     .padding(end = 8.dp)
                     .padding(vertical = 8.dp)
@@ -103,17 +102,5 @@ private fun LazyGridScope.renderError(loadState: CombinedLoadStates) {
                 ErrorRow(title = error.error.message.orEmpty())
             }
         }
-    }
-}
-
-// TODO: Lazy grid does not support LazyPagingItems directly.
-//  This is a workaround until it supports LazyPagingItems like LazyRow or LazyColumn
-private fun <T : Any> LazyGridScope.lazyPagingItems(
-    lazyPagingItems: LazyPagingItems<T>,
-    itemContent: @Composable LazyItemScope.(value: T?) -> Unit
-) {
-    items((0 until lazyPagingItems.itemCount).toList()) { index ->
-        val item = lazyPagingItems[index]
-        itemContent(item)
     }
 }
