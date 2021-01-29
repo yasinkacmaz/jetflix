@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -67,8 +67,11 @@ private fun ScalePulseAnimationPreview() {
 @Composable
 private fun ScalePulseAnimationPreview2() {
     val animatedScale = animatedFloat(1f)
-    onActive {
+    DisposableEffect(Unit) {
         animatedScale.animateTo(targetValue = 2f, anim = defaultScaleAnimation)
+        onDispose {
+            animatedScale.stop()
+        }
     }
     Surface(modifier = Modifier.fillMaxSize()) {
         Surface(

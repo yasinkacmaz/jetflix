@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.settings
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithSubstring
 import androidx.compose.ui.test.onNodeWithTag
@@ -68,7 +68,7 @@ class SettingsDialogTest {
         onNodeWithSubstring(thirdLanguageName, useUnmergedTree = true).assertIsDisplayed()
     }
 
-    private fun ComposeTestRule.showSettingsDialog(
+    private fun ComposeContentTestRule.showSettingsDialog(
         uiState: SettingsViewModel.UiState,
         selectedLanguage: State<Language>
     ) {

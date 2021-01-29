@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.center
-import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
@@ -16,7 +16,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.swipe
-import androidx.compose.ui.unit.milliseconds
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.AmbientDominantColor
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetail
@@ -135,7 +134,7 @@ class MovieDetailScreenTest {
 
     // TODO: Find another way to assert LazyRow items without scrolling them manually.
     //  Using onChildren with LazyRow only returns visible children.
-    private fun ComposeTestRule.assertPeople(tag: String, people: List<Person>) {
+    private fun ComposeContentTestRule.assertPeople(tag: String, people: List<Person>) {
         val peopleLazyRow = onNodeWithTag(tag).performScrollTo()
         people.forEach { person ->
             peopleLazyRow.performGesture {
@@ -145,14 +144,14 @@ class MovieDetailScreenTest {
                 val width = node.size.width
                 val start = Offset(x + width, y)
                 val end = Offset(x, y)
-                swipe(start, end, 1000.milliseconds)
+                swipe(start, end, durationMillis = 1000)
             }
             onNodeWithText(person.name, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
             onNodeWithText(person.character, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
         }
     }
 
-    private fun ComposeTestRule.setMovieDetailContent(
+    private fun ComposeContentTestRule.setMovieDetailContent(
         movieDetail: MovieDetail,
         credits: Credits = Credits(emptyList(), emptyList())
     ) {

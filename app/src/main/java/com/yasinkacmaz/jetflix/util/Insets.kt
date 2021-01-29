@@ -22,11 +22,11 @@ import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticAmbientOf
@@ -137,7 +137,7 @@ fun ProvideDisplayInsets(
 
     val displayInsets = remember { DisplayInsets() }
 
-    onCommit(view) {
+    DisposableEffect(view) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
             displayInsets.systemBars.updateFrom(windowInsets, Type.systemBars())
             displayInsets.systemGestures.updateFrom(windowInsets, Type.systemGestures())

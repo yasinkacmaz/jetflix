@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.animation.core.animateAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,12 +37,12 @@ import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.ambientOf
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onActive
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,9 +92,11 @@ val AmbientDominantColor = ambientOf<MutableState<Color>> { error("No dominant c
 fun MovieDetailScreen(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
     val movieDetailUiState = movieDetailViewModel.uiState.collectAsState().value
-    onActive {
+    DisposableEffect(Unit) {
         if (movieDetailUiState.movieDetail == null) {
             movieDetailViewModel.fetchMovieDetail(movieId)
+        }
+        onDispose {
         }
     }
     when {
@@ -352,7 +354,8 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
 @Composable
 private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
-    val scale = animateAsState(targetValue = if (isScaled.value) 2.2f else 1f, animationSpec = springAnimation).value
+    val scale =
+        animateFloatAsState(targetValue = if (isScaled.value) 2.2f else 1f, animationSpec = springAnimation).value
 
     Card(
         elevation = 24.dp,
