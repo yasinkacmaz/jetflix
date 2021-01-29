@@ -9,6 +9,7 @@
     <!-- settings -->
     <string name="language">Language:</string>
     <string name="fetching_languages">Fetching Languages</string>
+    <string name="back_icon_content_description">Go Back</string>
 
     <!-- movie detail -->
     <string name="release_date">Release Date</string>
@@ -21,4 +22,16 @@
     <string name="images">Images</string>
     <string name="see_all">See All</string>
     <string name="production_companies">Production Companies</string>
+    <string name="open_website_content_description">Open Movie Website</string>
+
+    <!--  images -->
+    <string name="likes_content_description">Likes</string>
+
+    <!-- error -->
+    <string name="error_icon_content_description">Error Icon</string>
+
+    <!-- settings -->
+    <string name="settings_content_description">Settings</string>
+    <string name="dark_theme_content_description">Use dark theme</string>
+    <string name="light_theme_content_description">Use light theme</string>
 </resources>

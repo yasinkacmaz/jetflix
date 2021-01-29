@@ -26,9 +26,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.transform.BlurTransformation
+import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.util.navigationBarsPadding
 import com.yasinkacmaz.jetflix.ui.widget.Pager
@@ -57,29 +59,49 @@ private fun Image(image: Image) {
         CoilImage(
             data = image.url,
             contentScale = ContentScale.FillHeight,
-            modifier = Modifier.fillMaxSize().alpha(alpha = 0.85f),
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(alpha = 0.85f),
             requestBuilder = { transformations(BlurTransformation(context = context, radius = 12f, sampling = 4f)) }
         )
         FloatingActionButton(
             onClick = {},
             backgroundColor = MaterialTheme.colors.surface,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).navigationBarsPadding()
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+                .navigationBarsPadding()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.ThumbUp, modifier = Modifier.padding(end = 4.dp))
+                Icon(
+                    imageVector = Icons.Filled.ThumbUp,
+                    contentDescription = stringResource(id = R.string.likes_content_description),
+                    modifier = Modifier.padding(end = 4.dp)
+                )
                 Text(text = image.voteCount.toString(), style = MaterialTheme.typography.body2)
             }
         }
         Card(
-            modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(horizontal = 12.dp)
-                .shadow(48.dp, clip = false).zIndex(48f).align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(horizontal = 12.dp)
+                .shadow(48.dp, clip = false)
+                .zIndex(48f)
+                .align(Alignment.Center),
             shape = RoundedCornerShape(12.dp), elevation = 24.dp
         ) {
             CoilImage(
                 data = image.url,
                 contentScale = ContentScale.FillWidth,
                 requestBuilder = { transformations(sizeTransformation) },
-                loading = { CircularProgressIndicator(Modifier.size(120.dp).fillMaxHeight()) },
+                loading = {
+                    CircularProgressIndicator(
+                        Modifier
+                            .size(120.dp)
+                            .fillMaxHeight()
+                    )
+                },
             )
         }
     }

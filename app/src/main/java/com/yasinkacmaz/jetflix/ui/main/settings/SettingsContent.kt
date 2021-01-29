@@ -72,9 +72,15 @@ fun SettingsDialog(
             shape = MaterialTheme.shapes.medium,
             backgroundColor = MaterialTheme.colors.surface,
             contentColor = MaterialTheme.colors.surface,
-            modifier = Modifier.fillMaxWidth().semantics { testTag = SETTINGS_DIALOG_TAG }
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { testTag = SETTINGS_DIALOG_TAG }
         ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 if (uiState.showLoading) {
                     LoadingRow(title = stringResource(R.string.fetching_languages))
                 } else {
@@ -161,7 +167,11 @@ private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent
         placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
     ),
     children = {
-        Image(imageVector = icon, colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface))
+        Image(
+            imageVector = icon,
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+        )
     }
 )
 

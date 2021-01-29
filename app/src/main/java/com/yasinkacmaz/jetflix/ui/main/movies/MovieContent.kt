@@ -42,15 +42,22 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
     Box(modifier = modifier) {
-        MovieRate(movie.voteAverage, modifier = Modifier.align(Alignment.TopCenter).zIndex(2f))
+        MovieRate(movie.voteAverage, modifier = Modifier
+            .align(Alignment.TopCenter)
+            .zIndex(2f))
         Card(
-            modifier = Modifier.fillMaxSize().offset(y = 12.dp).clickable(onClick = { onMovieClicked(movie.id) }),
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(y = 12.dp)
+                .clickable(onClick = { onMovieClicked(movie.id) }),
             shape = RoundedCornerShape(size = 8.dp),
             elevation = 8.dp
         ) {
             Box {
                 MoviePoster(movie.posterPath)
-                MovieInfo(movie, modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth())
+                MovieInfo(movie, modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth())
             }
         }
     }
@@ -67,8 +74,11 @@ private fun MoviePoster(posterPath: String) {
         loading = {
             Icon(
                 imageVector = Icons.Default.Movie,
+                contentDescription = null,
                 tint = tint,
-                modifier = Modifier.background(color = backgroundColor).fillMaxSize()
+                modifier = Modifier
+                    .background(color = backgroundColor)
+                    .fillMaxSize()
             )
         }
     )
@@ -95,7 +105,9 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
 
 @Composable
 private fun MovieInfo(movie: Movie, modifier: Modifier) {
-    Column(modifier = modifier.background(Color(0x97000000)).padding(horizontal = 8.dp, vertical = 4.dp)) {
+    Column(modifier = modifier
+        .background(Color(0x97000000))
+        .padding(horizontal = 8.dp, vertical = 4.dp)) {
         MovieName(name = movie.name)
         Spacer(modifier = Modifier.height(4.dp))
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
@@ -123,7 +135,7 @@ private fun MovieName(name: String) {
 @Composable
 private fun MovieFeature(icon: ImageVector, field: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(imageVector = icon, tint = Color.White, modifier = Modifier.size(14.dp))
+        Icon(imageVector = icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
         Text(
             text = field,
             style = MaterialTheme.typography.subtitle2.copy(
