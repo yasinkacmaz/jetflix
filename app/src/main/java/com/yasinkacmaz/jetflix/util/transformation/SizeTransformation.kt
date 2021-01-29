@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.util.transformation
 
 import android.graphics.Bitmap
-import androidx.compose.ui.util.annotation.IntRange
+import androidx.annotation.IntRange
 import coil.bitmap.BitmapPool
 import coil.size.Size
 import coil.transform.Transformation

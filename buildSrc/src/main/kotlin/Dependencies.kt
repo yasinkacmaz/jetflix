@@ -1,5 +1,5 @@
 object Dependencies {
-    const val kotlin = "1.4.21"
+    const val kotlin = "1.4.21-2"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
     const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.4.1"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
@@ -7,7 +7,7 @@ object Dependencies {
     const val ktlint = "com.pinterest:ktlint:0.39.0"
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha04"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha05"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
     }
@@ -30,7 +30,7 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.0.0-alpha10"
+        const val version = "1.0.0-alpha11"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
