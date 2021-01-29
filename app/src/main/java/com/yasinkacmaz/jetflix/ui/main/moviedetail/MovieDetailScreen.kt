@@ -168,9 +168,10 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
         FetchDominantColorFromPoster(movieDetail.posterUrl, AmbientDominantColor.current)
-        Backdrop(backdropUrl = movieDetail.backdropUrl, Modifier.constrainAs(backdrop) {})
+        Backdrop(backdropUrl = movieDetail.backdropUrl, movieDetail.title, Modifier.constrainAs(backdrop) {})
         Poster(
             movieDetail.posterUrl,
+            movieDetail.title,
             Modifier
                 .zIndex(17f)
                 .width(160.dp)
@@ -329,7 +330,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 }
 
 @Composable
-private fun Backdrop(backdropUrl: String, modifier: Modifier) {
+private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier) {
     val arcHeight = 240.dp.value * AmbientDensity.current.density
     Card(
         elevation = 16.dp,
@@ -340,6 +341,7 @@ private fun Backdrop(backdropUrl: String, modifier: Modifier) {
     ) {
         CoilImage(
             data = backdropUrl,
+            contentDescription = stringResource(id = R.string.backdrop_content_description, movieName),
             contentScale = ContentScale.FillHeight,
             colorFilter = ColorFilter(Color(0x23000000), BlendMode.SrcOver),
             modifier = modifier.fillMaxWidth()
@@ -348,7 +350,7 @@ private fun Backdrop(backdropUrl: String, modifier: Modifier) {
 }
 
 @Composable
-private fun Poster(posterUrl: String, modifier: Modifier) {
+private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
     val scale = animateAsState(targetValue = if (isScaled.value) 2.2f else 1f, animationSpec = springAnimation).value
 
@@ -359,7 +361,11 @@ private fun Poster(posterUrl: String, modifier: Modifier) {
             .scale(scale)
             .clickable(onClick = { isScaled.value = !isScaled.value })
     ) {
-        CoilImage(data = posterUrl, contentScale = ContentScale.FillHeight)
+        CoilImage(
+            data = posterUrl,
+            contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
+            contentScale = ContentScale.FillHeight
+        )
     }
 }
 
@@ -517,6 +523,7 @@ private fun Image(image: Image) {
     ) {
         CoilImage(
             data = image.url,
+            contentDescription = stringResource(id = R.string.poster_content_description),
             contentScale = ContentScale.Crop,
             error = { Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray) }
         )
@@ -539,6 +546,10 @@ private fun ProductionCompany(company: ProductionCompany) {
         ) {
             CoilImage(
                 data = company.logoUrl,
+                contentDescription = stringResource(
+                    id = R.string.production_company_logo_content_description,
+                    company.name
+                ),
                 contentScale = ContentScale.Inside,
                 modifier = Modifier
                     .size(150.dp, 85.dp)

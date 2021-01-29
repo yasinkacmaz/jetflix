@@ -10,10 +10,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.toPlaceholderImageRes
 import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
@@ -25,6 +27,7 @@ fun Person(profilePhotoUrl: String?, name: String, job: String, gender: Gender, 
         Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
             CoilImage(
                 data = profilePhotoUrl ?: gender.toPlaceholderImageRes(),
+                contentDescription = stringResource(id = R.string.person_photo_content_description, name, job),
                 fadeIn = true,
                 requestBuilder = { transformations(CircleTopCropTransformation()) }
             )

@@ -60,7 +60,8 @@ fun GenresScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(), elevation = 16.dp
+                    .wrapContentHeight(),
+                elevation = 16.dp
             ) {
                 Column(Modifier.fillMaxWidth()) {
                     JetflixAppBar(isDarkTheme, showSettingsDialog)

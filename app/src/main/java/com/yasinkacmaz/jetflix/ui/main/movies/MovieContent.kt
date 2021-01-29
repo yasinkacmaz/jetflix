@@ -29,12 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -42,9 +44,12 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
     Box(modifier = modifier) {
-        MovieRate(movie.voteAverage, modifier = Modifier
-            .align(Alignment.TopCenter)
-            .zIndex(2f))
+        MovieRate(
+            movie.voteAverage,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .zIndex(2f)
+        )
         Card(
             modifier = Modifier
                 .fillMaxSize()
@@ -54,21 +59,25 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
             elevation = 8.dp
         ) {
             Box {
-                MoviePoster(movie.posterPath)
-                MovieInfo(movie, modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth())
+                MoviePoster(movie.posterPath, movie.name)
+                MovieInfo(
+                    movie,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                )
             }
         }
     }
 }
 
 @Composable
-private fun MoviePoster(posterPath: String) {
+private fun MoviePoster(posterPath: String, movieName: String) {
     val backgroundColor = if (MaterialTheme.colors.isLight) Color.LightGray else MaterialTheme.colors.background
     val tint = if (MaterialTheme.colors.isLight) Color.DarkGray else MaterialTheme.colors.onBackground
     CoilImage(
         data = posterPath,
+        contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
         contentScale = ContentScale.None,
         modifier = Modifier.fillMaxSize(),
         loading = {
@@ -105,9 +114,11 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
 
 @Composable
 private fun MovieInfo(movie: Movie, modifier: Modifier) {
-    Column(modifier = modifier
-        .background(Color(0x97000000))
-        .padding(horizontal = 8.dp, vertical = 4.dp)) {
+    Column(
+        modifier = modifier
+            .background(Color(0x97000000))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
         MovieName(name = movie.name)
         Spacer(modifier = Modifier.height(4.dp))
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {

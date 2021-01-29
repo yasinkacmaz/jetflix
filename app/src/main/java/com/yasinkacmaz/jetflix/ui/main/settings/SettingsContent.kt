@@ -104,7 +104,7 @@ private fun LanguageRow(
         DropdownMenu(
             toggle = {
                 ToggleContent(
-                    title = selectedLanguage.englishName,
+                    countryName = selectedLanguage.englishName,
                     flagUrl = selectedLanguage.flagUrl,
                     onClick = { showLanguageDropdown.toggle() }
                 )
@@ -124,15 +124,15 @@ private fun LanguageRow(
 }
 
 @Composable
-private fun ToggleContent(title: String, flagUrl: String, onClick: () -> Unit) {
+private fun ToggleContent(countryName: String, flagUrl: String, onClick: () -> Unit) {
     val dropdownId = "dropdownIcon"
     val flagId = "flag"
-    val flagContent = flagContent(flagId, flagUrl)
+    val flagContent = flagContent(flagId, flagUrl, countryName)
     val dropdownContent = iconContent(dropdownId, Icons.Default.ArrowDropDown)
     Text(
         text = buildAnnotatedString {
             appendInlineContent(flagId)
-            append(title)
+            append(countryName)
             appendInlineContent(dropdownId)
         },
         inlineContent = mapOf(dropdownContent, flagContent),
@@ -141,19 +141,19 @@ private fun ToggleContent(title: String, flagUrl: String, onClick: () -> Unit) {
 }
 
 @Composable
-private fun DropdownItem(text: String, flagUrl: String, selected: Boolean, onClick: () -> Unit) {
+private fun DropdownItem(countryName: String, flagUrl: String, selected: Boolean, onClick: () -> Unit) {
     DropdownMenuItem(enabled = !selected, onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         val tickIconId = "tickIcon"
         val flagId = "flag"
         val tickIconContent = iconContent(tickIconId, Icons.Default.Done)
-        val flagContent = flagContent(flagId, flagUrl)
+        val flagContent = flagContent(flagId, flagUrl, countryName)
         Text(
             text = buildAnnotatedString {
                 appendInlineContent(flagId)
                 if (selected) {
                     appendInlineContent(tickIconId)
                 }
-                append(text)
+                append(countryName)
             },
             inlineContent = if (selected) mapOf(tickIconContent, flagContent) else mapOf(flagContent)
         )
@@ -175,13 +175,17 @@ private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent
     }
 )
 
-private fun flagContent(flagId: String, flagUrl: String) = flagId to InlineTextContent(
+private fun flagContent(flagId: String, flagUrl: String, countryName: String) = flagId to InlineTextContent(
     placeholder = Placeholder(
         width = 2.em,
         height = 1.em,
         placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
     ),
     children = {
-        CoilImage(data = flagUrl, Modifier.padding(end = 4.dp))
+        CoilImage(
+            data = flagUrl,
+            contentDescription = stringResource(id = R.string.flag_content_description, countryName),
+            Modifier.padding(end = 4.dp)
+        )
     }
 )
