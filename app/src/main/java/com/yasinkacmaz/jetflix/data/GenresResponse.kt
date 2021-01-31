@@ -1,7 +1,10 @@
 package com.yasinkacmaz.jetflix.data
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-data class GenresResponse(@SerializedName("genres") val genres: List<Genre>)
+@Serializable
+data class GenresResponse(@SerialName("genres") val genres: List<Genre>)
 
-data class Genre(@SerializedName("id") val id: Int, @SerializedName("name") val name: String?)
+@Serializable
+data class Genre(@SerialName("id") val id: Int, @SerialName("name") val name: String?)

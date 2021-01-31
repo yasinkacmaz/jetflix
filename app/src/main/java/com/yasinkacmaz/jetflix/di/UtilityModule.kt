@@ -1,11 +1,10 @@
-package com.yasinkacmaz.jetflix.module
+package com.yasinkacmaz.jetflix.di
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -13,7 +12,8 @@ import javax.inject.Singleton
 object UtilityModule {
     @Provides
     @Singleton
-    fun provideGson(): Gson {
-        return GsonBuilder().create()
+    fun provideJson(): Json = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
     }
 }

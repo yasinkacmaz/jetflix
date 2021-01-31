@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
 }
 
@@ -28,7 +29,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = Dependencies.kotlin
+        kotlinCompilerVersion = Dependencies.Kotlin.version
         kotlinCompilerExtensionVersion = Dependencies.Compose.version
     }
 
@@ -81,7 +82,8 @@ kapt {
 
 dependencies {
     // Kotlin
-    implementation(Dependencies.kotlinStdLib)
+    implementation(Dependencies.Kotlin.kotlinStdLib)
+    implementation(Dependencies.Kotlin.kotlinJsonSerialization)
 
     // AndroidX
     implementation(Dependencies.AndroidX.palette)
@@ -112,9 +114,8 @@ dependencies {
 
     // Network
     implementation(Dependencies.Retrofit.retrofit)
-    implementation(Dependencies.Retrofit.gsonConverter)
+    implementation(Dependencies.Retrofit.serializationConverter)
     implementation(Dependencies.okHttp)
-    implementation(Dependencies.gson)
 
     // Image
     implementation(Dependencies.coil)

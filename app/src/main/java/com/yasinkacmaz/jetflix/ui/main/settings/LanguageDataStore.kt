@@ -4,20 +4,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import javax.inject.Singleton
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-@Singleton
-class LanguageDataStore @Inject constructor(private val gson: Gson, private val preferences: DataStore<Preferences>) {
+class LanguageDataStore(private val json: Json, private val preferences: DataStore<Preferences>) {
 
     val language: Flow<Language> = preferences.data
         .map { preferences ->
             val languageString = preferences[KEY_LANGUAGE]
             if (languageString != null) {
-                gson.fromJson(languageString, Language::class.java)
+                json.decodeFromString(languageString)
             } else {
                 Language.default
             }
@@ -27,7 +26,7 @@ class LanguageDataStore @Inject constructor(private val gson: Gson, private val 
 
     suspend fun onLanguageSelected(language: Language) {
         preferences.edit { preferences ->
-            preferences[KEY_LANGUAGE] = gson.toJson(language)
+            preferences[KEY_LANGUAGE] = json.encodeToString(language)
         }
     }
 

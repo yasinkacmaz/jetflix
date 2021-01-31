@@ -1,18 +1,22 @@
 package com.yasinkacmaz.jetflix.data
-import com.google.gson.annotations.SerializedName
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ImagesResponse(
-    @SerializedName("backdrops") val backdrops: List<ImageResponse>,
-    @SerializedName("id") val id: Int,
-    @SerializedName("posters") val posters: List<ImageResponse>
+    @SerialName("backdrops") val backdrops: List<ImageResponse>,
+    @SerialName("id") val id: Int,
+    @SerialName("posters") val posters: List<ImageResponse>
 )
 
+@Serializable
 data class ImageResponse(
-    @SerializedName("aspect_ratio") val aspectRatio: Double,
-    @SerializedName("file_path") val filePath: String,
-    @SerializedName("height") val height: Int,
-    @SerializedName("iso_639_1") val iso6391: String,
-    @SerializedName("vote_average") val voteAverage: Double,
-    @SerializedName("vote_count") val voteCount: Int,
-    @SerializedName("width") val width: Int
+    @SerialName("aspect_ratio") val aspectRatio: Double,
+    @SerialName("file_path") val filePath: String,
+    @SerialName("height") val height: Int,
+    @SerialName("iso_639_1") val iso6391: String,
+    @SerialName("vote_average") val voteAverage: Double,
+    @SerialName("vote_count") val voteCount: Int,
+    @SerialName("width") val width: Int
 )

@@ -9,6 +9,7 @@ buildscript {
         classpath(Dependencies.Gradle.androidBuildPlugin)
         classpath(Dependencies.Gradle.hiltPlugin)
         classpath(Dependencies.Gradle.kotlinPlugin)
+        classpath(Dependencies.Gradle.kotlinSerializationPlugin)
     }
 }
 
