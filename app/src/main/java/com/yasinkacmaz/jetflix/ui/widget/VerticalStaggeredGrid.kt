@@ -25,6 +25,7 @@ import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaArgs
 import com.yasinkacmaz.jetflix.util.randomColor
 import kotlin.math.ceil
 
+// TODO: Can we compute items like LazyGrid to eliminate stutters.
 @Composable
 fun VerticalStaggeredGrid(
     modifier: Modifier = Modifier,
