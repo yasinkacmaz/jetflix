@@ -1,13 +1,15 @@
 package com.yasinkacmaz.jetflix.ui.main.settings
 
 import android.annotation.SuppressLint
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.Locale
 
+@Serializable
 data class Language(
-    @SerializedName("english_name") val englishName: String,
-    @SerializedName("iso_639_1") val iso6391: String,
-    @SerializedName("name") val name: String
+    @SerialName("english_name") val englishName: String,
+    @SerialName("iso_639_1") val iso6391: String,
+    @SerialName("name") val name: String
 ) {
     companion object {
         @SuppressLint("ConstantLocale")

@@ -1,18 +1,20 @@
 package com.yasinkacmaz.jetflix.util
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import java.io.Reader
 
-val gson = Gson()
-
-inline fun <reified T : Any> parseJson(fileName: String): T {
-    val typeToken: TypeToken<T> = TypeToken.get(T::class.java)
-    return gson.fromJson(gson.getResourceReader(fileName), typeToken.type)
+val json = Json {
+    isLenient = true
+    ignoreUnknownKeys = true
 }
 
-fun Gson.getResourceReader(fileName: String): BufferedReader {
-    val resource = javaClass.classLoader!!.getResourceAsStream(fileName)
-    return BufferedReader(InputStreamReader(resource, Charsets.UTF_8))
+inline fun <reified T : Any> parseJson(fileName: String): T {
+    val jsonString = json.jsonStringFromFile(fileName)
+    return json.decodeFromString(jsonString)
+}
+
+fun Json.jsonStringFromFile(fileName: String): String {
+    val inputStream = javaClass.classLoader!!.getResourceAsStream(fileName)
+    return inputStream.bufferedReader().use(Reader::readText)
 }

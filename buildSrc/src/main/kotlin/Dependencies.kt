@@ -1,15 +1,19 @@
 object Dependencies {
-    const val kotlin = "1.4.21-2"
-    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin}"
     const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.5.0"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
-    const val gson = "com.google.code.gson:gson:2.8.6"
     const val ktlint = "com.pinterest:ktlint:0.39.0"
+
+    object Kotlin {
+        const val version = "1.4.21-2"
+        const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
+        const val kotlinJsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    }
 
     object Gradle {
         const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha05"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
-        const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin}"
+        const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
+        const val kotlinSerializationPlugin= "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
     }
 
     object AndroidX {
@@ -58,7 +62,7 @@ object Dependencies {
     object Retrofit {
         private const val retrofitVersion = "2.9.0"
         const val retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
-        const val gsonConverter = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+        const val serializationConverter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
     }
 
     object Test {

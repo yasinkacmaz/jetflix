@@ -2,9 +2,9 @@ package com.yasinkacmaz.jetflix.ui.main.settings
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.google.gson.Gson
 import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore.Companion.KEY_LANGUAGE
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
+import com.yasinkacmaz.jetflix.util.json
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.serialization.encodeToString
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -22,8 +23,6 @@ class LanguageDataStoreTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    private val gson: Gson = Gson()
-
     @RelaxedMockK
     private lateinit var preferences: DataStore<Preferences>
 
@@ -32,7 +31,7 @@ class LanguageDataStoreTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        languageDataStore = LanguageDataStore(gson, preferences)
+        languageDataStore = LanguageDataStore(json, preferences)
     }
 
     @Test
@@ -54,7 +53,7 @@ class LanguageDataStoreTest {
             val prefs = mockk<Preferences>()
             val turkishLanguage = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
             coEvery { preferences.data } returns flowOf(prefs)
-            every { prefs[KEY_LANGUAGE] } returns gson.toJson(turkishLanguage)
+            every { prefs[KEY_LANGUAGE] } returns json.encodeToString(turkishLanguage)
 
             languageDataStore.language.collect { language ->
                 expectThat(language).isEqualTo(turkishLanguage)

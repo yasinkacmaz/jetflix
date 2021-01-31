@@ -1,39 +1,43 @@
 package com.yasinkacmaz.jetflix.data
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieDetailResponse(
-    @SerializedName("adult") val adult: Boolean,
-    @SerializedName("backdrop_path") val backdropPath: String?,
-    @SerializedName("budget") val budget: Int,
-    @SerializedName("genres") val genres: List<Genre>,
-    @SerializedName("homepage") val homepage: String?,
-    @SerializedName("id") val id: Int,
-    @SerializedName("original_language") val originalLanguage: String,
-    @SerializedName("original_title") val originalTitle: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("popularity") val popularity: Double,
-    @SerializedName("poster_path") val posterPath: String,
-    @SerializedName("production_companies") val productionCompanies: List<ProductionCompanyResponse>,
-    @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("revenue") val revenue: Double,
-    @SerializedName("runtime") val runtime: Int?,
-    @SerializedName("spoken_languages") val spokenLanguages: List<SpokenLanguage>,
-    @SerializedName("status") val status: String,
-    @SerializedName("tagline") val tagline: String,
-    @SerializedName("title") val title: String,
-    @SerializedName("vote_average") val voteAverage: Double,
-    @SerializedName("vote_count") val voteCount: Int
+    @SerialName("adult") val adult: Boolean,
+    @SerialName("backdrop_path") val backdropPath: String?,
+    @SerialName("budget") val budget: Int,
+    @SerialName("genres") val genres: List<Genre>,
+    @SerialName("homepage") val homepage: String?,
+    @SerialName("id") val id: Int,
+    @SerialName("original_language") val originalLanguage: String,
+    @SerialName("original_title") val originalTitle: String,
+    @SerialName("overview") val overview: String,
+    @SerialName("popularity") val popularity: Double,
+    @SerialName("poster_path") val posterPath: String,
+    @SerialName("production_companies") val productionCompanies: List<ProductionCompanyResponse>,
+    @SerialName("release_date") val releaseDate: String,
+    @SerialName("revenue") val revenue: Double,
+    @SerialName("runtime") val runtime: Int?,
+    @SerialName("spoken_languages") val spokenLanguages: List<SpokenLanguage>,
+    @SerialName("status") val status: String,
+    @SerialName("tagline") val tagline: String,
+    @SerialName("title") val title: String,
+    @SerialName("vote_average") val voteAverage: Double,
+    @SerialName("vote_count") val voteCount: Int
 )
 
+@Serializable
 data class ProductionCompanyResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("logo_path") val logoPath: String?,
-    @SerializedName("name") val name: String,
-    @SerializedName("origin_country") val originCountry: String
+    @SerialName("id") val id: Int,
+    @SerialName("logo_path") val logoPath: String?,
+    @SerialName("name") val name: String,
+    @SerialName("origin_country") val originCountry: String
 )
 
+@Serializable
 data class SpokenLanguage(
-    @SerializedName("iso_639_1") val iso6391: String,
-    @SerializedName("name") val name: String
+    @SerialName("iso_639_1") val iso6391: String,
+    @SerialName("name") val name: String
 )

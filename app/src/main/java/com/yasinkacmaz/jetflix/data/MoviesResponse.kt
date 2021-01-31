@@ -1,22 +1,25 @@
 package com.yasinkacmaz.jetflix.data
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MoviesResponse(
-    @SerializedName("page") val page: Int,
-    @SerializedName("results") val movies: List<MovieResponse>,
-    @SerializedName("total_pages") val totalPages: Int,
-    @SerializedName("total_results") val totalResults: Int
+    @SerialName("page") val page: Int,
+    @SerialName("results") val movies: List<MovieResponse>,
+    @SerialName("total_pages") val totalPages: Int,
+    @SerialName("total_results") val totalResults: Int
 )
 
+@Serializable
 data class MovieResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("release_date") val firstAirDate: String,
-    @SerializedName("title") val name: String,
-    @SerializedName("original_title") val originalTitle: String,
-    @SerializedName("original_language") val originalLanguage: String,
-    @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val posterPath: String?,
-    @SerializedName("vote_average") val voteAverage: Double,
-    @SerializedName("vote_count") val voteCount: Int
+    @SerialName("id") val id: Int,
+    @SerialName("release_date") val firstAirDate: String,
+    @SerialName("title") val name: String,
+    @SerialName("original_title") val originalTitle: String,
+    @SerialName("original_language") val originalLanguage: String,
+    @SerialName("overview") val overview: String,
+    @SerialName("poster_path") val posterPath: String?,
+    @SerialName("vote_average") val voteAverage: Double,
+    @SerialName("vote_count") val voteCount: Int
 )
