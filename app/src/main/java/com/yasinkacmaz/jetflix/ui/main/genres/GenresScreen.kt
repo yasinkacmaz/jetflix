@@ -42,8 +42,8 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.movies.MoviesContent
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.modifier.gradientBorder
-import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import com.yasinkacmaz.jetflix.util.toggle
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
 fun GenresScreen(
@@ -51,7 +51,7 @@ fun GenresScreen(
     isDarkTheme: MutableState<Boolean>,
     showSettingsDialog: MutableState<Boolean>
 ) {
-    val selectedGenre = AmbientSelectedGenre.current
+    val selectedGenre = LocalSelectedGenre.current
     Surface(modifier = Modifier.fillMaxSize(), elevation = 0.dp) {
         Column(
             Modifier
@@ -69,7 +69,7 @@ fun GenresScreen(
                     GenreChips(genreUiModels)
                 }
             }
-            Crossfade(modifier = Modifier.fillMaxSize(), current = selectedGenre.value) { selectedGenre ->
+            Crossfade(modifier = Modifier.fillMaxSize(), targetState = selectedGenre.value) { selectedGenre ->
                 MoviesContent(selectedGenre.genre)
             }
         }
@@ -135,7 +135,7 @@ fun GenreChips(genreUiModels: List<GenreUiModel>) {
 
 @Composable
 fun GenreChip(genreUiModel: GenreUiModel) {
-    val selectedGenre = AmbientSelectedGenre.current
+    val selectedGenre = LocalSelectedGenre.current
     val selected = selectedGenre.value == genreUiModel
     val colors = listOf(genreUiModel.primaryColor, genreUiModel.secondaryColor)
     val shape = RoundedCornerShape(percent = 50)

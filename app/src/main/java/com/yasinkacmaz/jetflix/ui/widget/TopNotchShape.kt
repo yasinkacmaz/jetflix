@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.util.dpToPx
 
@@ -23,7 +24,7 @@ import com.yasinkacmaz.jetflix.util.dpToPx
  * 8-----------------7
  */
 class TopNotchShape(private val notchSize: Size, private val cornerRadius: Float) : Shape {
-    override fun createOutline(size: Size, density: Density): Outline {
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
         val widthMinusCorners = size.width - (2 * cornerRadius)
         val heightMinusCorners = size.height - (2 * cornerRadius)
         val notchSideWidth = (size.width - (4 * cornerRadius) - notchSize.width) / 2

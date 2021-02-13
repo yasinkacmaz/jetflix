@@ -11,13 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
 class BottomArcShape(private val arcHeight: Float) : Shape {
-    override fun createOutline(size: Size, density: Density): Outline {
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
         val path = Path().apply {
             moveTo(size.width, 0f)
             lineTo(size.width, size.height)
@@ -39,6 +40,6 @@ class BottomArcShape(private val arcHeight: Float) : Shape {
 @Composable
 @Preview
 fun BottomArcShapePreview() {
-    val shape = BottomArcShape(100.dp.value * AmbientDensity.current.density)
+    val shape = BottomArcShape(100.dp.value * LocalDensity.current.density)
     Box(Modifier.size(200.dp, 300.dp).background(color = Color.Magenta, shape = shape))
 }

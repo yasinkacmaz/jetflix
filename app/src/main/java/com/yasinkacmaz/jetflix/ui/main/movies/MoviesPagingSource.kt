@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.yasinkacmaz.jetflix.service.MovieService
 
 class MoviesPagingSource(
@@ -21,5 +22,9 @@ class MoviesPagingSource(
         } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+        return state.anchorPosition
     }
 }

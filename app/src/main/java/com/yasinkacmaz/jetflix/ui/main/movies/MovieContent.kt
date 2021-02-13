@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
+import com.yasinkacmaz.jetflix.ui.main.genres.LocalSelectedGenre
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -96,7 +96,7 @@ private fun MoviePoster(posterPath: String, movieName: String) {
 @Composable
 private fun MovieRate(rate: Double, modifier: Modifier) {
     val shape = RoundedCornerShape(percent = 50)
-    val selectedGenre = AmbientSelectedGenre.current.value
+    val selectedGenre = LocalSelectedGenre.current.value
     Surface(
         shape = shape,
         elevation = 12.dp,

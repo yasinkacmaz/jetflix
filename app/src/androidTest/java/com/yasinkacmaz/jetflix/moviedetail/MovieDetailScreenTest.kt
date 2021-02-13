@@ -17,13 +17,13 @@ import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.swipe
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.AmbientDominantColor
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.LocalDominantColor
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetail
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
-import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
+import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.util.randomColor
 import org.junit.Rule
@@ -158,7 +158,7 @@ class MovieDetailScreenTest {
         setContent {
             val navigator = remember { Navigator<Screen>(Screen.FetchGenres) }
             val dominantColor = remember(movieDetail.id) { mutableStateOf(Color.randomColor()) }
-            Providers(AmbientNavigator provides navigator, AmbientDominantColor provides dominantColor) {
+            Providers(LocalNavigator provides navigator, LocalDominantColor provides dominantColor) {
                 MovieDetail(movieDetail, credits, listOf())
             }
         }

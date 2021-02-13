@@ -3,10 +3,10 @@ package com.yasinkacmaz.jetflix.ui.navigation
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.LifecycleOwner
 
-val AmbientNavigator = staticAmbientOf<Navigator<Screen>> { error("No navigator instance available") }
+val LocalNavigator = staticCompositionLocalOf<Navigator<Screen>> { error("No navigator instance available") }
 
 class Navigator<T : Screen>(
     initialScreen: T,

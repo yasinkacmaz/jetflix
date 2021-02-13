@@ -24,24 +24,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientAnimationClock
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalAnimationClock
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.transform.BlurTransformation
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
-import com.yasinkacmaz.jetflix.util.navigationBarsPadding
 import com.yasinkacmaz.jetflix.ui.widget.Pager
 import com.yasinkacmaz.jetflix.ui.widget.PagerState
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun ImagesScreen(images: List<Image>) {
     val pagerState: PagerState = run {
-        val clock = AmbientAnimationClock.current
+        val clock = LocalAnimationClock.current
         remember(clock) { PagerState(clock, maxPage = (images.size - 1).coerceAtLeast(0)) }
     }
     if (images.isNotEmpty()) {
@@ -55,7 +55,7 @@ fun ImagesScreen(images: List<Image>) {
 private fun Image(image: Image) {
     val sizeTransformation = remember { SizeTransformation(percent = 50) }
     Box(modifier = Modifier.fillMaxSize()) {
-        val context = AmbientContext.current
+        val context = LocalContext.current
         CoilImage(
             data = image.url,
             contentDescription = stringResource(id = R.string.poster_content_description),
