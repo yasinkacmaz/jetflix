@@ -105,9 +105,7 @@ private data class PageData(val page: Int) : ParentDataModifier {
 private val Measurable.page: Int
     get() = (parentData as? PageData)?.page ?: error("no PageData for measurable $this")
 
-class PagerScope(private val state: PagerState, val page: Int) {
-    val selectionState: PagerState.SelectionState get() = state.selectionState
-}
+class PagerScope(private val state: PagerState, val page: Int)
 
 class PagerState(
     clock: AnimationClockObservable,

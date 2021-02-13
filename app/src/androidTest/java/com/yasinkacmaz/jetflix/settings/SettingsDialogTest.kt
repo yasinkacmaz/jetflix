@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithSubstring
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -43,7 +42,7 @@ class SettingsDialogTest {
 
         showSettingsDialog(uiState, selectedLanguage)
 
-        onNodeWithSubstring(defaultLanguage.englishName, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(defaultLanguage.englishName, substring = true, useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
@@ -62,10 +61,10 @@ class SettingsDialogTest {
         showSettingsDialog(uiState, selectedLanguage)
 
         onNodeWithTag(SETTINGS_DIALOG_TAG).printToLog(TAG)
-        onNodeWithSubstring(defaultLanguage.englishName, useUnmergedTree = true).performClick()
-        onNodeWithSubstring(firstLanguageName, useUnmergedTree = true).assertIsDisplayed()
-        onNodeWithSubstring(secondLanguageName, useUnmergedTree = true).assertIsDisplayed()
-        onNodeWithSubstring(thirdLanguageName, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(defaultLanguage.englishName, substring = true, useUnmergedTree = true).performClick()
+        onNodeWithText(firstLanguageName, substring = true, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(secondLanguageName, substring = true, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(thirdLanguageName, substring = true, useUnmergedTree = true).assertIsDisplayed()
     }
 
     private fun ComposeContentTestRule.showSettingsDialog(

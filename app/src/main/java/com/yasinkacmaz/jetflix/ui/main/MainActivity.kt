@@ -10,27 +10,27 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.AmbientLifecycleOwner
-import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import com.yasinkacmaz.jetflix.ui.main.fetchgenres.FetchGenresScreen
 import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.main.genres.GenresScreen
-import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
+import com.yasinkacmaz.jetflix.ui.main.genres.LocalSelectedGenre
 import com.yasinkacmaz.jetflix.ui.main.images.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.main.settings.SettingsContent
 import com.yasinkacmaz.jetflix.ui.main.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
-import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
+import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.FetchGenres
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.Genres
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
-import com.yasinkacmaz.jetflix.util.ProvideDisplayInsets
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -48,8 +48,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun renderUi() {
-        setContent {
-            val lifecycleOwner = AmbientLifecycleOwner.current
+        this.setContent(null) {
+            val lifecycleOwner = LocalLifecycleOwner.current
             val navigator = remember { Navigator<Screen>(FetchGenres, lifecycleOwner, onBackPressedDispatcher) }
             val systemTheme = isSystemInDarkTheme()
             val isDarkTheme = remember { mutableStateOf(systemTheme) }
@@ -66,10 +66,10 @@ class MainActivity : ComponentActivity() {
         isDarkTheme: MutableState<Boolean>,
         showSettingsDialog: MutableState<Boolean>
     ) {
-        Providers(AmbientNavigator provides navigator, AmbientSelectedGenre provides genreUiModel) {
-            ProvideDisplayInsets {
+        Providers(LocalNavigator provides navigator, LocalSelectedGenre provides genreUiModel) {
+            ProvideWindowInsets {
                 JetflixTheme(isDarkTheme = isDarkTheme.value) {
-                    Crossfade(current = navigator.currentScreen) { screen ->
+                    Crossfade(targetState = navigator.currentScreen) { screen ->
                         when (screen) {
                             FetchGenres -> FetchGenresScreen()
                             is Genres -> GenresScreen(screen.genreUiModels, isDarkTheme, showSettingsDialog)

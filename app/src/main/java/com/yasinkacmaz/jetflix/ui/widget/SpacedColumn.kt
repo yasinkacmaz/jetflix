@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 
 @Composable
 fun SpacedColumn(spaceBetween: Dp, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    val space = (spaceBetween.value * AmbientDensity.current.density).toInt()
+    val space = (spaceBetween.value * LocalDensity.current.density).toInt()
     Layout(content, modifier) { measurables, constraints ->
         if (measurables.isEmpty()) {
             return@Layout layout(0, 0) { }

@@ -13,7 +13,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.viewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -24,9 +24,9 @@ import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
-import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
+import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
-import com.yasinkacmaz.jetflix.util.AmbientInsets
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
 @Composable
 fun MoviesContent(genre: Genre) {
@@ -43,13 +43,13 @@ fun MoviesContent(genre: Genre) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LazyMoviesGrid(moviePagingItems: LazyPagingItems<Movie>, genre: Genre) {
-    val navigator = AmbientNavigator.current
+    val navigator = LocalNavigator.current
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
     }
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(start = 8.dp, bottom = AmbientInsets.current.navigationBars.top.dp),
+        contentPadding = PaddingValues(start = 8.dp, bottom = LocalWindowInsets.current.navigationBars.top.dp),
         content = {
             items(moviePagingItems.itemCount) { index ->
                 val movie = moviePagingItems[index] ?: return@items
@@ -69,6 +69,7 @@ private fun LazyMoviesGrid(moviePagingItems: LazyPagingItems<Movie>, genre: Genr
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.renderLoading(loadState: CombinedLoadStates, genreName: String) {
     when {
         loadState.refresh is LoadState.Loading -> {
@@ -88,6 +89,7 @@ private fun LazyGridScope.renderLoading(loadState: CombinedLoadStates, genreName
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.renderError(loadState: CombinedLoadStates) {
     when {
         loadState.refresh is LoadState.Error -> {

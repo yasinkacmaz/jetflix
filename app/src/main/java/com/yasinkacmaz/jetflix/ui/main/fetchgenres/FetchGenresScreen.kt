@@ -3,13 +3,13 @@ package com.yasinkacmaz.jetflix.ui.main.fetchgenres
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.viewinterop.viewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
-import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
+import com.yasinkacmaz.jetflix.ui.main.genres.LocalSelectedGenre
+import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.Genres
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -27,7 +27,7 @@ fun FetchGenresScreen() {
 
     when {
         fetchGenresUiState.loading -> {
-            val context = AmbientContext.current
+            val context = LocalContext.current
             val title = context.getString(R.string.fetching_genres)
             LoadingColumn(title)
         }
@@ -35,8 +35,8 @@ fun FetchGenresScreen() {
             ErrorColumn(fetchGenresUiState.error.message.orEmpty())
         }
         fetchGenresUiState.genreUiModels.isNotEmpty() -> {
-            AmbientSelectedGenre.current.value = fetchGenresUiState.genreUiModels.first()
-            AmbientNavigator.current.navigateTo(Genres(fetchGenresUiState.genreUiModels), keepCurrentScreen = false)
+            LocalSelectedGenre.current.value = fetchGenresUiState.genreUiModels.first()
+            LocalNavigator.current.navigateTo(Genres(fetchGenresUiState.genreUiModels), keepCurrentScreen = false)
         }
     }
 }

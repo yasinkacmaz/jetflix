@@ -35,8 +35,8 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.compose.ui.viewinterop.viewModel
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.util.toggle
@@ -101,23 +101,25 @@ private fun LanguageRow(
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(stringResource(R.string.language))
         val showLanguageDropdown = remember { mutableStateOf(false) }
+        val expanded = showLanguageDropdown.value
         DropdownMenu(
-            toggle = {
+            expanded = expanded,
+            onDismissRequest = { showLanguageDropdown.value = false }
+        ) {
+            if (expanded) {
+                languages.forEach { language ->
+                    val selected = language == selectedLanguage
+                    DropdownItem(language.englishName, language.flagUrl, selected) {
+                        onLanguageSelected(language)
+                        showLanguageDropdown.value = false
+                    }
+                }
+            } else {
                 ToggleContent(
                     countryName = selectedLanguage.englishName,
                     flagUrl = selectedLanguage.flagUrl,
                     onClick = { showLanguageDropdown.toggle() }
                 )
-            },
-            expanded = showLanguageDropdown.value,
-            onDismissRequest = { showLanguageDropdown.value = false }
-        ) {
-            languages.forEach { language ->
-                val selected = language == selectedLanguage
-                DropdownItem(language.englishName, language.flagUrl, selected) {
-                    onLanguageSelected(language)
-                    showLanguageDropdown.value = false
-                }
             }
         }
     }

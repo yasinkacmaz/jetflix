@@ -26,13 +26,13 @@ val keyframeAnimation: AnimationSpec<Float> = infiniteRepeatable(
     repeatMode = RepeatMode.Reverse
 )
 
-val springAnimation: AnimationSpec<Float> = spring(
+val springAnimation = spring(
     dampingRatio = Spring.DampingRatioMediumBouncy,
     stiffness = Spring.StiffnessLow,
     visibilityThreshold = 0.001f
 )
 
-val defaultScaleAnimation: AnimationSpec<Float> = infiniteRepeatable(
+val defaultScaleAnimation = infiniteRepeatable<Float>(
     tween(3000, easing = LinearEasing),
     repeatMode = RepeatMode.Reverse
 )

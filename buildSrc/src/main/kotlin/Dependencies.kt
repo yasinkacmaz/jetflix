@@ -1,16 +1,18 @@
 object Dependencies {
-    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.5.0"
+    const val coil = "dev.chrisbanes.accompanist:accompanist-coil:0.5.1"
+    const val insets = "dev.chrisbanes.accompanist:accompanist-insets:0.5.1"
     const val okHttp = "com.squareup.okhttp3:okhttp:4.9.0"
     const val ktlint = "com.pinterest:ktlint:0.39.0"
 
     object Kotlin {
-        const val version = "1.4.21-2"
-        const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
-        const val kotlinJsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+        const val version = "1.4.30"
+        const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
+        const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+        const val reflect = "org.jetbrains.kotlin:kotlin-reflect:1.4.21"
     }
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha05"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha06"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val kotlinSerializationPlugin= "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
@@ -27,14 +29,13 @@ object Dependencies {
             const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
             const val core = "androidx.core:core-ktx:1.5.0-alpha02"
-            const val activity = "androidx.activity:activity-ktx:1.1.0"
         }
     }
 
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.0.0-alpha11"
+        const val version = "1.0.0-alpha12"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -44,9 +45,12 @@ object Dependencies {
         const val icons = "androidx.compose.material:material-icons-extended:$version"
         const val animation = "androidx.compose.animation:animation:$version"
         const val tooling = "androidx.compose.ui:ui-tooling:$version"
-        const val paging = "androidx.paging:paging-compose:1.0.0-alpha04"
+        const val paging = "androidx.paging:paging-compose:1.0.0-alpha07"
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
+        const val activity = "androidx.activity:activity-compose:1.3.0-alpha02"
+        const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha01"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha02"
     }
 
     object Hilt {

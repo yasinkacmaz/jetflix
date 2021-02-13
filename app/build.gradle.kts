@@ -66,13 +66,7 @@ android {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.apply {
         jvmTarget = "1.8"
-        useIR = true
-        freeCompilerArgs = listOf(
-            *freeCompilerArgs.toTypedArray(),
-            "-Xallow-jvm-ir-dependencies",
-            "-Xskip-prerelease-check",
-            "-Xopt-in=kotlin.RequiresOptIn"
-        )
+        freeCompilerArgs = listOf(*freeCompilerArgs.toTypedArray(), "-Xopt-in=kotlin.RequiresOptIn")
     }
 }
 
@@ -82,17 +76,15 @@ kapt {
 
 dependencies {
     // Kotlin
-    implementation(Dependencies.Kotlin.kotlinStdLib)
-    implementation(Dependencies.Kotlin.kotlinJsonSerialization)
+    implementation(Dependencies.Kotlin.stdLib)
+    implementation(Dependencies.Kotlin.jsonSerialization)
 
     // AndroidX
     implementation(Dependencies.AndroidX.palette)
     implementation(Dependencies.AndroidX.browser)
     implementation(Dependencies.AndroidX.dataStore)
     implementation(Dependencies.AndroidX.Ktx.core)
-    implementation(Dependencies.AndroidX.Ktx.viewmodel)
     implementation(Dependencies.AndroidX.Ktx.livedata)
-    implementation(Dependencies.AndroidX.Ktx.activity)
 
     // Compose
     implementation(Dependencies.Compose.runtime)
@@ -103,8 +95,12 @@ dependencies {
     implementation(Dependencies.Compose.material)
     implementation(Dependencies.Compose.icons)
     implementation(Dependencies.Compose.animation)
-    implementation(Dependencies.Compose.tooling)
     implementation(Dependencies.Compose.paging)
+    implementation(Dependencies.Compose.constraintLayout)
+    implementation(Dependencies.Compose.activity)
+    implementation(Dependencies.Compose.viewmodel)
+    debugImplementation(Dependencies.Compose.tooling)
+    debugImplementation(Dependencies.Kotlin.reflect)
 
     // Hilt
     implementation(Dependencies.Hilt.android)
@@ -119,6 +115,9 @@ dependencies {
 
     // Image
     implementation(Dependencies.coil)
+
+    // Ui
+    implementation(Dependencies.insets)
 
     // Test
     testImplementation(Dependencies.Test.junit)

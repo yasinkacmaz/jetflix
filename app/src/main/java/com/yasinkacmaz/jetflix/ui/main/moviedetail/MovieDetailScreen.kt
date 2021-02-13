@@ -10,7 +10,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ConstraintLayout
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,8 +39,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.ambientOf
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,8 +51,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.platform.AmbientDensity
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -64,28 +63,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.viewModel
 import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.genres.AmbientSelectedGenre
+import com.yasinkacmaz.jetflix.ui.main.genres.LocalSelectedGenre
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.Person
-import com.yasinkacmaz.jetflix.ui.navigation.AmbientNavigator
+import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.FetchDominantColorFromPoster
-import com.yasinkacmaz.jetflix.util.navigationBarsHeightPlus
-import com.yasinkacmaz.jetflix.util.statusBarsPadding
 import dev.chrisbanes.accompanist.coil.CoilImage
+import dev.chrisbanes.accompanist.insets.navigationBarsHeight
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-val AmbientDominantColor = ambientOf<MutableState<Color>> { error("No dominant color") }
+val LocalDominantColor = compositionLocalOf<MutableState<Color>> { error("No dominant color") }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -108,9 +108,9 @@ fun MovieDetailScreen(movieId: Int) {
             ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
-            val primaryColor = AmbientSelectedGenre.current.value.primaryColor
+            val primaryColor = LocalSelectedGenre.current.value.primaryColor
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
-            Providers(AmbientDominantColor provides dominantColor) {
+            Providers(LocalDominantColor provides dominantColor) {
                 AppBar(movieDetailUiState.movieDetail.homepage)
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
             }
@@ -128,7 +128,7 @@ private fun AppBar(homepage: String?) {
             .padding(horizontal = 4.dp, vertical = 2.dp)
             .zIndex(8f)
     ) {
-        val navigator = AmbientNavigator.current
+        val navigator = LocalNavigator.current
         val tint = Color.White
         IconButton(onClick = { navigator.goBack() }) {
             Icon(
@@ -138,8 +138,8 @@ private fun AppBar(homepage: String?) {
             )
         }
         if (homepage != null) {
-            val dominantColor = AmbientDominantColor.current.value
-            val context = AmbientContext.current
+            val dominantColor = LocalDominantColor.current.value
+            val context = LocalContext.current
             IconButton(onClick = { openHomepage(context, homepage, dominantColor) }) {
                 Icon(
                     Icons.Rounded.Public,
@@ -169,7 +169,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
-        FetchDominantColorFromPoster(movieDetail.posterUrl, AmbientDominantColor.current)
+        FetchDominantColorFromPoster(movieDetail.posterUrl, LocalDominantColor.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, movieDetail.title, Modifier.constrainAs(backdrop) {})
         Poster(
             movieDetail.posterUrl,
@@ -249,7 +249,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         Text(
             text = movieDetail.tagline,
-            color = AmbientDominantColor.current.value,
+            color = LocalDominantColor.current.value,
             style = MaterialTheme.typography.body1.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 24.sp,
@@ -280,7 +280,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
                 }
         )
 
-        val navigator = AmbientNavigator.current
+        val navigator = LocalNavigator.current
         MovieSection(
             credits.cast,
             { SectionHeaderWithDetail(R.string.cast) { navigator.navigateTo(Screen.PeopleGrid(credits.cast)) } },
@@ -325,7 +325,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         Spacer(
             modifier = Modifier
-                .navigationBarsHeightPlus(16.dp)
+                .navigationBarsHeight(16.dp)
                 .constrainAs(space) { top.linkTo(productionCompanies.bottom) }
         )
     }
@@ -333,7 +333,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
 @Composable
 private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier) {
-    val arcHeight = 240.dp.value * AmbientDensity.current.density
+    val arcHeight = 240.dp.value * LocalDensity.current.density
     Card(
         elevation = 16.dp,
         shape = BottomArcShape(arcHeight = arcHeight),
@@ -345,7 +345,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
             data = backdropUrl,
             contentDescription = stringResource(id = R.string.backdrop_content_description, movieName),
             contentScale = ContentScale.FillHeight,
-            colorFilter = ColorFilter(Color(0x23000000), BlendMode.SrcOver),
+            colorFilter = ColorFilter.tint(Color(0x23000000), BlendMode.SrcOver),
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -382,7 +382,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
                 modifier = Modifier
                     .border(
                         1.25.dp,
-                        AmbientDominantColor.current.value,
+                        LocalDominantColor.current.value,
                         RoundedCornerShape(50)
                     )
                     .padding(horizontal = 6.dp, vertical = 3.dp)
@@ -393,7 +393,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
 
 @Composable
 private fun RateStars(voteAverage: Double, modifier: Modifier) {
-    val dominantColor = AmbientDominantColor.current.value
+    val dominantColor = LocalDominantColor.current.value
     Row(modifier.padding(start = 4.dp)) {
         val maxVote = 10
         val starCount = 5
@@ -419,7 +419,7 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
 @Composable
 private fun MovieFields(movieDetail: MovieDetail, modifier: Modifier) {
     SpacedRow(spaceBetween = 20.dp, modifier = modifier) {
-        val context = AmbientContext.current
+        val context = LocalContext.current
         MovieField(context.getString(R.string.release_date), movieDetail.releaseDate)
         MovieField(
             context.getString(R.string.duration),
@@ -476,7 +476,7 @@ private fun <T : Any> MovieSection(
 @Composable
 private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
     text = stringResource(titleResId),
-    color = AmbientDominantColor.current.value,
+    color = LocalDominantColor.current.value,
     style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     modifier = Modifier.padding(start = 16.dp)
 )
@@ -491,7 +491,7 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
     ) {
         Text(
             text = stringResource(textRes),
-            color = AmbientDominantColor.current.value,
+            color = LocalDominantColor.current.value,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
         )
         Row(
@@ -502,14 +502,14 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
         ) {
             Text(
                 text = stringResource(R.string.see_all),
-                color = AmbientDominantColor.current.value,
+                color = LocalDominantColor.current.value,
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(end = 4.dp)
             )
             Icon(
                 Icons.Filled.ArrowForward,
                 contentDescription = stringResource(R.string.see_all),
-                tint = AmbientDominantColor.current.value
+                tint = LocalDominantColor.current.value
             )
         }
     }
@@ -544,7 +544,7 @@ private fun ProductionCompany(company: ProductionCompany) {
     ) {
         Column(
             Modifier
-                .background(AmbientDominantColor.current.value.copy(alpha = 0.7f))
+                .background(LocalDominantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
             CoilImage(
