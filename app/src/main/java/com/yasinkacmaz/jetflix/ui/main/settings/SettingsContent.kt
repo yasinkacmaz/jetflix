@@ -20,13 +20,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -39,11 +45,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
-import com.yasinkacmaz.jetflix.util.toggle
+import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 const val SETTINGS_DIALOG_TAG = "SettingsDialog"
+private const val FLAG_ID = "flag"
+private const val TICK_ID = "tickIcon"
+private const val DROPDOWN_ID = "dropdownIcon"
+private const val RESIZE_PERCENT = 25
+private val LocalSizeTransformation = staticCompositionLocalOf<SizeTransformation>()
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -84,7 +95,10 @@ fun SettingsDialog(
                 if (uiState.showLoading) {
                     LoadingRow(title = stringResource(R.string.fetching_languages))
                 } else {
-                    LanguageRow(uiState.languages, selectedLanguage.value, onLanguageSelected)
+                    val transformation = remember { SizeTransformation(percent = RESIZE_PERCENT) }
+                    Providers(LocalSizeTransformation provides transformation) {
+                        LanguageRow(uiState.languages, selectedLanguage.value, onLanguageSelected)
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -98,46 +112,42 @@ private fun LanguageRow(
     selectedLanguage: Language,
     onLanguageSelected: (Language) -> Unit
 ) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        var showDropdown by remember { mutableStateOf(false) }
         Text(stringResource(R.string.language))
-        val showLanguageDropdown = remember { mutableStateOf(false) }
-        val expanded = showLanguageDropdown.value
         DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { showLanguageDropdown.value = false }
+            expanded = showDropdown,
+            onDismissRequest = { showDropdown = false }
         ) {
-            if (expanded) {
-                languages.forEach { language ->
-                    val selected = language == selectedLanguage
-                    DropdownItem(language.englishName, language.flagUrl, selected) {
-                        onLanguageSelected(language)
-                        showLanguageDropdown.value = false
-                    }
+            languages.forEach { language ->
+                val selected = language == selectedLanguage
+                DropdownItem(language.englishName, language.flagUrl, selected) {
+                    onLanguageSelected(language)
+                    showDropdown = false
                 }
-            } else {
-                ToggleContent(
-                    countryName = selectedLanguage.englishName,
-                    flagUrl = selectedLanguage.flagUrl,
-                    onClick = { showLanguageDropdown.toggle() }
-                )
             }
+        }
+        ToggleContent(selectedLanguage.englishName, selectedLanguage.flagUrl) {
+            showDropdown = true
         }
     }
 }
 
 @Composable
 private fun ToggleContent(countryName: String, flagUrl: String, onClick: () -> Unit) {
-    val dropdownId = "dropdownIcon"
-    val flagId = "flag"
-    val flagContent = flagContent(flagId, flagUrl, countryName)
-    val dropdownContent = iconContent(dropdownId, Icons.Default.ArrowDropDown)
+    val flagContent = flagContent(flagUrl, countryName)
+    val arrowContent = iconContent(DROPDOWN_ID, Icons.Default.ArrowDropDown)
     Text(
         text = buildAnnotatedString {
-            appendInlineContent(flagId)
+            appendInlineContent(FLAG_ID)
             append(countryName)
-            appendInlineContent(dropdownId)
+            appendInlineContent(DROPDOWN_ID)
         },
-        inlineContent = mapOf(dropdownContent, flagContent),
+        inlineContent = mapOf(arrowContent, flagContent),
         modifier = Modifier.clickable(onClick = onClick)
     )
 }
@@ -145,21 +155,22 @@ private fun ToggleContent(countryName: String, flagUrl: String, onClick: () -> U
 @Composable
 private fun DropdownItem(countryName: String, flagUrl: String, selected: Boolean, onClick: () -> Unit) {
     DropdownMenuItem(enabled = !selected, onClick = onClick, modifier = Modifier.fillMaxWidth()) {
-        val tickIconId = "tickIcon"
-        val flagId = "flag"
-        val tickIconContent = iconContent(tickIconId, Icons.Default.Done)
-        val flagContent = flagContent(flagId, flagUrl, countryName)
         Text(
             text = buildAnnotatedString {
-                appendInlineContent(flagId)
                 if (selected) {
-                    appendInlineContent(tickIconId)
+                    appendInlineContent(TICK_ID)
                 }
+                appendInlineContent(FLAG_ID)
                 append(countryName)
             },
-            inlineContent = if (selected) mapOf(tickIconContent, flagContent) else mapOf(flagContent)
+            inlineContent = inlineContent(flagUrl, countryName, selected)
         )
     }
+}
+
+private fun inlineContent(flagUrl: String, countryName: String, selected: Boolean): Map<String, InlineTextContent> {
+    val flagContent = flagContent(flagUrl, countryName)
+    return if (selected) mapOf(iconContent(TICK_ID, Icons.Default.Done), flagContent) else mapOf(flagContent)
 }
 
 private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent(
@@ -177,17 +188,25 @@ private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent
     }
 )
 
-private fun flagContent(flagId: String, flagUrl: String, countryName: String) = flagId to InlineTextContent(
+private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to InlineTextContent(
     placeholder = Placeholder(
         width = 2.em,
         height = 1.em,
         placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
     ),
     children = {
+        val sizeTransformation = LocalSizeTransformation.current
+        /**
+         * We resize country flag bitmap by [RESIZE_PERCENT] percent to improve render performance.
+         * Then we set contentScale as [FixedScale] with 100/[RESIZE_PERCENT] value to match the original size.
+         * Why?: Dropdown menu does not use LazyColumn and we are rendering all of the country flags at once :(
+         */
         CoilImage(
+            modifier = Modifier.padding(end = 8.dp),
             data = flagUrl,
+            contentScale = FixedScale(100f / RESIZE_PERCENT),
             contentDescription = stringResource(id = R.string.flag_content_description, countryName),
-            Modifier.padding(end = 4.dp)
+            requestBuilder = { transformations(sizeTransformation) }
         )
     }
 )
