@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -18,8 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -27,6 +30,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WbSunny
@@ -36,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,6 +49,7 @@ import com.yasinkacmaz.jetflix.ui.main.movies.MoviesContent
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.modifier.gradientBorder
 import com.yasinkacmaz.jetflix.util.toggle
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
@@ -61,6 +67,22 @@ fun GenresScreen(
                     GenreChips(genreUiModels)
                 }
             }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                modifier = Modifier.wrapContentSize().navigationBarsPadding(),
+                onClick = { /*TODO*/ },
+                content = {
+                    val color =
+                        if (isDarkTheme.value) MaterialTheme.colors.surface else MaterialTheme.colors.onPrimary
+                    val tint = animateColorAsState(color).value
+                    Image(
+                        imageVector = Icons.Default.FilterList,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(tint)
+                    )
+                }
+            )
         },
         bodyContent = {
             Crossfade(
