@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -35,8 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.movies.MoviesContent
@@ -51,36 +52,31 @@ fun GenresScreen(
     isDarkTheme: MutableState<Boolean>,
     showSettingsDialog: MutableState<Boolean>
 ) {
-    val selectedGenre = LocalSelectedGenre.current
-    Surface(modifier = Modifier.fillMaxSize(), elevation = 0.dp) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-        ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                elevation = 16.dp
-            ) {
+    Scaffold(
+        modifier = Modifier.statusBarsPadding(),
+        topBar = {
+            Surface(modifier = Modifier.fillMaxWidth().wrapContentHeight(), elevation = 16.dp) {
                 Column(Modifier.fillMaxWidth()) {
                     JetflixAppBar(isDarkTheme, showSettingsDialog)
                     GenreChips(genreUiModels)
                 }
             }
-            Crossfade(modifier = Modifier.fillMaxSize(), targetState = selectedGenre.value) { selectedGenre ->
+        },
+        bodyContent = {
+            Crossfade(
+                modifier = Modifier.fillMaxSize(),
+                targetState = LocalSelectedGenre.current.value
+            ) { selectedGenre ->
                 MoviesContent(selectedGenre.genre)
             }
         }
-    }
+    )
 }
 
 @Composable
 private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog: MutableState<Boolean>) {
-    val tint = animateColorAsState(
-        if (isDarkTheme.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.primary
-    ).value
+    val colors = MaterialTheme.colors
+    val tint = animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary).value
     Row(
         Modifier
             .background(MaterialTheme.colors.surface)
@@ -98,7 +94,7 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
         }
 
         Icon(
-            imageVector = vectorResource(id = R.drawable.ic_jetflix),
+            painter = painterResource(id = R.drawable.ic_jetflix),
             contentDescription = null,
             tint = tint,
             modifier = Modifier.size(90.dp)
