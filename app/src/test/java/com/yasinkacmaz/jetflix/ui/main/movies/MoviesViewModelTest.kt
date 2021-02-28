@@ -4,13 +4,17 @@ import androidx.paging.PagingSource
 import com.yasinkacmaz.jetflix.data.MovieResponse
 import com.yasinkacmaz.jetflix.data.MoviesResponse
 import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.ui.main.filter.FilterDataStore
+import com.yasinkacmaz.jetflix.ui.main.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,40 +27,43 @@ class MoviesViewModelTest {
     @RelaxedMockK
     private lateinit var movieService: MovieService
 
+    @MockK
+    private lateinit var filterDataStore: FilterDataStore
+
     private val movieMapper = MovieMapper()
+    private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
 
     private lateinit var moviesViewModel: MoviesViewModel
-
-    private val genreId = 1337
     private val loadParams = mockk<PagingSource.LoadParams<Int>> {
         every { key } returns 1
     }
 
+    private val moviesResponse = MoviesResponse(1, listOf(MovieResponse(1, "", "", "", "", "", "", 1.1, 1)), 1, 1)
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        moviesViewModel = MoviesViewModel(movieService, movieMapper)
-        moviesViewModel.createPagingSource(genreId)
+        every { filterDataStore.filterState } returns flowOf()
+        moviesViewModel = MoviesViewModel(movieService, movieMapper, movieRequestOptionsMapper, filterDataStore)
+        moviesViewModel.initPagingSource()
     }
 
     @Test
     fun `fetchMovies success`() = coroutineTestRule.runBlockingTest {
-        val movieResponse = MovieResponse(1, "", "", "", "", "", "", 1.1, 1)
-        val response = MoviesResponse(1, listOf(movieResponse), 1, 1)
-        coEvery { movieService.fetchMovies(eq(genreId), any(), any()) } returns response
+        coEvery { movieService.fetchMovies(any(), any(), any()) } returns moviesResponse
 
         moviesViewModel.pagingSource.load(loadParams)
 
-        coVerify { movieService.fetchMovies(eq(genreId), eq(1), any()) }
+        coVerify { movieService.fetchMovies(any(), eq(1), any()) }
     }
 
     @Test
     fun `fetchMovies error`() = coroutineTestRule.runBlockingTest {
         val exception = IOException()
-        coEvery { movieService.fetchMovies(eq(genreId), any(), any()) } throws exception
+        coEvery { movieService.fetchMovies(any(), any(), any()) } throws exception
 
         moviesViewModel.pagingSource.load(loadParams)
 
-        coVerify { movieService.fetchMovies(eq(genreId), eq(1), any()) }
+        coVerify { movieService.fetchMovies(any(), eq(1), any()) }
     }
 }
