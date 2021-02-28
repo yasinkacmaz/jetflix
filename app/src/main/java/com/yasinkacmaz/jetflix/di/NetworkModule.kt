@@ -20,7 +20,6 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 
 private const val BASE_URL = "https://api.themoviedb.org/3/"
@@ -63,9 +62,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieService(retrofit: Retrofit): MovieService = retrofit.create()
+    fun provideMovieService(retrofit: Retrofit) = retrofit.create(MovieService::class.java)
 
     @Provides
     @Singleton
-    fun provideConfigurationService(retrofit: Retrofit): ConfigurationService = retrofit.create()
+    fun provideConfigurationService(retrofit: Retrofit) = retrofit.create(ConfigurationService::class.java)
 }

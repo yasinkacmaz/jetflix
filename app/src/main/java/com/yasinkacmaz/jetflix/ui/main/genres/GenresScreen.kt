@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.yasinkacmaz.jetflix.ui.main.genres
 
 import androidx.compose.animation.Crossfade
@@ -22,20 +24,27 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -44,13 +53,17 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.ui.main.filter.FilterViewModel
+import com.yasinkacmaz.jetflix.ui.main.filter.toFilterOptions
 import com.yasinkacmaz.jetflix.ui.main.movies.MoviesContent
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.modifier.gradientBorder
 import com.yasinkacmaz.jetflix.util.toggle
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
 fun GenresScreen(
@@ -58,10 +71,90 @@ fun GenresScreen(
     isDarkTheme: MutableState<Boolean>,
     showSettingsDialog: MutableState<Boolean>
 ) {
+    val filterViewModel = viewModel<FilterViewModel>()
+    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {
+            BottomSheetContent(filterViewModel, sheetState)
+        },
+        content = {
+            GenreContent(genreUiModels, isDarkTheme, showSettingsDialog, sheetState)
+        }
+    )
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@Composable
+private fun BottomSheetContent(filterViewModel: FilterViewModel, bottomSheetState: ModalBottomSheetState) {
+    Surface(
+        Modifier.fillMaxWidth(),
+        elevation = 8.dp,
+        color = MaterialTheme.colors.primary
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .padding(end = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = { bottomSheetState.hide() }) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = stringResource(id = R.string.close_content_description)
+                    )
+                }
+                Text(
+                    text = stringResource(id = R.string.title_filter_bottom_sheet),
+                    color = MaterialTheme.colors.onPrimary
+                )
+            }
+            Text(
+                stringResource(id = R.string.reset),
+                color = MaterialTheme.colors.onPrimary,
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier.clickable { filterViewModel.onResetClicked() }
+            )
+        }
+    }
+
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(vertical = 16.dp)
+    ) {
+        val filterState = filterViewModel.filterState.collectAsState().value
+        filterState.toFilterOptions().forEach { filterOption ->
+            filterOption.Render() {
+                val newState = filterOption.modifyFilterState(filterState)
+                filterViewModel.onFilterStateChanged(newState)
+            }
+        }
+    }
+}
+
+@Composable
+private fun GenreContent(
+    genreUiModels: List<GenreUiModel>,
+    isDarkTheme: MutableState<Boolean>,
+    showSettingsDialog: MutableState<Boolean>,
+    bottomSheetState: ModalBottomSheetState
+) {
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         topBar = {
-            Surface(modifier = Modifier.fillMaxWidth().wrapContentHeight(), elevation = 16.dp) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                elevation = 16.dp
+            ) {
                 Column(Modifier.fillMaxWidth()) {
                     JetflixAppBar(isDarkTheme, showSettingsDialog)
                     GenreChips(genreUiModels)
@@ -70,15 +163,17 @@ fun GenresScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.wrapContentSize().navigationBarsPadding(),
-                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .wrapContentSize()
+                    .navigationBarsPadding(),
+                onClick = { bottomSheetState.show() },
                 content = {
                     val color =
                         if (isDarkTheme.value) MaterialTheme.colors.surface else MaterialTheme.colors.onPrimary
                     val tint = animateColorAsState(color).value
                     Image(
                         imageVector = Icons.Default.FilterList,
-                        contentDescription = null,
+                        contentDescription = stringResource(id = R.string.title_filter_bottom_sheet),
                         colorFilter = ColorFilter.tint(tint)
                     )
                 }
@@ -117,7 +212,7 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
 
         Icon(
             painter = painterResource(id = R.drawable.ic_jetflix),
-            contentDescription = null,
+            contentDescription = stringResource(id = R.string.app_name),
             tint = tint,
             modifier = Modifier.size(90.dp)
         )

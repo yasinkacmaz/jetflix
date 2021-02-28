@@ -8,13 +8,14 @@ import com.yasinkacmaz.jetflix.data.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface MovieService {
     @GET("discover/movie")
     suspend fun fetchMovies(
-        @Query("with_genres") genreId: Int,
+        @Query("with_genres") genreId: Int?,
         @Query("page") pageNumber: Int,
-        @Query("sort_by") sortBy: String = "vote_count.desc"
+        @QueryMap options: Map<String, String>
     ): MoviesResponse
 
     @GET("genre/movie/list")

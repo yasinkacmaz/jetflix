@@ -8,8 +8,9 @@ import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyGridScope
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,32 +25,44 @@ import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
+import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun MoviesContent(genre: Genre) {
     val moviesViewModel = viewModel<MoviesViewModel>(key = genre.id.toString())
-    DisposableEffect(genre.id) {
-        moviesViewModel.createPagingSource(genre.id)
-        onDispose {
-        }
-    }
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
-    LazyMoviesGrid(movies, genre)
+    val filterStateChanges = moviesViewModel.filterStateChanges
+    LazyMoviesGrid(movies, genre, filterStateChanges)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun LazyMoviesGrid(moviePagingItems: LazyPagingItems<Movie>, genre: Genre) {
+private fun LazyMoviesGrid(
+    moviePagingItems: LazyPagingItems<Movie>,
+    genre: Genre,
+    filterStateChanges: SharedFlow<FilterState>
+) {
     val navigator = LocalNavigator.current
     val onMovieClicked: (Int) -> Unit = { movieId ->
         navigator.navigateTo(MovieDetail(movieId))
     }
+    val state = rememberLazyListState()
+    filterStateChanges
+        .onEach {
+            state.snapToItemIndex(0)
+            moviePagingItems.refresh()
+        }
+        .launchIn(rememberCoroutineScope())
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(start = 8.dp, bottom = LocalWindowInsets.current.navigationBars.top.dp),
+        state = state,
         content = {
             items(moviePagingItems.itemCount) { index ->
                 val movie = moviePagingItems[index] ?: return@items
