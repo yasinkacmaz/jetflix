@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.fetchgenres
+package com.yasinkacmaz.jetflix.ui.main.genres
 
 import com.yasinkacmaz.jetflix.data.Genre
 import org.junit.Test

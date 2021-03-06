@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.movies
+package com.yasinkacmaz.jetflix.ui.main.movie
 
 data class Movie(
     val id: Int,

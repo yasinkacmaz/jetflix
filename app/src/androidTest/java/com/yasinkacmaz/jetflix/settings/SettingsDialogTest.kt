@@ -1,27 +1,28 @@
 package com.yasinkacmaz.jetflix.settings
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.getString
 import com.yasinkacmaz.jetflix.ui.main.settings.Language
 import com.yasinkacmaz.jetflix.ui.main.settings.SETTINGS_DIALOG_TAG
 import com.yasinkacmaz.jetflix.ui.main.settings.SettingsDialog
 import com.yasinkacmaz.jetflix.ui.main.settings.SettingsViewModel
-import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
+import com.yasinkacmaz.jetflix.util.getString
+import com.yasinkacmaz.jetflix.util.setTestContent
 import org.junit.Rule
 import org.junit.Test
 
 class SettingsDialogTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val defaultLanguage = Language("Turkish", "tr", "")
 
@@ -70,17 +71,13 @@ class SettingsDialogTest {
     private fun ComposeContentTestRule.showSettingsDialog(
         uiState: SettingsViewModel.UiState,
         selectedLanguage: State<Language>
-    ) {
-        setContent {
-            JetflixTheme {
-                SettingsDialog(
-                    onDialogDismiss = {},
-                    uiState = uiState,
-                    selectedLanguage = selectedLanguage,
-                    onLanguageSelected = {}
-                )
-            }
-        }
+    ) = setTestContent {
+        SettingsDialog(
+            onDialogDismiss = {},
+            uiState = uiState,
+            selectedLanguage = selectedLanguage,
+            onLanguageSelected = {}
+        )
     }
 
     companion object {

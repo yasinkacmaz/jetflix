@@ -42,7 +42,7 @@ private fun MovieDetailPreview() {
     )
     val person = Person(profilePhotoUrl = "", name = "Yasin", character = "Android", gender = Gender.MALE)
     val credits = Credits(cast = listOf(person, person, person), crew = listOf(person, person, person))
-    val navigator = Navigator<Screen>(Screen.FetchGenres, LocalLifecycleOwner.current, OnBackPressedDispatcher {})
+    val navigator = Navigator<Screen>(Screen.Movies, LocalLifecycleOwner.current, OnBackPressedDispatcher {})
     Providers(
         LocalDominantColor provides mutableStateOf(Color.randomColor()),
         LocalNavigator provides navigator

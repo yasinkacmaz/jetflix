@@ -6,6 +6,7 @@ import com.yasinkacmaz.jetflix.data.MoviesResponse
 import com.yasinkacmaz.jetflix.service.MovieService
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.main.filter.MovieRequestOptionsMapper
+import com.yasinkacmaz.jetflix.ui.main.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

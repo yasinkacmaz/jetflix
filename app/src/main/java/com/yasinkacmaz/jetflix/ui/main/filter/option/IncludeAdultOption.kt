@@ -17,17 +17,18 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterSectionTitle
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
 
-data class IncludeAdultOption(override var value: Boolean) : FilterOption<Boolean> {
+data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption<Boolean> {
+    override var currentValue: Boolean = defaultValue
 
-    override fun modifyFilterState(filterState: FilterState, currentValue: Boolean) =
+    override fun modifyFilterState(filterState: FilterState) =
         filterState.copy(includeAdult = currentValue)
 
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val isChecked = mutableStateOf(value)
+        val isChecked = mutableStateOf(currentValue)
         val onClick = {
-            value = value.not()
-            isChecked.value = value
+            currentValue = currentValue.not()
+            isChecked.value = currentValue
             onChanged()
         }
         Row(

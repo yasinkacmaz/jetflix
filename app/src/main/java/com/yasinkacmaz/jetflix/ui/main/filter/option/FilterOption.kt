@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
 
 interface FilterOption<Type : Any> {
-    var value: Type
+    val defaultValue: Type
+    var currentValue: Type
 
-    fun modifyFilterState(filterState: FilterState, currentValue: Type = value): FilterState
+    fun modifyFilterState(filterState: FilterState): FilterState
 
     @Composable fun Render(onChanged: () -> Unit)
 }

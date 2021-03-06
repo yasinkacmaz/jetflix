@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.movies
+package com.yasinkacmaz.jetflix.ui.main.movie
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

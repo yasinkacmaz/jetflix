@@ -4,8 +4,8 @@
     <string name="fetching_genres">Fetching Movie Genres</string>
 
     <!-- movies -->
-    <string name="fetching_movies">Fetching %1$s Movies</string>
-    <string name="fetching_more_movies">Fetching More %1$s Movies</string>
+    <string name="fetching_movies">Fetching Movies</string>
+    <string name="fetching_more_movies">Fetching More Movies</string>
 
     <!-- filter -->
     <string name="include_adult">Include Adult</string>
@@ -26,6 +26,9 @@
     <string name="sort_order">Sort Order</string>
     <string name="sort_order_descending">Descending</string>
     <string name="sort_order_ascending">Ascending</string>
+
+    <!-- genres -->
+    <string name="genres">Genres</string>
 
     <!-- movie detail -->
     <string name="fetching_movie_detail">Fetching Movie Detail</string>

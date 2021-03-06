@@ -26,6 +26,7 @@ import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.util.randomColor
+import com.yasinkacmaz.jetflix.util.setTestContent
 import org.junit.Rule
 import org.junit.Test
 
@@ -154,13 +155,11 @@ class MovieDetailScreenTest {
     private fun ComposeContentTestRule.setMovieDetailContent(
         movieDetail: MovieDetail,
         credits: Credits = Credits(emptyList(), emptyList())
-    ) {
-        setContent {
-            val navigator = remember { Navigator<Screen>(Screen.FetchGenres) }
-            val dominantColor = remember(movieDetail.id) { mutableStateOf(Color.randomColor()) }
-            Providers(LocalNavigator provides navigator, LocalDominantColor provides dominantColor) {
-                MovieDetail(movieDetail, credits, listOf())
-            }
+    ) = setTestContent {
+        val navigator = remember { Navigator<Screen>(Screen.Movies) }
+        val dominantColor = remember(movieDetail.id) { mutableStateOf(Color.randomColor()) }
+        Providers(LocalNavigator provides navigator, LocalDominantColor provides dominantColor) {
+            MovieDetail(movieDetail, credits, listOf())
         }
     }
 }
