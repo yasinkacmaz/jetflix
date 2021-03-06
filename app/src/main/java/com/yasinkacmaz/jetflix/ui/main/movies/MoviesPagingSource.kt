@@ -5,6 +5,8 @@ import androidx.paging.PagingState
 import com.yasinkacmaz.jetflix.service.MovieService
 import com.yasinkacmaz.jetflix.ui.main.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
+import com.yasinkacmaz.jetflix.ui.main.movie.Movie
+import com.yasinkacmaz.jetflix.ui.main.movie.MovieMapper
 
 class MoviesPagingSource(
     private val movieService: MovieService,

@@ -1,13 +1,8 @@
-package com.yasinkacmaz.jetflix.ui.main.movies
+package com.yasinkacmaz.jetflix.ui.main.movie
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
-import com.yasinkacmaz.jetflix.ui.main.genres.LocalSelectedGenre
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 
 @Preview(name = "Preview", group = "Size")
@@ -23,7 +18,5 @@ private fun MovieMultiPreview() {
 
 @Composable
 fun MoviePreview(content: @Composable () -> Unit) {
-    Providers(LocalSelectedGenre provides mutableStateOf(GenreUiModel(Genre(-1, "Genre")))) {
-        JetflixTheme(content = content)
-    }
+    JetflixTheme(content = content)
 }

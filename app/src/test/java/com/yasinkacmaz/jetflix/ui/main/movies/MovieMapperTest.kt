@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
 import com.yasinkacmaz.jetflix.data.MovieResponse
+import com.yasinkacmaz.jetflix.ui.main.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.toPosterUrl
 import org.junit.Test
 import strikt.api.expectThat

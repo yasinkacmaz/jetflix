@@ -3,11 +3,10 @@ package com.yasinkacmaz.jetflix.ui.main.main
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import com.yasinkacmaz.jetflix.ui.main.fetchgenres.FetchGenresScreen
-import com.yasinkacmaz.jetflix.ui.main.genres.GenresScreen
 import com.yasinkacmaz.jetflix.ui.main.images.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.PeopleGridScreen
+import com.yasinkacmaz.jetflix.ui.main.movies.MoviesScreen
 import com.yasinkacmaz.jetflix.ui.main.settings.SettingsContent
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
@@ -20,8 +19,7 @@ fun MainContent(
 ) {
     Crossfade(targetState = navigator.currentScreen) { screen ->
         when (screen) {
-            Screen.FetchGenres -> FetchGenresScreen()
-            is Screen.Genres -> GenresScreen(screen.genreUiModels, isDarkTheme, showSettingsDialog)
+            is Screen.Movies -> MoviesScreen(isDarkTheme, showSettingsDialog)
             is Screen.MovieDetail -> MovieDetailScreen(screen.movieId)
             is Screen.Images -> ImagesScreen(screen.images)
             is Screen.PeopleGrid -> PeopleGridScreen(screen.people)

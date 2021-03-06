@@ -50,9 +50,7 @@ android {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
         }
-        testOptions {
-            animationsDisabled = true
-        }
+        animationsDisabled = true
     }
 
     packagingOptions.apply {

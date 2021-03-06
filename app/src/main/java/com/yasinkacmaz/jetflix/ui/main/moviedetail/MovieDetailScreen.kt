@@ -70,7 +70,6 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.genres.LocalSelectedGenre
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.Person
@@ -80,6 +79,7 @@ import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.FetchDominantColorFromPoster
+import com.yasinkacmaz.jetflix.util.randomColor
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
@@ -108,8 +108,7 @@ fun MovieDetailScreen(movieId: Int) {
             ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
-            val primaryColor = LocalSelectedGenre.current.value.primaryColor
-            val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(primaryColor) }
+            val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(Color.randomColor()) }
             Providers(LocalDominantColor provides dominantColor) {
                 AppBar(movieDetailUiState.movieDetail.homepage)
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)

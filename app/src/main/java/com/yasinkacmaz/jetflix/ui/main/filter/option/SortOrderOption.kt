@@ -19,14 +19,14 @@ import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.widget.VerticalStaggeredGrid
 import kotlinx.serialization.Serializable
 
-data class SortOrderOption(override var value: SortOrder) : FilterOption<SortOrder> {
+data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<SortOrder> {
+    override var currentValue: SortOrder = defaultValue
 
-    override fun modifyFilterState(filterState: FilterState, currentValue: SortOrder) =
-        filterState.copy(sortOrder = currentValue)
+    override fun modifyFilterState(filterState: FilterState) = filterState.copy(sortOrder = currentValue)
 
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val sortOrderState = mutableStateOf(value)
+        val sortOrderState = mutableStateOf(currentValue)
         FilterSectionTitle(
             painter = rememberVectorPainter(image = Icons.Default.SwapVert),
             title = R.string.sort_order
@@ -40,8 +40,8 @@ data class SortOrderOption(override var value: SortOrder) : FilterOption<SortOrd
             val sortOrder = values[index]
             val selected = sortOrderState.value == sortOrder
             FilterRadioItem(title = stringResource(id = sortOrder.titleResId), selected = selected) {
-                value = sortOrder
-                sortOrderState.value = value
+                currentValue = sortOrder
+                sortOrderState.value = currentValue
                 onChanged()
             }
         }

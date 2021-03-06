@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.main.movies
+package com.yasinkacmaz.jetflix.ui.main.movie
 
 import com.yasinkacmaz.jetflix.data.MovieResponse
 import com.yasinkacmaz.jetflix.util.Mapper
