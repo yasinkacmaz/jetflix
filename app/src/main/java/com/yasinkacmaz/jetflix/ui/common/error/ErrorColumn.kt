@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -29,7 +29,7 @@ fun ErrorColumn(message: String, modifier: Modifier = Modifier) {
             imageVector = Icons.Filled.Face,
             contentDescription = stringResource(id = R.string.error_icon_content_description),
             modifier = Modifier
-                .preferredSize(40.dp)
+                .size(40.dp)
                 .padding(top = 16.dp)
         )
     }

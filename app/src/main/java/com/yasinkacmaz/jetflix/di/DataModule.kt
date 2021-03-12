@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore
 import dagger.Module
@@ -14,24 +14,21 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
+val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 @Module
 @InstallIn(ApplicationComponent::class)
 object DataModule {
+
     @Provides
     @Singleton
-    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return context.createDataStore(name = "settings")
+    fun provideLanguageDataStore(@ApplicationContext context: Context, json: Json): LanguageDataStore {
+        return LanguageDataStore(json, context.preferencesDataStore)
     }
 
     @Provides
     @Singleton
-    fun provideLanguageDataStore(json: Json, preferences: DataStore<Preferences>): LanguageDataStore {
-        return LanguageDataStore(json, preferences)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFilterDataStore(json: Json, preferences: DataStore<Preferences>): FilterDataStore {
-        return FilterDataStore(json, preferences)
+    fun provideFilterDataStore(@ApplicationContext context: Context, json: Json): FilterDataStore {
+        return FilterDataStore(json, context.preferencesDataStore)
     }
 }

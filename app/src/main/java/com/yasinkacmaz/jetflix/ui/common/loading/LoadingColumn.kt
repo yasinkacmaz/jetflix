@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +21,7 @@ fun LoadingColumn(title: String, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(title)
-        CircularProgressIndicator(modifier = Modifier.preferredSize(40.dp).padding(top = 16.dp))
+        CircularProgressIndicator(modifier = Modifier.size(40.dp).padding(top = 16.dp))
     }
 }
 

@@ -36,9 +36,9 @@ import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.Providers
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
@@ -83,11 +83,9 @@ import com.yasinkacmaz.jetflix.util.randomColor
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 val LocalDominantColor = compositionLocalOf<MutableState<Color>> { error("No dominant color") }
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun MovieDetailScreen(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
@@ -109,7 +107,7 @@ fun MovieDetailScreen(movieId: Int) {
         }
         movieDetailUiState.movieDetail != null -> {
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(Color.randomColor()) }
-            Providers(LocalDominantColor provides dominantColor) {
+            CompositionLocalProvider(LocalDominantColor provides dominantColor) {
                 AppBar(movieDetailUiState.movieDetail.homepage)
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
             }

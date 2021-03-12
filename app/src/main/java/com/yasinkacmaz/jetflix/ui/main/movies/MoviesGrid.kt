@@ -3,8 +3,8 @@ package com.yasinkacmaz.jetflix.ui.main.movies
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyGridScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -41,7 +41,7 @@ fun MoviesGrid() {
     val filterStateChanges = moviesViewModel.filterStateChanges
     filterStateChanges
         .onEach {
-            state.snapToItemIndex(0)
+            state.scrollToItem(0)
             movies.refresh()
         }
         .launchIn(rememberCoroutineScope())
@@ -69,7 +69,7 @@ private fun LazyMoviesGrid(
                     .padding(end = 8.dp)
                     .padding(vertical = 8.dp)
                 BoxWithConstraints(modifier) {
-                    MovieContent(movie, Modifier.preferredHeight(320.dp), onMovieClicked)
+                    MovieContent(movie, Modifier.height(320.dp), onMovieClicked)
                 }
             }
 

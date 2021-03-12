@@ -31,6 +31,7 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -45,6 +46,7 @@ import com.yasinkacmaz.jetflix.util.toggle
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
 @Composable
@@ -54,6 +56,7 @@ fun MoviesScreen(
 ) {
     val filterViewModel = viewModel<FilterViewModel>()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -64,7 +67,11 @@ fun MoviesScreen(
                 filterState,
                 filterViewModel::onFilterStateChanged,
                 filterViewModel::onResetClicked,
-                onHideClicked = { sheetState.hide() }
+                onHideClicked = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                    }
+                }
             )
         },
         content = {
@@ -80,6 +87,7 @@ private fun MoviesGrid(
     showSettingsDialog: MutableState<Boolean>,
     bottomSheetState: ModalBottomSheetState
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         topBar = {
@@ -99,7 +107,11 @@ private fun MoviesGrid(
                 modifier = Modifier
                     .wrapContentSize()
                     .navigationBarsPadding(),
-                onClick = { bottomSheetState.show() },
+                onClick = {
+                    coroutineScope.launch {
+                        bottomSheetState.show()
+                    }
+                },
                 content = {
                     val color =
                         if (isDarkTheme.value) MaterialTheme.colors.surface else MaterialTheme.colors.onPrimary
@@ -112,7 +124,7 @@ private fun MoviesGrid(
                 }
             )
         },
-        bodyContent = {
+        content = {
             MoviesGrid()
         }
     )

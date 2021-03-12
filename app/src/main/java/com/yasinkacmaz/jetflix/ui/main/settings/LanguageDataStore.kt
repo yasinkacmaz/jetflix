@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.main.settings
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -31,6 +31,6 @@ class LanguageDataStore(private val json: Json, private val preferences: DataSto
     }
 
     companion object {
-        val KEY_LANGUAGE = preferencesKey<String>("language")
+        val KEY_LANGUAGE = stringPreferencesKey("language")
     }
 }

@@ -82,7 +82,6 @@ dependencies {
     implementation(Dependencies.AndroidX.browser)
     implementation(Dependencies.AndroidX.dataStore)
     implementation(Dependencies.AndroidX.Ktx.core)
-    implementation(Dependencies.AndroidX.Ktx.livedata)
 
     // Compose
     implementation(Dependencies.Compose.runtime)
@@ -96,9 +95,8 @@ dependencies {
     implementation(Dependencies.Compose.paging)
     implementation(Dependencies.Compose.constraintLayout)
     implementation(Dependencies.Compose.activity)
-    implementation(Dependencies.Compose.viewmodel)
+    implementation(Dependencies.Compose.viewModel)
     debugImplementation(Dependencies.Compose.tooling)
-    debugImplementation(Dependencies.Kotlin.reflect)
 
     // Hilt
     implementation(Dependencies.Hilt.android)

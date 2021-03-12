@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
             val systemTheme = isSystemInDarkTheme()
             val isDarkTheme = remember { mutableStateOf(systemTheme) }
             val showSettingsDialog = remember { mutableStateOf(false) }
-            Providers(LocalNavigator provides navigator) {
+            CompositionLocalProvider(LocalNavigator provides navigator) {
                 ProvideWindowInsets {
                     JetflixTheme(isDarkTheme = isDarkTheme.value) {
                         MainContent(navigator, isDarkTheme, showSettingsDialog)

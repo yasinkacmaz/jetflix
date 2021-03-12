@@ -2,7 +2,7 @@ package com.yasinkacmaz.jetflix.ui.main.moviedetail
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -43,7 +43,7 @@ private fun MovieDetailPreview() {
     val person = Person(profilePhotoUrl = "", name = "Yasin", character = "Android", gender = Gender.MALE)
     val credits = Credits(cast = listOf(person, person, person), crew = listOf(person, person, person))
     val navigator = Navigator<Screen>(Screen.Movies, LocalLifecycleOwner.current, OnBackPressedDispatcher {})
-    Providers(
+    CompositionLocalProvider(
         LocalDominantColor provides mutableStateOf(Color.randomColor()),
         LocalNavigator provides navigator
     ) {
