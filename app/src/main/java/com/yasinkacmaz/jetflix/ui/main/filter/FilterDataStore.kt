@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.main.filter
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -38,6 +38,6 @@ class FilterDataStore(private val json: Json, private val preferences: DataStore
     }
 
     companion object {
-        val KEY_FILTER_STATE = preferencesKey<String>("filter_state")
+        val KEY_FILTER_STATE = stringPreferencesKey("filter_state")
     }
 }

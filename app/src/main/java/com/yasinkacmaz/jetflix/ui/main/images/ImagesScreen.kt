@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalAnimationClock
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -40,11 +39,8 @@ import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun ImagesScreen(images: List<Image>) {
-    val pagerState: PagerState = run {
-        val clock = LocalAnimationClock.current
-        remember(clock) { PagerState(clock, maxPage = (images.size - 1).coerceAtLeast(0)) }
-    }
     if (images.isNotEmpty()) {
+        val pagerState: PagerState = remember { PagerState(maxPage = (images.size - 1).coerceAtLeast(0)) }
         Pager(state = pagerState) {
             Image(images[page])
         }

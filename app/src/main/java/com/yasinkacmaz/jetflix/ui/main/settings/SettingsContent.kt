@@ -20,7 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,7 +54,9 @@ private const val FLAG_ID = "flag"
 private const val TICK_ID = "tickIcon"
 private const val DROPDOWN_ID = "dropdownIcon"
 private const val RESIZE_PERCENT = 25
-private val LocalSizeTransformation = staticCompositionLocalOf<SizeTransformation>()
+private val LocalSizeTransformation = staticCompositionLocalOf<SizeTransformation> {
+    error("No transformation instance available")
+}
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -96,7 +98,7 @@ fun SettingsDialog(
                     LoadingRow(title = stringResource(R.string.fetching_languages))
                 } else {
                     val transformation = remember { SizeTransformation(percent = RESIZE_PERCENT) }
-                    Providers(LocalSizeTransformation provides transformation) {
+                    CompositionLocalProvider(LocalSizeTransformation provides transformation) {
                         LanguageRow(uiState.languages, selectedLanguage.value, onLanguageSelected)
                     }
                     Spacer(modifier = Modifier.height(16.dp))

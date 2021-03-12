@@ -1,11 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedFloatModel
-import androidx.compose.animation.core.AnimationClockObservable
-import androidx.compose.animation.core.AnimationEndReason
-import androidx.compose.animation.core.fling
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -13,36 +11,34 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-/**
-Taken from:
-https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Jetcaster/app/src/main/java/com/example/jetcaster/util/Pager.kt
- */
+// https://github.com/android/compose-samples/blob/main/Jetcaster/app/src/main/java/com/example/jetcaster/util/Pager.kt
 @Composable
-@SuppressLint("ComposableLambdaParameterNaming")
 fun Pager(
-    modifier: Modifier = Modifier,
     state: PagerState,
+    modifier: Modifier = Modifier,
     offscreenLimit: Int = 2,
     pageContent: @Composable PagerScope.() -> Unit
 ) {
-    var currentPageWidth by remember { mutableStateOf(0) }
+    var pageSize by remember { mutableStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
     Layout(
         content = {
-            val startPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
-            val endPage = (state.currentPage + offscreenLimit).coerceAtMost(state.maxPage)
+            val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
+            val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.maxPage)
 
-            for (page in startPage..endPage) {
+            for (page in minPage..maxPage) {
                 val pageData = PageData(page)
                 val scope = PagerScope(state, page)
                 key(pageData) {
@@ -56,19 +52,24 @@ fun Pager(
             orientation = Orientation.Horizontal,
             onDragStarted = { state.selectionState = PagerState.SelectionState.Undecided },
             onDragStopped = { velocity ->
-                // Velocity is in pixels per second, but we deal in percentage offsets, so we
-                // need to scale the velocity to match
-                state.fling(velocity / currentPageWidth)
-            }
-        ) { dy ->
-            with(state) {
-                val pos = currentPageWidth * currentPageOffset
-                val max = if (currentPage == minPage) 0 else currentPageWidth * offscreenLimit
-                val min = if (currentPage == maxPage) 0 else -currentPageWidth * offscreenLimit
-                val newPos = (pos + dy).coerceIn(min.toFloat(), max.toFloat())
-                currentPageOffset = newPos / currentPageWidth
-            }
-        }
+                coroutineScope.launch {
+                    // Velocity is in pixels per second, but we deal in percentage offsets, so we
+                    // need to scale the velocity to match
+                    state.fling(velocity / pageSize)
+                }
+            },
+            state = rememberDraggableState { dy ->
+                coroutineScope.launch {
+                    with(state) {
+                        val pos = pageSize * currentPageOffset
+                        val max = if (currentPage == minPage) 0 else pageSize * offscreenLimit
+                        val min = if (currentPage == maxPage) 0 else -pageSize * offscreenLimit
+                        val newPos = (pos + dy).coerceIn(min.toFloat(), max.toFloat())
+                        snapToOffset(newPos / pageSize)
+                    }
+                }
+            },
+        )
     ) { measurables, constraints ->
         layout(constraints.maxWidth, constraints.maxHeight) {
             val currentPage = state.currentPage
@@ -76,9 +77,7 @@ fun Pager(
             val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
 
             measurables
-                .map {
-                    it.measure(childConstraints) to it.page
-                }
+                .map { it.measure(childConstraints) to it.page }
                 .forEach { (placeable, page) ->
                     // TODO: current this centers each page. We should investigate reading
                     //  gravity modifiers on the child, or maybe as a param to Pager.
@@ -86,7 +85,7 @@ fun Pager(
                     val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
 
                     if (currentPage == page) {
-                        currentPageWidth = placeable.width
+                        pageSize = placeable.width
                     }
 
                     val xItemOffset = ((page + offset - currentPage) * placeable.width).roundToInt()
@@ -97,22 +96,7 @@ fun Pager(
     }
 }
 
-@Immutable
-private data class PageData(val page: Int) : ParentDataModifier {
-    override fun Density.modifyParentData(parentData: Any?): Any = this@PageData
-}
-
-private val Measurable.page: Int
-    get() = (parentData as? PageData)?.page ?: error("no PageData for measurable $this")
-
-class PagerScope(private val state: PagerState, val page: Int)
-
-class PagerState(
-    clock: AnimationClockObservable,
-    currentPage: Int = 0,
-    minPage: Int = 0,
-    maxPage: Int = 0
-) {
+class PagerState(currentPage: Int = 0, minPage: Int = 0, maxPage: Int = 0) {
     private var _minPage by mutableStateOf(minPage)
     var minPage: Int
         get() = _minPage
@@ -140,34 +124,52 @@ class PagerState(
 
     var selectionState by mutableStateOf(SelectionState.Selected)
 
-    private fun selectPage() {
+    suspend inline fun <R> selectPage(block: PagerState.() -> R): R = try {
+        selectionState = SelectionState.Undecided
+        block()
+    } finally {
+        selectPage()
+    }
+
+    suspend fun selectPage() {
         currentPage -= currentPageOffset.roundToInt()
-        currentPageOffset = 0f
+        snapToOffset(0f)
         selectionState = SelectionState.Selected
     }
 
-    private var _currentPageOffset = AnimatedFloatModel(0f, clock = clock).apply { setBounds(-1f, 1f) }
-    var currentPageOffset: Float
-        get() = _currentPageOffset.value
-        set(value) {
-            val max = if (currentPage == minPage) 0f else 1f
-            val min = if (currentPage == maxPage) 0f else -1f
-            _currentPageOffset.snapTo(value.coerceIn(min, max))
-        }
+    private var _currentPageOffset = Animatable(0f).apply {
+        updateBounds(-1f, 1f)
+    }
+    val currentPageOffset: Float get() = _currentPageOffset.value
 
-    fun fling(velocity: Float) {
+    suspend fun snapToOffset(offset: Float) {
+        val max = if (currentPage == minPage) 0f else 1f
+        val min = if (currentPage == maxPage) 0f else -1f
+        _currentPageOffset.snapTo(offset.coerceIn(min, max))
+    }
+
+    suspend fun fling(velocity: Float) {
         if (velocity < 0 && currentPage == maxPage) return
         if (velocity > 0 && currentPage == minPage) return
 
-        _currentPageOffset.fling(velocity) { reason, _, _ ->
-            if (reason != AnimationEndReason.Interrupted) {
-                _currentPageOffset.animateTo(currentPageOffset.roundToInt().toFloat()) { _, _ ->
-                    selectPage()
-                }
-            }
-        }
+        _currentPageOffset.animateTo(currentPageOffset.roundToInt().toFloat())
+        selectPage()
     }
 
-    override fun toString(): String = """PagerState{minPage=$minPage, maxPage=$maxPage, currentPage=$currentPage, 
-|currentPageOffset=$currentPageOffset}""".trimMargin()
+    override fun toString(): String = "PagerState{minPage=$minPage, maxPage=$maxPage, " +
+        "currentPage=$currentPage, currentPageOffset=$currentPageOffset}"
+}
+
+@Immutable
+private data class PageData(val page: Int) : ParentDataModifier {
+    override fun Density.modifyParentData(parentData: Any?): Any = this@PageData
+}
+
+private val Measurable.page: Int
+    get() = (parentData as? PageData)?.page ?: error("no PageData for measurable $this")
+
+class PagerScope(private val state: PagerState, val page: Int) {
+    val currentPage: Int get() = state.currentPage
+    val currentPageOffset: Float get() = state.currentPageOffset
+    val selectionState: PagerState.SelectionState get() = state.selectionState
 }

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -30,7 +30,7 @@ fun ErrorRow(title: String) {
             imageVector = Icons.Filled.Face,
             contentDescription = stringResource(id = R.string.error_icon_content_description),
             modifier = Modifier
-                .preferredSize(40.dp)
+                .size(40.dp)
                 .padding(end = 8.dp)
         )
         Text(title)
