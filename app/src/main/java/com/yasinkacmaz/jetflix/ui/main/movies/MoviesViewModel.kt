@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.main.movies
 
 import androidx.annotation.VisibleForTesting
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -13,14 +12,17 @@ import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.main.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.main.movie.Movie
 import com.yasinkacmaz.jetflix.ui.main.movie.MovieMapper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MoviesViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MoviesViewModel @Inject constructor(
     private val movieService: MovieService,
     private val movieMapper: MovieMapper,
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,

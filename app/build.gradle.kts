@@ -96,13 +96,12 @@ dependencies {
     implementation(Dependencies.Compose.constraintLayout)
     implementation(Dependencies.Compose.activity)
     implementation(Dependencies.Compose.viewModel)
+    implementation(Dependencies.Compose.hiltNavigation)
     debugImplementation(Dependencies.Compose.tooling)
 
     // Hilt
     implementation(Dependencies.Hilt.android)
     kapt(Dependencies.Hilt.androidCompiler)
-    implementation(Dependencies.Hilt.viewmodel)
-    kapt(Dependencies.Hilt.viewmodelCompiler)
 
     // Network
     implementation(Dependencies.Retrofit.retrofit)
