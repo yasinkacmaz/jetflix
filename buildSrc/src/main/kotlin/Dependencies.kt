@@ -43,9 +43,9 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha08"
-        const val activity = "androidx.activity:activity-compose:1.3.0-alpha02"
+        const val activity = "androidx.activity:activity-compose:1.3.0-alpha04"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha02"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha03"
     }
 
     object Hilt {

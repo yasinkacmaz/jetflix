@@ -23,6 +23,7 @@ val DarkThemeColors = darkColors(
     primary = Color(0xFFE50914),
     primaryVariant = Color(0xFF971C1C),
     secondary = Color(0xFFE50914),
+    secondaryVariant = Color(0xFF831010),
     background = Color(0xFF1C1C1C),
     surface = Color(0xFF1C1C1C),
     error = Color(0xFFCF6679),

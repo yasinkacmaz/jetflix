@@ -42,13 +42,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterContent
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterViewModel
-import com.yasinkacmaz.jetflix.util.toggle
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoviesScreen(
     isDarkTheme: MutableState<Boolean>,
@@ -158,7 +156,11 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
         )
 
         val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
-        IconButton(onClick = isDarkTheme::toggle) {
+        IconButton(
+            onClick = {
+                isDarkTheme.value = isDarkTheme.value.not()
+            }
+        ) {
             val contentDescriptionResId = if (isDarkTheme.value) {
                 R.string.light_theme_content_description
             } else {

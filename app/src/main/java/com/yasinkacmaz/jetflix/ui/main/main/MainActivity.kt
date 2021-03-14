@@ -34,15 +34,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun renderUi() {
-        this.setContent(null) {
+        setContent {
             val lifecycleOwner = LocalLifecycleOwner.current
             val navigator = remember { Navigator<Screen>(Screen.Movies, lifecycleOwner, onBackPressedDispatcher) }
+            val showSettingsDialog = remember { mutableStateOf(false) }
             val systemTheme = isSystemInDarkTheme()
             val isDarkTheme = remember { mutableStateOf(systemTheme) }
-            val showSettingsDialog = remember { mutableStateOf(false) }
-            CompositionLocalProvider(LocalNavigator provides navigator) {
+            JetflixTheme(isDarkTheme = isDarkTheme.value) {
                 ProvideWindowInsets {
-                    JetflixTheme(isDarkTheme = isDarkTheme.value) {
+                    CompositionLocalProvider(LocalNavigator provides navigator) {
                         MainContent(navigator, isDarkTheme, showSettingsDialog)
                     }
                 }
