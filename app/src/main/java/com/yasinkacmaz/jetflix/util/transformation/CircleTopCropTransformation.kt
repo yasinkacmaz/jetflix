@@ -30,12 +30,6 @@ class CircleTopCropTransformation : Transformation {
         return output
     }
 
-    override fun equals(other: Any?) = other is CircleTopCropTransformation
-
-    override fun hashCode() = javaClass.hashCode()
-
-    override fun toString() = "CircleTopCropTransformation()"
-
     private companion object {
         val XFERMODE = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     }

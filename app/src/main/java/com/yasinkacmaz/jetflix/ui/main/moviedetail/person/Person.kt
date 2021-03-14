@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,7 +30,8 @@ fun Person(profilePhotoUrl: String?, name: String, job: String, gender: Gender, 
                 data = profilePhotoUrl ?: gender.toPlaceholderImageRes(),
                 contentDescription = stringResource(id = R.string.person_photo_content_description, name, job),
                 fadeIn = true,
-                requestBuilder = { transformations(CircleTopCropTransformation()) }
+                requestBuilder = { transformations(CircleTopCropTransformation()) },
+                contentScale = ContentScale.FillHeight
             )
         }
         Text(
