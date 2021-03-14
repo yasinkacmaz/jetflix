@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -34,7 +36,7 @@ import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
-import androidx.compose.material.icons.rounded.Public
+import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -77,12 +79,11 @@ import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.FetchDominantColorFromPoster
+import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.randomColor
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 val LocalDominantColor = compositionLocalOf<MutableState<Color>> { error("No dominant color") }
 
@@ -108,7 +109,6 @@ fun MovieDetailScreen(movieId: Int) {
         movieDetailUiState.movieDetail != null -> {
             val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(Color.randomColor()) }
             CompositionLocalProvider(LocalDominantColor provides dominantColor) {
-                AppBar(movieDetailUiState.movieDetail.homepage)
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
             }
         }
@@ -116,32 +116,30 @@ fun MovieDetailScreen(movieId: Int) {
 }
 
 @Composable
-private fun AppBar(homepage: String?) {
+private fun AppBar(modifier: Modifier, homepage: String?) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .padding(horizontal = 4.dp, vertical = 2.dp)
-            .zIndex(8f)
+        modifier = modifier
     ) {
         val navigator = LocalNavigator.current
-        val tint = Color.White
+        val dominantColor = LocalDominantColor.current.value
+        val scaleModifier = Modifier.scale(1.1f)
         IconButton(onClick = { navigator.goBack() }) {
             Icon(
                 Icons.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.back_icon_content_description),
-                tint = tint
+                tint = dominantColor,
+                modifier = scaleModifier
             )
         }
         if (homepage != null) {
-            val dominantColor = LocalDominantColor.current.value
             val context = LocalContext.current
             IconButton(onClick = { openHomepage(context, homepage, dominantColor) }) {
                 Icon(
-                    Icons.Rounded.Public,
+                    Icons.Rounded.OpenInNew,
                     contentDescription = stringResource(id = R.string.open_website_content_description),
-                    tint = tint
+                    tint = dominantColor,
+                    modifier = scaleModifier
                 )
             }
         }
@@ -161,19 +159,27 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             .background(MaterialTheme.colors.surface)
             .verticalScroll(rememberScrollState())
     ) {
-        val (backdrop, poster, title, originalTitle, genres, specs, rateStars, tagline, overview) = createRefs()
+        val (appbar, backdrop, poster, title, originalTitle, genres, specs, rateStars, tagline, overview) = createRefs()
         val (cast, crew, imagesSection, productionCompanies, space) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
         FetchDominantColorFromPoster(movieDetail.posterUrl, LocalDominantColor.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, movieDetail.title, Modifier.constrainAs(backdrop) {})
+        val posterWidth = 160.dp
+        AppBar(
+            homepage = movieDetail.homepage,
+            modifier = Modifier
+                .requiredWidth(posterWidth * 2.2f)
+                .constrainAs(appbar) { centerTo(poster) }
+                .offset(y = 24.dp)
+        )
         Poster(
             movieDetail.posterUrl,
             movieDetail.title,
             Modifier
                 .zIndex(17f)
-                .width(160.dp)
+                .width(posterWidth)
                 .height(240.dp)
                 .constrainAs(poster) {
                     centerAround(backdrop.bottom)
