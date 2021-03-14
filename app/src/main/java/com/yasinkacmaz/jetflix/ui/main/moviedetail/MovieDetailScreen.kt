@@ -257,8 +257,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
                 letterSpacing = 2.sp,
                 lineHeight = 24.sp,
                 fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Justify
+                fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -272,8 +271,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             style = MaterialTheme.typography.body2.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 30.sp,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Justify
+                fontFamily = FontFamily.SansSerif
             ),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
