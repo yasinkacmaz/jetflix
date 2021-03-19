@@ -46,7 +46,7 @@
     <string name="backdrop_content_description">Backdrop Image of %1$s</string>
     <string name="movie_poster_content_description">Poster Image of %1$s</string>
     <string name="production_company_logo_content_description">Logo of %1$s</string>
-    <string name="person_photo_content_description">Photo of %1$s the %2$s</string>
+    <string name="person_content_description">Photo of %1$s the %2$s</string>
 
     <!--  images -->
     <string name="likes_content_description">Likes</string>

@@ -1,16 +1,13 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -21,8 +18,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaArgs
-import com.yasinkacmaz.jetflix.util.animation.scaleAndAlpha
+import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
+import com.yasinkacmaz.jetflix.util.animation.animateItem
 import com.yasinkacmaz.jetflix.util.randomColor
 import kotlin.math.ceil
 
@@ -40,10 +37,16 @@ fun VerticalStaggeredGrid(
     Layout(
         content = {
             for (index in 0..itemCount) {
-                val animation = tween<Float>(durationMillis = 500, delayMillis = 100 * index)
-                val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
-                val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
-                itemContent(index, Modifier.graphicsLayer(alpha = alpha, scaleX = scale, scaleY = scale))
+                val animation =
+                    animateItem(ItemAnimationArgs(scaleRange = 2f..1f, alphaRange = 0f..1f))
+                itemContent(
+                    index,
+                    Modifier.graphicsLayer(
+                        alpha = animation.alpha,
+                        scaleX = animation.scale,
+                        scaleY = animation.scale
+                    )
+                )
             }
         },
         modifier = modifier.verticalScroll(rememberScrollState())
@@ -111,7 +114,7 @@ private fun VerticalGridPreview() {
     ) { index, modifier ->
         val height = remember(index) { (40..200).random().dp }
         val color = remember(index) { Color.randomColor() }
-        Box(modifier = modifier.fillMaxSize().height(height).background(color)) {
+        Card(backgroundColor = color, modifier = modifier.height(height)) {
             Text(text = index.toString(), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
         }
     }

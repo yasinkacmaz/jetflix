@@ -39,7 +39,7 @@ class CreditsMapperTest {
         val castPerson = credits.cast.first()
         val castResponse = creditsResponse.cast.first()
         expectThat(castPerson.name).isEqualTo(castResponse.name)
-        expectThat(castPerson.character).isEqualTo(castResponse.character)
+        expectThat(castPerson.role).isEqualTo(castResponse.character)
         expectThat(castPerson.profilePhotoUrl).isEqualTo(castResponse.profilePath?.toProfilePhotoUrl())
     }
 
@@ -50,7 +50,7 @@ class CreditsMapperTest {
         val crewPerson = credits.crew.first()
         val crewResponse = creditsResponse.crew.first()
         expectThat(crewPerson.name).isEqualTo(crewResponse.name)
-        expectThat(crewPerson.character).isEqualTo(crewResponse.job)
+        expectThat(crewPerson.role).isEqualTo(crewResponse.job)
         expectThat(crewPerson.profilePhotoUrl).isEqualTo(crewResponse.profilePath?.toProfilePhotoUrl())
     }
 }
