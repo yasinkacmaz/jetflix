@@ -1,17 +1,11 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.yasinkacmaz.jetflix.ui.main.moviedetail.person
 
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyGridScope
@@ -25,11 +19,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
-import com.yasinkacmaz.jetflix.util.animation.ScaleAndAlphaArgs
-import com.yasinkacmaz.jetflix.util.animation.scaleAndAlpha
+import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
+import com.yasinkacmaz.jetflix.util.animation.animateItem
 import com.yasinkacmaz.jetflix.util.toDp
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PeopleGridScreen(people: List<Person>) {
     val insets = LocalWindowInsets.current
@@ -37,26 +32,22 @@ fun PeopleGridScreen(people: List<Person>) {
     val navigationBarPadding = insets.navigationBars.bottom.toDp().dp
     val horizontalPadding = 4.dp
     val columnCount = 3
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(MaterialTheme.colors.surface)
-    ) {
-        val state = rememberLazyListState()
-        LazyVerticalGrid(
-            cells = GridCells.Fixed(columnCount),
-            contentPadding = PaddingValues(
-                start = horizontalPadding,
-                end = horizontalPadding,
-                top = statusBarPadding,
-                bottom = navigationBarPadding
-            ),
-            state = state,
-            content = { peopleGridContent(people, columnCount, state, horizontalPadding) }
-        )
-    }
+    val state = rememberLazyListState()
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(columnCount),
+        modifier = Modifier.background(MaterialTheme.colors.surface),
+        contentPadding = PaddingValues(
+            start = horizontalPadding,
+            end = horizontalPadding,
+            top = statusBarPadding,
+            bottom = navigationBarPadding
+        ),
+        state = state,
+        content = { peopleGridContent(people, columnCount, state, horizontalPadding) }
+    )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.peopleGridContent(
     people: List<Person>,
     columnCount: Int,
@@ -65,36 +56,43 @@ private fun LazyGridScope.peopleGridContent(
 ) {
     items(people.count()) { index ->
         val (delay, easing) = state.calculateDelayAndEasing(index, columnCount)
-        BoxWithConstraints(Modifier.padding(horizontal = horizontalPadding, vertical = 8.dp)) {
-            val animation = tween<Float>(durationMillis = 500, delayMillis = delay, easing = easing)
-            val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
-            val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
-            val person = people[index]
-            Person(
-                profilePhotoUrl = person.profilePhotoUrl,
-                name = person.name,
-                job = person.character,
-                gender = person.gender,
-                modifier = Modifier.graphicsLayer(alpha = alpha, scaleX = scale, scaleY = scale)
-            )
-        }
+        val args = ItemAnimationArgs(
+            scaleRange = 0f..1f,
+            alphaRange = 0f..1f,
+            delay = delay,
+            easing = easing
+        )
+        val animationData = animateItem(args)
+        Person(
+            person = people[index],
+            modifier = Modifier
+                .padding(horizontal = horizontalPadding, vertical = 8.dp)
+                .graphicsLayer(
+                    alpha = animationData.alpha,
+                    scaleX = animationData.scale,
+                    scaleY = animationData.scale
+                )
+        )
     }
 }
 
 @Composable
 private fun LazyListState.calculateDelayAndEasing(index: Int, columnCount: Int): Pair<Int, Easing> {
-    val row = index / columnCount
-    val column = index % columnCount
-    val firstVisibleRow = firstVisibleItemIndex + 1
+    val rowIndex = index / columnCount
     val visibleRows = layoutInfo.visibleItemsInfo.count()
-    val scrollingToBottom = firstVisibleRow < row
-    val rowDelay = 200 * when {
-        scrollingToBottom && visibleRows != 0 -> visibleRows + firstVisibleRow - row // scrolling to bottom
-        visibleRows == 0 -> row // initial load
-        else -> 1 // scrolling to top
+    val firstVisibleRowIndex = firstVisibleItemIndex
+    val firstVisibleRow = firstVisibleRowIndex + 1
+    val scrollingToBottom = firstVisibleRowIndex <= rowIndex
+    val isFirstLoad = visibleRows == 0
+    val rowMultiplier = when {
+        isFirstLoad -> rowIndex
+        scrollingToBottom -> firstVisibleRowIndex + visibleRows - rowIndex
+        else -> firstVisibleRow - rowIndex // scrolling to top
     }
-    val scrollDirectionMultiplier = if (scrollingToBottom || visibleRows == 0) 1 else -1
+    val rowDelay = 200 * rowMultiplier
+    val scrollDirectionMultiplier = if (isFirstLoad || scrollingToBottom) 1 else -1
+    val column = (index % columnCount) + 1
     val columnDelay = column * 150 * scrollDirectionMultiplier
-    val easing = if (scrollingToBottom || visibleRows == 0) LinearOutSlowInEasing else FastOutSlowInEasing
+    val easing = if (isFirstLoad || scrollingToBottom) LinearOutSlowInEasing else FastOutSlowInEasing
     return rowDelay + columnDelay to easing
 }

@@ -148,7 +148,7 @@ class MovieDetailScreenTest {
                 swipe(start, end, durationMillis = 1000)
             }
             onNodeWithText(person.name, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
-            onNodeWithText(person.character, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
+            onNodeWithText(person.role, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
         }
     }
 

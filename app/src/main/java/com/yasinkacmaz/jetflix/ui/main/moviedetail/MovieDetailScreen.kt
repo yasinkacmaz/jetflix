@@ -285,7 +285,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         MovieSection(
             credits.cast,
             { SectionHeaderWithDetail(R.string.cast) { navigator.navigateTo(Screen.PeopleGrid(credits.cast)) } },
-            { Person(it.profilePhotoUrl, it.name, it.character, it.gender, Modifier.width(140.dp)) },
+            { Person(it, Modifier.width(140.dp)) },
             Modifier.constrainAs(cast) {
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -296,7 +296,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         MovieSection(
             credits.crew,
             { SectionHeaderWithDetail(R.string.crew) { navigator.navigateTo(Screen.PeopleGrid(credits.crew)) } },
-            { Person(it.profilePhotoUrl, it.name, it.character, it.gender, Modifier.width(140.dp)) },
+            { Person(it, Modifier.width(140.dp)) },
             Modifier.constrainAs(crew) {
                 top.linkTo(cast.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -307,7 +307,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         MovieSection(
             images,
             { SectionHeaderWithDetail(R.string.images) { navigator.navigateTo(Screen.Images(images = images)) } },
-            { Image(it) },
+            { MovieImage(it) },
             Modifier.constrainAs(imagesSection) {
                 top.linkTo(crew.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -517,7 +517,7 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
 }
 
 @Composable
-private fun Image(image: Image) {
+private fun MovieImage(image: Image) {
     Card(
         Modifier
             .width(240.dp)

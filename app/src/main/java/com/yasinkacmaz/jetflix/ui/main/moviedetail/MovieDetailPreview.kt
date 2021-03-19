@@ -11,6 +11,7 @@ import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
@@ -40,18 +41,14 @@ private fun MovieDetailPreview() {
         productionCompanies = listOf(ProductionCompany("Marvel", ""), ProductionCompany("Pixar", "")),
         homepage = ""
     )
-    val person = Person(profilePhotoUrl = "", name = "Yasin", character = "Android", gender = Gender.MALE)
+    val person = Person(profilePhotoUrl = "", name = "Yasin", role = "Android Developer", gender = Gender.MALE)
     val credits = Credits(cast = listOf(person, person, person), crew = listOf(person, person, person))
     val navigator = Navigator<Screen>(Screen.Movies, LocalLifecycleOwner.current, OnBackPressedDispatcher {})
     CompositionLocalProvider(
         LocalDominantColor provides mutableStateOf(Color.randomColor()),
         LocalNavigator provides navigator
     ) {
-        val images = listOf(
-            com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image("", 1),
-            com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image("", 1),
-            com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image("", 1)
-        )
+        val images = listOf(Image("", 1), Image("", 1), Image("", 1))
         MovieDetail(movieDetail = movieDetail, credits = credits, images = images)
     }
 }
