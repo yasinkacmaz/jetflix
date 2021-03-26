@@ -22,6 +22,7 @@ jobs:
           gradle-dependencies-cache-key: buildSrc/**/Dependencies.kt
           save-local-build-cache: false # Disable caching of ~/.gradle/caches/build-cache-*
           gradle-distribution-sha-256-sum-warning: false
+          execution-only-caches: true
           arguments: dependencyUpdates
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt

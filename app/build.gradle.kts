@@ -116,8 +116,8 @@ dependencies {
     // Test
     testImplementation(Dependencies.Test.junit)
     testImplementation(Dependencies.Test.mockk)
+    testImplementation(Dependencies.Test.striktAssertion)
     testImplementation(Dependencies.Test.coroutines)
-    testImplementation(Dependencies.Test.strikt)
     androidTestImplementation(Dependencies.Compose.uiTest)
     androidTestImplementation(Dependencies.Compose.uiTestJunit)
 }
