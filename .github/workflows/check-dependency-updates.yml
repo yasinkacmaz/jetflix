@@ -1,8 +1,7 @@
 name: Check Dependency Updates
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: "3 23 * * SAT"
   workflow_dispatch:
 jobs:
   dependency-updates:
@@ -22,10 +21,22 @@ jobs:
           gradle-dependencies-cache-key: buildSrc/**/Dependencies.kt
           save-local-build-cache: false # Disable caching of ~/.gradle/caches/build-cache-*
           gradle-distribution-sha-256-sum-warning: false
-          execution-only-caches: true
+          read-only: true
           arguments: dependencyUpdates
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
+      - name: 💌 Send report mail
+        if: github.event_name == 'schedule'
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GMAIL_USERNAME}}
+          password: ${{secrets.GMAIL_PASSWORD}}
+          subject: Dependency update report of Jetflix ¯\_(ツ)_/¯
+          body: file://build/dependencyUpdates/dependency_update_report.txt
+          to: ${{secrets.GMAIL_USERNAME}}
+          from: Jetflix
       - name: Share dependency update reports
         uses: actions/upload-artifact@v2
         with:
