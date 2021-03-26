@@ -15,7 +15,12 @@ object Dependencies {
         const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha12"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:$daggerHiltVersion"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
-        const val kotlinSerializationPlugin= "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
+        const val kotlinSerializationPlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
+
+        object VersionsPlugin {
+            const val id = "com.github.ben-manes.versions"
+            const val version = "0.38.0"
+        }
     }
 
     object AndroidX {

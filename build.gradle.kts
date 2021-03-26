@@ -1,3 +1,6 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
+
 buildscript {
     repositories {
         google()
@@ -13,6 +16,10 @@ buildscript {
     }
 }
 
+plugins {
+    id(Dependencies.Gradle.VersionsPlugin.id) version Dependencies.Gradle.VersionsPlugin.version
+}
+
 allprojects {
     repositories {
         google()
@@ -22,6 +29,15 @@ allprojects {
 
 subprojects {
     apply(from = rootProject.file("ktlint.gradle.kts"))
+}
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+    checkForGradleUpdate = true
+    gradleReleaseChannel = GradleReleaseChannel.RELEASE_CANDIDATE.id
+    revision = "integration"
+    outputFormatter = "plain,json"
+    outputDir = "build/dependencyUpdates"
+    reportfileName = "dependency_update_report"
 }
 
 task("clean", Delete::class) {
