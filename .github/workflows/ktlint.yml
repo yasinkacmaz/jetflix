@@ -13,5 +13,5 @@ jobs:
           java-version: '11'
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
-      - name: Build with Gradle
+      - name: Run ktlintCheck
         run: ./gradlew ktlintCheck
