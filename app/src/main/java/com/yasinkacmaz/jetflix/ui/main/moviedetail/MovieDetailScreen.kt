@@ -3,6 +3,7 @@ package com.yasinkacmaz.jetflix.ui.main.moviedetail
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -147,8 +148,8 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
 }
 
 private fun openHomepage(context: Context, homepage: String, dominantColor: Color) {
-    val builder = CustomTabsIntent.Builder()
-    val customTabsIntent = builder.setToolbarColor(dominantColor.toArgb()).build()
+    val schemeParams = CustomTabColorSchemeParams.Builder().setToolbarColor(dominantColor.toArgb()).build()
+    val customTabsIntent = CustomTabsIntent.Builder().setDefaultColorSchemeParams(schemeParams).build()
     customTabsIntent.launchUrl(context, Uri.parse(homepage))
 }
 
