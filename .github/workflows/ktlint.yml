@@ -2,7 +2,6 @@ name: Ktlint
 on: pull_request
 jobs:
   ktlint:
-    name: Ktlint Checker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -13,7 +12,10 @@ jobs:
           java-version: '11'
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
-      - name: Run ktlintCheck
-        run: ./gradlew ktlintCheck
+      - name: Run ktlint
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          gradle-dependencies-cache-key: buildSrc/**/Dependencies.kt
+          save-local-build-cache: false # Disable caching of ~/.gradle/caches/build-cache-*
+          gradle-distribution-sha-256-sum-warning: false
+          arguments: ktlintCheck
