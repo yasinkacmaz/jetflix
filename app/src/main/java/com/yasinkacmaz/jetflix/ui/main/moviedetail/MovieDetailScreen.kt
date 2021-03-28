@@ -69,6 +69,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.insets.navigationBarsHeight
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
@@ -83,8 +85,6 @@ import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.FetchDominantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.randomColor
-import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 
 val LocalDominantColor = compositionLocalOf<MutableState<Color>> { error("No dominant color") }
 

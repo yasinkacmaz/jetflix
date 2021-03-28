@@ -18,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
 import com.yasinkacmaz.jetflix.util.animation.animateItem
 import com.yasinkacmaz.jetflix.util.toDp
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

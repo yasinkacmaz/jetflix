@@ -43,10 +43,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.coil.CoilImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
-import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 const val SETTINGS_DIALOG_TAG = "SettingsDialog"

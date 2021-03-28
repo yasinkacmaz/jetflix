@@ -20,6 +20,7 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.google.accompanist.insets.LocalWindowInsets
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
@@ -29,7 +30,6 @@ import com.yasinkacmaz.jetflix.ui.main.movie.Movie
 import com.yasinkacmaz.jetflix.ui.main.movie.MovieContent
 import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
