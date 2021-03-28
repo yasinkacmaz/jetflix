@@ -16,6 +16,7 @@ import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterContent
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
@@ -25,7 +26,6 @@ import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
 import com.yasinkacmaz.jetflix.util.withRole
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import org.junit.Rule
 import org.junit.Test
 

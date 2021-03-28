@@ -49,6 +49,6 @@ private fun MovieDetailPreview() {
         LocalNavigator provides navigator
     ) {
         val images = listOf(Image("", 1), Image("", 1), Image("", 1))
-        MovieDetail(movieDetail = movieDetail, credits = credits, images = images)
+        MovieDetail(movieDetail = movieDetail, cast = credits.cast, crew = credits.crew, images = images)
     }
 }
