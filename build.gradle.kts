@@ -40,6 +40,16 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     reportfileName = "dependency_update_report"
 }
 
+tasks.withType<Test>().configureEach {
+    reports.html.isEnabled = false
+    reports.junitXml.isEnabled = true
+    maxParallelForks = Runtime.getRuntime().availableProcessors()
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.isFork = true
+}
+
 task("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
