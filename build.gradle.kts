@@ -4,7 +4,6 @@ import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 buildscript {
     repositories {
         google()
-        jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap/")
         maven("https://plugins.gradle.org/m2/")
     }
@@ -23,7 +22,6 @@ plugins {
 allprojects {
     repositories {
         google()
-        jcenter()
     }
 }
 
