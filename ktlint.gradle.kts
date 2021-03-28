@@ -15,7 +15,7 @@ val ktlintCheck by tasks.creating(JavaExec::class) {
     description = "Check Kotlin code style."
     classpath = ktlint
     main = "com.pinterest.ktlint.Main"
-    args = listOf("src/**/*.kt", "--reporter=checkstyle,output=${buildDir}/ktlint.xml")
+    args = listOf("src/**/*.kt", "--reporter=checkstyle,output=${buildDir}/ktlint-report.xml")
 }
 
 val ktlintFormat by tasks.creating(JavaExec::class) {

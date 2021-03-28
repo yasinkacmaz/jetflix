@@ -79,7 +79,7 @@ private fun Image(image: Image) {
             }
         }
         Card(
-            modifier = Modifier
+            modifier =Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(horizontal = 12.dp)
