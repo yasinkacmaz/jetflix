@@ -29,13 +29,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.transform.BlurTransformation
+import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.insets.navigationBarsPadding
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.widget.Pager
 import com.yasinkacmaz.jetflix.ui.widget.PagerState
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
-import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun ImagesScreen(images: List<Image>) {

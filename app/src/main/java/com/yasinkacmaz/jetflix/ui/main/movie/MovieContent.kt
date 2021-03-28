@@ -36,10 +36,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.google.accompanist.coil.CoilImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.randomColor
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {

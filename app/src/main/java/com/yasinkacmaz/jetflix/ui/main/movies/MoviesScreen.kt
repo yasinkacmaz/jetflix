@@ -39,11 +39,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterContent
 import com.yasinkacmaz.jetflix.ui.main.filter.FilterViewModel
-import dev.chrisbanes.accompanist.insets.navigationBarsPadding
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)

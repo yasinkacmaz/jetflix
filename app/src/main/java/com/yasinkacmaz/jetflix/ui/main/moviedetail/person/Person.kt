@@ -16,11 +16,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.CoilImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.toPlaceholderImageRes
 import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun Person(person: Person, modifier: Modifier = Modifier) {

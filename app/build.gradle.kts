@@ -97,6 +97,10 @@ dependencies {
     implementation(Dependencies.Compose.viewModel)
     debugImplementation(Dependencies.Compose.tooling)
 
+    // Accompanist
+    implementation(Dependencies.Compose.Accompanist.coil)
+    implementation(Dependencies.Compose.Accompanist.insets)
+
     // Hilt
     implementation(Dependencies.Hilt.android)
     kapt(Dependencies.Hilt.androidCompiler)
@@ -107,12 +111,6 @@ dependencies {
     implementation(Dependencies.Retrofit.retrofit)
     implementation(Dependencies.Retrofit.serializationConverter)
     implementation(Dependencies.okHttp)
-
-    // Image
-    implementation(Dependencies.coil)
-
-    // Ui
-    implementation(Dependencies.insets)
 
     // Test
     testImplementation(Dependencies.Test.junit)
