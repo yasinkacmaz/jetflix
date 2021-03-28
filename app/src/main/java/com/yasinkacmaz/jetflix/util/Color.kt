@@ -21,8 +21,7 @@ fun Color.Companion.randomColor() = Color(colorRange.random(), colorRange.random
 @Composable
 fun GetVibrantColorFromPoster(
     posterUrl: String,
-    color: Animatable<Color, AnimationVector4D>,
-    defaultColor: Color = Color.randomColor()
+    color: Animatable<Color, AnimationVector4D>
 ) {
     val context = LocalContext.current
     LaunchedEffect(posterUrl) {
@@ -34,7 +33,7 @@ fun GetVibrantColorFromPoster(
             .build()
 
         val bitmap = (loader.execute(request) as? SuccessResult)?.drawable?.toBitmap() ?: return@LaunchedEffect
-        val vibrantColor = Palette.from(bitmap).generate().getVibrantColor(defaultColor.toArgb())
+        val vibrantColor = Palette.from(bitmap).generate().getVibrantColor(color.value.toArgb())
         color.animateTo(Color(vibrantColor), tween(800))
     }
 }
