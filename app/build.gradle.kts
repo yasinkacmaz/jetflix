@@ -100,6 +100,7 @@ dependencies {
     // Accompanist
     implementation(Dependencies.Compose.Accompanist.coil)
     implementation(Dependencies.Compose.Accompanist.insets)
+    implementation(Dependencies.Compose.Accompanist.pager)
 
     // Hilt
     implementation(Dependencies.Hilt.android)

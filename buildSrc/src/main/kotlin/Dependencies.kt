@@ -56,6 +56,7 @@ object Dependencies {
 
             const val coil = "$libraryName-coil:$version"
             const val insets = "$libraryName-insets:$version"
+            const val pager = "$libraryName-pager:$version"
         }
     }
 

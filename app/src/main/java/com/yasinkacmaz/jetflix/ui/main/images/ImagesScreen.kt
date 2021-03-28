@@ -31,17 +31,19 @@ import androidx.compose.ui.zIndex
 import coil.transform.BlurTransformation
 import com.google.accompanist.coil.CoilImage
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
-import com.yasinkacmaz.jetflix.ui.widget.Pager
-import com.yasinkacmaz.jetflix.ui.widget.PagerState
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ImagesScreen(images: List<Image>) {
     if (images.isNotEmpty()) {
-        val pagerState: PagerState = remember { PagerState(maxPage = (images.size - 1).coerceAtLeast(0)) }
-        Pager(state = pagerState) {
+        val pagerState = rememberPagerState(pageCount = (images.size - 1).coerceAtLeast(0))
+        HorizontalPager(state = pagerState) { page ->
             Image(images[page])
         }
     }
