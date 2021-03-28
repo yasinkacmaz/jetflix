@@ -3,7 +3,6 @@ object Dependencies {
     const val insets = "dev.chrisbanes.accompanist:accompanist-insets:0.6.2"
     const val okHttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
     const val ktlint = "com.pinterest:ktlint:0.41.0"
-    private const val daggerHiltVersion = "2.33-beta"
 
     object Kotlin {
         const val version = "1.4.31"
@@ -13,7 +12,7 @@ object Dependencies {
 
     object Gradle {
         const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha12"
-        const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:$daggerHiltVersion"
+        const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.28-alpha"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val kotlinSerializationPlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
 
@@ -51,13 +50,17 @@ object Dependencies {
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha08"
         const val activity = "androidx.activity:activity-compose:1.3.0-alpha05"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03"
-        const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha01"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha05"
     }
 
     object Hilt {
+        private const val daggerHiltVersion = "2.29.1-alpha"
+        private const val daggerHiltViewModelVersion = "1.0.0-alpha02"
+
         const val android = "com.google.dagger:hilt-android:$daggerHiltVersion"
         const val androidCompiler = "com.google.dagger:hilt-android-compiler:$daggerHiltVersion"
+        const val viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:$daggerHiltViewModelVersion"
+        const val viewmodelCompiler = "androidx.hilt:hilt-compiler:$daggerHiltViewModelVersion"
     }
 
     object Retrofit {
