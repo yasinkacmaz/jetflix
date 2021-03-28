@@ -9,15 +9,15 @@ import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
-private val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ApplicationComponent::class)
 object DataModule {
 
     @Provides

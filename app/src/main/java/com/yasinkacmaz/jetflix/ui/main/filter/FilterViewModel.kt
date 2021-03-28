@@ -1,10 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.main.filter
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.MovieService
 import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModelMapper
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.StateFlow
@@ -13,10 +13,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
-@HiltViewModel
-class FilterViewModel @Inject constructor(
+class FilterViewModel @ViewModelInject constructor(
     private val filterDataStore: FilterDataStore,
     private val movieService: MovieService,
     private val genreUiModelMapper: GenreUiModelMapper

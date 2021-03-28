@@ -11,8 +11,8 @@ import com.yasinkacmaz.jetflix.util.interceptor.LanguageInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -25,7 +25,7 @@ import javax.inject.Singleton
 private const val BASE_URL = "https://api.themoviedb.org/3/"
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ApplicationComponent::class)
 object NetworkModule {
     @Provides
     @Singleton
