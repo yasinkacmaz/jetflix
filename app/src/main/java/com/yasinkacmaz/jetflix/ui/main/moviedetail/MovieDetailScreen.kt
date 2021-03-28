@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -157,6 +158,7 @@ private fun openHomepage(context: Context, homepage: String, vibrantColor: Color
 fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>) {
     ConstraintLayout(
         Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colors.surface)
             .verticalScroll(rememberScrollState())
     ) {
@@ -229,7 +231,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         GenreChips(
             movieDetail.genres.take(4),
-            modifier = Modifier.Companion.constrainAs(genres) {
+            modifier = Modifier.constrainAs(genres) {
                 top.linkTo(originalTitle.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
