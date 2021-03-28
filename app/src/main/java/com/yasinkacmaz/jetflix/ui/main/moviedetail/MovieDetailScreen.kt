@@ -52,9 +52,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -73,6 +71,8 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.MaterialLoadingImage
 import com.google.accompanist.insets.navigationBarsHeight
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
@@ -341,17 +341,23 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
     Card(
         elevation = 16.dp,
         shape = BottomArcShape(arcHeight = arcHeight),
-        modifier = modifier
-            .fillMaxWidth()
-            .height(360.dp)
+        backgroundColor = LocalVibrantColor.current.value.copy(alpha = 0.1f),
+        modifier = modifier.height(360.dp)
     ) {
         CoilImage(
             data = backdropUrl,
-            contentDescription = stringResource(id = R.string.backdrop_content_description, movieName),
-            contentScale = ContentScale.FillHeight,
-            colorFilter = ColorFilter.tint(Color(0x23000000), BlendMode.SrcOver),
             modifier = modifier.fillMaxWidth()
-        )
+        ) { imageState ->
+            if (imageState is ImageLoadState.Success) {
+                MaterialLoadingImage(
+                    result = imageState,
+                    contentScale = ContentScale.FillHeight,
+                    contentDescription = stringResource(R.string.backdrop_content_description, movieName),
+                    fadeInEnabled = true,
+                    fadeInDurationMs = 2400,
+                )
+            }
+        }
     }
 }
 
