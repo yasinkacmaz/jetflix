@@ -78,7 +78,7 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
+import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.person.Person
 import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
@@ -94,24 +94,24 @@ val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>>
 @Composable
 fun MovieDetailScreen(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
-    val movieDetailUiState = movieDetailViewModel.uiState.collectAsState().value
+    val uiState = movieDetailViewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
-        if (movieDetailUiState.movieDetail == null) {
+        if (uiState.movieDetail == null) {
             movieDetailViewModel.fetchMovieDetail(movieId)
         }
     }
     when {
-        movieDetailUiState.loading -> {
+        uiState.loading -> {
             val title = stringResource(id = R.string.fetching_movie_detail)
             LoadingColumn(title)
         }
-        movieDetailUiState.error != null -> {
-            ErrorColumn(movieDetailUiState.error.message.orEmpty())
+        uiState.error != null -> {
+            ErrorColumn(uiState.error.message.orEmpty())
         }
-        movieDetailUiState.movieDetail != null -> {
+        uiState.movieDetail != null -> {
             val animatableColor = remember(movieId) { Animatable(Color.randomColor()) }
             CompositionLocalProvider(LocalVibrantColor provides animatableColor) {
-                MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
+                MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
             }
         }
     }
@@ -155,7 +155,7 @@ private fun openHomepage(context: Context, homepage: String, vibrantColor: Color
 }
 
 @Composable
-fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>) {
+fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>, images: List<Image>) {
     ConstraintLayout(
         Modifier
             .fillMaxSize()
@@ -163,7 +163,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
             .verticalScroll(rememberScrollState())
     ) {
         val (appbar, backdrop, poster, title, originalTitle, genres, specs, rateStars, tagline, overview) = createRefs()
-        val (cast, crew, imagesSection, productionCompanies, space) = createRefs()
+        val (castSection, crewSection, imagesSection, productionCompanies, space) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
@@ -286,10 +286,10 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         val navigator = LocalNavigator.current
         MovieSection(
-            credits.cast,
-            { SectionHeaderWithDetail(R.string.cast) { navigator.navigateTo(Screen.PeopleGrid(credits.cast)) } },
+            cast,
+            { SectionHeaderWithDetail(R.string.cast, cast.size) { navigator.navigateTo(Screen.PeopleGrid(cast)) } },
             { Person(it, Modifier.width(140.dp)) },
-            Modifier.constrainAs(cast) {
+            Modifier.constrainAs(castSection) {
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             },
@@ -297,11 +297,11 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         )
 
         MovieSection(
-            credits.crew,
-            { SectionHeaderWithDetail(R.string.crew) { navigator.navigateTo(Screen.PeopleGrid(credits.crew)) } },
+            crew,
+            { SectionHeaderWithDetail(R.string.crew, crew.size) { navigator.navigateTo(Screen.PeopleGrid(crew)) } },
             { Person(it, Modifier.width(140.dp)) },
-            Modifier.constrainAs(crew) {
-                top.linkTo(cast.bottom, 16.dp)
+            Modifier.constrainAs(crewSection) {
+                top.linkTo(castSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             },
             tag = "crew"
@@ -309,10 +309,10 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         MovieSection(
             images,
-            { SectionHeaderWithDetail(R.string.images) { navigator.navigateTo(Screen.Images(images = images)) } },
+            { SectionHeaderWithDetail(R.string.images, images.size) { navigator.navigateTo(Screen.Images(images)) } },
             { MovieImage(it) },
             Modifier.constrainAs(imagesSection) {
-                top.linkTo(crew.bottom, 16.dp)
+                top.linkTo(crewSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
         )
@@ -485,7 +485,7 @@ private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
 )
 
 @Composable
-private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit) {
+private fun SectionHeaderWithDetail(@StringRes textRes: Int, count: Int, onClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -504,7 +504,7 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
                 .padding(4.dp)
         ) {
             Text(
-                text = stringResource(R.string.see_all),
+                text = stringResource(R.string.see_all, count),
                 color = LocalVibrantColor.current.value,
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(end = 4.dp)

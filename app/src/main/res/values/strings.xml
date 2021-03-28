@@ -40,7 +40,7 @@
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
     <string name="images">Images</string>
-    <string name="see_all">See All</string>
+    <string name="see_all">See All(%1$d)</string>
     <string name="production_companies">Production Companies</string>
     <string name="open_website_content_description">Open Movie Website</string>
     <string name="backdrop_content_description">Backdrop Image of %1$s</string>

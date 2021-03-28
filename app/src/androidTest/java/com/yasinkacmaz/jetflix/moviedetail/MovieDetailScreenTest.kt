@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.moviedetail
 
+import androidx.compose.animation.Animatable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -157,9 +157,9 @@ class MovieDetailScreenTest {
         credits: Credits = Credits(emptyList(), emptyList())
     ) = setTestContent {
         val navigator = remember { Navigator<Screen>(Screen.Movies) }
-        val dominantColor = remember(movieDetail.id) { mutableStateOf(Color.randomColor()) }
+        val dominantColor = remember(movieDetail.id) { Animatable(Color.randomColor()) }
         CompositionLocalProvider(LocalNavigator provides navigator, LocalVibrantColor provides dominantColor) {
-            MovieDetail(movieDetail, credits, listOf())
+            MovieDetail(movieDetail, credits.cast, credits.crew, listOf())
         }
     }
 }
