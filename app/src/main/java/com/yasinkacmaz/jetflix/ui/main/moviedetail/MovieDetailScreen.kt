@@ -5,6 +5,9 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,8 +43,7 @@ import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
@@ -82,21 +84,19 @@ import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
-import com.yasinkacmaz.jetflix.util.FetchDominantColorFromPoster
+import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.randomColor
 
-val LocalDominantColor = compositionLocalOf<MutableState<Color>> { error("No dominant color") }
+val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color") }
 
 @Composable
 fun MovieDetailScreen(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel(key = movieId.toString())
     val movieDetailUiState = movieDetailViewModel.uiState.collectAsState().value
-    DisposableEffect(Unit) {
+    LaunchedEffect(Unit) {
         if (movieDetailUiState.movieDetail == null) {
             movieDetailViewModel.fetchMovieDetail(movieId)
-        }
-        onDispose {
         }
     }
     when {
@@ -108,8 +108,8 @@ fun MovieDetailScreen(movieId: Int) {
             ErrorColumn(movieDetailUiState.error.message.orEmpty())
         }
         movieDetailUiState.movieDetail != null -> {
-            val dominantColor = remember(movieDetailUiState.movieDetail.id) { mutableStateOf(Color.randomColor()) }
-            CompositionLocalProvider(LocalDominantColor provides dominantColor) {
+            val animatableColor = remember(movieId) { Animatable(Color.randomColor()) }
+            CompositionLocalProvider(LocalVibrantColor provides animatableColor) {
                 MovieDetail(movieDetailUiState.movieDetail, movieDetailUiState.credits, movieDetailUiState.images)
             }
         }
@@ -123,23 +123,23 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
         modifier = modifier
     ) {
         val navigator = LocalNavigator.current
-        val dominantColor = LocalDominantColor.current.value
+        val vibrantColor = LocalVibrantColor.current.value
         val scaleModifier = Modifier.scale(1.1f)
         IconButton(onClick = { navigator.goBack() }) {
             Icon(
                 Icons.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.back_icon_content_description),
-                tint = dominantColor,
+                tint = vibrantColor,
                 modifier = scaleModifier
             )
         }
         if (homepage != null) {
             val context = LocalContext.current
-            IconButton(onClick = { openHomepage(context, homepage, dominantColor) }) {
+            IconButton(onClick = { openHomepage(context, homepage, vibrantColor) }) {
                 Icon(
                     Icons.Rounded.OpenInNew,
                     contentDescription = stringResource(id = R.string.open_website_content_description),
-                    tint = dominantColor,
+                    tint = vibrantColor,
                     modifier = scaleModifier
                 )
             }
@@ -147,8 +147,8 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
     }
 }
 
-private fun openHomepage(context: Context, homepage: String, dominantColor: Color) {
-    val schemeParams = CustomTabColorSchemeParams.Builder().setToolbarColor(dominantColor.toArgb()).build()
+private fun openHomepage(context: Context, homepage: String, vibrantColor: Color) {
+    val schemeParams = CustomTabColorSchemeParams.Builder().setToolbarColor(vibrantColor.toArgb()).build()
     val customTabsIntent = CustomTabsIntent.Builder().setDefaultColorSchemeParams(schemeParams).build()
     customTabsIntent.launchUrl(context, Uri.parse(homepage))
 }
@@ -165,7 +165,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
 
-        FetchDominantColorFromPoster(movieDetail.posterUrl, LocalDominantColor.current)
+        GetVibrantColorFromPoster(movieDetail.posterUrl, LocalVibrantColor.current)
         Backdrop(backdropUrl = movieDetail.backdropUrl, movieDetail.title, Modifier.constrainAs(backdrop) {})
         val posterWidth = 160.dp
         AppBar(
@@ -253,7 +253,7 @@ fun MovieDetail(movieDetail: MovieDetail, credits: Credits, images: List<Image>)
 
         Text(
             text = movieDetail.tagline,
-            color = LocalDominantColor.current.value,
+            color = LocalVibrantColor.current.value,
             style = MaterialTheme.typography.body1.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 24.sp,
@@ -384,7 +384,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
                 modifier = Modifier
                     .border(
                         1.25.dp,
-                        LocalDominantColor.current.value,
+                        LocalVibrantColor.current.value,
                         RoundedCornerShape(50)
                     )
                     .padding(horizontal = 6.dp, vertical = 3.dp)
@@ -395,24 +395,17 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
 
 @Composable
 private fun RateStars(voteAverage: Double, modifier: Modifier) {
-    val dominantColor = LocalDominantColor.current.value
     Row(modifier.padding(start = 4.dp)) {
         val maxVote = 10
         val starCount = 5
         repeat(starCount) { starIndex ->
             val voteStarCount = voteAverage / (maxVote / starCount)
-            val (tint, asset) = when {
-                voteStarCount >= starIndex + 1 -> {
-                    dominantColor to Icons.Filled.Star
-                }
-                voteStarCount in starIndex.toDouble()..(starIndex + 1).toDouble() -> {
-                    dominantColor to Icons.Filled.StarHalf
-                }
-                else -> {
-                    dominantColor to Icons.Filled.StarOutline
-                }
+            val asset = when {
+                voteStarCount >= starIndex + 1 -> Icons.Filled.Star
+                voteStarCount in starIndex.toDouble()..(starIndex + 1).toDouble() -> Icons.Filled.StarHalf
+                else -> Icons.Filled.StarOutline
             }
-            Icon(imageVector = asset, contentDescription = null, tint = tint)
+            Icon(imageVector = asset, contentDescription = null, tint = LocalVibrantColor.current.value)
             Spacer(modifier = Modifier.width(4.dp))
         }
     }
@@ -478,7 +471,7 @@ private fun <T : Any> MovieSection(
 @Composable
 private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
     text = stringResource(titleResId),
-    color = LocalDominantColor.current.value,
+    color = LocalVibrantColor.current.value,
     style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     modifier = Modifier.padding(start = 16.dp)
 )
@@ -493,7 +486,7 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
     ) {
         Text(
             text = stringResource(textRes),
-            color = LocalDominantColor.current.value,
+            color = LocalVibrantColor.current.value,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
         )
         Row(
@@ -504,14 +497,14 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, onClick: () -> Unit
         ) {
             Text(
                 text = stringResource(R.string.see_all),
-                color = LocalDominantColor.current.value,
+                color = LocalVibrantColor.current.value,
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(end = 4.dp)
             )
             Icon(
                 Icons.Filled.ArrowForward,
                 contentDescription = stringResource(R.string.see_all),
-                tint = LocalDominantColor.current.value
+                tint = LocalVibrantColor.current.value
             )
         }
     }
@@ -546,7 +539,7 @@ private fun ProductionCompany(company: ProductionCompany) {
     ) {
         Column(
             Modifier
-                .background(LocalDominantColor.current.value.copy(alpha = 0.7f))
+                .background(LocalVibrantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
             CoilImage(
