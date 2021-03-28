@@ -2,11 +2,12 @@ name: Ktlint
 on: pull_request
 jobs:
   ktlint:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Use Java 11
+      - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: '11'

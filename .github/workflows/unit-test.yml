@@ -1,0 +1,30 @@
+name: Unit Test
+on: pull_request
+jobs:
+  unit-tests:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Run unit tests
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          gradle-dependencies-cache-key: buildSrc/**/Dependencies.kt
+          save-local-build-cache: false # Disable caching of ~/.gradle/caches/build-cache-*
+          gradle-distribution-sha-256-sum-warning: false
+          arguments: testDebugUnitTest --continue --quiet
+      - name: Publish Unit Test Results
+        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Unit Test Results
+          comment_title: "Unit Test Results"
+          files: '**/test-results/**/*.xml'

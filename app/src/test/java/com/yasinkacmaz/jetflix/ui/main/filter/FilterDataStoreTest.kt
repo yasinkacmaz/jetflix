@@ -42,7 +42,7 @@ class FilterDataStoreTest {
     fun `Should set filterState as default when preference is not exists`() = coroutineTestRule.runBlockingTest {
         every { preferences[KEY_FILTER_STATE] } returns null
 
-        expectThat(filterDataStore.filterState.first()).isEqualTo(FilterState())
+        expectThat(filterDataStore.filterState.first()).isEqualTo(FilterState(includeAdult = true))
     }
 
     @Test
