@@ -15,14 +15,15 @@ jobs:
           java-version: '11'
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-      - name: Check Dependency Updates
-        uses: burrunan/gradle-cache-action@v1
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Fetch Gradle Wrapper Cache
+        uses: actions/cache@v2
         with:
-          gradle-dependencies-cache-key: buildSrc/**/Dependencies.kt
-          save-local-build-cache: false # Disable caching of ~/.gradle/caches/build-cache-*
-          gradle-distribution-sha-256-sum-warning: false
-          read-only: true
-          arguments: dependencyUpdates
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - name: Check Dependency Updates
+        run: ./gradlew dependencyUpdates
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
       - name: 💌 Send email report

@@ -13,13 +13,24 @@ jobs:
           java-version: '11'
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-      - name: Run unit tests
-        uses: burrunan/gradle-cache-action@v1
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Fetch Gradle Wrapper Cache
+        uses: actions/cache@v2
         with:
-          gradle-dependencies-cache-key: buildSrc/**/Dependencies.kt
-          save-local-build-cache: false # Disable caching of ~/.gradle/caches/build-cache-*
-          gradle-distribution-sha-256-sum-warning: false
-          arguments: testDebugUnitTest --continue --quiet
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - name: Fetch Gradle Cache
+        uses: actions/cache@v2
+        continue-on-error: true
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/Dependencies.kt') }}
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --continue
       - name: Publish Unit Test Results
         uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
         if: always()
