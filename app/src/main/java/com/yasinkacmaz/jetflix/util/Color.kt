@@ -1,8 +1,10 @@
 package com.yasinkacmaz.jetflix.util
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector4D
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -17,9 +19,9 @@ private val colorRange = 0..256
 fun Color.Companion.randomColor() = Color(colorRange.random(), colorRange.random(), colorRange.random())
 
 @Composable
-fun FetchDominantColorFromPoster(
+fun GetVibrantColorFromPoster(
     posterUrl: String,
-    colorState: MutableState<Color>,
+    color: Animatable<Color, AnimationVector4D>,
     defaultColor: Color = Color.randomColor()
 ) {
     val context = LocalContext.current
@@ -32,7 +34,7 @@ fun FetchDominantColorFromPoster(
             .build()
 
         val bitmap = (loader.execute(request) as? SuccessResult)?.drawable?.toBitmap() ?: return@LaunchedEffect
-        val dominantColor = Palette.from(bitmap).generate().getVibrantColor(defaultColor.toArgb())
-        colorState.value = Color(dominantColor)
+        val vibrantColor = Palette.from(bitmap).generate().getVibrantColor(defaultColor.toArgb())
+        color.animateTo(Color(vibrantColor), tween(800))
     }
 }
