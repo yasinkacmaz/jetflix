@@ -11,7 +11,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -27,7 +26,7 @@ class FilterViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @MockK
+    @RelaxedMockK
     private lateinit var filterDataStore: FilterDataStore
 
     @RelaxedMockK
