@@ -134,7 +134,7 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
                 modifier = scaleModifier
             )
         }
-        if (homepage != null) {
+        if (!homepage.isNullOrBlank()) {
             val context = LocalContext.current
             IconButton(onClick = { openHomepage(context, homepage, vibrantColor) }) {
                 Icon(
