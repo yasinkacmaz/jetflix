@@ -81,6 +81,13 @@ class FilterViewModelTest {
     }
 
     @Test
+    fun `onResetClicked should call data store resetFilterState`() = coroutineTestRule.runBlockingTest {
+        filterViewModel.onResetClicked()
+
+        coVerify { filterDataStore.resetFilterState() }
+    }
+
+    @Test
     fun `onFilterStateChanged should call data store onFilterStateChanged`() = coroutineTestRule.runBlockingTest {
         val newFilterState = FilterState(sortBy = SortBy.REVENUE)
 
