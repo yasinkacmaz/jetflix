@@ -42,7 +42,7 @@ import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 @Composable
 fun ImagesScreen(images: List<Image>) {
     if (images.isNotEmpty()) {
-        val pagerState = rememberPagerState(pageCount = (images.size - 1).coerceAtLeast(0))
+        val pagerState = rememberPagerState(pageCount = images.size)
         HorizontalPager(state = pagerState) { page ->
             Image(images[page])
         }
