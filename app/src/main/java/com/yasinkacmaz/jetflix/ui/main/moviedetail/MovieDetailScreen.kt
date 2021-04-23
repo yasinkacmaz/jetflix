@@ -9,6 +9,7 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +38,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
@@ -70,9 +72,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
-import com.google.accompanist.imageloading.MaterialLoadingImage
 import com.google.accompanist.insets.navigationBarsHeight
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
@@ -344,20 +345,16 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
         backgroundColor = LocalVibrantColor.current.value.copy(alpha = 0.1f),
         modifier = modifier.height(360.dp)
     ) {
-        CoilImage(
-            data = backdropUrl,
+        Image(
+            painter = rememberCoilPainter(
+                request = backdropUrl,
+                fadeIn = true,
+                fadeInDurationMs = 2400
+            ),
+            contentScale = ContentScale.FillHeight,
+            contentDescription = stringResource(R.string.backdrop_content_description, movieName),
             modifier = modifier.fillMaxWidth()
-        ) { imageState ->
-            if (imageState is ImageLoadState.Success) {
-                MaterialLoadingImage(
-                    result = imageState,
-                    contentScale = ContentScale.FillHeight,
-                    contentDescription = stringResource(R.string.backdrop_content_description, movieName),
-                    fadeInEnabled = true,
-                    fadeInDurationMs = 2400,
-                )
-            }
-        }
+        )
     }
 }
 
@@ -374,8 +371,8 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
             .scale(scale)
             .clickable(onClick = { isScaled.value = !isScaled.value })
     ) {
-        CoilImage(
-            data = posterUrl,
+        Image(
+            painter = rememberCoilPainter(request = posterUrl),
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight
         )
@@ -527,12 +524,19 @@ private fun MovieImage(image: Image) {
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
-        CoilImage(
-            data = image.url,
+        val painter = rememberCoilPainter(request = image.url)
+        Image(
+            painter = painter,
             contentDescription = stringResource(id = R.string.poster_content_description),
-            contentScale = ContentScale.Crop,
-            error = { Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray) }
+            contentScale = ContentScale.Crop
         )
+        when (painter.loadState) {
+            is ImageLoadState.Error -> {
+                Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray)
+            }
+            else -> {
+            }
+        }
     }
 }
 
@@ -546,22 +550,31 @@ private fun ProductionCompany(company: ProductionCompany) {
         elevation = 8.dp
     ) {
         Column(
-            Modifier
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
                 .background(LocalVibrantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
-            CoilImage(
-                data = company.logoUrl,
-                contentDescription = stringResource(
-                    id = R.string.production_company_logo_content_description,
-                    company.name
-                ),
-                contentScale = ContentScale.Inside,
-                modifier = Modifier
-                    .size(150.dp, 85.dp)
-                    .align(Alignment.CenterHorizontally),
-                error = { Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray) }
-            )
+            val painter = rememberCoilPainter(request = company.logoUrl)
+            if (painter.loadState is ImageLoadState.Error) {
+                Icon(
+                    imageVector = Icons.Default.BrokenImage,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(150.dp, 85.dp)
+                )
+            } else {
+                Image(
+                    painter = painter,
+                    contentDescription = stringResource(
+                        id = R.string.production_company_logo_content_description,
+                        company.name
+                    ),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(150.dp, 85.dp)
+                )
+            }
             Text(
                 text = company.name,
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),

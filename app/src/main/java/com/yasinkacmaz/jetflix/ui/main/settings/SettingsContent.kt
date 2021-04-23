@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
@@ -203,12 +203,14 @@ private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to Inlin
          * Then we set contentScale as [FixedScale] with 100/[RESIZE_PERCENT] value to match the original size.
          * Why?: Dropdown menu does not use LazyColumn and we are rendering all of the country flags at once :(
          */
-        CoilImage(
-            modifier = Modifier.padding(end = 8.dp),
-            data = flagUrl,
-            contentScale = FixedScale(100f / RESIZE_PERCENT),
+        Image(
+            painter = rememberCoilPainter(
+                request = flagUrl,
+                requestBuilder = { transformations(sizeTransformation) },
+            ),
             contentDescription = stringResource(id = R.string.flag_content_description, countryName),
-            requestBuilder = { transformations(sizeTransformation) }
+            modifier = Modifier.padding(end = 8.dp),
+            contentScale = FixedScale(100f / RESIZE_PERCENT),
         )
     }
 )
