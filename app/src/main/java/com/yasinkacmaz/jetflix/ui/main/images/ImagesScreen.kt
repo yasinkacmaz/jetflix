@@ -1,12 +1,11 @@
 package com.yasinkacmaz.jetflix.ui.main.images
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.transform.BlurTransformation
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.imageloading.ImageLoadState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -51,35 +52,16 @@ fun ImagesScreen(images: List<Image>) {
 
 @Composable
 private fun Image(image: Image) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         BlurImage(image)
-
         Card(
-            shape = RoundedCornerShape(12.dp),
-            elevation = 24.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(horizontal = 12.dp)
-                .align(Alignment.Center)
+            Modifier
+                .padding(12.dp)
+                .shadow(16.dp, RoundedCornerShape(12.dp))
+                .animateContentSize()
         ) {
-            BoxWithConstraints {
-                CoilImage(
-                    data = image.url,
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .animateContentSize(),
-                    loading = {
-                        CircularProgressIndicator(
-                            Modifier
-                                .size(120.dp)
-                                .fillMaxHeight()
-                        )
-                    }
-                )
-
+            Box {
+                Poster(image)
                 VoteCount(image.voteCount)
             }
         }
@@ -90,15 +72,39 @@ private fun Image(image: Image) {
 private fun BlurImage(image: Image) {
     val context = LocalContext.current
     val blurTransformation = remember { BlurTransformation(context = context, radius = 12f, sampling = 4f) }
-    CoilImage(
-        data = image.url,
+    Image(
+        painter = rememberCoilPainter(
+            request = image.url,
+            requestBuilder = { transformations(blurTransformation) },
+        ),
         contentDescription = stringResource(id = R.string.poster_content_description),
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
             .fillMaxSize()
-            .alpha(alpha = 0.80f),
-        requestBuilder = { transformations(blurTransformation) }
+            .alpha(alpha = 0.80f)
     )
+}
+
+@Composable
+private fun BoxScope.Poster(image: Image) {
+    val painter = rememberCoilPainter(request = image.url)
+    if (painter.loadState == ImageLoadState.Loading) {
+        CircularProgressIndicator(
+            Modifier
+                .size(240.dp)
+                .padding(16.dp)
+        )
+    } else {
+        Image(
+            painter = painter,
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.Companion
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .wrapContentHeight()
+        )
+    }
 }
 
 @Composable

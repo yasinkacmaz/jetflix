@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.main.moviedetail.person
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,7 +17,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.toPlaceholderImageRes
@@ -26,11 +27,13 @@ import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 fun Person(person: Person, modifier: Modifier = Modifier) {
     Column(modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
-            CoilImage(
-                data = person.profilePhotoUrl ?: person.gender.toPlaceholderImageRes(),
+            Image(
+                painter = rememberCoilPainter(
+                    request = person.profilePhotoUrl ?: person.gender.toPlaceholderImageRes(),
+                    requestBuilder = { transformations(CircleTopCropTransformation()) },
+                    fadeIn = true
+                ),
                 contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
-                fadeIn = true,
-                requestBuilder = { transformations(CircleTopCropTransformation()) },
                 contentScale = ContentScale.FillHeight
             )
         }

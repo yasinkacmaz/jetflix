@@ -20,7 +20,7 @@ class CircleTopCropTransformation : Transformation {
         val minSize = min(input.width, input.height)
         val radius = minSize / 2f
         val output = pool.get(minSize, minSize, input.config)
-        val top = if (input.height == input.width) 0f else -30f
+        val top = if (input.height == input.width) 0f else -20f
         output.applyCanvas {
             drawCircle(radius, radius, radius, paint)
             paint.xfermode = XFERMODE

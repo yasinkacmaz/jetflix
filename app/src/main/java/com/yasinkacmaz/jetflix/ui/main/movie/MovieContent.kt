@@ -1,9 +1,11 @@
 package com.yasinkacmaz.jetflix.ui.main.movie
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +22,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.ThumbUp
@@ -27,7 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -36,7 +41,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.imageloading.ImageLoadState
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.randomColor
@@ -72,25 +78,39 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
 }
 
 @Composable
-private fun MoviePoster(posterPath: String, movieName: String) {
-    val backgroundColor = if (MaterialTheme.colors.isLight) Color.LightGray else MaterialTheme.colors.background
-    val tint = if (MaterialTheme.colors.isLight) Color.DarkGray else MaterialTheme.colors.onBackground
-    CoilImage(
-        data = posterPath,
+private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
+    val tint = if (MaterialTheme.colors.isLight) Color.DarkGray else Color.Gray
+    val painter = rememberCoilPainter(request = posterPath)
+    Image(
+        painter = painter,
         contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
-        contentScale = ContentScale.None,
-        modifier = Modifier.fillMaxSize(),
-        loading = {
-            Icon(
-                imageVector = Icons.Default.Movie,
+        contentScale = ContentScale.FillBounds,
+        modifier = Modifier.fillMaxSize()
+    )
+    val modifier = Modifier
+        .padding(8.dp)
+        .fillMaxSize()
+        .align(Alignment.Center)
+    when (painter.loadState) {
+        ImageLoadState.Loading -> {
+            Image(
+                painter = rememberVectorPainter(image = Icons.Default.Movie),
                 contentDescription = null,
-                tint = tint,
-                modifier = Modifier
-                    .background(color = backgroundColor)
-                    .fillMaxSize()
+                colorFilter = ColorFilter.tint(tint),
+                modifier = modifier
             )
         }
-    )
+        is ImageLoadState.Error -> {
+            Image(
+                imageVector = Icons.Filled.BrokenImage,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(tint),
+                modifier = modifier
+            )
+        }
+        else -> {
+        }
+    }
 }
 
 @Composable
