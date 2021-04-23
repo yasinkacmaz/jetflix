@@ -23,10 +23,10 @@ object Dependencies {
     object AndroidX {
         const val palette = "androidx.palette:palette:1.0.0"
         const val browser = "androidx.browser:browser:1.3.0"
-        const val dataStore = "androidx.datastore:datastore-preferences:1.0.0-alpha08"
+        const val dataStore = "androidx.datastore:datastore-preferences:1.0.0-beta01"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.6.0-alpha01"
+            const val core = "androidx.core:core-ktx:1.6.0-alpha02"
         }
     }
 
@@ -46,7 +46,7 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha08"
-        const val activity = "androidx.activity:activity-compose:1.3.0-alpha06"
+        const val activity = "androidx.activity:activity-compose:1.3.0-alpha07"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha05"
 
