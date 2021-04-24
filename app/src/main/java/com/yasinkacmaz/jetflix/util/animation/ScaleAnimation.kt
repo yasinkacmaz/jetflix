@@ -22,9 +22,10 @@ private enum class ScaleState { DEFAULT, SCALED }
 
 @Composable
 fun scale(toScale: Float, animation: FiniteAnimationSpec<Float>): Float {
-    val scaleTransition = updateTransition(targetState = ScaleState.SCALED)
+    val label = "scale"
+    val scaleTransition = updateTransition(targetState = ScaleState.SCALED, label = label)
 
-    val scale by scaleTransition.animateFloat(transitionSpec = { animation }) { state ->
+    val scale by scaleTransition.animateFloat(transitionSpec = { animation }, label = label) { state ->
         when (state) {
             ScaleState.DEFAULT -> 1f
             ScaleState.SCALED -> toScale
@@ -41,7 +42,9 @@ private fun ScaleAnimationPreview() {
         Surface(
             color = Color.Red,
             shape = CircleShape,
-            modifier = Modifier.size(60.dp).scale(scale)
+            modifier = Modifier
+                .size(60.dp)
+                .scale(scale)
         ) {
         }
     }
@@ -58,7 +61,9 @@ private fun ScalePulseAnimationPreview() {
         Surface(
             color = Color.Red,
             shape = CircleShape,
-            modifier = Modifier.size(60.dp).scale(animatedScale.value)
+            modifier = Modifier
+                .size(60.dp)
+                .scale(animatedScale.value)
         ) {
         }
     }

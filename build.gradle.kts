@@ -1,5 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
@@ -29,6 +30,15 @@ allprojects {
 
 subprojects {
     apply(from = rootProject.file("ktlint.gradle.kts"))
+    afterEvaluate {
+        tasks.withType(KotlinCompile::class).all {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
+                allWarningsAsErrors = true
+                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+            }
+        }
+    }
 }
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {

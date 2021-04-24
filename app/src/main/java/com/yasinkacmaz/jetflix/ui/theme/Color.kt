@@ -31,5 +31,5 @@ val DarkThemeColors = darkColors(
     onSecondary = Color.White,
     onBackground = Color.White,
     onSurface = Color.White,
-    onError = Color(0x1C1C1C)
+    onError = Color(0xFF1C1C1C)
 )

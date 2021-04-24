@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -58,9 +59,11 @@ class TopNotchShape(private val notchSize: Size, private val cornerRadius: Float
 @Preview
 fun TopNotchShapePreview() {
     Surface(
-        shape = TopNotchShape(Size(160.dpToPx(), 80.dpToPx()), 16.dpToPx()),
+        shape = TopNotchShape(notchSize = Size(120.dpToPx(), 80.dpToPx()), cornerRadius = 16.dpToPx()),
         color = Color.Magenta,
-        modifier = Modifier.size(300.dp, 400.dp)
+        modifier = Modifier
+            .size(300.dp, 400.dp)
+            .padding(16.dp)
     ) {
     }
 }

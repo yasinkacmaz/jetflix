@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -49,7 +50,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
         ) { index, _ ->
             val genreUiModel = genreUiModels[index]
             val genreId = genreUiModel.genre.id
-            GenreChip(genreUiModel = genreUiModel) { selected ->
+            GenreChip(uiModel = genreUiModel) { selected ->
                 selectedGenreIds.removeAll { it == genreId }
                 if (selected) {
                     selectedGenreIds.add(genreId)
@@ -62,10 +63,10 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
     }
 
     @Composable
-    private fun GenreChip(genreUiModel: GenreUiModel, onClicked: (Boolean) -> Unit) {
-        val colors = listOf(genreUiModel.primaryColor, genreUiModel.secondaryColor)
+    private fun GenreChip(uiModel: GenreUiModel, onClicked: (Boolean) -> Unit) {
+        val colors = listOf(uiModel.primaryColor, uiModel.secondaryColor)
         val shape = RoundedCornerShape(percent = 50)
-        var selected by mutableStateOf(genreUiModel.genre.id in currentValue.second)
+        var selected by remember(uiModel.genre.id) { mutableStateOf(uiModel.genre.id in currentValue.second) }
         val scale = animateFloatAsState(if (selected) 1.1f else 1f).value
         val modifier = Modifier
             .scale(scale)
@@ -83,7 +84,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             .padding(horizontal = 10.dp, vertical = 4.dp)
 
         Text(
-            text = genreUiModel.genre.name.orEmpty(),
+            text = uiModel.genre.name.orEmpty(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.body2,
