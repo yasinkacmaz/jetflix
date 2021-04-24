@@ -58,7 +58,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -88,6 +87,7 @@ import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
+import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.randomColor
 
 val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color") }
@@ -336,10 +336,9 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
 
 @Composable
 private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier) {
-    val arcHeight = 240.dp.value * LocalDensity.current.density
     Card(
         elevation = 16.dp,
-        shape = BottomArcShape(arcHeight = arcHeight),
+        shape = BottomArcShape(arcHeight = 120.dpToPx()),
         backgroundColor = LocalVibrantColor.current.value.copy(alpha = 0.1f),
         modifier = modifier.height(360.dp)
     ) {
@@ -347,7 +346,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
             painter = rememberCoilPainter(
                 request = backdropUrl,
                 fadeIn = true,
-                fadeInDurationMs = 2400
+                fadeInDurationMs = 2000
             ),
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(R.string.backdrop_content_description, movieName),
