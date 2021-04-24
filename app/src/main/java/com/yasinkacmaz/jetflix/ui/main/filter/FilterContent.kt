@@ -38,7 +38,7 @@ fun ColumnScope.FilterContent(
             .padding(vertical = 8.dp)
     ) {
         filterState.toFilterOptions().forEach { filterOption ->
-            filterOption.Render() {
+            filterOption.Render {
                 val newState = filterOption.modifyFilterState(filterState)
                 onFilterStateChanged(newState)
             }

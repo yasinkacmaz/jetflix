@@ -1,5 +1,5 @@
 package com.yasinkacmaz.jetflix.util
 
-interface Mapper<T, U> {
-    fun map(input: T): U
+interface Mapper<Input, Output> {
+    fun map(input: Input): Output
 }

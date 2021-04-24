@@ -16,9 +16,5 @@ class SizeTransformation(@IntRange(from = 0, to = 100) val percent: Int) : Trans
         return Bitmap.createScaledBitmap(input, newWidth, newHeight, false)
     }
 
-    override fun equals(other: Any?) = other is SizeTransformation
-
-    override fun hashCode() = javaClass.hashCode()
-
-    override fun toString() = "SizeTransformation()"
+    override fun toString() = "SizeTransformation(%$percent percent)"
 }

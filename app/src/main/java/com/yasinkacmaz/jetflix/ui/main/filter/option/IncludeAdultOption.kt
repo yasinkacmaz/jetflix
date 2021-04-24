@@ -9,6 +9,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,7 +26,7 @@ data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption
 
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val isChecked = mutableStateOf(currentValue)
+        val isChecked = remember { mutableStateOf(currentValue) }
         val onClick = {
             currentValue = currentValue.not()
             isChecked.value = currentValue

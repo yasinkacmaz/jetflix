@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
@@ -26,7 +27,7 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
 
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val sortOrderState = mutableStateOf(currentValue)
+        val sortOrderState = remember { mutableStateOf(currentValue) }
         FilterSectionTitle(
             painter = rememberVectorPainter(image = Icons.Default.SwapVert),
             title = R.string.sort_order
