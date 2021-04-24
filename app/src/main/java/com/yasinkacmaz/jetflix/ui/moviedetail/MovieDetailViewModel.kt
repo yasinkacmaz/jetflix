@@ -10,6 +10,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,30 +33,30 @@ class MovieDetailViewModel @Inject constructor(
 
     fun fetchMovieDetail(movieId: Int) {
         viewModelScope.launch {
-            uiValue = uiValue.copy(loading = true)
-            try {
-                val movieDetail = async {
-                    val movieDetailResponse = movieService.fetchMovieDetail(movieId)
-                    movieDetailMapper.map(movieDetailResponse)
-                }
-                val credits = async {
-                    val creditsResponse = movieService.fetchMovieCredits(movieId)
-                    creditsMapper.map(creditsResponse)
-                }
-                val images = async {
-                    val imagesResponse = movieService.fetchMovieImages(movieId)
-                    imageMapper.map(imagesResponse)
-                }
-                uiValue = uiValue.copy(
-                    movieDetail = movieDetail.await(),
-                    credits = credits.await(),
-                    images = images.await(),
-                    loading = false
-                )
+            uiValue = uiValue.copy(loading = true, error = null)
+            uiValue = try {
+                val (movieDetail, credits, images) = fetchMovieInformation(movieId)
+                uiValue.copy(movieDetail = movieDetail, credits = credits, images = images, loading = false)
             } catch (exception: Exception) {
-                uiValue = uiValue.copy(error = exception, loading = false)
+                uiValue.copy(error = exception, loading = false)
             }
         }
+    }
+
+    private suspend fun fetchMovieInformation(movieId: Int) = coroutineScope {
+        val movieDetail = async {
+            val movieDetailResponse = movieService.fetchMovieDetail(movieId)
+            movieDetailMapper.map(movieDetailResponse)
+        }
+        val credits = async {
+            val creditsResponse = movieService.fetchMovieCredits(movieId)
+            creditsMapper.map(creditsResponse)
+        }
+        val images = async {
+            val imagesResponse = movieService.fetchMovieImages(movieId)
+            imageMapper.map(imagesResponse)
+        }
+        return@coroutineScope Triple(movieDetail.await(), credits.await(), images.await())
     }
 
     data class MovieDetailUiState(
