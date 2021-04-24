@@ -1,16 +1,18 @@
 package com.yasinkacmaz.jetflix.ui.widget
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -18,6 +20,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
 import com.yasinkacmaz.jetflix.util.animation.animateItem
 import com.yasinkacmaz.jetflix.util.randomColor
@@ -38,7 +41,7 @@ fun VerticalStaggeredGrid(
         content = {
             for (index in 0..itemCount) {
                 val animation =
-                    animateItem(ItemAnimationArgs(scaleRange = 2f..1f, alphaRange = 0f..1f))
+                    animateItem(ItemAnimationArgs(scaleRange = 2f..1f, alphaRange = 0f..1f, delay = 250 * index))
                 itemContent(
                     index,
                     Modifier.graphicsLayer(
@@ -103,19 +106,31 @@ private fun placingToLastRow(index: Int, rowCount: Int, columnCount: Int): Boole
     return ceil((index + 1).toFloat() / columnCount).toInt() >= rowCount
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, name = "Run on device to see item animations")
 @Composable
-private fun VerticalGridPreview() {
+private fun VerticalStaggeredGridPreview() {
     VerticalStaggeredGrid(
-        itemCount = 180,
+        itemCount = 80,
         columnCount = 4,
         columnSpacing = 4.dp,
-        rowSpacing = 4.dp
+        rowSpacing = 4.dp,
+        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 64.dp)
     ) { index, modifier ->
-        val height = remember(index) { (40..200).random().dp }
+        val height = remember(index) { (80..240).random().dp }
         val color = remember(index) { Color.randomColor() }
-        Card(backgroundColor = color, modifier = modifier.height(height)) {
-            Text(text = index.toString(), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+        Card(
+            backgroundColor = color,
+            modifier = modifier
+                .height(height)
+                .fillMaxWidth()
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Text(
+                    text = index.toString(),
+                    fontSize = 32.sp,
+                    color = Color.White
+                )
+            }
         }
     }
 }
