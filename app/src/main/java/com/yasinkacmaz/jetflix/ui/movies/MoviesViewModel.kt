@@ -41,8 +41,8 @@ class MoviesViewModel @Inject constructor(
     init {
         filterDataStore.filterState
             .onEach { filterState ->
-                filterStateChanges.emit(filterState)
                 this.filterState = filterState
+                filterStateChanges.emit(filterState)
             }
             .launchIn(viewModelScope)
     }

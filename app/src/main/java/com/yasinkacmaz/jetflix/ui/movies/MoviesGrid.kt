@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.movies
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -65,12 +64,14 @@ private fun LazyMoviesGrid(
         content = {
             items(moviePagingItems.itemCount) { index ->
                 val movie = moviePagingItems[index] ?: return@items
-                val modifier = Modifier
-                    .padding(end = 8.dp)
-                    .padding(vertical = 8.dp)
-                BoxWithConstraints(modifier) {
-                    MovieContent(movie, Modifier.height(320.dp), onMovieClicked)
-                }
+                MovieContent(
+                    movie,
+                    Modifier
+                        .height(320.dp)
+                        .padding(end = 8.dp)
+                        .padding(vertical = 8.dp),
+                    onMovieClicked
+                )
             }
 
             // TODO: LazyVerticalGrid does not have span strategy.
