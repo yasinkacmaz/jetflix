@@ -7,6 +7,7 @@ import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.json
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.flow.first
@@ -33,7 +34,7 @@ class FilterDataStoreTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { preferencesDataStore.data } returns flowOf(preferences)
+        coEvery { preferencesDataStore.data } returns flowOf(preferences)
         every { preferences[KEY_FILTER_STATE] } returns null
         filterDataStore = FilterDataStore(json, preferencesDataStore)
     }
