@@ -5,7 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.service.ConfigurationService
 import com.yasinkacmaz.jetflix.service.MovieService
-import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import com.yasinkacmaz.jetflix.util.interceptor.ApiKeyInterceptor
 import com.yasinkacmaz.jetflix.util.interceptor.LanguageInterceptor
 import dagger.Module

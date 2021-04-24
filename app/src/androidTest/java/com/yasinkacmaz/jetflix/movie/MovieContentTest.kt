@@ -13,8 +13,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.ui.main.movie.Movie
-import com.yasinkacmaz.jetflix.ui.main.movie.MovieContent
+import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
+import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
 import com.yasinkacmaz.jetflix.util.setTestContent
 import org.junit.Rule
 import org.junit.Test

@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.util.interceptor
 
-import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

@@ -15,7 +15,7 @@
         android:theme="@style/JetflixTheme"
         tools:ignore="AllowBackup">
         <activity
-            android:name="com.yasinkacmaz.jetflix.ui.main.main.MainActivity"
+            android:name="com.yasinkacmaz.jetflix.ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

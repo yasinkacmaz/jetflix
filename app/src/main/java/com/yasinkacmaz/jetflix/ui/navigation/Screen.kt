@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.navigation
 
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.image.Image
+import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
+import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 
 sealed class Screen {
     object Movies : Screen()

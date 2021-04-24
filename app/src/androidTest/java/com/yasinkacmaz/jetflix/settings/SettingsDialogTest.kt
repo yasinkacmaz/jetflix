@@ -11,10 +11,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.main.settings.Language
-import com.yasinkacmaz.jetflix.ui.main.settings.SETTINGS_DIALOG_TAG
-import com.yasinkacmaz.jetflix.ui.main.settings.SettingsDialog
-import com.yasinkacmaz.jetflix.ui.main.settings.SettingsViewModel
+import com.yasinkacmaz.jetflix.ui.settings.Language
+import com.yasinkacmaz.jetflix.ui.settings.SETTINGS_DIALOG_TAG
+import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
+import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
 import org.junit.Rule
