@@ -346,7 +346,8 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
             painter = rememberCoilPainter(
                 request = backdropUrl,
                 fadeIn = true,
-                fadeInDurationMs = 2000
+                fadeInDurationMs = 2000,
+                previewPlaceholder = R.drawable.ic_movie
             ),
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(R.string.backdrop_content_description, movieName),
@@ -369,7 +370,7 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
             .clickable(onClick = { isScaled.value = !isScaled.value })
     ) {
         Image(
-            painter = rememberCoilPainter(request = posterUrl),
+            painter = rememberCoilPainter(request = posterUrl, previewPlaceholder = R.drawable.ic_image),
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight
         )
@@ -521,7 +522,7 @@ private fun MovieImage(image: Image) {
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
-        val painter = rememberCoilPainter(request = image.url)
+        val painter = rememberCoilPainter(request = image.url, previewPlaceholder = R.drawable.ic_image)
         Image(
             painter = painter,
             contentDescription = stringResource(id = R.string.poster_content_description),
@@ -553,7 +554,7 @@ private fun ProductionCompany(company: ProductionCompany) {
                 .background(LocalVibrantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
-            val painter = rememberCoilPainter(request = company.logoUrl)
+            val painter = rememberCoilPainter(request = company.logoUrl, previewPlaceholder = R.drawable.ic_jetflix)
             if (painter.loadState is ImageLoadState.Error) {
                 Icon(
                     imageVector = Icons.Default.BrokenImage,

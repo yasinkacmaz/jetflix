@@ -31,7 +31,8 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
                 painter = rememberCoilPainter(
                     request = person.profilePhotoUrl ?: person.gender.toPlaceholderImageRes(),
                     requestBuilder = { transformations(CircleTopCropTransformation()) },
-                    fadeIn = true
+                    fadeIn = true,
+                    previewPlaceholder = person.gender.toPlaceholderImageRes()
                 ),
                 contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
                 contentScale = ContentScale.FillHeight
