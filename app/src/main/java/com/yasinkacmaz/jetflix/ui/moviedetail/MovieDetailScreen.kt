@@ -96,7 +96,7 @@ val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>>
 fun MovieDetailScreen(movieId: Int) {
     val movieDetailViewModel: MovieDetailViewModel = viewModel()
     val uiState = movieDetailViewModel.uiState.collectAsState().value
-    LaunchedEffect(movieId) {
+    LaunchedEffect(movieId, uiState.movieDetail == null) {
         movieDetailViewModel.fetchMovieDetail(movieId)
     }
     when {
