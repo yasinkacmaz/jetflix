@@ -2,13 +2,11 @@ package com.yasinkacmaz.jetflix.ui.settings
 
 import com.yasinkacmaz.jetflix.service.ConfigurationService
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import io.mockk.MockKAnnotations
+import com.yasinkacmaz.jetflix.util.mockkRelaxed
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.spyk
 import io.mockk.verifyOrder
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
@@ -17,19 +15,11 @@ class SettingsViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var configurationService: ConfigurationService
+    private val configurationService: ConfigurationService = mockkRelaxed()
 
-    @RelaxedMockK
-    private lateinit var languageDataStore: LanguageDataStore
+    private val languageDataStore: LanguageDataStore = mockkRelaxed()
 
-    private lateinit var settingsViewModel: SettingsViewModel
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        settingsViewModel = spyk(SettingsViewModel(configurationService, languageDataStore))
-    }
+    private val settingsViewModel = spyk(SettingsViewModel(configurationService, languageDataStore))
 
     @Test
     fun `fetchLanguages success`() = coroutineTestRule.runBlockingTest {

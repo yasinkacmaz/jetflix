@@ -8,13 +8,11 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import io.mockk.MockKAnnotations
+import com.yasinkacmaz.jetflix.util.mockkRelaxed
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -22,24 +20,15 @@ class MoviesPagingSourceTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var movieService: MovieService
-
-    lateinit var moviesPagingSource: MoviesPagingSource
+    private val movieService: MovieService = mockkRelaxed()
+    private val loadParams = mockk<PagingSource.LoadParams<Int>> { every { key } returns 1 }
     private val movieMapper = MovieMapper()
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
     private val filterState = FilterState()
     private val genreId = 1337
-    private val loadParams = mockk<PagingSource.LoadParams<Int>> {
-        every { key } returns 1
-    }
 
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        moviesPagingSource =
-            MoviesPagingSource(movieService, movieMapper, movieRequestOptionsMapper, filterState, genreId)
-    }
+    private val moviesPagingSource =
+        MoviesPagingSource(movieService, movieMapper, movieRequestOptionsMapper, filterState, genreId)
 
     @Test
     fun load() = coroutineTestRule.runBlockingTest {

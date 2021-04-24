@@ -7,11 +7,11 @@ import com.yasinkacmaz.jetflix.service.MovieService
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
+import com.yasinkacmaz.jetflix.util.mockkRelaxed
 import com.yasinkacmaz.jetflix.util.parseJson
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.spyk
 import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +26,7 @@ class MovieDetailViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var movieService: MovieService
+    private val movieService: MovieService = mockkRelaxed()
 
     private val movieDetailMapper = MovieDetailMapper()
     private val creditsMapper = CreditsMapper()

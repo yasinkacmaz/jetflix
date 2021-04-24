@@ -5,15 +5,13 @@ import androidx.datastore.preferences.core.Preferences
 import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore.Companion.KEY_LANGUAGE
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.json
-import io.mockk.MockKAnnotations
+import com.yasinkacmaz.jetflix.util.mockkRelaxed
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.encodeToString
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
@@ -23,16 +21,9 @@ class LanguageDataStoreTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var preferences: DataStore<Preferences>
+    private val preferences: DataStore<Preferences> = mockkRelaxed()
 
-    private lateinit var languageDataStore: LanguageDataStore
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        languageDataStore = LanguageDataStore(json, preferences)
-    }
+    private val languageDataStore = LanguageDataStore(json, preferences)
 
     @Test
     fun `Should return default language when preference is not present`() {

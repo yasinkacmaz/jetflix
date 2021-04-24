@@ -6,9 +6,9 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore.Companion.KEY_FILTER_ST
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.json
-import io.mockk.MockKAnnotations
+import com.yasinkacmaz.jetflix.util.mockkRelaxed
+import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.encodeToString
@@ -22,18 +22,14 @@ class FilterDataStoreTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var preferencesDataStore: DataStore<Preferences>
-
-    @RelaxedMockK
-    private lateinit var preferences: Preferences
+    private val preferencesDataStore: DataStore<Preferences> = mockkRelaxed()
+    private val preferences: Preferences = mockkRelaxed()
 
     private lateinit var filterDataStore: FilterDataStore
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
-        every { preferencesDataStore.data } returns flowOf(preferences)
+        coEvery { preferencesDataStore.data } returns flowOf(preferences)
         every { preferences[KEY_FILTER_STATE] } returns null
         filterDataStore = FilterDataStore(json, preferencesDataStore)
     }
