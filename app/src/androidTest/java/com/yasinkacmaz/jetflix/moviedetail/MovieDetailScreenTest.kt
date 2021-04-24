@@ -17,11 +17,11 @@ import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.swipe
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.LocalVibrantColor
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.MovieDetail
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Credits
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Gender
-import com.yasinkacmaz.jetflix.ui.main.moviedetail.credits.Person
+import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
+import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetail
+import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
+import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Gender
+import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Navigator
 import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen

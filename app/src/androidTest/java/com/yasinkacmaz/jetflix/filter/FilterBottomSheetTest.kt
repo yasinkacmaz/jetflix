@@ -18,11 +18,11 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.main.filter.FilterContent
-import com.yasinkacmaz.jetflix.ui.main.filter.FilterState
-import com.yasinkacmaz.jetflix.ui.main.filter.option.SortBy
-import com.yasinkacmaz.jetflix.ui.main.filter.option.SortOrder
-import com.yasinkacmaz.jetflix.ui.main.genres.GenreUiModel
+import com.yasinkacmaz.jetflix.ui.filter.FilterContent
+import com.yasinkacmaz.jetflix.ui.filter.FilterState
+import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
+import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
+import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
 import com.yasinkacmaz.jetflix.util.withRole

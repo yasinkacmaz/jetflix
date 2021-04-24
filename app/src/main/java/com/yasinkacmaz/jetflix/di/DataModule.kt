@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.yasinkacmaz.jetflix.ui.main.filter.FilterDataStore
-import com.yasinkacmaz.jetflix.ui.main.settings.LanguageDataStore
+import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
