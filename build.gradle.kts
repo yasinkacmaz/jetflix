@@ -58,7 +58,7 @@ tasks.withType<Test>().configureEach {
 
 // Change gradleVersion and run gradlew wrapper to properly update gradle wrapper
 tasks.named<Wrapper>("wrapper") {
-    distributionType = Wrapper.DistributionType.ALL
+    distributionType = Wrapper.DistributionType.BIN
     gradleVersion = "7.0"
 }
 
