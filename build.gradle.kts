@@ -56,10 +56,6 @@ tasks.withType<Test>().configureEach {
     maxParallelForks = Runtime.getRuntime().availableProcessors()
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    options.isFork = true
-}
-
 task("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
