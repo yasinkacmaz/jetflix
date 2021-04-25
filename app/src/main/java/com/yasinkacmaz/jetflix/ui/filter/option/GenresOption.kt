@@ -36,6 +36,8 @@ typealias GenresFilterOption = Pair<List<GenreUiModel>, MutableList<Int>>
 class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption<GenresFilterOption> {
     override var currentValue: GenresFilterOption = defaultValue
 
+    private val selectedGenreIds get() = currentValue.second
+
     override fun modifyFilterState(filterState: FilterState) = filterState.copy(selectedGenreIds = currentValue.second)
 
     @Composable
@@ -66,7 +68,12 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
     private fun GenreChip(uiModel: GenreUiModel, onClicked: (Boolean) -> Unit) {
         val colors = listOf(uiModel.primaryColor, uiModel.secondaryColor)
         val shape = RoundedCornerShape(percent = 50)
-        var selected by remember(uiModel.genre.id) { mutableStateOf(uiModel.genre.id in currentValue.second) }
+        // I've added only genreId and selectedGenreIds to remember because genres does not change.
+        // I also am concerned(trying to reduce) about the slot table memory footprint.
+        // IMHO this is the fine tuned option of remembering the genre chip selection state.
+        var selected by remember(uiModel.genre.id, selectedGenreIds) {
+            mutableStateOf(uiModel.genre.id in currentValue.second)
+        }
         val scale = animateFloatAsState(if (selected) 1.1f else 1f).value
         val modifier = Modifier
             .scale(scale)
