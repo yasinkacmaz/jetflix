@@ -56,6 +56,12 @@ tasks.withType<Test>().configureEach {
     maxParallelForks = Runtime.getRuntime().availableProcessors()
 }
 
+// Change gradleVersion and run gradlew wrapper to properly update gradle wrapper
+tasks.named<Wrapper>("wrapper") {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = "7.0"
+}
+
 task("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
