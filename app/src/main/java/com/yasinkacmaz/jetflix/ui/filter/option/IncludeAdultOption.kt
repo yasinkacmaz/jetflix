@@ -26,7 +26,7 @@ data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption
 
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val isChecked = remember { mutableStateOf(currentValue) }
+        val isChecked = remember(defaultValue) { mutableStateOf(currentValue) }
         val onClick = {
             currentValue = currentValue.not()
             isChecked.value = currentValue
