@@ -27,7 +27,7 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
 
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val sortOrderState = remember { mutableStateOf(currentValue) }
+        val sortOrderState = remember(defaultValue) { mutableStateOf(currentValue) }
         FilterSectionTitle(
             painter = rememberVectorPainter(image = Icons.Default.SwapVert),
             title = R.string.sort_order
