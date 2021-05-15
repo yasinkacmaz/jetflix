@@ -92,7 +92,7 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
         .fillMaxSize()
         .align(Alignment.Center)
     when (painter.loadState) {
-        ImageLoadState.Loading -> {
+        is ImageLoadState.Loading -> {
             Image(
                 painter = rememberVectorPainter(image = Icons.Default.Movie),
                 contentDescription = null,

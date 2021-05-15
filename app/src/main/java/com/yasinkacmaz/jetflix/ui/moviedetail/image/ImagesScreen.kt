@@ -88,7 +88,7 @@ private fun BlurImage(image: Image) {
 @Composable
 private fun BoxScope.Poster(image: Image) {
     val painter = rememberCoilPainter(request = image.url)
-    if (painter.loadState == ImageLoadState.Loading) {
+    if (painter.loadState is ImageLoadState.Loading) {
         CircularProgressIndicator(
             Modifier
                 .size(240.dp)
