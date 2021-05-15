@@ -13,6 +13,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -379,10 +380,14 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
 
 @Composable
 private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
-    SpacedRow(spaceBetween = 8.dp, modifier = modifier) {
-        genres.map(Genre::name).forEach {
+    Row(
+        modifier
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp)
+    ) {
+        genres.map(Genre::name).forEachIndexed { index, name ->
             Text(
-                text = it.orEmpty(),
+                text = name.orEmpty(),
                 style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
                 modifier = Modifier
                     .border(
@@ -392,6 +397,10 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
                     )
                     .padding(horizontal = 6.dp, vertical = 3.dp)
             )
+
+            if (index != genres.lastIndex) {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
         }
     }
 }
