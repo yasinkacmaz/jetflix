@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -10,10 +8,10 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId("com.yasinkacmaz.jetflix")
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
-        compileSdkVersion(Versions.compileSdk)
+        applicationId = "com.yasinkacmaz.jetflix"
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+        compileSdk = Versions.compileSdk
         versionCode = Versions.versionCode
         versionName = Versions.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -35,12 +33,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -53,17 +46,14 @@ android {
     }
 
     packagingOptions.apply {
-        exclude("**/attach_hotspot_windows.dll")
-        exclude("META-INF/licenses/**")
-        exclude("META-INF/AL2.0")
-        exclude("META-INF/LGPL2.1")
-    }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.apply {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf(*freeCompilerArgs.toTypedArray(), "-Xopt-in=kotlin.RequiresOptIn")
+        resources.excludes.addAll(
+            listOf(
+                "**/attach_hotspot_windows.dll",
+                "META-INF/licenses/**",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1"
+            )
+        )
     }
 }
 
