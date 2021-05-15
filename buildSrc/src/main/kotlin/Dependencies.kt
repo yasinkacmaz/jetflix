@@ -1,7 +1,7 @@
 object Dependencies {
     const val okHttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
     const val ktlint = "com.pinterest:ktlint:0.41.0"
-    const val daggerHiltVersion = "2.35"
+    const val daggerHiltVersion = "2.35.1"
 
     object Kotlin {
         const val version = "1.4.32"
@@ -27,7 +27,7 @@ object Dependencies {
         const val dataStore = "androidx.datastore:datastore-preferences:1.0.0-beta01"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.6.0-alpha02"
+            const val core = "androidx.core:core-ktx:1.6.0-alpha03"
         }
     }
 
@@ -65,7 +65,7 @@ object Dependencies {
         const val android = "com.google.dagger:hilt-android:$daggerHiltVersion"
         const val androidCompiler = "com.google.dagger:hilt-android-compiler:$daggerHiltVersion"
         const val viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-        const val viewmodelCompiler = "androidx.hilt:hilt-compiler:1.0.0-beta01"
+        const val viewmodelCompiler = "androidx.hilt:hilt-compiler:1.0.0"
     }
 
     object Retrofit {
