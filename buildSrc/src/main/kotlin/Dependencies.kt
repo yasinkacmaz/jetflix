@@ -57,7 +57,7 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test:$compose_version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$compose_version"
         const val paging = "androidx.paging:paging-compose:$paging_compose_version"
-        const val activity = "androidx.activity:activity-compose:1.3.0-alpha07"
+        const val activity = "androidx.activity:activity-compose:$compose_activity_version"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha06"
 
