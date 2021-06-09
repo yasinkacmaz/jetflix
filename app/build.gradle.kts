@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.PLUGIN_CLASSPATH_CONFIGURATION_NAME
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -6,7 +7,35 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+//FIXME those mark to detect android tools build version let AS 4.0.X~4.2.X to support Compose
+//def android_builder_version = "4.0.1"
+//
+//ext {
+//    android_builder_main_version = Integer.parseInt(android_builder_version.split("\\.")[0])
+//    android_builder_mid_version = Integer.parseInt(android_builder_version.split("\\.")[1])
+//}
+
 android {
+//    this.rootProject.buildscript.configurations.classpath
+//        .resolvedConfiguration
+//        .firstLevelModuleDependencies.
+//        each {
+//            def name = it.name
+//                    if (name.contains('com.android.tools.build:gradle')) {
+//                        def moduleVersion = it.moduleVersion
+//                                if (moduleVersion.contains("-")) {
+//                                    def alphaversionArray = moduleVersion.split("-")[0]
+//                                    def versionArray = alphaversionArray.toString().split("\\.")
+//                                    ext.android_builder_main_version = Integer.parseInt(versionArray[0])
+//                                    ext.android_builder_mid_version = Integer.parseInt(versionArray[1])
+//                                } else {
+//                                    version = moduleVersion
+//                                    android_builder_version = moduleVersion
+//                                    ext.android_builder_main_version = Integer.parseInt(android_builder_version.split("\\.")[0])
+//                                    ext.android_builder_mid_version = Integer.parseInt(android_builder_version.split("\\.")[1])
+//                                }
+//                    }
+//        }
     defaultConfig {
         applicationId = "com.yasinkacmaz.jetflix"
         minSdk = Versions.minSdk
@@ -22,12 +51,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    buildFeatures {
-        compose = true
+    if (ext.android_builder_main_version >= 7 || (ext.android_builder_main_version > 4 && ext.android_builder_mid_version > 1)) {
+        buildFeatures {
+            compose true
+        }
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.Compose.version
+        kotlinCompilerExtensionVersion = Dependencies.Compose.compose_version
+        kotlinCompilerVersion Dependencies.Kotlin.version
     }
 
     buildTypes {
@@ -73,6 +105,7 @@ dependencies {
     implementation(Dependencies.AndroidX.Ktx.core)
 
     // Compose
+    add(PLUGIN_CLASSPATH_CONFIGURATION_NAME, "androidx.compose.compiler:compiler:${Dependencies.Compose.compose_version}")
     implementation(Dependencies.Compose.runtime)
     implementation(Dependencies.Compose.foundation)
     implementation(Dependencies.Compose.layout)
