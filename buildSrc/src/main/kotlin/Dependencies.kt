@@ -1,7 +1,7 @@
 object Dependencies {
     const val okHttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
     const val ktlint = "com.pinterest:ktlint:0.41.0"
-    const val daggerHiltVersion = "2.35.1"
+    const val daggerHiltVersion = "2.36"
 
     object Kotlin {
         const val version = "1.4.32"
@@ -10,14 +10,14 @@ object Dependencies {
     }
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:7.0.0-alpha15"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.1.0-alpha02"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:$daggerHiltVersion"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val kotlinSerializationPlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
 
         object VersionsPlugin {
             const val id = "com.github.ben-manes.versions"
-            const val version = "0.38.0"
+            const val version = "0.39.0"
         }
     }
 
@@ -27,14 +27,14 @@ object Dependencies {
         const val dataStore = "androidx.datastore:datastore-preferences:1.0.0-beta01"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.6.0-alpha03"
+            const val core = "androidx.core:core-ktx:1.6.0-beta02"
         }
     }
 
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.0.0-beta06"
+        const val version = "1.0.0-beta08"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -46,10 +46,10 @@ object Dependencies {
         const val tooling = "androidx.compose.ui:ui-tooling:$version"
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
-        const val paging = "androidx.paging:paging-compose:1.0.0-alpha08"
-        const val activity = "androidx.activity:activity-compose:1.3.0-alpha07"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha06"
+        const val paging = "androidx.paging:paging-compose:1.0.0-alpha10"
+        const val activity = "androidx.activity:activity-compose:1.3.0-beta01"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha06"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
 
         object Accompanist {
             private const val libraryName = "com.google.accompanist:accompanist"
