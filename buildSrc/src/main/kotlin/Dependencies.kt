@@ -63,11 +63,14 @@ object Dependencies {
 
         object Accompanist {
             private const val libraryName = "com.google.accompanist:accompanist"
-            private const val version = "0.11.1"
+            private const val accompanist_version = "0.11.1"
 
-            const val coil = "$libraryName-coil:$version"
-            const val insets = "$libraryName-insets:$version"
-            const val pager = "$libraryName-pager:$version"
+            const val coil = "$libraryName-coil:$accompanist_version"
+            const val insets = "$libraryName-insets:$accompanist_version"
+            const val pager = "$libraryName-pager:$accompanist_version"
+
+            const val chrisbanes_coil = "dev.chrisbanes.accompanist:accompanist-coil:$compose_utils_chrisbanes_coil"
+            const val io_coil = "io.coil-kt:coil:$compose_utils_coil"
         }
     }
 
