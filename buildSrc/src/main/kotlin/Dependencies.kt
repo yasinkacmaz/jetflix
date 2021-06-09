@@ -58,8 +58,8 @@ object Dependencies {
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$compose_version"
         const val paging = "androidx.paging:paging-compose:$paging_compose_version"
         const val activity = "androidx.activity:activity-compose:$compose_activity_version"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha06"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_lifecycle_version"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:$compose_constraintlayout_version"
 
         object Accompanist {
             private const val libraryName = "com.google.accompanist:accompanist"
