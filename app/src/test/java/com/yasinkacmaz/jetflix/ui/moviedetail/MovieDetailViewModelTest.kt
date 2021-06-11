@@ -14,6 +14,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.spyk
 import io.mockk.verifyOrder
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -64,6 +65,7 @@ class MovieDetailViewModelTest {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @Test
     fun `fetchMovieDetail error`() = coroutineTestRule.runBlockingTest {
         GlobalScope.launch(Dispatchers.IO) {
