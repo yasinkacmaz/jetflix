@@ -2,7 +2,6 @@ package com.yasinkacmaz.jetflix.ui.movies.movie
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -17,10 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Text
 import androidx.compose.material.Icon
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.DateRange
@@ -47,6 +47,7 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.randomColor
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
     Box(modifier = modifier) {
@@ -59,10 +60,10 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = 12.dp)
-                .clickable(onClick = { onMovieClicked(movie.id) }),
+                .offset(y = 12.dp),
             shape = RoundedCornerShape(size = 8.dp),
-            elevation = 8.dp
+            elevation = 8.dp,
+            onClick = { onMovieClicked(movie.id) }
         ) {
             Box {
                 MoviePoster(movie.posterPath, movie.name)
