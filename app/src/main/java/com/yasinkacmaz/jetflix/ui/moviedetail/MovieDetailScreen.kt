@@ -32,6 +32,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -357,6 +358,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
@@ -366,9 +368,8 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     Card(
         elevation = 24.dp,
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier
-            .scale(scale)
-            .clickable(onClick = { isScaled.value = !isScaled.value })
+        modifier = modifier.scale(scale),
+        onClick = { isScaled.value = !isScaled.value }
     ) {
         Image(
             painter = rememberCoilPainter(request = posterUrl, previewPlaceholder = R.drawable.ic_image),
