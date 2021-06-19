@@ -34,7 +34,7 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.0.0-beta08"
+        const val version = "1.0.0-beta09"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -47,9 +47,9 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha10"
-        const val activity = "androidx.activity:activity-compose:1.3.0-beta01"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha06"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
+        const val activity = "androidx.activity:activity-compose:1.3.0-beta02"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08"
 
         object Accompanist {
             private const val libraryName = "com.google.accompanist:accompanist"
