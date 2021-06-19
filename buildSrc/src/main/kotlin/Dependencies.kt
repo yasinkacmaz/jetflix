@@ -53,7 +53,7 @@ object Dependencies {
 
         object Accompanist {
             private const val libraryName = "com.google.accompanist:accompanist"
-            private const val version = "0.11.1"
+            private const val version = "0.12.0"
 
             const val coil = "$libraryName-coil:$version"
             const val insets = "$libraryName-insets:$version"
