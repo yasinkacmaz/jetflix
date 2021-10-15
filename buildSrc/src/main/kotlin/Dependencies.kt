@@ -10,7 +10,7 @@ object Dependencies {
     }
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:7.1.0-alpha02"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.2.0-alpha02"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:$daggerHiltVersion"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val kotlinSerializationPlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
@@ -34,7 +34,7 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.0.0-rc01"
+        const val version = "1.1.0-alpha06"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -46,10 +46,10 @@ object Dependencies {
         const val tooling = "androidx.compose.ui:ui-tooling:$version"
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
-        const val paging = "androidx.paging:paging-compose:1.0.0-alpha11"
-        const val activity = "androidx.activity:activity-compose:1.3.0-rc01"
+        const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
+        const val activity = "androidx.activity:activity-compose:1.4.0-rc01"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
 
         object Accompanist {
             private const val libraryName = "com.google.accompanist:accompanist"
