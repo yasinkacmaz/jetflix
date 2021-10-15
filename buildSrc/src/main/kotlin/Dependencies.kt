@@ -52,13 +52,12 @@ object Dependencies {
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
 
         object Accompanist {
-            private const val libraryName = "com.google.accompanist:accompanist"
-            private const val version = "0.13.0"
+            private const val accompanistLibrary = "com.google.accompanist:accompanist"
+            private const val version = "0.20.0"
 
-            const val coil = "$libraryName-coil:$version"
-            const val insets = "$libraryName-insets:$version"
-            const val insetsUi = "$libraryName-insets-ui:$version"
-            const val pager = "$libraryName-pager:$version"
+            const val insets = "$accompanistLibrary-insets:$version"
+            const val insetsUi = "$accompanistLibrary-insets-ui:$version"
+            const val pager = "$accompanistLibrary-pager:$version"
         }
     }
 
