@@ -33,7 +33,7 @@ subprojects {
     afterEvaluate {
         tasks.withType(KotlinCompile::class).all {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
+                jvmTarget = JavaVersion.VERSION_11.toString()
                 allWarningsAsErrors = true
                 freeCompilerArgs = listOf(*freeCompilerArgs.toTypedArray(), "-Xopt-in=kotlin.RequiresOptIn")
             }
