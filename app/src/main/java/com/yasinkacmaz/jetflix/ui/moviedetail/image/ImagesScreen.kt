@@ -43,8 +43,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 @Composable
 fun ImagesScreen(images: List<Image>) {
     if (images.isNotEmpty()) {
-        val pagerState = rememberPagerState(pageCount = images.size)
-        HorizontalPager(state = pagerState) { page ->
+        HorizontalPager(state = rememberPagerState(), count = images.size) { page ->
             Image(images[page])
         }
     }
