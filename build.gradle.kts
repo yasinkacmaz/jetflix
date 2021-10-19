@@ -29,13 +29,13 @@ allprojects {
 }
 
 subprojects {
-    apply(from = rootProject.file("ktlint.gradle.kts"))
+    apply(from = file("$rootDir/ktlint.gradle.kts"))
     afterEvaluate {
         tasks.withType(KotlinCompile::class).all {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_11.toString()
                 allWarningsAsErrors = true
-                freeCompilerArgs = listOf(*freeCompilerArgs.toTypedArray(), "-Xopt-in=kotlin.RequiresOptIn")
+                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
             }
         }
     }
@@ -51,15 +51,15 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
 }
 
 tasks.withType<Test>().configureEach {
-    reports.html.isEnabled = false
-    reports.junitXml.isEnabled = true
+    reports.html.required.set(false)
+    reports.junitXml.required.set(true)
     maxParallelForks = Runtime.getRuntime().availableProcessors()
 }
 
 // Change gradleVersion and run gradlew wrapper to properly update gradle wrapper
 tasks.named<Wrapper>("wrapper") {
     distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "7.2"
+    gradleVersion = "7.3-rc-1"
 }
 
 task("clean", Delete::class) {
