@@ -9,7 +9,7 @@ class MovieMapper @Inject constructor() : Mapper<MovieResponse, Movie> {
     override fun map(input: MovieResponse) = Movie(
         id = input.id,
         name = input.name,
-        releaseDate = input.firstAirDate,
+        releaseDate = input.firstAirDate.orEmpty(),
         posterPath = input.posterPath.orEmpty().toPosterUrl(),
         voteAverage = input.voteAverage,
         voteCount = input.voteCount

@@ -20,7 +20,7 @@ class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailResponse, Movi
             backdropUrl = input.backdropPath.orEmpty().toBackdropUrl(),
             posterUrl = input.posterPath.toPosterUrl(),
             genres = input.genres,
-            releaseDate = input.releaseDate,
+            releaseDate = input.releaseDate.orEmpty(),
             voteAverage = input.voteAverage,
             voteCount = input.voteCount,
             duration = input.runtime ?: -1,
