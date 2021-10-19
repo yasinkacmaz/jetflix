@@ -88,10 +88,12 @@ dependencies {
     debugImplementation(Dependencies.Compose.tooling)
 
     // Accompanist
-    implementation(Dependencies.Compose.Accompanist.coil)
     implementation(Dependencies.Compose.Accompanist.insets)
     implementation(Dependencies.Compose.Accompanist.insetsUi)
     implementation(Dependencies.Compose.Accompanist.pager)
+
+    // Coil Image
+    implementation(Dependencies.coil)
 
     // Hilt
     implementation(Dependencies.Hilt.android)

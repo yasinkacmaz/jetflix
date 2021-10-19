@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.main
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import com.yasinkacmaz.jetflix.ui.images.ImagesScreen
+import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen

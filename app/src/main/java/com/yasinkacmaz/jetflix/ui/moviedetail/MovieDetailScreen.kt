@@ -73,8 +73,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.imageloading.ImageLoadState
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsHeight
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
@@ -345,11 +346,12 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
         modifier = modifier.height(360.dp)
     ) {
         Image(
-            painter = rememberCoilPainter(
-                request = backdropUrl,
-                fadeIn = true,
-                fadeInDurationMs = 2000,
-                previewPlaceholder = R.drawable.ic_movie
+            painter = rememberImagePainter(
+                data = backdropUrl,
+                builder = {
+                    crossfade(2000)
+                    placeholder(R.drawable.ic_movie)
+                }
             ),
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(R.string.backdrop_content_description, movieName),
@@ -372,7 +374,10 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
         onClick = { isScaled.value = !isScaled.value }
     ) {
         Image(
-            painter = rememberCoilPainter(request = posterUrl, previewPlaceholder = R.drawable.ic_image),
+            painter = rememberImagePainter(
+                data = posterUrl,
+                builder = { placeholder(R.drawable.ic_image) }
+            ),
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight
         )
@@ -523,6 +528,7 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, count: Int, onClick
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun MovieImage(image: Image) {
     Card(
@@ -532,14 +538,17 @@ private fun MovieImage(image: Image) {
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
-        val painter = rememberCoilPainter(request = image.url, previewPlaceholder = R.drawable.ic_image)
+        val painter = rememberImagePainter(
+            data = image.url,
+            builder = { placeholder(R.drawable.ic_image) }
+        )
         Image(
             painter = painter,
             contentDescription = stringResource(id = R.string.poster_content_description),
             contentScale = ContentScale.Crop
         )
-        when (painter.loadState) {
-            is ImageLoadState.Error -> {
+        when (painter.state) {
+            is ImagePainter.State.Error -> {
                 Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray)
             }
             else -> {
@@ -548,6 +557,7 @@ private fun MovieImage(image: Image) {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun ProductionCompany(company: ProductionCompany) {
     Card(
@@ -564,8 +574,11 @@ private fun ProductionCompany(company: ProductionCompany) {
                 .background(LocalVibrantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
-            val painter = rememberCoilPainter(request = company.logoUrl, previewPlaceholder = R.drawable.ic_jetflix)
-            if (painter.loadState is ImageLoadState.Error) {
+            val painter = rememberImagePainter(
+                data = company.logoUrl,
+                builder = { placeholder(R.drawable.ic_jetflix) }
+            )
+            if (painter.state is ImagePainter.State.Error) {
                 Icon(
                     imageVector = Icons.Default.BrokenImage,
                     contentDescription = null,

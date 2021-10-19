@@ -35,7 +35,7 @@ subprojects {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_11.toString()
                 allWarningsAsErrors = true
-                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
             }
         }
     }

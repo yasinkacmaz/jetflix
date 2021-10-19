@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.toPlaceholderImageRes
@@ -28,11 +28,13 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
     Column(modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
             Image(
-                painter = rememberCoilPainter(
-                    request = person.profilePhotoUrl ?: person.gender.toPlaceholderImageRes(),
-                    requestBuilder = { transformations(CircleTopCropTransformation()) },
-                    fadeIn = true,
-                    previewPlaceholder = person.gender.toPlaceholderImageRes()
+                painter = rememberImagePainter(
+                    data = person.profilePhotoUrl ?: person.gender.toPlaceholderImageRes(),
+                    builder = {
+                        crossfade(true)
+                        transformations(CircleTopCropTransformation())
+                        placeholder(person.gender.toPlaceholderImageRes())
+                    }
                 ),
                 contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
                 contentScale = ContentScale.FillHeight
