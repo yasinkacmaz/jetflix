@@ -15,12 +15,14 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
 
+@ExperimentalCoroutinesApi
 class MoviesViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
