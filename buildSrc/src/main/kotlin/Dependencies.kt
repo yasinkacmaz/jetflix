@@ -77,8 +77,8 @@ object Dependencies {
 
     object Test {
         const val junit = "junit:junit:4.13.2"
-        const val mockk = "io.mockk:mockk:1.11.0"
-        const val striktAssertion = "io.strikt:strikt-core:0.30.0"
-        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2"
+        const val mockk = "io.mockk:mockk:1.12.0"
+        const val striktAssertion = "io.strikt:strikt-core:0.32.0"
+        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
     }
 }

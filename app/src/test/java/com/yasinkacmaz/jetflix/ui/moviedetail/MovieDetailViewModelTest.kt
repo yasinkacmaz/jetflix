@@ -16,6 +16,7 @@ import io.mockk.spyk
 import io.mockk.verifyOrder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.junit.Before
@@ -23,6 +24,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
 
+@ExperimentalCoroutinesApi
 class MovieDetailViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()

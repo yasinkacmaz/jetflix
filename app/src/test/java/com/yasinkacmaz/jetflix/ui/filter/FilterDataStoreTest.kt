@@ -9,6 +9,7 @@ import com.yasinkacmaz.jetflix.util.json
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.serialization.encodeToString
@@ -18,6 +19,7 @@ import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
+@ExperimentalCoroutinesApi
 class FilterDataStoreTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()

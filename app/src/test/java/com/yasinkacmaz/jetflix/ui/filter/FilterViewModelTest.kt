@@ -12,6 +12,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -22,6 +23,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import java.io.IOException
 
+@ExperimentalCoroutinesApi
 class FilterViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
