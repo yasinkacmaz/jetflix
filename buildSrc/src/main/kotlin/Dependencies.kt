@@ -24,11 +24,11 @@ object Dependencies {
 
     object AndroidX {
         const val palette = "androidx.palette:palette:1.0.0"
-        const val browser = "androidx.browser:browser:1.3.0"
-        const val dataStore = "androidx.datastore:datastore-preferences:1.0.0-beta01"
+        const val browser = "androidx.browser:browser:1.4.0-rc01"
+        const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.6.0-beta02"
+            const val core = "androidx.core:core-ktx:1.7.0-rc01"
         }
     }
 
