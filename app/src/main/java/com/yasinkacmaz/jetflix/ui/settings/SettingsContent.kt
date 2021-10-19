@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
@@ -204,9 +204,9 @@ private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to Inlin
          * Why?: Dropdown menu does not use LazyColumn and we are rendering all of the country flags at once :(
          */
         Image(
-            painter = rememberCoilPainter(
-                request = flagUrl,
-                requestBuilder = { transformations(sizeTransformation) },
+            painter = rememberImagePainter(
+                data = flagUrl,
+                builder = { transformations(sizeTransformation) },
             ),
             contentDescription = stringResource(id = R.string.flag_content_description, countryName),
             modifier = Modifier.padding(end = 8.dp),

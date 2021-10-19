@@ -16,11 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.Icon
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.DateRange
@@ -41,8 +41,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.imageloading.ImageLoadState
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.randomColor
@@ -78,10 +79,12 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
     val tint = if (MaterialTheme.colors.isLight) Color.DarkGray else Color.Gray
-    val painter = rememberCoilPainter(request = posterPath, previewPlaceholder = R.drawable.ic_image)
+    val painter =
+        rememberImagePainter(data = posterPath, builder = { placeholder(R.drawable.ic_image) })
     Image(
         painter = painter,
         contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
@@ -92,8 +95,8 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
         .padding(8.dp)
         .fillMaxSize()
         .align(Alignment.Center)
-    when (painter.loadState) {
-        is ImageLoadState.Loading -> {
+    when (painter.state) {
+        is ImagePainter.State.Loading -> {
             Image(
                 painter = rememberVectorPainter(image = Icons.Default.Movie),
                 contentDescription = null,
@@ -101,7 +104,7 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
                 modifier = modifier
             )
         }
-        is ImageLoadState.Error -> {
+        is ImagePainter.State.Error -> {
             Image(
                 imageVector = Icons.Filled.BrokenImage,
                 contentDescription = null,
@@ -166,7 +169,12 @@ private fun MovieName(name: String) {
 @Composable
 private fun MovieFeature(icon: ImageVector, field: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(imageVector = icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(14.dp)
+        )
         Text(
             text = field,
             style = MaterialTheme.typography.subtitle2.copy(
