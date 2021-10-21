@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,13 +37,15 @@ fun MoviesGrid() {
     val moviesViewModel = viewModel<MoviesViewModel>()
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
     val state = rememberLazyListState()
-    val filterStateChanges = moviesViewModel.filterStateChanges
-    filterStateChanges
-        .onEach {
-            state.scrollToItem(0)
-            movies.refresh()
-        }
-        .launchIn(rememberCoroutineScope())
+    LaunchedEffect(Unit) {
+        moviesViewModel.filterStateChanges
+            .onEach {
+                state.scrollToItem(0)
+                movies.refresh()
+            }
+            .launchIn(this)
+    }
+
     LazyMoviesGrid(movies, state)
 }
 
@@ -59,7 +61,10 @@ private fun LazyMoviesGrid(
     }
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(start = 8.dp, bottom = LocalWindowInsets.current.navigationBars.top.dp),
+        contentPadding = PaddingValues(
+            start = 8.dp,
+            bottom = LocalWindowInsets.current.navigationBars.top.dp
+        ),
         state = state,
         content = {
             items(moviePagingItems.itemCount) { index ->

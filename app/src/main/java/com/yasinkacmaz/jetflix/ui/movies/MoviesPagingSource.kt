@@ -15,7 +15,8 @@ class MoviesPagingSource(
     filterState: FilterState? = null,
     private val genreId: Int? = null
 ) : PagingSource<Int, Movie>() {
-    val options = movieRequestOptionsMapper.map(filterState)
+    private val options = movieRequestOptionsMapper.map(filterState)
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val page = params.key ?: 1
@@ -31,7 +32,5 @@ class MoviesPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int {
-        return 1
-    }
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int = 1
 }
