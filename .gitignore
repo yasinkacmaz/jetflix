@@ -46,9 +46,7 @@ google-services.json
 build
 reports
 signing.properties
-yemeksepeti.keystore
-.gradle/
-.navigation/
+jetflix.keystore
 *.hprof
 *.txt
 *.DS_STORE

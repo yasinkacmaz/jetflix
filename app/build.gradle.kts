@@ -1,3 +1,6 @@
+import java.nio.charset.Charset
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -30,9 +33,33 @@ android {
         kotlinCompilerExtensionVersion = Dependencies.Compose.version
     }
 
+    signingConfigs {
+        val propertiesFile = File("signing.properties")
+        if (propertiesFile.exists()) {
+            val properties = Properties()
+            properties.load(propertiesFile.reader(Charset.forName("UTF-8")))
+            create("release") {
+                storeFile = file(properties.getProperty("KEYSTORE_FILE"))
+                storePassword = properties.getProperty("KEYSTORE_PASSWORD")
+                keyAlias = properties.getProperty("KEY_ALIAS")
+                keyPassword = properties.getProperty("KEY_PASSWORD")
+            }
+        } else {
+            create("release")
+        }
+    }
+
     buildTypes {
+        getByName("debug") {
+            isDefault = true
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-DEBUG"
+        }
         getByName("release") {
+            isShrinkResources = false
             isMinifyEnabled = false
+            isDebuggable = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -85,7 +112,7 @@ dependencies {
     implementation(Dependencies.Compose.constraintLayout)
     implementation(Dependencies.Compose.activity)
     implementation(Dependencies.Compose.viewModel)
-    debugImplementation(Dependencies.Compose.tooling)
+    implementation(Dependencies.Compose.tooling)
 
     // Accompanist
     implementation(Dependencies.Compose.Accompanist.insets)
