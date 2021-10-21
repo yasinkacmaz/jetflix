@@ -25,10 +25,17 @@ private enum class ScaleState { DEFAULT, SCALED }
 @Composable
 fun scale(toScale: Float, animation: FiniteAnimationSpec<Float>): Float {
     val label = "scale"
-    val scaleState = remember { MutableTransitionState(ScaleState.DEFAULT).apply { targetState = ScaleState.SCALED } }
+    val scaleState = remember {
+        MutableTransitionState(ScaleState.DEFAULT).apply {
+            targetState = ScaleState.SCALED
+        }
+    }
     val scaleTransition = updateTransition(scaleState, label = label)
 
-    val scale by scaleTransition.animateFloat(transitionSpec = { animation }, label = label) { state ->
+    val scale by scaleTransition.animateFloat(
+        transitionSpec = { animation },
+        label = label
+    ) { state ->
         when (state) {
             ScaleState.DEFAULT -> 1f
             ScaleState.SCALED -> toScale

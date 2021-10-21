@@ -24,19 +24,29 @@ data class ItemAnimationData(val scale: Float, val alpha: Float)
 
 @Composable
 fun animateItem(args: ItemAnimationArgs): ItemAnimationData = with(args) {
-    val transitionState =
-        remember { MutableTransitionState(ItemState.PLACING).apply { targetState = ItemState.PLACED } }
-    val animationSpec = tween<Float>(durationMillis = durationMillis, delayMillis = delay, easing = easing)
+    val transitionState = remember {
+        MutableTransitionState(ItemState.PLACING).apply {
+            targetState = ItemState.PLACED
+        }
+    }
+    val animationSpec =
+        tween<Float>(durationMillis = durationMillis, delayMillis = delay, easing = easing)
     val label = "itemPlacement"
     val transition = updateTransition(transitionState, label = label)
 
-    val scale by transition.animateFloat(transitionSpec = { animationSpec }, label = "$label-Scale") { state ->
+    val scale by transition.animateFloat(
+        transitionSpec = { animationSpec },
+        label = "$label-Scale"
+    ) { state ->
         when (state) {
             ItemState.PLACING -> scaleRange.start
             ItemState.PLACED -> scaleRange.endInclusive
         }
     }
-    val alpha by transition.animateFloat(transitionSpec = { animationSpec }, label = "$label-Alpha") { state ->
+    val alpha by transition.animateFloat(
+        transitionSpec = { animationSpec },
+        label = "$label-Alpha"
+    ) { state ->
         when (state) {
             ItemState.PLACING -> alphaRange.start
             ItemState.PLACED -> alphaRange.endInclusive
