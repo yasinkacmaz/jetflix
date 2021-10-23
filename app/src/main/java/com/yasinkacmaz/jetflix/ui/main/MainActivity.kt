@@ -8,13 +8,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
-import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
-import com.yasinkacmaz.jetflix.ui.navigation.Navigator
-import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,26 +24,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         renderUi()
-        settingsViewModel.onSettingsChanged.observe(this) {
-            finish()
-            startActivity(intent)
-        }
+        settingsViewModel.onSettingsChanged.observe(this) { restart() }
     }
 
-    private fun renderUi() {
-        setContent {
-            val lifecycleOwner = LocalLifecycleOwner.current
-            val navigator = remember { Navigator<Screen>(Screen.Movies, lifecycleOwner, onBackPressedDispatcher) }
-            val showSettingsDialog = remember { mutableStateOf(false) }
-            val systemTheme = isSystemInDarkTheme()
-            val isDarkTheme = remember { mutableStateOf(systemTheme) }
-            JetflixTheme(isDarkTheme = isDarkTheme.value) {
-                ProvideWindowInsets {
-                    CompositionLocalProvider(LocalNavigator provides navigator) {
-                        MainContent(navigator, isDarkTheme, showSettingsDialog)
-                    }
+    private fun renderUi() = setContent {
+        val showSettingsDialog = remember { mutableStateOf(false) }
+        val systemTheme = isSystemInDarkTheme()
+        val isDarkTheme = remember { mutableStateOf(systemTheme) }
+        val navController = rememberNavController()
+        JetflixTheme(isDarkTheme = isDarkTheme.value) {
+            ProvideWindowInsets {
+                CompositionLocalProvider(LocalNavController provides navController) {
+                    MainContent(isDarkTheme, showSettingsDialog)
                 }
             }
         }
+    }
+
+    private fun restart() {
+        finish()
+        startActivity(intent)
     }
 }

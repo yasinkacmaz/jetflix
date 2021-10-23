@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.MovieService
@@ -7,6 +8,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
+import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -18,6 +20,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val movieService: MovieService,
     private val movieDetailMapper: MovieDetailMapper,
     private val creditsMapper: CreditsMapper,
@@ -31,7 +34,12 @@ class MovieDetailViewModel @Inject constructor(
             uiState.value = value
         }
 
-    fun fetchMovieDetail(movieId: Int) {
+    init {
+        val movieId: Int = savedStateHandle.get<String>(ARG_MOVIE_ID)!!.toInt()
+        fetchMovieDetail(movieId = movieId)
+    }
+
+    private fun fetchMovieDetail(movieId: Int) {
         viewModelScope.launch {
             uiValue = uiValue.copy(loading = true, error = null)
             uiValue = try {

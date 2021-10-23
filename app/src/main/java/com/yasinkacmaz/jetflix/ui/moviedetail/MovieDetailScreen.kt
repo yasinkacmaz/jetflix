@@ -48,7 +48,6 @@ import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,9 +59,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -72,7 +70,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
@@ -81,10 +78,10 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
+import com.yasinkacmaz.jetflix.ui.main.LocalNavController
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
-import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
@@ -93,15 +90,12 @@ import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.randomColor
 
-val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color") }
+val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color defined") }
 
 @Composable
-fun MovieDetailScreen(movieId: Int) {
-    val movieDetailViewModel: MovieDetailViewModel = viewModel()
+fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
     val uiState = movieDetailViewModel.uiState.collectAsState().value
-    LaunchedEffect(movieId, uiState.movieDetail == null) {
-        movieDetailViewModel.fetchMovieDetail(movieId)
-    }
+
     when {
         uiState.loading -> {
             val title = stringResource(id = R.string.fetching_movie_detail)
@@ -111,7 +105,7 @@ fun MovieDetailScreen(movieId: Int) {
             ErrorColumn(uiState.error.message.orEmpty())
         }
         uiState.movieDetail != null -> {
-            val animatableColor = remember(movieId) { Animatable(Color.randomColor()) }
+            val animatableColor = remember { Animatable(Color.randomColor()) }
             CompositionLocalProvider(LocalVibrantColor provides animatableColor) {
                 MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
             }
@@ -125,10 +119,10 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
     ) {
-        val navigator = LocalNavigator.current
+        val navController = LocalNavController.current
         val vibrantColor = LocalVibrantColor.current.value
         val scaleModifier = Modifier.scale(1.1f)
-        IconButton(onClick = { navigator.goBack() }) {
+        IconButton(onClick = { navController.popBackStack() }) {
             Icon(
                 Icons.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.back_icon_content_description),
@@ -286,44 +280,46 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
                 }
         )
 
-        val navigator = LocalNavigator.current
+        val navController = LocalNavController.current
         MovieSection(
-            cast,
-            { SectionHeaderWithDetail(R.string.cast, cast.size) { navigator.navigateTo(Screen.PeopleGrid(cast)) } },
-            { Person(it, Modifier.width(140.dp)) },
-            Modifier.constrainAs(castSection) {
+            items = cast,
+            headerResId = R.string.cast,
+            onDetailClicked = { navController.navigate(Screen.CAST.createPath(movieDetail.id)) },
+            itemContent = { Person(it, Modifier.width(140.dp)) },
+            modifier = Modifier.constrainAs(castSection) {
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
-            },
-            tag = "cast"
+            }
         )
 
         MovieSection(
-            crew,
-            { SectionHeaderWithDetail(R.string.crew, crew.size) { navigator.navigateTo(Screen.PeopleGrid(crew)) } },
-            { Person(it, Modifier.width(140.dp)) },
-            Modifier.constrainAs(crewSection) {
+            items = crew,
+            headerResId = R.string.crew,
+            onDetailClicked = { navController.navigate(Screen.CREW.createPath(movieDetail.id)) },
+            itemContent = { Person(it, Modifier.width(140.dp)) },
+            modifier = Modifier.constrainAs(crewSection) {
                 top.linkTo(castSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
-            },
-            tag = "crew"
+            }
         )
 
         MovieSection(
-            images,
-            { SectionHeaderWithDetail(R.string.images, images.size) { navigator.navigateTo(Screen.Images(images)) } },
-            { MovieImage(it) },
-            Modifier.constrainAs(imagesSection) {
+            items = images,
+            headerResId = R.string.images,
+            onDetailClicked = { navController.navigate(Screen.IMAGES.createPath(movieDetail.id)) },
+            itemContent = { MovieImage(it) },
+            modifier = Modifier.constrainAs(imagesSection) {
                 top.linkTo(crewSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
         )
 
         MovieSection(
-            movieDetail.productionCompanies,
-            { MovieSectionHeader(titleResId = R.string.production_companies) },
-            { ProductionCompany(it) },
-            Modifier.constrainAs(productionCompanies) {
+            items = movieDetail.productionCompanies,
+            headerResId = R.string.production_companies,
+            onDetailClicked = null,
+            itemContent = { ProductionCompany(it) },
+            modifier = Modifier.constrainAs(productionCompanies) {
                 top.linkTo(imagesSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             }
@@ -373,10 +369,7 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
         onClick = { isScaled.value = !isScaled.value }
     ) {
         Image(
-            painter = rememberImagePainter(
-                data = posterUrl,
-                builder = { placeholder(R.drawable.ic_image) }
-            ),
+            painter = rememberImagePainter(data = posterUrl, builder = { placeholder(R.drawable.ic_image) }),
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight
         )
@@ -395,11 +388,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
                 text = name.orEmpty(),
                 style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
                 modifier = Modifier
-                    .border(
-                        1.25.dp,
-                        LocalVibrantColor.current.value,
-                        RoundedCornerShape(50)
-                    )
+                    .border(1.25.dp, LocalVibrantColor.current.value, RoundedCornerShape(50))
                     .padding(horizontal = 6.dp, vertical = 3.dp)
             )
 
@@ -463,15 +452,15 @@ private fun MovieField(name: String, value: String) {
 @Composable
 private fun <T : Any> MovieSection(
     items: List<T>,
-    header: @Composable () -> Unit,
+    @StringRes headerResId: Int,
+    onDetailClicked: (() -> Unit)? = null,
     itemContent: @Composable (T) -> Unit,
-    modifier: Modifier,
-    tag: String = ""
+    modifier: Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        header()
+        SectionHeader(headerResId, items.size, onDetailClicked)
         LazyRow(
-            modifier = Modifier.semantics { testTag = tag },
+            modifier = Modifier.testTag(LocalContext.current.getString(headerResId)),
             contentPadding = PaddingValues(16.dp)
         ) {
             items(
@@ -486,15 +475,11 @@ private fun <T : Any> MovieSection(
 }
 
 @Composable
-private fun MovieSectionHeader(@StringRes titleResId: Int) = Text(
-    text = stringResource(titleResId),
-    color = LocalVibrantColor.current.value,
-    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
-    modifier = Modifier.padding(start = 16.dp)
-)
-
-@Composable
-private fun SectionHeaderWithDetail(@StringRes textRes: Int, count: Int, onClick: () -> Unit) {
+private fun SectionHeader(
+    @StringRes headerResId: Int,
+    count: Int,
+    onClick: (() -> Unit)? = null
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -502,27 +487,29 @@ private fun SectionHeaderWithDetail(@StringRes textRes: Int, count: Int, onClick
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = stringResource(textRes),
+            text = stringResource(headerResId),
             color = LocalVibrantColor.current.value,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable(onClick = onClick)
-                .padding(4.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.see_all, count),
-                color = LocalVibrantColor.current.value,
-                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
-                modifier = Modifier.padding(end = 4.dp)
-            )
-            Icon(
-                Icons.Filled.ArrowForward,
-                contentDescription = stringResource(R.string.see_all),
-                tint = LocalVibrantColor.current.value
-            )
+        if (onClick != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable(onClick = { onClick() })
+                    .padding(4.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.see_all, count),
+                    color = LocalVibrantColor.current.value,
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+                Icon(
+                    Icons.Filled.ArrowForward,
+                    contentDescription = stringResource(R.string.see_all),
+                    tint = LocalVibrantColor.current.value
+                )
+            }
         }
     }
 }
@@ -550,8 +537,7 @@ private fun MovieImage(image: Image) {
             is ImagePainter.State.Error -> {
                 Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray)
             }
-            else -> {
-            }
+            else -> Unit
         }
     }
 }

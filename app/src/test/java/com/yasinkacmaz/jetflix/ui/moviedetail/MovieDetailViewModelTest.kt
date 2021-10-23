@@ -1,16 +1,19 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
+import androidx.lifecycle.SavedStateHandle
 import com.yasinkacmaz.jetflix.data.CreditsResponse
 import com.yasinkacmaz.jetflix.data.ImagesResponse
 import com.yasinkacmaz.jetflix.data.MovieDetailResponse
 import com.yasinkacmaz.jetflix.service.MovieService
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
+import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.parseJson
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.spyk
 import io.mockk.verifyOrder
@@ -19,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +35,9 @@ class MovieDetailViewModelTest {
 
     @RelaxedMockK
     private lateinit var movieService: MovieService
+
+    @RelaxedMockK
+    private lateinit var savedStateHandle: SavedStateHandle
 
     private val movieDetailMapper = MovieDetailMapper()
     private val creditsMapper = CreditsMapper()
@@ -46,24 +53,31 @@ class MovieDetailViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        movieDetailViewModel = spyk(MovieDetailViewModel(movieService, movieDetailMapper, creditsMapper, imageMapper))
+        every { savedStateHandle.get<String>(ARG_MOVIE_ID) } returns movieId.toString()
     }
 
+    private fun initViewModel() {
+        movieDetailViewModel =
+            spyk(MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper))
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
     @Test
-    fun `fetchMovieDetail success`() = coroutineTestRule.runBlockingTest {
-        mockServices()
+    fun `fetchMovieDetail success`() = runBlockingTest {
+        GlobalScope.launch(Dispatchers.IO) {
+            mockServices()
+            initViewModel()
 
-        movieDetailViewModel.fetchMovieDetail(movieId)
-
-        verifyServices()
-        verifyOrder {
-            movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(loading = true)
-            movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(
-                movieDetailMapper.map(movieDetailResponse),
-                creditsMapper.map(creditsResponse),
-                imageMapper.map(imagesResponse),
-                loading = false
-            )
+            verifyServices()
+            verifyOrder {
+                movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(loading = true)
+                movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(
+                    movieDetailMapper.map(movieDetailResponse),
+                    creditsMapper.map(creditsResponse),
+                    imageMapper.map(imagesResponse),
+                    loading = false
+                )
+            }
         }
     }
 
@@ -74,8 +88,7 @@ class MovieDetailViewModelTest {
             mockServices()
             val exception = IOException()
             coEvery { movieService.fetchMovieDetail(movieId) } throws exception
-
-            movieDetailViewModel.fetchMovieDetail(movieId)
+            initViewModel()
 
             verifyServices()
             verifyOrder {

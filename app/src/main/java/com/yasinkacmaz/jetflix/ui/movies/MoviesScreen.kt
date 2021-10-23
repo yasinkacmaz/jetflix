@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.R
@@ -54,7 +54,7 @@ fun MoviesScreen(
     isDarkTheme: MutableState<Boolean>,
     showSettingsDialog: MutableState<Boolean>
 ) {
-    val filterViewModel = viewModel<FilterViewModel>()
+    val filterViewModel = hiltViewModel<FilterViewModel>()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val filterState = filterViewModel.filterState.collectAsState().value
     val coroutineScope = rememberCoroutineScope()

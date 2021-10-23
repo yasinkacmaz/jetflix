@@ -1,14 +1,22 @@
 package com.yasinkacmaz.jetflix.ui.navigation
 
-import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
-import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
+const val ARG_MOVIE_ID = "MOVIE_ID"
 
-sealed class Screen {
-    object Movies : Screen()
+enum class Screen(val route: String) {
+    MOVIES("movies"),
+    DETAIL("movie/{$ARG_MOVIE_ID}/detail"),
+    IMAGES("movie/{$ARG_MOVIE_ID}/images"),
+    CAST("movie/{$ARG_MOVIE_ID}/cast"),
+    CREW("movie/{$ARG_MOVIE_ID}/crew");
 
-    data class MovieDetail(val movieId: Int) : Screen()
-
-    data class Images(val images: List<Image>) : Screen()
-
-    data class PeopleGrid(val people: List<Person>) : Screen()
+    fun createPath(vararg args: Any): String {
+        var route = route
+        require(args.size == route.argumentCount) {
+            "Provided ${args.count()} parameters, was expected ${route.argumentCount} parameters!"
+        }
+        route.arguments().forEachIndexed { index, matchResult ->
+            route = route.replaceRange(matchResult.range, args[index].toString())
+        }
+        return route
+    }
 }

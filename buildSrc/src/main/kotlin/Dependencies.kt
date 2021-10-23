@@ -18,7 +18,7 @@ object Dependencies {
 
         object VersionsPlugin {
             const val id = "com.github.ben-manes.versions"
-            const val version = "0.39.0"
+            const val version = "0.42.0"
         }
     }
 
@@ -50,6 +50,7 @@ object Dependencies {
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
         const val activity = "androidx.activity:activity-compose:1.4.0"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+        const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
 
         object Accompanist {

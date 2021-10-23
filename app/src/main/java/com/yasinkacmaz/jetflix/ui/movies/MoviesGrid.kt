@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -29,11 +29,11 @@ import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
+import com.yasinkacmaz.jetflix.ui.main.LocalNavController
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
-import com.yasinkacmaz.jetflix.ui.navigation.LocalNavigator
-import com.yasinkacmaz.jetflix.ui.navigation.Screen.MovieDetail
 import com.yasinkacmaz.jetflix.util.toDp
+import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -45,13 +45,9 @@ private val span: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(CELL_
 
 @Composable
 fun MoviesGrid() {
-    val moviesViewModel = viewModel<MoviesViewModel>()
+    val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
     val state = rememberLazyListState()
-    val navigator = LocalNavigator.current
-    val onMovieClicked: (Int) -> Unit = { movieId ->
-        navigator.navigateTo(MovieDetail(movieId))
-    }
     LaunchedEffect(Unit) {
         moviesViewModel.filterStateChanges
             .onEach {
@@ -70,18 +66,16 @@ fun MoviesGrid() {
             ErrorColumn(error.error.message.orEmpty())
         }
         else -> {
-            LazyMoviesGrid(state, movies, onMovieClicked)
+            LazyMoviesGrid(state, movies)
         }
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun LazyMoviesGrid(
-    state: LazyListState,
-    moviePagingItems: LazyPagingItems<Movie>,
-    onMovieClicked: (Int) -> Unit
-) {
+private fun LazyMoviesGrid(state: LazyListState, moviePagingItems: LazyPagingItems<Movie>) {
+    val navController = LocalNavController.current
+    val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.DETAIL.createPath(movieId)) }
     LazyVerticalGrid(
         cells = GridCells.Fixed(CELL_COUNT),
         contentPadding = PaddingValues(

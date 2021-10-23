@@ -103,6 +103,7 @@ dependencies {
     implementation(Dependencies.Compose.constraintLayout)
     implementation(Dependencies.Compose.activity)
     implementation(Dependencies.Compose.viewModel)
+    implementation(Dependencies.Compose.hiltNavigation)
     implementation(Dependencies.Compose.tooling)
 
     // Accompanist
