@@ -7,7 +7,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap/")
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
@@ -19,7 +18,7 @@ buildscript {
 }
 
 plugins {
-    id(Dependencies.Gradle.VersionsPlugin.id) version Dependencies.Gradle.VersionsPlugin.version
+   id(Dependencies.Gradle.VersionsPlugin.id) version Dependencies.Gradle.VersionsPlugin.version
 }
 
 allprojects {
