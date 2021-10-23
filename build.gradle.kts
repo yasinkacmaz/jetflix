@@ -29,7 +29,7 @@ allprojects {
 }
 
 subprojects {
-    apply(from = file("$rootDir/ktlint.gradle.kts"))
+    apply(plugin = "plugins.ktlint")
     afterEvaluate {
         tasks.withType(KotlinCompile::class).all {
             kotlinOptions {
