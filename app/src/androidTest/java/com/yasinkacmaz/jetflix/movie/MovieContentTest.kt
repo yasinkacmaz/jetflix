@@ -34,7 +34,7 @@ class MovieContentTest {
 
     @Test
     fun should_not_find_movie_information_with_merged_tree() = with(composeTestRule) {
-        setMovieContent()
+        renderMovieContent()
 
         onRoot().printToLog(TAG)
         onNodeWithText("Movie Name", useUnmergedTree = false).assertDoesNotExist()
@@ -44,7 +44,7 @@ class MovieContentTest {
 
     @Test
     fun should_assert_movie_information_with_unmerged_tree(): Unit = with(composeTestRule) {
-        setMovieContent()
+        renderMovieContent()
 
         onRoot().printToLog(TAG)
         onNodeWithText("Movie Name", useUnmergedTree = true).assertIsDisplayed()
@@ -52,7 +52,7 @@ class MovieContentTest {
         onNodeWithText(1337.toString(), useUnmergedTree = true).assertIsDisplayed()
     }
 
-    private fun ComposeContentTestRule.setMovieContent() = setTestContent {
+    private fun ComposeContentTestRule.renderMovieContent() = setTestContent {
         Box(
             Modifier
                 .fillMaxHeight(0.5f)
