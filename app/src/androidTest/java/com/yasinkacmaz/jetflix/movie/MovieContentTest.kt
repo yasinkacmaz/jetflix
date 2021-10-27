@@ -33,7 +33,7 @@ class MovieContentTest {
     )
 
     @Test
-    fun `Should not find movie information with merged tree`(): Unit = with(composeTestRule) {
+    fun should_not_find_movie_information_with_merged_tree() = with(composeTestRule) {
         setMovieContent()
 
         onRoot().printToLog(TAG)
@@ -43,7 +43,7 @@ class MovieContentTest {
     }
 
     @Test
-    fun `Should assert movie information with unmerged tree`(): Unit = with(composeTestRule) {
+    fun should_assert_movie_information_with_unmerged_tree(): Unit = with(composeTestRule) {
         setMovieContent()
 
         onRoot().printToLog(TAG)

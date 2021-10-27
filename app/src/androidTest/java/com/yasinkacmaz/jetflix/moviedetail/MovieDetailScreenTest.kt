@@ -15,6 +15,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performGesture
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
@@ -37,7 +38,7 @@ class MovieDetailScreenTest {
     private val movieDetail = MovieDetail(id = 1)
 
     @Test
-    fun `Should not render original title if same with name`(): Unit = with(composeTestRule) {
+    fun should_not_render_original_title_if_same_with_name(): Unit = with(composeTestRule) {
         val title = "Title"
         val originalTitle = "Title"
 
@@ -47,7 +48,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun `Should render original title with parentheses if different from name`(): Unit = with(composeTestRule) {
+    fun should_render_original_title_with_parentheses_if_different_from_name(): Unit = with(composeTestRule) {
         val title = "Title"
         val originalTitle = "Original Title"
 
@@ -58,7 +59,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun `Should render genre chips`(): Unit = with(composeTestRule) {
+    fun should_render_genre_chips(): Unit = with(composeTestRule) {
         val genres = listOf(Genre(1, "Action"), Genre(2, "Drama"), Genre(3, "Family"))
 
         setMovieDetailContent(movieDetail.copy(genres = genres))
@@ -69,7 +70,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun `Should render movie fields`(): Unit = with(composeTestRule) {
+    fun should_render_movie_fields(): Unit = with(composeTestRule) {
         val releaseDate = "01.03.1337"
         val duration = 137
         val voteAverage = 7.3
@@ -91,7 +92,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun `Should render tagline and overview`(): Unit = with(composeTestRule) {
+    fun should_render_tagline_and_overview(): Unit = with(composeTestRule) {
         val tagline = "Tagline"
         val overview = "Overview"
 
@@ -104,7 +105,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun `Should render cast`(): Unit = with(composeTestRule) {
+    fun should_render_cast(): Unit = with(composeTestRule) {
         val tony = Person("Al Pacino", "Tony Montana", "", Gender.MALE)
         val natasha = Person("Scarlett Johansson", "Natasha Romanoff", "", Gender.FEMALE)
         val hermione = Person("Emma Watson", "Hermione Granger", "", Gender.FEMALE)
@@ -118,7 +119,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun `Should render crew`(): Unit = with(composeTestRule) {
+    fun should_render_crew(): Unit = with(composeTestRule) {
         val klaus = Person("Klaus Badelt", "Composer", "", Gender.MALE)
         val rowling = Person("J.K. Rowling", "Novel", "", Gender.FEMALE)
         val hans = Person("Hans Zimmer", "Music Composer", "", Gender.MALE)
@@ -138,7 +139,7 @@ class MovieDetailScreenTest {
     private fun ComposeContentTestRule.assertPeople(tag: String, people: List<Person>) {
         val peopleLazyRow = onNodeWithTag(tag).performScrollTo()
         people.forEach { person ->
-            peopleLazyRow.performGesture {
+            peopleLazyRow.performTouchInput {
                 val y = center.y
                 val node = onNodeWithText(person.name).fetchSemanticsNode()
                 val x = node.positionInRoot.x
