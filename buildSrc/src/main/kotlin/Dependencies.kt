@@ -80,5 +80,6 @@ object Dependencies {
         const val mockk = "io.mockk:mockk:1.12.0"
         const val striktAssertion = "io.strikt:strikt-core:0.32.0"
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
+        const val junitExt = "androidx.test.ext:junit:1.1.3"
     }
 }

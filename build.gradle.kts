@@ -1,6 +1,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.android.build.gradle.BaseExtension
 
 buildscript {
     repositories {
@@ -36,6 +37,22 @@ subprojects {
                 jvmTarget = JavaVersion.VERSION_11.toString()
                 allWarningsAsErrors = true
                 freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
+            }
+        }
+
+        extensions.findByType<BaseExtension>() ?: return@afterEvaluate
+        configure<BaseExtension> {
+            compileSdkVersion(Versions.compileSdk)
+            defaultConfig {
+                minSdk = Versions.minSdk
+                targetSdk = Versions.targetSdk
+                versionName = Versions.versionName
+                versionCode = Versions.versionCode
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            }
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_11
+                targetCompatibility = JavaVersion.VERSION_11
             }
         }
     }

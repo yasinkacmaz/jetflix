@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application tools:ignore="AllowBackup">
-        <!--   Required for createComposeRule you'll have to add ComponentActivity-->
-        <activity android:name="androidx.activity.ComponentActivity" />
+    <application tools:ignore="AllowBackup,MissingApplicationIcon">
+        <!-- Required for createComposeRule. you'll have to add ComponentActivity -->
+        <activity
+            android:name="androidx.activity.ComponentActivity"
+            android:exported="false"
+            tools:node="merge" />
     </application>
 
 </manifest>
