@@ -27,7 +27,7 @@ class SettingsDialogTest {
     private val defaultLanguage = Language("Turkish", "tr", "")
 
     @Test
-    fun should_show_loading_when_uiState_showLoading_is_true(): Unit = with(composeTestRule) {
+    fun should_render_loading_when_uiState_showLoading_is_true(): Unit = with(composeTestRule) {
         val selectedLanguage: State<Language> = mutableStateOf(defaultLanguage)
         val uiState = SettingsViewModel.UiState(showLoading = true)
 
@@ -37,7 +37,7 @@ class SettingsDialogTest {
     }
 
     @Test
-    fun should_show_selected_language(): Unit = with(composeTestRule) {
+    fun should_render_selected_language(): Unit = with(composeTestRule) {
         val selectedLanguage: State<Language> = mutableStateOf(defaultLanguage)
         val uiState = SettingsViewModel.UiState()
 
@@ -47,7 +47,7 @@ class SettingsDialogTest {
     }
 
     @Test
-    fun should_show_languages_when_selected_language_clicked(): Unit = with(composeTestRule) {
+    fun should_render_languages_when_selected_language_clicked(): Unit = with(composeTestRule) {
         val selectedLanguage: State<Language> = mutableStateOf(defaultLanguage)
         val firstLanguageName = "English"
         val secondLanguageName = "Russian"
