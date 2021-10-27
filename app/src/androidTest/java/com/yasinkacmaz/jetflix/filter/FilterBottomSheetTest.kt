@@ -37,7 +37,7 @@ class FilterBottomSheetTest {
     fun should_render_sort_order_as_selected(): Unit = with(composeTestRule) {
         val filterState = FilterState(sortOrder = SortOrder.ASCENDING)
 
-        showFilterBottomSheetContent(filterState)
+        renderFilterBottomSheet(filterState)
 
         verifySortOrder(filterState.sortOrder)
     }
@@ -46,7 +46,7 @@ class FilterBottomSheetTest {
     fun should_render_sort_by_as_selected(): Unit = with(composeTestRule) {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
 
-        showFilterBottomSheetContent(filterState)
+        renderFilterBottomSheet(filterState)
 
         verifySortBy(filterState.sortBy)
     }
@@ -57,7 +57,7 @@ class FilterBottomSheetTest {
         val uiModels = genreNames.map { GenreUiModel(genre = Genre(id = -1, name = it)) }
         val filterState = FilterState(genres = uiModels)
 
-        showFilterBottomSheetContent(filterState)
+        renderFilterBottomSheet(filterState)
 
         genreNames.forEach { genreName ->
             onNodeWithText(genreName).assertIsDisplayed()
@@ -70,7 +70,7 @@ class FilterBottomSheetTest {
         val uiModels = genreNames.map { GenreUiModel(genre = Genre(id = -1, name = it)) }
         val filterState = FilterState(genres = uiModels, selectedGenreIds = listOf(-1))
 
-        showFilterBottomSheetContent(filterState)
+        renderFilterBottomSheet(filterState)
 
         genreNames.forEach { genreName ->
             onNodeWithText(genreName).assertIsSelected()
@@ -81,7 +81,7 @@ class FilterBottomSheetTest {
     fun should_render_include_adult() = with(composeTestRule) {
         val filterState = FilterState(includeAdult = true)
 
-        showFilterBottomSheetContent(filterState)
+        renderFilterBottomSheet(filterState)
 
         verifyIncludeAdult(filterState.includeAdult)
     }
@@ -101,7 +101,7 @@ class FilterBottomSheetTest {
         onNodeWithText("Include Adult").assert(hasAnyChild(isToggleable().and(matcher)))
     }
 
-    private fun ComposeContentTestRule.showFilterBottomSheetContent(
+    private fun ComposeContentTestRule.renderFilterBottomSheet(
         filterState: FilterState,
         onFilterStateChanged: (FilterState) -> Unit = { },
         onResetClicked: () -> Unit = { },

@@ -42,7 +42,7 @@ class MovieDetailScreenTest {
         val title = "Title"
         val originalTitle = "Title"
 
-        setMovieDetailContent(movieDetail.copy(title = title, originalTitle = originalTitle))
+        renderMovieDetail(movieDetail.copy(title = title, originalTitle = originalTitle))
 
         onAllNodesWithText(title, useUnmergedTree = false).assertCountEquals(1)
     }
@@ -52,7 +52,7 @@ class MovieDetailScreenTest {
         val title = "Title"
         val originalTitle = "Original Title"
 
-        setMovieDetailContent(movieDetail.copy(title = title, originalTitle = originalTitle))
+        renderMovieDetail(movieDetail.copy(title = title, originalTitle = originalTitle))
 
         onNodeWithText(title, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText("($originalTitle)", useUnmergedTree = false).assertIsDisplayed()
@@ -62,7 +62,7 @@ class MovieDetailScreenTest {
     fun should_render_genre_chips(): Unit = with(composeTestRule) {
         val genres = listOf(Genre(1, "Action"), Genre(2, "Drama"), Genre(3, "Family"))
 
-        setMovieDetailContent(movieDetail.copy(genres = genres))
+        renderMovieDetail(movieDetail.copy(genres = genres))
 
         onNodeWithText("Action", useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText("Drama", useUnmergedTree = false).assertIsDisplayed()
@@ -76,7 +76,7 @@ class MovieDetailScreenTest {
         val voteAverage = 7.3
         val voteCount = 1337
 
-        setMovieDetailContent(
+        renderMovieDetail(
             movieDetail.copy(
                 releaseDate = releaseDate,
                 duration = duration,
@@ -96,7 +96,7 @@ class MovieDetailScreenTest {
         val tagline = "Tagline"
         val overview = "Overview"
 
-        setMovieDetailContent(
+        renderMovieDetail(
             movieDetail.copy(tagline = tagline, overview = overview)
         )
 
@@ -113,7 +113,7 @@ class MovieDetailScreenTest {
         val cast = listOf(tony, natasha, hermione, sparrow)
         val credits = Credits(cast = cast, crew = emptyList())
 
-        setMovieDetailContent(movieDetail, credits)
+        renderMovieDetail(movieDetail, credits)
 
         assertPeople("cast", cast)
     }
@@ -129,7 +129,7 @@ class MovieDetailScreenTest {
         val crew = listOf(klaus, rowling, hans, stan, quentin)
         val credits = Credits(cast = emptyList(), crew = crew)
 
-        setMovieDetailContent(movieDetail, credits)
+        renderMovieDetail(movieDetail, credits)
 
         assertPeople("crew", crew)
     }
@@ -153,7 +153,7 @@ class MovieDetailScreenTest {
         }
     }
 
-    private fun ComposeContentTestRule.setMovieDetailContent(
+    private fun ComposeContentTestRule.renderMovieDetail(
         movieDetail: MovieDetail,
         credits: Credits = Credits(emptyList(), emptyList())
     ) = setTestContent {
