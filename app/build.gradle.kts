@@ -10,20 +10,6 @@ plugins {
 }
 
 android {
-    defaultConfig {
-        applicationId = "com.yasinkacmaz.jetflix"
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
-        compileSdk = Versions.compileSdk
-        versionCode = Versions.versionCode
-        versionName = Versions.versionName
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
 
     buildFeatures {
         compose = true
@@ -70,6 +56,11 @@ android {
             isReturnDefaultValues = true
         }
         animationsDisabled = true
+        emulatorSnapshots {
+            enableForTestFailures = true
+            maxSnapshotsForTestFailures = 2
+            compressSnapshots = false
+        }
     }
 
     packagingOptions.apply {
@@ -140,4 +131,5 @@ dependencies {
     testImplementation(Dependencies.Test.coroutines)
     androidTestImplementation(Dependencies.Compose.uiTest)
     androidTestImplementation(Dependencies.Compose.uiTestJunit)
+    androidTestImplementation(Dependencies.Test.junitExt)
 }
