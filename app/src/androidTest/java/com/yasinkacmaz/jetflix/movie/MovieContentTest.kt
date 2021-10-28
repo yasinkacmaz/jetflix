@@ -37,9 +37,9 @@ class MovieContentTest {
         renderMovieContent()
 
         onRoot().printToLog(TAG)
-        onNodeWithText("Movie Name", useUnmergedTree = false).assertDoesNotExist()
-        onNodeWithText("01.03.1337", useUnmergedTree = false).assertDoesNotExist()
-        onNodeWithText(1337.toString(), useUnmergedTree = false).assertDoesNotExist()
+        onNodeWithText(movie.name, useUnmergedTree = false).assertDoesNotExist()
+        onNodeWithText(movie.releaseDate, useUnmergedTree = false).assertDoesNotExist()
+        onNodeWithText(movie.voteCount.toString(), useUnmergedTree = false).assertDoesNotExist()
     }
 
     @Test
@@ -47,9 +47,9 @@ class MovieContentTest {
         renderMovieContent()
 
         onRoot().printToLog(TAG)
-        onNodeWithText("Movie Name", useUnmergedTree = true).assertIsDisplayed()
-        onNodeWithText("01.03.1337", useUnmergedTree = true).assertIsDisplayed()
-        onNodeWithText(1337.toString(), useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(movie.name, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(movie.releaseDate, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(movie.voteCount.toString(), useUnmergedTree = true).assertIsDisplayed()
     }
 
     private fun ComposeContentTestRule.renderMovieContent() = setTestContent {

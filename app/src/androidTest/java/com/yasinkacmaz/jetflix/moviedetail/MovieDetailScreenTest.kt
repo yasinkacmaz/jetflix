@@ -62,9 +62,9 @@ class MovieDetailScreenTest {
 
         renderMovieDetail(movieDetail.copy(genres = genres))
 
-        onNodeWithText("Action", useUnmergedTree = false).assertIsDisplayed()
-        onNodeWithText("Drama", useUnmergedTree = false).assertIsDisplayed()
-        onNodeWithText("Family", useUnmergedTree = false).assertIsDisplayed()
+        genres.forEach {
+            onNodeWithText(it.name!!, useUnmergedTree = false).assertIsDisplayed()
+        }
     }
 
     @Test
@@ -94,9 +94,7 @@ class MovieDetailScreenTest {
         val tagline = "Tagline"
         val overview = "Overview"
 
-        renderMovieDetail(
-            movieDetail.copy(tagline = tagline, overview = overview)
-        )
+        renderMovieDetail(movieDetail.copy(tagline = tagline, overview = overview))
 
         onNodeWithText(tagline, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(overview, useUnmergedTree = false).assertIsDisplayed()
@@ -121,7 +119,7 @@ class MovieDetailScreenTest {
         val klaus = Person("Klaus Badelt", "Composer", "", Gender.MALE)
         val rowling = Person("J.K. Rowling", "Novel", "", Gender.FEMALE)
         val hans = Person("Hans Zimmer", "Music Composer", "", Gender.MALE)
-        // Stan and Quentin is at offscreen. We should scroll them to assert.
+        // Stan and Quentin is not visible initially. We should scroll to them to make them visible, then assert.
         val stan = Person("Stan Lee", "Characters", "", Gender.MALE)
         val quentin = Person("Quentin Tarantino", "Director", "", Gender.MALE)
         val crew = listOf(klaus, rowling, hans, stan, quentin)

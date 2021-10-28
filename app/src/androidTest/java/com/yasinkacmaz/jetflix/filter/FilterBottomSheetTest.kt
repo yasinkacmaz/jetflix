@@ -33,6 +33,9 @@ class FilterBottomSheetTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
+    private val genreNames = listOf("Action", "Drama", "Animation", "Comedy")
+    private val genres = genreNames.map { GenreUiModel(genre = Genre(id = -1, name = it)) }
+
     @Test
     fun should_render_sort_order_as_selected(): Unit = with(composeTestRule) {
         val filterState = FilterState(sortOrder = SortOrder.ASCENDING)
@@ -53,9 +56,7 @@ class FilterBottomSheetTest {
 
     @Test
     fun should_render_genres() = with(composeTestRule) {
-        val genreNames = listOf("Action", "Drama", "Animation", "Comedy")
-        val uiModels = genreNames.map { GenreUiModel(genre = Genre(id = -1, name = it)) }
-        val filterState = FilterState(genres = uiModels)
+        val filterState = FilterState(genres = genres)
 
         renderFilterBottomSheet(filterState)
 
@@ -66,9 +67,7 @@ class FilterBottomSheetTest {
 
     @Test
     fun should_render_selected_genres() = with(composeTestRule) {
-        val genreNames = listOf("Action", "Drama", "Animation", "Comedy")
-        val uiModels = genreNames.map { GenreUiModel(genre = Genre(id = -1, name = it)) }
-        val filterState = FilterState(genres = uiModels, selectedGenreIds = listOf(-1))
+        val filterState = FilterState(genres = genres, selectedGenreIds = listOf(-1))
 
         renderFilterBottomSheet(filterState)
 
