@@ -6,13 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToLog
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.settings.Language
-import com.yasinkacmaz.jetflix.ui.settings.SETTINGS_DIALOG_TAG
 import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.util.getString
@@ -47,7 +44,7 @@ class SettingsDialogTest {
     }
 
     @Test
-    fun should_render_languages_when_selected_language_clicked(): Unit = with(composeTestRule) {
+    fun should_render_languages_when_selected_language_clicked() = with(composeTestRule) {
         val selectedLanguage: State<Language> = mutableStateOf(defaultLanguage)
         val firstLanguageName = "English"
         val secondLanguageName = "Russian"
@@ -60,12 +57,11 @@ class SettingsDialogTest {
         val uiState = SettingsViewModel.UiState(languages = languages)
 
         showSettingsDialog(uiState, selectedLanguage)
-
-        onNodeWithTag(SETTINGS_DIALOG_TAG).printToLog(TAG)
         onNodeWithText(defaultLanguage.englishName, substring = true, useUnmergedTree = true).performClick()
-        onNodeWithText(firstLanguageName, substring = true, useUnmergedTree = true).assertIsDisplayed()
-        onNodeWithText(secondLanguageName, substring = true, useUnmergedTree = true).assertIsDisplayed()
-        onNodeWithText(thirdLanguageName, substring = true, useUnmergedTree = true).assertIsDisplayed()
+
+        languages.forEach {
+            onNodeWithText(it.englishName, substring = true, useUnmergedTree = true).assertIsDisplayed()
+        }
     }
 
     private fun ComposeContentTestRule.showSettingsDialog(
@@ -78,9 +74,5 @@ class SettingsDialogTest {
             selectedLanguage = selectedLanguage,
             onLanguageSelected = {}
         )
-    }
-
-    companion object {
-        private const val TAG = "SettingsDialogTestTag"
     }
 }
