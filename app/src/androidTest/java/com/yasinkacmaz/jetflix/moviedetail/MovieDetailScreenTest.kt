@@ -3,7 +3,6 @@ package com.yasinkacmaz.jetflix.moviedetail
 import androidx.compose.animation.Animatable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,8 +12,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipe
+import androidx.compose.ui.test.performScrollToIndex
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetail
@@ -130,20 +128,10 @@ class MovieDetailScreenTest {
         assertPeople("crew", crew)
     }
 
-    // TODO: Find another way to assert LazyRow items without scrolling them manually.
-    //  Using onChildren with LazyRow only returns visible children.
     private fun ComposeContentTestRule.assertPeople(tag: String, people: List<Person>) {
         val peopleLazyRow = onNodeWithTag(tag).performScrollTo()
-        people.forEach { person ->
-            peopleLazyRow.performTouchInput {
-                val y = center.y
-                val node = onNodeWithText(person.name).fetchSemanticsNode()
-                val x = node.positionInRoot.x
-                val width = node.size.width
-                val start = Offset(x + width, y)
-                val end = Offset(x, y)
-                swipe(start, end)
-            }
+        people.forEachIndexed { index, person ->
+            peopleLazyRow.performScrollToIndex(index)
             onNodeWithText(person.name, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
             onNodeWithText(person.role, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
         }
