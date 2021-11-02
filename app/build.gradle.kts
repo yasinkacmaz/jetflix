@@ -15,6 +15,10 @@ android {
         compose = true
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
     composeOptions {
         kotlinCompilerExtensionVersion = Dependencies.Compose.compilerVersion
     }
@@ -127,5 +131,6 @@ dependencies {
     testImplementation(Dependencies.Test.coroutines)
     androidTestImplementation(Dependencies.Compose.uiTest)
     androidTestImplementation(Dependencies.Compose.uiTestJunit)
+    debugImplementation(Dependencies.Compose.testManifest)
     androidTestImplementation(Dependencies.Test.junitExt)
 }

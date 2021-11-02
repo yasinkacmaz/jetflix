@@ -47,6 +47,7 @@ object Dependencies {
         const val tooling = "androidx.compose.ui:ui-tooling:$version"
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
+        const val testManifest = "androidx.compose.ui:ui-test-manifest:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha16"
         const val activity = "androidx.activity:activity-compose:1.6.0-beta01"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha01"
