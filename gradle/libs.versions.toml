@@ -31,6 +31,7 @@ compose_animation = { module = "androidx.compose.animation:animation", version.r
 compose_tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose_uiTest = { module = "androidx.compose.ui:ui-test", version.ref = "compose" }
 compose_uiTestJunit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
+compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose_paging = { module = "androidx.paging:paging-compose", version = "1.0.0-alpha16" }
 compose_activity = { module = "androidx.activity:activity-compose", version = "1.7.0-alpha01" }
 compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.6.0-alpha02" }
