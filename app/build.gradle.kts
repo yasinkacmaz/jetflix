@@ -10,9 +10,13 @@ plugins {
 }
 
 android {
-
+    namespace = "com.yasinkacmaz.jetflix"
     buildFeatures {
         compose = true
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     composeOptions {
@@ -73,7 +77,6 @@ android {
             )
         )
     }
-    namespace = "com.yasinkacmaz.jetflix"
 }
 
 kapt {
@@ -88,6 +91,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.hilt)
     kapt(libs.hiltCompiler)
+    debugImplementation(libs.compose.testManifest)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)
 }
