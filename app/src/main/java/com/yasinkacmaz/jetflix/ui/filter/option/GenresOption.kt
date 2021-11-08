@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.filter.option
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -30,7 +31,6 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterSectionTitle
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.widget.VerticalStaggeredGrid
-import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 
 typealias GenresFilterOption = Pair<List<GenreUiModel>, MutableList<Int>>
 
@@ -75,13 +75,16 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
         var selected by remember(uiModel.genre.id, selectedGenreIds) {
             mutableStateOf(uiModel.genre.id in currentValue.second)
         }
+        val animatedColors = List(colors.size) { i ->
+            animateColorAsState(if (selected) colors[i] else colors[i].copy(alpha = 0f)).value
+        }
         val scale = animateFloatAsState(if (selected) 1.1f else 1f).value
         val modifier = Modifier
             .scale(scale)
             .shadow(animateDpAsState(if (selected) 8.dp else 4.dp).value, shape)
             .background(MaterialTheme.colors.surface)
             .border(2.dp, Brush.horizontalGradient(colors), shape)
-            .gradientBackground(colors, shape = shape, selected)
+            .background(Brush.horizontalGradient(animatedColors), shape)
             .selectable(
                 selected,
                 onClick = {
