@@ -349,8 +349,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
             painter = rememberImagePainter(
                 data = backdropUrl,
                 builder = {
-                    crossfade(2000)
-                    placeholder(R.drawable.ic_movie)
+                    crossfade(1500)
                 }
             ),
             contentScale = ContentScale.FillHeight,
