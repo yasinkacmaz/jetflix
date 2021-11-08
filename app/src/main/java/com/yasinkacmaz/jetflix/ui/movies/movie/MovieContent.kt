@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -73,6 +71,7 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
+                        .background(Color(0x97000000))
                 )
             }
         }
@@ -137,12 +136,10 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
 @Composable
 private fun MovieInfo(movie: Movie, modifier: Modifier) {
     Column(
-        modifier = modifier
-            .background(Color(0x97000000))
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier.padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
         MovieName(name = movie.name)
-        Spacer(modifier = Modifier.height(4.dp))
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
             MovieFeature(Icons.Default.DateRange, movie.releaseDate)
             MovieFeature(Icons.Default.ThumbUp, movie.voteCount.toString())
@@ -151,40 +148,33 @@ private fun MovieInfo(movie: Movie, modifier: Modifier) {
 }
 
 @Composable
-private fun MovieName(name: String) {
-    Text(
-        text = name,
-        style = MaterialTheme.typography.subtitle1.copy(
-            color = Color.White,
-            letterSpacing = 2.sp,
-            fontFamily = FontFamily.Serif,
-            fontWeight = FontWeight.W500,
-        ),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis
-    )
-}
+private fun MovieName(name: String) = Text(
+    text = name,
+    style = MaterialTheme.typography.subtitle1.copy(
+        color = Color.White,
+        letterSpacing = 1.5.sp,
+        fontFamily = FontFamily.Serif,
+        fontWeight = FontWeight.W500,
+    ),
+    maxLines = 1,
+    overflow = TextOverflow.Ellipsis
+)
 
 @Composable
 private fun MovieFeature(icon: ImageVector, field: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(14.dp)
-        )
+        Icon(imageVector = icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(13.dp))
         Text(
             text = field,
             style = MaterialTheme.typography.subtitle2.copy(
                 color = Color.White,
-                letterSpacing = 2.sp,
+                letterSpacing = 1.5.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.W400
             ),
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.padding(horizontal = 4.dp)
+            modifier = Modifier.padding(horizontal = 2.dp)
         )
     }
 }
