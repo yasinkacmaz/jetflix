@@ -82,9 +82,8 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
-    val tint = if (MaterialTheme.colors.isLight) Color.DarkGray else Color.Gray
-    val painter =
-        rememberImagePainter(data = posterPath, builder = { placeholder(R.drawable.ic_image) })
+    val tint = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
+    val painter = rememberImagePainter(data = posterPath)
     Image(
         painter = painter,
         contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
