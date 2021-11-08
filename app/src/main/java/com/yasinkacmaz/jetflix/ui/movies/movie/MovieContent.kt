@@ -46,7 +46,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.util.randomColor
+import com.yasinkacmaz.jetflix.util.rateColors
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -128,7 +128,7 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
             text = rate.toString(),
             style = MaterialTheme.typography.body1.copy(color = Color.White),
             modifier = Modifier
-                .background(Brush.horizontalGradient(listOf(Color.randomColor(), Color.randomColor())))
+                .background(Brush.horizontalGradient(Color.rateColors(movieRate = rate)))
                 .padding(horizontal = 10.dp)
         )
     }
