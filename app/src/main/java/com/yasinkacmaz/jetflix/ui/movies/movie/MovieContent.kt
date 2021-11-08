@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,7 +46,6 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.util.modifier.gradientBackground
 import com.yasinkacmaz.jetflix.util.randomColor
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -129,7 +129,7 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
             text = rate.toString(),
             style = MaterialTheme.typography.body1.copy(color = Color.White),
             modifier = Modifier
-                .gradientBackground(listOf(Color.randomColor(), Color.randomColor()), shape)
+                .background(Brush.horizontalGradient(listOf(Color.randomColor(), Color.randomColor())))
                 .padding(horizontal = 10.dp)
         )
     }
