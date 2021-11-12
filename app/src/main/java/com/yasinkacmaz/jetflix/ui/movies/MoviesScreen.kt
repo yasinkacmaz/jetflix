@@ -4,8 +4,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -42,7 +42,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
+import com.yasinkacmaz.jetflix.ui.filter.FilterHeader
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import kotlinx.coroutines.launch
 
@@ -54,23 +56,32 @@ fun MoviesScreen(
 ) {
     val filterViewModel = viewModel<FilterViewModel>()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val filterState = filterViewModel.filterState.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
+    val hideFilterBottomSheet: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.hide()
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
-            val filterState = filterViewModel.filterState.collectAsState().value
-            FilterBottomSheetContent(
-                filterState,
-                filterViewModel::onFilterStateChanged,
-                filterViewModel::onResetClicked,
-                onHideClicked = {
-                    coroutineScope.launch {
-                        sheetState.hide()
-                    }
-                }
-            )
+            val onResetClicked = if (filterState == null) null else filterViewModel::onResetClicked
+            FilterHeader(onHideClicked = hideFilterBottomSheet, onResetClicked = onResetClicked)
+
+            if (filterState == null) {
+                LoadingColumn(
+                    title = stringResource(id = R.string.loading_filter_options),
+                    modifier = Modifier.fillMaxHeight(0.4f)
+                )
+            } else {
+                FilterBottomSheetContent(
+                    filterState = filterState,
+                    onFilterStateChanged = filterViewModel::onFilterStateChanged
+                )
+            }
         },
         content = {
             MoviesGrid(isDarkTheme, showSettingsDialog, sheetState)
@@ -95,9 +106,7 @@ private fun MoviesGrid(
                     .wrapContentHeight(),
                 elevation = 16.dp
             ) {
-                Column(Modifier.fillMaxWidth()) {
-                    JetflixAppBar(isDarkTheme, showSettingsDialog)
-                }
+                JetflixAppBar(isDarkTheme, showSettingsDialog)
             }
         },
         floatingActionButton = {

@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,15 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.R
 
-@Suppress("unused")
 @Composable
-fun ColumnScope.FilterBottomSheetContent(
-    filterState: FilterState,
-    onFilterStateChanged: (FilterState) -> Unit,
-    onResetClicked: () -> Unit,
-    onHideClicked: () -> Unit
-) {
-    FilterHeader(onHideClicked, onResetClicked)
+fun FilterBottomSheetContent(filterState: FilterState, onFilterStateChanged: (FilterState) -> Unit) {
     Spacer(modifier = Modifier.padding(top = 4.dp))
     filterState.toFilterOptions().forEach { filterOption ->
         filterOption.Render {
@@ -39,7 +31,7 @@ fun ColumnScope.FilterBottomSheetContent(
 }
 
 @Composable
-private fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: () -> Unit) {
+fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: (() -> Unit)? = null) {
     Surface(
         Modifier.fillMaxWidth(),
         elevation = 8.dp,
@@ -66,12 +58,14 @@ private fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: () -> Unit) 
                     style = MaterialTheme.typography.body1
                 )
             }
-            IconButton(onClick = { onResetClicked() }) {
-                Text(
-                    text = stringResource(id = R.string.reset),
-                    color = MaterialTheme.colors.onPrimary,
-                    style = MaterialTheme.typography.body2
-                )
+            if (onResetClicked != null) {
+                IconButton(onClick = { onResetClicked() }) {
+                    Text(
+                        text = stringResource(id = R.string.reset),
+                        color = MaterialTheme.colors.onPrimary,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
             }
         }
     }
