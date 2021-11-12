@@ -18,7 +18,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.ui.filter.FilterContent
+import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
@@ -107,7 +107,7 @@ class FilterBottomSheetTest {
         onHideClicked: () -> Unit = { }
     ) = setTestContent {
         Column(Modifier.statusBarsPadding()) {
-            FilterContent(filterState, onFilterStateChanged, onResetClicked, onHideClicked)
+            FilterBottomSheetContent(filterState, onFilterStateChanged, onResetClicked, onHideClicked)
         }
     }
 }

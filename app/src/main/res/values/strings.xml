@@ -9,7 +9,7 @@
 
     <!-- filter -->
     <string name="include_adult">Include Adult</string>
-    <string name="title_filter_bottom_sheet">Filter&amp;Sort Movies</string>
+    <string name="title_filter_bottom_sheet">Filter &amp; Sort Movies</string>
     <string name="reset">RESET</string>
     <string name="close_content_description">Close</string>
 
