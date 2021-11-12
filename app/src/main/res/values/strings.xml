@@ -8,6 +8,7 @@
     <string name="fetching_more_movies">Fetching More Movies</string>
 
     <!-- filter -->
+    <string name="loading_filter_options">Loading filter options, please wait…</string>
     <string name="include_adult">Include Adult</string>
     <string name="title_filter_bottom_sheet">Filter &amp; Sort Movies</string>
     <string name="reset">RESET</string>
