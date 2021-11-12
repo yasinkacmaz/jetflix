@@ -42,7 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.filter.FilterContent
+import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import kotlinx.coroutines.launch
 
@@ -61,7 +61,7 @@ fun MoviesScreen(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
             val filterState = filterViewModel.filterState.collectAsState().value
-            FilterContent(
+            FilterBottomSheetContent(
                 filterState,
                 filterViewModel::onFilterStateChanged,
                 filterViewModel::onResetClicked,

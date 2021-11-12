@@ -1,10 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -19,29 +18,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsPadding
 import com.yasinkacmaz.jetflix.R
 
 @Suppress("unused")
 @Composable
-fun ColumnScope.FilterContent(
+fun ColumnScope.FilterBottomSheetContent(
     filterState: FilterState,
     onFilterStateChanged: (FilterState) -> Unit,
     onResetClicked: () -> Unit,
     onHideClicked: () -> Unit
 ) {
     FilterHeader(onHideClicked, onResetClicked)
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(vertical = 8.dp)
-    ) {
-        filterState.toFilterOptions().forEach { filterOption ->
-            filterOption.Render {
-                val newState = filterOption.modifyFilterState(filterState)
-                onFilterStateChanged(newState)
-            }
+    Spacer(modifier = Modifier.padding(top = 4.dp))
+    filterState.toFilterOptions().forEach { filterOption ->
+        filterOption.Render {
+            val newState = filterOption.modifyFilterState(filterState)
+            onFilterStateChanged(newState)
         }
     }
 }
@@ -56,7 +48,7 @@ private fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: () -> Unit) 
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(4.dp)
+                .padding(2.dp)
                 .padding(end = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -70,15 +62,17 @@ private fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: () -> Unit) 
                 }
                 Text(
                     text = stringResource(id = R.string.title_filter_bottom_sheet),
-                    color = MaterialTheme.colors.onPrimary
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.body1
                 )
             }
-            Text(
-                stringResource(id = R.string.reset),
-                color = MaterialTheme.colors.onPrimary,
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.clickable { onResetClicked() }
-            )
+            IconButton(onClick = { onResetClicked() }) {
+                Text(
+                    text = stringResource(id = R.string.reset),
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.body2
+                )
+            }
         }
     }
 }
