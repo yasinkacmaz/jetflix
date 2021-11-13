@@ -9,11 +9,10 @@ A Movie listing app using TheMovieDb api and Jetpack Compose. Based on MVVM arch
 ## Screenshots
 
 <p>
-<img src="screenshots/1.gif" width="30%" height="40%"/>
-<img src="screenshots/2.gif" width="30%" height="40%"/>
-<img src="screenshots/3.gif" width="30%" height="40%"/>
-<img src="screenshots/4.gif" width="30%" height="40%"/>
-<img src="screenshots/5.gif" width="30%" height="40%"/>
+<img src="screenshots/1.gif" width="24%" height="40%"/>
+<img src="screenshots/2.gif" width="24%" height="40%"/>
+<img src="screenshots/3.gif" width="24%" height="40%"/>
+<img src="screenshots/4.gif" width="24%" height="40%"/>
 </p>
 
 
