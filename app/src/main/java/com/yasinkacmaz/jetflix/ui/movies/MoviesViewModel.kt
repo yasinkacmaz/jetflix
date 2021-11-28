@@ -28,7 +28,8 @@ class MoviesViewModel @Inject constructor(
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
     filterDataStore: FilterDataStore
 ) : ViewModel() {
-    private val pager: Pager<Int, Movie> = Pager(PagingConfig(pageSize = 20), pagingSourceFactory = ::initPagingSource)
+    private val pager: Pager<Int, Movie> =
+        Pager(config = PagingConfig(pageSize = 20), pagingSourceFactory = ::initPagingSource)
     val movies: Flow<PagingData<Movie>> = pager.flow
     val filterStateChanges = MutableSharedFlow<FilterState>()
     private var filterState: FilterState? = null
