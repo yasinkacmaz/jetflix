@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -33,12 +34,15 @@ fun MainContent(
 
         navigation(startDestination = Screen.DETAIL.route, route = "movie") {
             argument(ARG_MOVIE_ID) { type = NavType.StringType }
-            val movieId = { navController.currentBackStackEntry?.arguments?.getString(ARG_MOVIE_ID)!!.toInt() }
+
+            fun NavBackStackEntry.movieId(): Int {
+                return arguments?.getString(ARG_MOVIE_ID)!!.toInt()
+            }
 
             val movieDetailViewModel: @Composable (movieId: Int) -> MovieDetailViewModel = { hiltViewModel() }
 
             composable(route = Screen.DETAIL.route) {
-                MovieDetailScreen(movieDetailViewModel(movieId()))
+                MovieDetailScreen(movieDetailViewModel(it.movieId()))
             }
 
             composable(
@@ -46,17 +50,17 @@ fun MainContent(
                 arguments = listOf(navArgument(ARG_INITIAL_PAGE) { defaultValue = "0" })
             ) {
                 val initialPage = it.arguments?.getString(ARG_INITIAL_PAGE)!!.toInt()
-                val images = movieDetailViewModel(movieId()).uiValue.images
+                val images = movieDetailViewModel(it.movieId()).uiValue.images
                 ImagesScreen(images, initialPage)
             }
 
             composable(route = Screen.CAST.route) {
-                val cast = movieDetailViewModel(movieId()).uiValue.credits.cast
+                val cast = movieDetailViewModel(it.movieId()).uiValue.credits.cast
                 PeopleGridScreen(cast)
             }
 
             composable(route = Screen.CREW.route) {
-                val crew = movieDetailViewModel(movieId()).uiValue.credits.crew
+                val crew = movieDetailViewModel(it.movieId()).uiValue.credits.crew
                 PeopleGridScreen(crew)
             }
         }
