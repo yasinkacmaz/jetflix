@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -67,6 +68,7 @@ fun MoviesScreen(
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        scrimColor = Color.DarkGray.copy(alpha = 0.7f),
         sheetContent = {
             val onResetClicked = if (filterState == null) null else filterViewModel::onResetClicked
             FilterHeader(onHideClicked = hideFilterBottomSheet, onResetClicked = onResetClicked)
