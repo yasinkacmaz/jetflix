@@ -60,6 +60,7 @@ object Dependencies {
             const val insets = "$accompanistLibrary-insets:$version"
             const val insetsUi = "$accompanistLibrary-insets-ui:$version"
             const val pager = "$accompanistLibrary-pager:$version"
+            const val flowLayout = "$accompanistLibrary-flowlayout:$version"
         }
     }
 
