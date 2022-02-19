@@ -88,7 +88,6 @@ import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
-import com.yasinkacmaz.jetflix.util.randomColor
 
 val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color defined") }
 val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
@@ -106,9 +105,10 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
             ErrorColumn(uiState.error.message.orEmpty())
         }
         uiState.movieDetail != null -> {
-            val animatableColor = remember { Animatable(Color.randomColor()) }
+            val defaultTextColor = MaterialTheme.colors.onBackground
+            val vibrantColor = remember { Animatable(defaultTextColor) }
             CompositionLocalProvider(
-                LocalVibrantColor provides animatableColor,
+                LocalVibrantColor provides vibrantColor,
                 LocalMovieId provides uiState.movieDetail.id
             ) {
                 MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
