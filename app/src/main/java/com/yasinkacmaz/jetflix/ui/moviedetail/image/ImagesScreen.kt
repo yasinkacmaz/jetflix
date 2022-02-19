@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -44,10 +45,14 @@ import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ImagesScreen(images: List<Image>, initialPage: Int) {
-    if(images.isEmpty() || initialPage !in images.indices) return
+    if (images.isEmpty() || initialPage !in images.indices) return
 
-    HorizontalPager(state = rememberPagerState(initialPage = initialPage), count = images.size) { page ->
-        Image(images[page])
+    val pagerState = rememberPagerState(initialPage = initialPage)
+    Box {
+        HorizontalPager(state = pagerState, count = images.size) { page ->
+            Image(images[page])
+        }
+        Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
     }
 }
 
@@ -101,9 +106,10 @@ private fun BoxScope.Poster(image: Image) {
     val painter = rememberImagePainter(image.url)
     if (painter.state is ImagePainter.State.Loading) {
         CircularProgressIndicator(
-            Modifier
+            strokeWidth = 8.dp,
+            modifier = Modifier
                 .size(240.dp)
-                .padding(16.dp)
+                .padding(32.dp)
         )
     } else {
         Image(
@@ -126,7 +132,7 @@ private fun BoxScope.VoteCount(voteCount: Int) {
             .wrapContentSize()
             .align(Alignment.BottomStart)
             .background(
-                color = MaterialTheme.colors.surface.copy(alpha = 0.35f),
+                color = MaterialTheme.colors.surface.copy(alpha = 0.3f),
                 shape = RoundedCornerShape(bottomStart = 12.dp, topEnd = 12.dp)
             )
             .padding(4.dp)
@@ -139,4 +145,19 @@ private fun BoxScope.VoteCount(voteCount: Int) {
         )
         Text(text = voteCount.toString(), style = MaterialTheme.typography.body2)
     }
+}
+
+@Composable
+private fun BoxScope.Index(position: Int, imageCount: Int) {
+    Text(
+        text = "$position / $imageCount",
+        style = MaterialTheme.typography.body1,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .navigationBarsPadding()
+            .padding(16.dp)
+            .shadow(16.dp, RoundedCornerShape(16.dp))
+            .background(color = MaterialTheme.colors.surface.copy(alpha = 0.3f))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    )
 }
