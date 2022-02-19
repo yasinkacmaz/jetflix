@@ -9,9 +9,9 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.GridItemSpan
 import androidx.compose.foundation.lazy.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.LazyGridScope
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyGridState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -32,8 +32,8 @@ import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.main.LocalNavController
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
-import com.yasinkacmaz.jetflix.util.toDp
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
+import com.yasinkacmaz.jetflix.util.toDp
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -43,11 +43,12 @@ private val GRID_SPACING = 8.dp
 @OptIn(ExperimentalFoundationApi::class)
 private val span: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(CELL_COUNT) }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MoviesGrid() {
     val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
-    val state = rememberLazyListState()
+    val state = rememberLazyGridState()
     LaunchedEffect(Unit) {
         moviesViewModel.filterStateChanges
             .onEach {
@@ -73,7 +74,7 @@ fun MoviesGrid() {
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun LazyMoviesGrid(state: LazyListState, moviePagingItems: LazyPagingItems<Movie>) {
+private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingItems<Movie>) {
     val navController = LocalNavController.current
     val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.DETAIL.createPath(movieId)) }
     LazyVerticalGrid(

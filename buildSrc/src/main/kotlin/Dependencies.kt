@@ -5,7 +5,7 @@ object Dependencies {
     const val daggerHiltVersion = "2.40.1"
 
     object Kotlin {
-        const val version = "1.5.31"
+        const val version = "1.6.10"
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
         const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
     }
@@ -35,7 +35,7 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.1.0-beta03"
+        const val version = "1.2.0-alpha03"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"

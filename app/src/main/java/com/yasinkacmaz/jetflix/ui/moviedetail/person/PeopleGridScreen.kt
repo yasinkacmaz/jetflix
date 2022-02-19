@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyGridScope
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyGridState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.rememberLazyGridState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +32,7 @@ fun PeopleGridScreen(people: List<Person>) {
     val navigationBarPadding = insets.navigationBars.bottom.toDp().dp
     val horizontalPadding = 4.dp
     val columnCount = 3
-    val state = rememberLazyListState()
+    val state = rememberLazyGridState()
     LazyVerticalGrid(
         cells = GridCells.Fixed(columnCount),
         modifier = Modifier.background(MaterialTheme.colors.surface),
@@ -51,7 +51,7 @@ fun PeopleGridScreen(people: List<Person>) {
 private fun LazyGridScope.peopleGridContent(
     people: List<Person>,
     columnCount: Int,
-    state: LazyListState,
+    state: LazyGridState,
     horizontalPadding: Dp
 ) {
     items(people.count()) { index ->
@@ -76,8 +76,9 @@ private fun LazyGridScope.peopleGridContent(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun LazyListState.calculateDelayAndEasing(index: Int, columnCount: Int): Pair<Int, Easing> {
+private fun LazyGridState.calculateDelayAndEasing(index: Int, columnCount: Int): Pair<Int, Easing> {
     val rowIndex = index / columnCount
     val visibleRows = layoutInfo.visibleItemsInfo.count()
     val firstVisibleRowIndex = firstVisibleItemIndex
