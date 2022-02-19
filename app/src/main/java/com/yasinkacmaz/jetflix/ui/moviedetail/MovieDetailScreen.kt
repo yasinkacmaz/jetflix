@@ -91,6 +91,7 @@ import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.randomColor
 
 val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color defined") }
+val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
 
 @Composable
 fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
@@ -106,7 +107,10 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
         }
         uiState.movieDetail != null -> {
             val animatableColor = remember { Animatable(Color.randomColor()) }
-            CompositionLocalProvider(LocalVibrantColor provides animatableColor) {
+            CompositionLocalProvider(
+                LocalVibrantColor provides animatableColor,
+                LocalMovieId provides uiState.movieDetail.id
+            ) {
                 MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
             }
         }
@@ -284,8 +288,8 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = cast,
             headerResId = R.string.cast,
-            onDetailClicked = { navController.navigate(Screen.CAST.createPath(movieDetail.id)) },
-            itemContent = { Person(it, Modifier.width(140.dp)) },
+            onSeeAllClicked = { navController.navigate(Screen.CAST.createPath(movieDetail.id)) },
+            itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
             modifier = Modifier.constrainAs(castSection) {
                 top.linkTo(overview.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -295,8 +299,8 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = crew,
             headerResId = R.string.crew,
-            onDetailClicked = { navController.navigate(Screen.CREW.createPath(movieDetail.id)) },
-            itemContent = { Person(it, Modifier.width(140.dp)) },
+            onSeeAllClicked = { navController.navigate(Screen.CREW.createPath(movieDetail.id)) },
+            itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
             modifier = Modifier.constrainAs(crewSection) {
                 top.linkTo(castSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -306,8 +310,8 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = images,
             headerResId = R.string.images,
-            onDetailClicked = { navController.navigate(Screen.IMAGES.createPath(movieDetail.id)) },
-            itemContent = { MovieImage(it) },
+            onSeeAllClicked = { navController.navigate(Screen.IMAGES.createPath(movieDetail.id, 0)) },
+            itemContent = { item, index -> MovieImage(item, index) },
             modifier = Modifier.constrainAs(imagesSection) {
                 top.linkTo(crewSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -317,8 +321,8 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = movieDetail.productionCompanies,
             headerResId = R.string.production_companies,
-            onDetailClicked = null,
-            itemContent = { ProductionCompany(it) },
+            onSeeAllClicked = null,
+            itemContent = { item, _ -> ProductionCompany(item) },
             modifier = Modifier.constrainAs(productionCompanies) {
                 top.linkTo(imagesSection.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
@@ -453,12 +457,12 @@ private fun MovieField(name: String, value: String) {
 private fun <T : Any> MovieSection(
     items: List<T>,
     @StringRes headerResId: Int,
-    onDetailClicked: (() -> Unit)? = null,
-    itemContent: @Composable (T) -> Unit,
+    onSeeAllClicked: (() -> Unit)? = null,
+    itemContent: @Composable (T, Int) -> Unit,
     modifier: Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        SectionHeader(headerResId, items.size, onDetailClicked)
+        SectionHeader(headerResId, items.size, onSeeAllClicked)
         LazyRow(
             modifier = Modifier.testTag(LocalContext.current.getString(headerResId)),
             contentPadding = PaddingValues(16.dp)
@@ -466,7 +470,7 @@ private fun <T : Any> MovieSection(
             items(
                 count = items.size,
                 itemContent = { index ->
-                    itemContent(items[index])
+                    itemContent(items[index], index)
                     Spacer(modifier = Modifier.width(16.dp))
                 }
             )
@@ -516,11 +520,14 @@ private fun SectionHeader(
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun MovieImage(image: Image) {
+private fun MovieImage(image: Image, index: Int) {
+    val navController = LocalNavController.current
+    val movieId = LocalMovieId.current
     Card(
         Modifier
             .width(240.dp)
-            .height(160.dp),
+            .height(160.dp)
+            .clickable { navController.navigate(Screen.IMAGES.createPath(movieId, index)) },
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
