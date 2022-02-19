@@ -8,12 +8,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen
+import com.yasinkacmaz.jetflix.ui.navigation.ARG_INITIAL_PAGE
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
@@ -39,9 +41,13 @@ fun MainContent(
                 MovieDetailScreen(movieDetailViewModel(movieId()))
             }
 
-            composable(route = Screen.IMAGES.route) {
+            composable(
+                route = Screen.IMAGES.route,
+                arguments = listOf(navArgument(ARG_INITIAL_PAGE) { defaultValue = "0" })
+            ) {
+                val initialPage = it.arguments?.getString(ARG_INITIAL_PAGE)!!.toInt()
                 val images = movieDetailViewModel(movieId()).uiValue.images
-                ImagesScreen(images)
+                ImagesScreen(images, initialPage)
             }
 
             composable(route = Screen.CAST.route) {

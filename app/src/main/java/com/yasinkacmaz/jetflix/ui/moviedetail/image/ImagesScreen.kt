@@ -43,11 +43,11 @@ import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImagesScreen(images: List<Image>) {
-    if (images.isNotEmpty()) {
-        HorizontalPager(state = rememberPagerState(), count = images.size) { page ->
-            Image(images[page])
-        }
+fun ImagesScreen(images: List<Image>, initialPage: Int) {
+    if(images.isEmpty() || initialPage !in images.indices) return
+
+    HorizontalPager(state = rememberPagerState(initialPage = initialPage), count = images.size) { page ->
+        Image(images[page])
     }
 }
 
