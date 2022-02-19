@@ -110,6 +110,7 @@ dependencies {
     implementation(Dependencies.Compose.Accompanist.insets)
     implementation(Dependencies.Compose.Accompanist.insetsUi)
     implementation(Dependencies.Compose.Accompanist.pager)
+    implementation(Dependencies.Compose.Accompanist.flowLayout)
 
     // Coil Image
     implementation(Dependencies.coil)

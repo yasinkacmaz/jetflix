@@ -25,8 +25,10 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.SizeMode
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.filter.FilterGrid
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionDivider
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionTitle
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
@@ -45,16 +47,24 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
     override fun Render(onChanged: () -> Unit) {
         val (genreUiModels, selectedGenreIds) = currentValue
         FilterSectionTitle(painter = rememberVectorPainter(image = Icons.Default.Category), title = R.string.genres)
-        FilterGrid(items = genreUiModels) { index, _ ->
-            val genreUiModel = genreUiModels[index]
-            val genreId = genreUiModel.genre.id
-            GenreChip(uiModel = genreUiModel) { selected ->
-                selectedGenreIds.removeAll { it == genreId }
-                if (selected) {
-                    selectedGenreIds.add(genreId)
+        FlowRow(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            mainAxisSize = SizeMode.Expand,
+            mainAxisSpacing = 12.dp,
+            crossAxisSpacing = 8.dp,
+            mainAxisAlignment = FlowMainAxisAlignment.Center,
+            lastLineMainAxisAlignment = FlowMainAxisAlignment.Center
+        ) {
+            genreUiModels.forEach { genreUiModel ->
+                val genreId = genreUiModel.genre.id
+                GenreChip(uiModel = genreUiModel) { selected ->
+                    selectedGenreIds.removeAll { it == genreId }
+                    if (selected) {
+                        selectedGenreIds.add(genreId)
+                    }
+                    currentValue = currentValue.copy(second = selectedGenreIds)
+                    onChanged()
                 }
-                currentValue = currentValue.copy(second = selectedGenreIds)
-                onChanged()
             }
         }
         FilterSectionDivider()
