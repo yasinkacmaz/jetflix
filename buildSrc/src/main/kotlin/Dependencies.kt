@@ -2,7 +2,7 @@ object Dependencies {
     const val okHttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
     const val ktlint = "com.pinterest:ktlint:0.42.1"
     const val coil = "io.coil-kt:coil-compose:2.0.0-alpha01"
-    const val daggerHiltVersion = "2.40.1"
+    const val daggerHiltVersion = "2.41"
 
     object Kotlin {
         const val version = "1.6.10"
@@ -50,7 +50,7 @@ object Dependencies {
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
         const val activity = "androidx.activity:activity-compose:1.4.0"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
-        const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
+        const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
 
         object Accompanist {
@@ -66,8 +66,6 @@ object Dependencies {
     object Hilt {
         const val android = "com.google.dagger:hilt-android:$daggerHiltVersion"
         const val androidCompiler = "com.google.dagger:hilt-android-compiler:$daggerHiltVersion"
-        const val viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-        const val viewmodelCompiler = "androidx.hilt:hilt-compiler:1.0.0"
     }
 
     object Retrofit {
