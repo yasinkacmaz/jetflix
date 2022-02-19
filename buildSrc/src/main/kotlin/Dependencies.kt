@@ -55,7 +55,7 @@ object Dependencies {
 
         object Accompanist {
             private const val accompanistLibrary = "com.google.accompanist:accompanist"
-            private const val version = "0.20.0"
+            private const val version = "0.24.2-alpha"
 
             const val insets = "$accompanistLibrary-insets:$version"
             const val insetsUi = "$accompanistLibrary-insets-ui:$version"
@@ -69,8 +69,7 @@ object Dependencies {
     }
 
     object Retrofit {
-        private const val retrofitVersion = "2.9.0"
-        const val retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
+        const val retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
         const val serializationConverter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
     }
 
