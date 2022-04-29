@@ -107,8 +107,6 @@ dependencies {
     implementation(Dependencies.Compose.tooling)
 
     // Accompanist
-    implementation(Dependencies.Compose.Accompanist.insets)
-    implementation(Dependencies.Compose.Accompanist.insetsUi)
     implementation(Dependencies.Compose.Accompanist.pager)
     implementation(Dependencies.Compose.Accompanist.flowLayout)
 

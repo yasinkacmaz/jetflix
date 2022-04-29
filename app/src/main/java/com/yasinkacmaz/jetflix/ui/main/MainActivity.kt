@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,10 +32,8 @@ class MainActivity : ComponentActivity() {
         val isDarkTheme = remember { mutableStateOf(systemTheme) }
         val navController = rememberNavController()
         JetflixTheme(isDarkTheme = isDarkTheme.value) {
-            ProvideWindowInsets {
-                CompositionLocalProvider(LocalNavController provides navController) {
-                    MainContent(isDarkTheme, showSettingsDialog)
-                }
+            CompositionLocalProvider(LocalNavController provides navController) {
+                MainContent(isDarkTheme, showSettingsDialog)
             }
         }
     }

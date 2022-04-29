@@ -2,7 +2,9 @@ package com.yasinkacmaz.jetflix.ui.movies
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,7 +25,6 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.google.accompanist.insets.LocalWindowInsets
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
@@ -78,7 +80,7 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
         contentPadding = PaddingValues(
             start = GRID_SPACING,
             end = GRID_SPACING,
-            bottom = LocalWindowInsets.current.navigationBars.bottom.toDp().dp.plus(GRID_SPACING)
+            bottom = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp.plus(GRID_SPACING)
         ),
         horizontalArrangement = Arrangement.spacedBy(GRID_SPACING, Alignment.CenterHorizontally),
         state = state,

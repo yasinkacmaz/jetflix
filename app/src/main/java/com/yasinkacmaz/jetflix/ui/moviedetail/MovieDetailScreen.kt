@@ -19,14 +19,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -73,7 +76,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.navigationBarsHeight
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
@@ -331,7 +333,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
 
         Spacer(
             modifier = Modifier
-                .navigationBarsHeight(16.dp)
+                .windowInsetsBottomHeight(WindowInsets.navigationBars)
                 .constrainAs(space) { top.linkTo(productionCompanies.bottom) }
         )
     }

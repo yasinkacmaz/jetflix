@@ -5,7 +5,10 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -15,9 +18,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
 import com.yasinkacmaz.jetflix.util.animation.animateItem
@@ -25,9 +28,8 @@ import com.yasinkacmaz.jetflix.util.toDp
 
 @Composable
 fun PeopleGridScreen(people: List<Person>) {
-    val insets = LocalWindowInsets.current
-    val statusBarPadding = insets.statusBars.top.toDp().dp
-    val navigationBarPadding = insets.navigationBars.bottom.toDp().dp
+    val statusBarPadding = WindowInsets.statusBars.getBottom(LocalDensity.current).toDp().dp
+    val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp
     val horizontalPadding = 4.dp
     val columnCount = 3
     val state = rememberLazyGridState()
