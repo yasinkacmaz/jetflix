@@ -11,7 +11,7 @@ object Dependencies {
     }
 
     object Gradle {
-        const val androidBuildPlugin = "com.android.tools.build:gradle:7.2.0-alpha05"
+        const val androidBuildPlugin = "com.android.tools.build:gradle:7.3.0-alpha09"
         const val hiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:$daggerHiltVersion"
         const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val kotlinSerializationPlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
@@ -28,7 +28,7 @@ object Dependencies {
         const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.8.0-alpha04"
+            const val core = "androidx.core:core-ktx:1.9.0-alpha03"
         }
     }
 
@@ -49,7 +49,7 @@ object Dependencies {
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
         const val activity = "androidx.activity:activity-compose:1.6.0-alpha03"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha02"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-beta01"
         const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0"
 
