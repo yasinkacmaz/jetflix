@@ -1,17 +1,16 @@
 package com.yasinkacmaz.jetflix.ui.movies
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyGridItemSpanScope
-import androidx.compose.foundation.lazy.LazyGridScope
-import androidx.compose.foundation.lazy.LazyGridState
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -37,13 +36,11 @@ import com.yasinkacmaz.jetflix.util.toDp
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-private const val CELL_COUNT = 2
+private const val COLUMN_COUNT = 2
 private val GRID_SPACING = 8.dp
 
-@OptIn(ExperimentalFoundationApi::class)
-private val span: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(CELL_COUNT) }
+private val span: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(COLUMN_COUNT) }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MoviesGrid() {
     val moviesViewModel = hiltViewModel<MoviesViewModel>()
@@ -73,12 +70,11 @@ fun MoviesGrid() {
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingItems<Movie>) {
     val navController = LocalNavController.current
     val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.DETAIL.createPath(movieId)) }
     LazyVerticalGrid(
-        cells = GridCells.Fixed(CELL_COUNT),
+        columns = GridCells.Fixed(COLUMN_COUNT),
         contentPadding = PaddingValues(
             start = GRID_SPACING,
             end = GRID_SPACING,
@@ -103,7 +99,6 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.renderLoading(loadState: CombinedLoadStates) {
     if (loadState.append !is LoadState.Loading) return
 
@@ -113,7 +108,6 @@ private fun LazyGridScope.renderLoading(loadState: CombinedLoadStates) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.renderError(loadState: CombinedLoadStates) {
     val message = (loadState.append as? LoadState.Error)?.error?.message ?: return
 

@@ -3,15 +3,14 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.person
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyGridScope
-import androidx.compose.foundation.lazy.LazyGridState
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
 import com.yasinkacmaz.jetflix.util.animation.animateItem
 import com.yasinkacmaz.jetflix.util.toDp
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PeopleGridScreen(people: List<Person>) {
     val insets = LocalWindowInsets.current
@@ -34,7 +32,7 @@ fun PeopleGridScreen(people: List<Person>) {
     val columnCount = 3
     val state = rememberLazyGridState()
     LazyVerticalGrid(
-        cells = GridCells.Fixed(columnCount),
+        columns = GridCells.Fixed(columnCount),
         modifier = Modifier.background(MaterialTheme.colors.surface),
         contentPadding = PaddingValues(
             start = horizontalPadding,
@@ -47,7 +45,6 @@ fun PeopleGridScreen(people: List<Person>) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.peopleGridContent(
     people: List<Person>,
     columnCount: Int,
@@ -76,7 +73,6 @@ private fun LazyGridScope.peopleGridContent(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LazyGridState.calculateDelayAndEasing(index: Int, columnCount: Int): Pair<Int, Easing> {
     val rowIndex = index / columnCount

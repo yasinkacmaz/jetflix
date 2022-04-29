@@ -5,7 +5,7 @@ object Dependencies {
     const val daggerHiltVersion = "2.41"
 
     object Kotlin {
-        const val version = "1.6.10"
+        const val version = "1.6.20"
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
         const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
     }
@@ -35,7 +35,7 @@ object Dependencies {
     object Compose {
         // Compose is combination of 7 Maven Group Ids within androidx.
         // Each Group contains a targeted subset of functionality, each with it's own set of release notes.
-        const val version = "1.2.0-alpha03"
+        const val version = "1.2.0-alpha08"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -48,7 +48,7 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
-        const val activity = "androidx.activity:activity-compose:1.5.0-alpha02"
+        const val activity = "androidx.activity:activity-compose:1.6.0-alpha03"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha02"
         const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0"
