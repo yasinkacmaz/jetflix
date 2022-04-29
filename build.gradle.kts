@@ -33,7 +33,7 @@ subprojects {
     afterEvaluate {
         tasks.withType(KotlinCompile::class).all {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_11.toString()
+                jvmTarget = Config.javaVersion.toString()
                 allWarningsAsErrors = true
                 freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
             }
@@ -50,8 +50,8 @@ subprojects {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
             compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_11
-                targetCompatibility = JavaVersion.VERSION_11
+                sourceCompatibility = Config.javaVersion
+                targetCompatibility = Config.javaVersion
             }
         }
     }
