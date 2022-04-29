@@ -75,7 +75,7 @@ tasks.withType<Test>().configureEach {
 // Change gradleVersion and run gradlew wrapper to properly update gradle wrapper
 tasks.named<Wrapper>("wrapper") {
     distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "7.3-rc-5"
+    gradleVersion = "7.4.2"
 }
 
 task("clean", Delete::class) {
