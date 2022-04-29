@@ -19,7 +19,7 @@ fun ComposeContentTestRule.setTestContent(
 ) = setContent {
     JetflixTheme(isDarkTheme = isDarkTheme) {
         ProvideWindowInsets {
-            Surface() {
+            Surface {
                 content()
             }
         }

@@ -35,18 +35,18 @@ subprojects {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_11.toString()
                 allWarningsAsErrors = true
-                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
+                freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
             }
         }
 
         extensions.findByType<BaseExtension>() ?: return@afterEvaluate
         configure<BaseExtension> {
-            compileSdkVersion(Versions.compileSdk)
+            compileSdkVersion(Config.compileSdk)
             defaultConfig {
-                minSdk = Versions.minSdk
-                targetSdk = Versions.targetSdk
-                versionName = Versions.versionName
-                versionCode = Versions.versionCode
+                minSdk = Config.minSdk
+                targetSdk = Config.targetSdk
+                versionName = Config.versionName
+                versionCode = Config.versionCode
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
             compileOptions {
