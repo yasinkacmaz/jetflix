@@ -10,22 +10,22 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.parseJson
+import com.yasinkacmaz.jetflix.util.test
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.spyk
-import io.mockk.verifyOrder
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
@@ -43,66 +43,62 @@ class MovieDetailViewModelTest {
     private val creditsMapper = CreditsMapper()
     private val imageMapper = ImageMapper()
 
-    private lateinit var movieDetailViewModel: MovieDetailViewModel
-
     private val movieId = 111
     private val movieDetailResponse: MovieDetailResponse = parseJson("movie_detail.json")
     private val creditsResponse: CreditsResponse = parseJson("credits.json")
     private val imagesResponse: ImagesResponse = parseJson("images.json")
 
+    private lateinit var movieDetailViewModel: MovieDetailViewModel
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { savedStateHandle.get<String>(ARG_MOVIE_ID) } returns movieId.toString()
+        mockServices()
     }
 
-    private fun initViewModel() {
+    @Test
+    fun `fetchMovieDetail success`() = runTest {
+        mutableListOf<MovieDetailViewModel.MovieDetailUiState>()
         movieDetailViewModel =
-            spyk(MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper))
+            MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper)
+        val stateValues = movieDetailViewModel.uiState.test()
+
+        verifyServices()
+        expectThat(stateValues.last()).isEqualTo(
+            MovieDetailViewModel.MovieDetailUiState(
+                movieDetailMapper.map(movieDetailResponse),
+                creditsMapper.map(creditsResponse),
+                imageMapper.map(imagesResponse),
+                loading = false
+            )
+        )
     }
 
     @OptIn(DelicateCoroutinesApi::class)
     @Test
-    fun `fetchMovieDetail success`() = runBlockingTest {
-        GlobalScope.launch(Dispatchers.IO) {
-            mockServices()
-            initViewModel()
-
-            verifyServices()
-            verifyOrder {
-                movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(loading = true)
-                movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(
-                    movieDetailMapper.map(movieDetailResponse),
-                    creditsMapper.map(creditsResponse),
-                    imageMapper.map(imagesResponse),
-                    loading = false
-                )
-            }
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    @Test
-    fun `fetchMovieDetail error`() = coroutineTestRule.runBlockingTest {
-        GlobalScope.launch(Dispatchers.IO) {
-            mockServices()
+    fun `fetchMovieDetail error`() = runTest {
+        GlobalScope.launch {
             val exception = IOException()
             coEvery { movieService.fetchMovieDetail(movieId) } throws exception
-            initViewModel()
+            movieDetailViewModel =
+                MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper)
+            val stateValues = movieDetailViewModel.uiState.test()
 
             verifyServices()
-            verifyOrder {
-                movieDetailViewModel.uiValue = MovieDetailViewModel.MovieDetailUiState(loading = true)
-                movieDetailViewModel.uiValue =
-                    MovieDetailViewModel.MovieDetailUiState(loading = false, error = exception)
-            }
+            expectThat(stateValues.last()).isEqualTo(
+                MovieDetailViewModel.MovieDetailUiState(
+                    loading = false,
+                    error = exception
+                )
+            )
         }
     }
 
-    private fun mockServices() {
-        coEvery { movieService.fetchMovieDetail(movieId) } returns movieDetailResponse
-        coEvery { movieService.fetchMovieCredits(movieId) } returns creditsResponse
-        coEvery { movieService.fetchMovieImages(movieId) } returns imagesResponse
+    private fun mockServices() = with(movieService) {
+        coEvery { fetchMovieDetail(movieId) } returns movieDetailResponse
+        coEvery { fetchMovieCredits(movieId) } returns creditsResponse
+        coEvery { fetchMovieImages(movieId) } returns imagesResponse
     }
 
     private fun verifyServices() = coVerify {

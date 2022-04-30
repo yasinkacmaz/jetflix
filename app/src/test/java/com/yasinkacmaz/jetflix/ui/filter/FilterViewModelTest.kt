@@ -16,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +50,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `Should fetch genres`() = coroutineTestRule.runBlockingTest {
+    fun `Should fetch genres`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
         coEvery { filterDataStore.filterState } returns flowOf(filterState)
 
@@ -60,7 +61,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `Should fetch genres only once`() = coroutineTestRule.runBlockingTest {
+    fun `Should fetch genres only once`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
         every { filterDataStore.filterState } returns flowOf(filterState, filterState, filterState)
 
@@ -71,7 +72,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `Should set genres as empty when fetch genres error`() = coroutineTestRule.runBlockingTest {
+    fun `Should set genres as empty when fetch genres error`() = runTest {
         coEvery { movieService.fetchGenres() } throws IOException()
         val filterState = FilterState(sortBy = SortBy.REVENUE)
         coEvery { filterDataStore.filterState } returns flowOf(filterState)
@@ -82,7 +83,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `onResetClicked should call data store resetFilterState`() = coroutineTestRule.runBlockingTest {
+    fun `onResetClicked should call data store resetFilterState`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
         coEvery { filterDataStore.filterState } returns flowOf(filterState)
 
@@ -94,7 +95,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `onFilterStateChanged should call data store onFilterStateChanged`() = coroutineTestRule.runBlockingTest {
+    fun `onFilterStateChanged should call data store onFilterStateChanged`() = runTest {
         coEvery { filterDataStore.filterState } returns flowOf(FilterState())
         val newFilterState = FilterState(sortBy = SortBy.REVENUE)
 
@@ -105,7 +106,7 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `filter state should change when filter data store changed`() = coroutineTestRule.runBlockingTest {
+    fun `filter state should change when filter data store changed`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
         val filterStateFlow = MutableStateFlow(filterState)
         coEvery { filterDataStore.filterState } returns filterStateFlow

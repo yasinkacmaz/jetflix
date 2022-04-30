@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +45,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun load() = coroutineTestRule.runBlockingTest {
+    fun load() = runTest {
         val moviesResponse = MoviesResponse(1, listOf(MovieResponse(1, "", "", "", "", "", "", 1.1, 1)), 1, 1)
         coEvery { movieService.fetchMovies(any(), any(), any()) } returns moviesResponse
 

@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import org.junit.Before
 import org.junit.Rule
@@ -36,29 +37,25 @@ class LanguageDataStoreTest {
     }
 
     @Test
-    fun `Should return default language when preference is not present`() {
-        coroutineTestRule.runBlockingTest {
-            val prefs = mockk<Preferences>()
-            coEvery { preferences.data } returns flowOf(prefs)
+    fun `Should return default language when preference is not present`() = runTest {
+        val prefs = mockk<Preferences>()
+        coEvery { preferences.data } returns flowOf(prefs)
 
-            languageDataStore.language.collect { language ->
-                val defaultLanguage = Language.default
-                expectThat(language).isEqualTo(defaultLanguage)
-            }
+        languageDataStore.language.collect { language ->
+            val defaultLanguage = Language.default
+            expectThat(language).isEqualTo(defaultLanguage)
         }
     }
 
     @Test
-    fun `Should return saved language when preference is present`() {
-        coroutineTestRule.runBlockingTest {
-            val prefs = mockk<Preferences>()
-            val turkishLanguage = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
-            coEvery { preferences.data } returns flowOf(prefs)
-            every { prefs[KEY_LANGUAGE] } returns json.encodeToString(turkishLanguage)
+    fun `Should return saved language when preference is present`() = runTest {
+        val prefs = mockk<Preferences>()
+        val turkishLanguage = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
+        coEvery { preferences.data } returns flowOf(prefs)
+        every { prefs[KEY_LANGUAGE] } returns json.encodeToString(turkishLanguage)
 
-            languageDataStore.language.collect { language ->
-                expectThat(language).isEqualTo(turkishLanguage)
-            }
+        languageDataStore.language.collect { language ->
+            expectThat(language).isEqualTo(turkishLanguage)
         }
     }
 }

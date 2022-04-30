@@ -9,6 +9,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.spyk
 import io.mockk.verifyOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,7 +35,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `fetchLanguages success`() = coroutineTestRule.runBlockingTest {
+    fun `fetchLanguages success`() = runTest {
         val languages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
         coEvery { configurationService.fetchLanguages() } returns languages
 
@@ -48,7 +49,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `fetchLanguages should sort languages by englishName when success`() = coroutineTestRule.runBlockingTest {
+    fun `fetchLanguages should sort languages by englishName when success`() = runTest {
         val languages = listOf(Language(englishName = "2", "", ""), Language(englishName = "1", "", ""))
         coEvery { configurationService.fetchLanguages() } returns languages
 
@@ -63,7 +64,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `fetchLanguages error`() = coroutineTestRule.runBlockingTest {
+    fun `fetchLanguages error`() = runTest {
         coEvery { configurationService.fetchLanguages() } throws IOException()
 
         settingsViewModel.fetchLanguages()

@@ -35,7 +35,7 @@ subprojects {
             kotlinOptions {
                 jvmTarget = Config.javaVersion.toString()
                 allWarningsAsErrors = true
-                freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
+                freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xcontext-receivers")
             }
         }
 

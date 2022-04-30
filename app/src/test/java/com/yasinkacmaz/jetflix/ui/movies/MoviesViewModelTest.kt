@@ -17,6 +17,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,7 +53,7 @@ class MoviesViewModelTest {
     }
 
     @Test
-    fun `fetchMovies success`() = coroutineTestRule.runBlockingTest {
+    fun `fetchMovies success`() = runTest {
         coEvery { movieService.fetchMovies(any(), any(), any()) } returns moviesResponse
 
         moviesViewModel.pagingSource.load(loadParams)
@@ -61,7 +62,7 @@ class MoviesViewModelTest {
     }
 
     @Test
-    fun `fetchMovies error`() = coroutineTestRule.runBlockingTest {
+    fun `fetchMovies error`() = runTest {
         val exception = IOException()
         coEvery { movieService.fetchMovies(any(), any(), any()) } throws exception
 
