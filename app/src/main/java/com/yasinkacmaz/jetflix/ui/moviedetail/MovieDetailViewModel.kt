@@ -42,7 +42,7 @@ class MovieDetailViewModel @Inject constructor(
             val imagesResponse = async { movieService.fetchMovieImages(movieId) }
             _uiState.value.copy(
                 movieDetail = movieDetailMapper.map(movieDetailResponse.await()),
-                credits =  creditsMapper.map(creditsResponse.await()),
+                credits = creditsMapper.map(creditsResponse.await()),
                 images = imageMapper.map(imagesResponse.await()),
                 loading = false
             )
