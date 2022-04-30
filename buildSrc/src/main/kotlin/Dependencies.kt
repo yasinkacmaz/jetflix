@@ -7,7 +7,7 @@ object Dependencies {
     object Kotlin {
         const val version = "1.6.20"
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
-        const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
+        const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
     }
 
     object Gradle {
@@ -73,9 +73,9 @@ object Dependencies {
 
     object Test {
         const val junit = "junit:junit:4.13.2"
-        const val mockk = "io.mockk:mockk:1.12.0"
-        const val striktAssertion = "io.strikt:strikt-core:0.32.0"
-        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
-        const val junitExt = "androidx.test.ext:junit:1.1.3"
+        const val mockk = "io.mockk:mockk:1.12.3"
+        const val striktAssertion = "io.strikt:strikt-core:0.34.1"
+        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
+        const val junitExt = "androidx.test.ext:junit:1.1.4-alpha06"
     }
 }
