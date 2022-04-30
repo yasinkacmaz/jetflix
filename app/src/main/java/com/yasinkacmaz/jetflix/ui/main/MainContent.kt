@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.ui.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
@@ -50,17 +51,17 @@ fun MainContent(
                 arguments = listOf(navArgument(ARG_INITIAL_PAGE) { defaultValue = "0" })
             ) {
                 val initialPage = it.arguments?.getString(ARG_INITIAL_PAGE)!!.toInt()
-                val images = movieDetailViewModel(it.movieId()).uiValue.images
+                val images = movieDetailViewModel(it.movieId()).uiState.collectAsState().value.images
                 ImagesScreen(images, initialPage)
             }
 
             composable(route = Screen.CAST.route) {
-                val cast = movieDetailViewModel(it.movieId()).uiValue.credits.cast
+                val cast = movieDetailViewModel(it.movieId()).uiState.collectAsState().value.credits.cast
                 PeopleGridScreen(cast)
             }
 
             composable(route = Screen.CREW.route) {
-                val crew = movieDetailViewModel(it.movieId()).uiValue.credits.crew
+                val crew = movieDetailViewModel(it.movieId()).uiState.collectAsState().value.credits.crew
                 PeopleGridScreen(crew)
             }
         }

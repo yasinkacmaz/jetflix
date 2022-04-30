@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import org.junit.Before
 import org.junit.Rule
@@ -41,14 +42,14 @@ class FilterDataStoreTest {
     }
 
     @Test
-    fun `Should set filterState as default when preference is not exists`() = coroutineTestRule.runBlockingTest {
+    fun `Should set filterState as default when preference is not exists`() = runTest {
         every { preferences[KEY_FILTER_STATE] } returns null
 
         expectThat(filterDataStore.filterState.first()).isEqualTo(FilterState())
     }
 
     @Test
-    fun `Should set filterState when preference is exists`() = coroutineTestRule.runBlockingTest {
+    fun `Should set filterState when preference is exists`() = runTest {
         val filterState = FilterState(sortBy = SortBy.VOTE_AVERAGE)
         every { preferences[KEY_FILTER_STATE] } returns json.encodeToString(filterState)
 
