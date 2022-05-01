@@ -40,9 +40,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.util.rateColors
 
@@ -78,41 +77,30 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
-    val tint = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
-    val painter = rememberImagePainter(data = posterPath)
+    val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
+    val painter = rememberAsyncImagePainter(
+        model = posterPath,
+        error = rememberVectorPainter(Icons.Filled.BrokenImage),
+        placeholder = rememberVectorPainter(Icons.Default.Movie)
+    )
+    val colorFilter = when (painter.state) {
+        is AsyncImagePainter.State.Loading -> ColorFilter.tint(tintColor)
+        is AsyncImagePainter.State.Error -> ColorFilter.tint(tintColor)
+        else -> null
+    }
+    val scale = if (painter.state !is AsyncImagePainter.State.Success) ContentScale.Fit else ContentScale.FillBounds
+
     Image(
         painter = painter,
+        colorFilter = colorFilter,
         contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
-        contentScale = ContentScale.FillBounds,
-        modifier = Modifier.fillMaxSize()
+        contentScale = scale,
+        modifier = Modifier
+            .fillMaxSize()
+            .align(Alignment.Center)
     )
-    val modifier = Modifier
-        .padding(8.dp)
-        .fillMaxSize()
-        .align(Alignment.Center)
-    when (painter.state) {
-        is ImagePainter.State.Loading -> {
-            Image(
-                painter = rememberVectorPainter(image = Icons.Default.Movie),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(tint),
-                modifier = modifier
-            )
-        }
-        is ImagePainter.State.Error -> {
-            Image(
-                imageVector = Icons.Filled.BrokenImage,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(tint),
-                modifier = modifier
-            )
-        }
-        else -> {
-        }
-    }
 }
 
 @Composable

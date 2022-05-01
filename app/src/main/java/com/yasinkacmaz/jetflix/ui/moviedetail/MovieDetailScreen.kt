@@ -63,6 +63,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -73,9 +74,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
@@ -347,13 +349,8 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
         backgroundColor = LocalVibrantColor.current.value.copy(alpha = 0.1f),
         modifier = modifier.height(360.dp)
     ) {
-        Image(
-            painter = rememberImagePainter(
-                data = backdropUrl,
-                builder = {
-                    crossfade(1500)
-                }
-            ),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current).data(data = backdropUrl).crossfade(1500).build(),
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(R.string.backdrop_content_description, movieName),
             modifier = modifier.fillMaxWidth()
@@ -374,8 +371,9 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
         modifier = modifier.scale(scale),
         onClick = { isScaled.value = !isScaled.value }
     ) {
-        Image(
-            painter = rememberImagePainter(data = posterUrl, builder = { placeholder(R.drawable.ic_image) }),
+        AsyncImage(
+            model = posterUrl,
+            placeholder = painterResource(id = R.drawable.ic_image),
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight
         )
@@ -520,7 +518,6 @@ private fun SectionHeader(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun MovieImage(image: Image, index: Int) {
     val navController = LocalNavController.current
@@ -533,9 +530,11 @@ private fun MovieImage(image: Image, index: Int) {
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
-        val painter = rememberImagePainter(
-            data = image.url,
-            builder = { placeholder(R.drawable.ic_image) }
+        val painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(data = image.url)
+                .placeholder(R.drawable.ic_image)
+                .build()
         )
         Image(
             painter = painter,
@@ -543,7 +542,7 @@ private fun MovieImage(image: Image, index: Int) {
             contentScale = ContentScale.Crop
         )
         when (painter.state) {
-            is ImagePainter.State.Error -> {
+            is AsyncImagePainter.State.Error -> {
                 Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray)
             }
             else -> Unit
@@ -551,7 +550,6 @@ private fun MovieImage(image: Image, index: Int) {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun ProductionCompany(company: ProductionCompany) {
     Card(
@@ -568,11 +566,13 @@ private fun ProductionCompany(company: ProductionCompany) {
                 .background(LocalVibrantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
-            val painter = rememberImagePainter(
-                data = company.logoUrl,
-                builder = { placeholder(R.drawable.ic_jetflix) }
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
+                    .data(company.logoUrl)
+                    .placeholder(R.drawable.ic_jetflix)
+                    .build()
             )
-            if (painter.state is ImagePainter.State.Error) {
+            if (painter.state is AsyncImagePainter.State.Error) {
                 Icon(
                     imageVector = Icons.Default.BrokenImage,
                     contentDescription = null,
