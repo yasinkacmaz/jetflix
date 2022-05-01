@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.filter
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.assert
@@ -16,13 +17,12 @@ import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.google.accompanist.insets.statusBarsPadding
 import com.yasinkacmaz.jetflix.data.Genre
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
+import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
-import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
 import com.yasinkacmaz.jetflix.util.withRole
@@ -102,12 +102,10 @@ class FilterBottomSheetTest {
 
     private fun ComposeContentTestRule.renderFilterBottomSheet(
         filterState: FilterState,
-        onFilterStateChanged: (FilterState) -> Unit = { },
-        onResetClicked: () -> Unit = { },
-        onHideClicked: () -> Unit = { }
+        onFilterStateChanged: (FilterState) -> Unit = { }
     ) = setTestContent {
         Column(Modifier.statusBarsPadding()) {
-            FilterBottomSheetContent(filterState, onFilterStateChanged, onResetClicked, onHideClicked)
+            FilterBottomSheetContent(filterState, onFilterStateChanged)
         }
     }
 }
