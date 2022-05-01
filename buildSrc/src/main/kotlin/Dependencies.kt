@@ -1,7 +1,7 @@
 object Dependencies {
     const val okHttp = "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
     const val ktlint = "com.pinterest:ktlint:0.45.2"
-    const val coil = "io.coil-kt:coil-compose:2.0.0-alpha01"
+    const val coil = "io.coil-kt:coil-compose:2.0.0-rc03"
     const val daggerHiltVersion = "2.41"
 
     object Kotlin {

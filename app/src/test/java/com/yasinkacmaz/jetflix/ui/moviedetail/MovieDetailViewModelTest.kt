@@ -18,13 +18,12 @@ import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
+import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import java.io.IOException
 
@@ -43,7 +42,7 @@ class MovieDetailViewModelTest {
     private val creditsMapper = CreditsMapper()
     private val imageMapper = ImageMapper()
 
-    private val movieId = 111
+    private val movieId = 1337
     private val movieDetailResponse: MovieDetailResponse = parseJson("movie_detail.json")
     private val creditsResponse: CreditsResponse = parseJson("credits.json")
     private val imagesResponse: ImagesResponse = parseJson("images.json")
@@ -54,17 +53,24 @@ class MovieDetailViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { savedStateHandle.get<String>(ARG_MOVIE_ID) } returns movieId.toString()
-        mockServices()
+        with(movieService) {
+            coEvery { fetchMovieDetail(movieId) } returns movieDetailResponse
+            coEvery { fetchMovieCredits(movieId) } returns creditsResponse
+            coEvery { fetchMovieImages(movieId) } returns imagesResponse
+        }
     }
 
     @Test
     fun `fetchMovieDetail success`() = runTest {
-        mutableListOf<MovieDetailViewModel.MovieDetailUiState>()
-        movieDetailViewModel =
-            MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper)
+        movieDetailViewModel = createViewModel()
+
         val stateValues = movieDetailViewModel.uiState.test()
 
-        verifyServices()
+        coVerify {
+            movieService.fetchMovieDetail(movieId)
+            movieService.fetchMovieCredits(movieId)
+            movieService.fetchMovieImages(movieId)
+        }
         expectThat(stateValues.last()).isEqualTo(
             MovieDetailViewModel.MovieDetailUiState(
                 movieDetailMapper.map(movieDetailResponse),
@@ -78,32 +84,19 @@ class MovieDetailViewModelTest {
     @OptIn(DelicateCoroutinesApi::class)
     @Test
     fun `fetchMovieDetail error`() = runTest {
-        GlobalScope.launch {
-            val exception = IOException()
-            coEvery { movieService.fetchMovieDetail(movieId) } throws exception
-            movieDetailViewModel =
-                MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper)
-            val stateValues = movieDetailViewModel.uiState.test()
+        coEvery { movieService.fetchMovieDetail(movieId) } throws IOException()
+        movieDetailViewModel = createViewModel()
 
-            verifyServices()
-            expectThat(stateValues.last()).isEqualTo(
-                MovieDetailViewModel.MovieDetailUiState(
-                    loading = false,
-                    error = exception
-                )
-            )
+        val stateValues = movieDetailViewModel.uiState.test()
+
+        coVerify { movieService.fetchMovieDetail(movieId) }
+        coVerify(inverse = true) {
+            movieService.fetchMovieCredits(movieId)
+            movieService.fetchMovieImages(movieId)
         }
+        expectThat(stateValues.last().error).isA<IOException>()
     }
 
-    private fun mockServices() = with(movieService) {
-        coEvery { fetchMovieDetail(movieId) } returns movieDetailResponse
-        coEvery { fetchMovieCredits(movieId) } returns creditsResponse
-        coEvery { fetchMovieImages(movieId) } returns imagesResponse
-    }
-
-    private fun verifyServices() = coVerify {
-        movieService.fetchMovieDetail(movieId)
-        movieService.fetchMovieCredits(movieId)
-        movieService.fetchMovieImages(movieId)
-    }
+    private fun createViewModel() =
+        MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper)
 }

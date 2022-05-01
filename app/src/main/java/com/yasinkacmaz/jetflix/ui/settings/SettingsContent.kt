@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -186,8 +186,8 @@ private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent
 private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to InlineTextContent(
     placeholder = placeholder,
     children = {
-        Image(
-            painter = rememberImagePainter(data = flagUrl),
+        AsyncImage(
+            model = flagUrl,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize(),
             contentDescription = stringResource(id = R.string.flag_content_description, countryName)

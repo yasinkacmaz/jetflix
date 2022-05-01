@@ -2,7 +2,6 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
 import android.os.Build
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -32,9 +31,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -59,7 +59,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
 @Composable
 private fun Image(image: Image) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        BlurImage(image)
+        BlurImage(image.url)
         Card(
             Modifier
                 .padding(12.dp)
@@ -67,7 +67,7 @@ private fun Image(image: Image) {
                 .animateContentSize()
         ) {
             Box {
-                Poster(image)
+                Poster(image.url)
                 VoteCount(image.voteCount)
             }
         }
@@ -75,7 +75,7 @@ private fun Image(image: Image) {
 }
 
 @Composable
-private fun BlurImage(image: Image) {
+private fun BlurImage(url: String) {
     val sampling = 4f
     val radius = 16f
     val context = LocalContext.current
@@ -89,8 +89,8 @@ private fun BlurImage(image: Image) {
         }
     }
 
-    Image(
-        painter = rememberImagePainter(image.url, builder = { transformations(transformation) }),
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current).data(url).transformations(transformation).build(),
         contentDescription = stringResource(id = R.string.poster_content_description),
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
@@ -100,27 +100,30 @@ private fun BlurImage(image: Image) {
     )
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun BoxScope.Poster(image: Image) {
-    val painter = rememberImagePainter(image.url)
-    if (painter.state is ImagePainter.State.Loading) {
-        CircularProgressIndicator(
-            strokeWidth = 8.dp,
-            modifier = Modifier
-                .size(240.dp)
-                .padding(32.dp)
-        )
+private fun BoxScope.Poster(url: String) {
+    val painter = rememberAsyncImagePainter(url)
+
+    val modifier = if (painter.state is AsyncImagePainter.State.Loading) {
+        Modifier
+            .size(240.dp)
+            .padding(32.dp)
     } else {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier.Companion
-                .align(Alignment.Center)
-                .fillMaxWidth()
-                .wrapContentHeight()
-        )
+        Modifier
+            .align(Alignment.Center)
+            .fillMaxWidth()
+            .wrapContentHeight()
+    }
+
+    androidx.compose.foundation.Image(
+        painter = painter,
+        contentDescription = null,
+        contentScale = ContentScale.FillWidth,
+        modifier = modifier
+    )
+
+    if (painter.state is AsyncImagePainter.State.Loading) {
+        CircularProgressIndicator(strokeWidth = 8.dp, modifier = modifier)
     }
 }
 
