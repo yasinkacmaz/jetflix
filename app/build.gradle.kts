@@ -3,20 +3,16 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
+    id("kotlinx-serialization")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 android {
     namespace = "com.yasinkacmaz.jetflix"
     buildFeatures {
         compose = true
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     composeOptions {
@@ -51,19 +47,6 @@ android {
             isDebuggable = false
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-
-    testOptions {
-        unitTests.apply {
-            isIncludeAndroidResources = true
-            isReturnDefaultValues = true
-        }
-        animationsDisabled = true
-        emulatorSnapshots {
-            enableForTestFailures = true
-            maxSnapshotsForTestFailures = 2
-            compressSnapshots = false
         }
     }
 
