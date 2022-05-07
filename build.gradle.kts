@@ -22,7 +22,7 @@ plugins {
 subprojects {
     apply(plugin = "plugins.ktlint")
     afterEvaluate {
-        tasks.withType(KotlinCompile::class).all {
+        tasks.withType<KotlinCompile>().configureEach {
             kotlinOptions {
                 jvmTarget = Config.javaVersion.toString()
                 allWarningsAsErrors = true
@@ -59,6 +59,14 @@ subprojects {
             compileOptions {
                 sourceCompatibility = Config.javaVersion
                 targetCompatibility = Config.javaVersion
+            }
+
+            testOptions {
+                unitTests.apply {
+                    isIncludeAndroidResources = true
+                    isReturnDefaultValues = true
+                }
+                animationsDisabled = true
             }
         }
     }
