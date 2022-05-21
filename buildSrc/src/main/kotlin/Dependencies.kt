@@ -28,7 +28,7 @@ object Dependencies {
         const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.9.0-alpha03"
+            const val core = "androidx.core:core-ktx:1.9.0-alpha04"
         }
     }
 
@@ -49,9 +49,9 @@ object Dependencies {
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
         const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
         const val activity = "androidx.activity:activity-compose:1.6.0-alpha03"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-beta01"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-rc01"
         const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha01"
 
         object Accompanist {
             private const val version = "0.24.7-alpha"
