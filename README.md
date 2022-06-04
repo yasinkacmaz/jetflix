@@ -1,10 +1,10 @@
 <p align="center">
-<img src="https://i.imgur.com/4olQKn0.png" width="33%"/>
+<img src="https://i.imgur.com/4olQKn0.png" width="57%"/>
 </p>
 <h1 align="center">Jetflix</h1>
-<p align="center">
-A Movie listing app using TheMovieDb api and Jetpack Compose. Based on MVVM architecture with Dagger Hilt.
-</p>
+<h4 align="center">Movie listing app that demonstrates various UI's written with Jetpack Compose using TheMovieDb API</h1>
+
+</br>
 
 ## Screenshots
 
@@ -18,20 +18,19 @@ A Movie listing app using TheMovieDb api and Jetpack Compose. Based on MVVM arch
 
 ## Download
 
+Go to [Play Store](https://play.google.com/store/apps/details?id=com.yasinkacmaz.jetflix) to download the latest APP.
+
 Go to [Releases](https://github.com/yasinkacmaz/jetflix/releases) page to download the latest APK.
 
 ## Technologies
 
-- [Kotlin](https://kotlinlang.org/) - %100 Kotlin
+- [Kotlin](https://kotlinlang.org/) - %100 Kotlin, No XML
 - [Jetpack Compose](https://developer.android.com/jetpack/compose) for Declarative UI
-- [Coil](https://github.com/coil-kt/coil) and [accompanist/coil](https://github.com/chrisbanes/accompanist/tree/main/coil) for image loading
+- [Accompanist](https://github.com/google/accompanist) for Compose UI Widgets
+- [Coil](https://github.com/coil-kt/coil) for image loading
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) for asynchronous operations
 - [StateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) and [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) for Dependency Injection
 - [OkHttp](https://github.com/square/okhttp) and [Retrofit](https://github.com/square/retrofit) for network operations
 - [TheMovieDb(Tmdb) Api](https://developers.themoviedb.org/3) for movies
-
-## Want to contribute
-
-You can create [issues](https://github.com/yasinkacmaz/jetflix/issues) or [pull requests](https://github.com/yasinkacmaz/jetflix/pulls) to contribute this project
