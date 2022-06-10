@@ -27,7 +27,7 @@ jobs:
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
       - name: 💌 Send email report
-        if: ${{ github.event_name == 'schedule' }}
+#        if: ${{ github.event_name == 'schedule' }}
         uses: actions/github-script@v3
         env:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
