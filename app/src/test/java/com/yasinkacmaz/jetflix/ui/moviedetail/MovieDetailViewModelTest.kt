@@ -16,7 +16,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -81,7 +80,6 @@ class MovieDetailViewModelTest {
         )
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Test
     fun `fetchMovieDetail error`() = runTest {
         coEvery { movieService.fetchMovieDetail(movieId) } throws IOException()

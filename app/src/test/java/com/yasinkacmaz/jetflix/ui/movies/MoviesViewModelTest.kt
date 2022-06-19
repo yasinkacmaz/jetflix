@@ -49,25 +49,42 @@ class MoviesViewModelTest {
         MockKAnnotations.init(this)
         every { filterDataStore.filterState } returns flowOf()
         moviesViewModel = MoviesViewModel(movieService, movieMapper, movieRequestOptionsMapper, filterDataStore)
-        moviesViewModel.initPagingSource()
     }
 
     @Test
-    fun `fetchMovies success`() = runTest {
-        coEvery { movieService.fetchMovies(any(), any(), any()) } returns moviesResponse
+    fun `should call search endpoint when query is not empty`() = runTest {
+        val query = "query"
+        coEvery { movieService.search(any(), any()) } returns moviesResponse
+        moviesViewModel.onSearch(query)
 
-        moviesViewModel.pagingSource.load(loadParams)
+        loadMovies()
 
-        coVerify { movieService.fetchMovies(any(), eq(1), any()) }
+        coVerify { movieService.search(eq(1), eq(query), eq(true)) }
+        coVerify(exactly = 0) { movieService.fetchMovies(eq(1), any()) }
+    }
+
+    @Test
+    fun `should call movies endpoint when query is empty`() = runTest {
+        coEvery { movieService.fetchMovies(any(), any()) } returns moviesResponse
+
+        loadMovies()
+
+        coVerify { movieService.fetchMovies(eq(1), any()) }
+        coVerify(exactly = 0) { movieService.search(eq(1), any()) }
     }
 
     @Test
     fun `fetchMovies error`() = runTest {
         val exception = IOException()
-        coEvery { movieService.fetchMovies(any(), any(), any()) } throws exception
+        coEvery { movieService.fetchMovies(any(), any()) } throws exception
 
+        loadMovies()
+
+        coVerify { movieService.fetchMovies(eq(1), any()) }
+    }
+
+    private suspend fun loadMovies() {
+        moviesViewModel.initPagingSource()
         moviesViewModel.pagingSource.load(loadParams)
-
-        coVerify { movieService.fetchMovies(any(), eq(1), any()) }
     }
 }

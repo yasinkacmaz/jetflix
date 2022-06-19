@@ -13,14 +13,19 @@ import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
     private val movieService: MovieService,
@@ -33,7 +38,10 @@ class MoviesViewModel @Inject constructor(
     val movies: Flow<PagingData<Movie>> = pager.flow
     val filterStateChanges = MutableSharedFlow<FilterState>()
     private var filterState: FilterState? = null
-    private var genreId: Int? = null
+
+    private val searchQuery = MutableStateFlow("")
+    private val _searchQueryChanges = MutableSharedFlow<Unit>()
+    val searchQueryChanges: SharedFlow<Unit> = _searchQueryChanges.asSharedFlow()
 
     @VisibleForTesting
     lateinit var pagingSource: MoviesPagingSource
@@ -46,6 +54,12 @@ class MoviesViewModel @Inject constructor(
                 filterStateChanges.emit(filterState)
             }
             .launchIn(viewModelScope)
+
+        searchQuery
+            .debounce(SEARCH_DEBOUNCE_MS)
+            .distinctUntilChanged()
+            .onEach { _searchQueryChanges.emit(Unit) }
+            .launchIn(viewModelScope)
     }
 
     @VisibleForTesting
@@ -54,6 +68,18 @@ class MoviesViewModel @Inject constructor(
         movieMapper,
         movieRequestOptionsMapper,
         filterState,
-        genreId
+        searchQuery.value
     ).also(::pagingSource::set)
+
+    fun onSearch(query: String) {
+        if (searchQuery.value.isEmpty() && query.isBlank()) return
+        if (searchQuery.value.isBlank() && query.length < SEARCH_MINIMUM_LENGTH) return
+
+        searchQuery.tryEmit(query)
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_MS = 300L
+        private const val SEARCH_MINIMUM_LENGTH = 3
+    }
 }

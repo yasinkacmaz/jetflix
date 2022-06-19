@@ -32,26 +32,40 @@ class MoviesPagingSourceTest {
     private val movieMapper = MovieMapper()
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
     private val filterState = FilterState()
-    private val genreId = 1337
-    private val loadParams = mockk<PagingSource.LoadParams<Int>> {
-        every { key } returns 1
-    }
+    private val loadParams = mockk<PagingSource.LoadParams<Int>> { every { key } returns 1 }
+    private val moviesResponse = MoviesResponse(1, listOf(MovieResponse(1, "", "", "", "", "", "", 1.1, 1)), 1, 1)
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        moviesPagingSource =
-            MoviesPagingSource(movieService, movieMapper, movieRequestOptionsMapper, filterState, genreId)
     }
 
     @Test
-    fun load() = runTest {
-        val moviesResponse = MoviesResponse(1, listOf(MovieResponse(1, "", "", "", "", "", "", 1.1, 1)), 1, 1)
-        coEvery { movieService.fetchMovies(any(), any(), any()) } returns moviesResponse
+    fun `should call movies endpoint when query is empty`() = runTest {
+        initPagingSource()
+        coEvery { movieService.fetchMovies(any(), any()) } returns moviesResponse
 
         moviesPagingSource.load(loadParams)
 
         val expectedOptions = movieRequestOptionsMapper.map(filterState)
-        coVerify { movieService.fetchMovies(genreId, 1, expectedOptions) }
+        coVerify { movieService.fetchMovies(1, expectedOptions) }
+        coVerify(exactly = 0) { movieService.search(any(), any()) }
+    }
+
+    @Test
+    fun `should call search endpoint when query is not empty`() = runTest {
+        val query = "query"
+        initPagingSource(query)
+        coEvery { movieService.search(1, query) } returns moviesResponse
+
+        moviesPagingSource.load(loadParams)
+
+        coVerify(exactly = 0) { movieService.fetchMovies(any(), any()) }
+        coVerify { movieService.search(1, query) }
+    }
+
+    private fun initPagingSource(query: String = "") {
+        moviesPagingSource =
+            MoviesPagingSource(movieService, movieMapper, movieRequestOptionsMapper, filterState, query)
     }
 }

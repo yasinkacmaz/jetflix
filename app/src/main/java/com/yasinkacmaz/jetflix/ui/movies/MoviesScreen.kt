@@ -1,20 +1,25 @@
 package com.yasinkacmaz.jetflix.ui.movies
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -25,15 +30,22 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.HighlightOff
 import androidx.compose.material.icons.filled.NightsStay
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yasinkacmaz.jetflix.R
@@ -100,43 +113,49 @@ private fun MoviesGrid(
     showSettingsDialog: MutableState<Boolean>,
     bottomSheetState: ModalBottomSheetState
 ) {
+    val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val coroutineScope = rememberCoroutineScope()
+    val searchQuery = remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         topBar = {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                elevation = 16.dp
-            ) {
-                JetflixAppBar(isDarkTheme, showSettingsDialog)
+            Surface(modifier = Modifier.fillMaxWidth(), elevation = 16.dp) {
+                Column(
+                    Modifier
+                        .background(MaterialTheme.colors.surface)
+                        .padding(bottom = 2.dp)
+                ) {
+                    JetflixAppBar(isDarkTheme, showSettingsDialog)
+                    SearchBar(searchQuery, moviesViewModel::onSearch)
+                }
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .navigationBarsPadding(),
-                onClick = {
-                    coroutineScope.launch {
-                        bottomSheetState.show()
+            AnimatedVisibility(visible = searchQuery.value.isBlank()) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .navigationBarsPadding(),
+                    onClick = {
+                        coroutineScope.launch {
+                            bottomSheetState.show()
+                        }
+                    },
+                    content = {
+                        val color =
+                            if (isDarkTheme.value) MaterialTheme.colors.surface else MaterialTheme.colors.onPrimary
+                        val tint = animateColorAsState(color).value
+                        Image(
+                            imageVector = Icons.Default.FilterList,
+                            contentDescription = stringResource(id = R.string.title_filter_bottom_sheet),
+                            colorFilter = ColorFilter.tint(tint)
+                        )
                     }
-                },
-                content = {
-                    val color =
-                        if (isDarkTheme.value) MaterialTheme.colors.surface else MaterialTheme.colors.onPrimary
-                    val tint = animateColorAsState(color).value
-                    Image(
-                        imageVector = Icons.Default.FilterList,
-                        contentDescription = stringResource(id = R.string.title_filter_bottom_sheet),
-                        colorFilter = ColorFilter.tint(tint)
-                    )
-                }
-            )
+                )
+            }
         },
         content = {
-            MoviesGrid()
+            MoviesGrid(moviesViewModel)
         }
     )
 }
@@ -147,9 +166,8 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
     val tint = animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary).value
     Row(
         Modifier
-            .background(MaterialTheme.colors.surface)
             .fillMaxWidth()
-            .height(56.dp),
+            .height(50.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -165,15 +183,11 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
             painter = painterResource(id = R.drawable.ic_jetflix),
             contentDescription = stringResource(id = R.string.app_name),
             tint = tint,
-            modifier = Modifier.size(90.dp)
+            modifier = Modifier.size(82.dp)
         )
 
         val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
-        IconButton(
-            onClick = {
-                isDarkTheme.value = isDarkTheme.value.not()
-            }
-        ) {
+        IconButton(onClick = { isDarkTheme.value = isDarkTheme.value.not() }) {
             val contentDescriptionResId = if (isDarkTheme.value) {
                 R.string.light_theme_content_description
             } else {
@@ -182,4 +196,41 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
             Icon(icon, contentDescription = stringResource(id = contentDescriptionResId), tint = tint)
         }
     }
+}
+
+@Composable
+private fun SearchBar(searchQuery: MutableState<String>, onSearch: (String) -> Unit) {
+    TextField(
+        modifier = Modifier
+            .padding(horizontal = 12.dp)
+            .heightIn(max = 50.dp)
+            .fillMaxWidth(),
+        value = searchQuery.value,
+        textStyle = MaterialTheme.typography.subtitle1,
+        singleLine = true,
+        shape = RoundedCornerShape(50),
+        placeholder = { Text(stringResource(id = R.string.search_movies), color = Color.Gray) },
+        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
+        trailingIcon = {
+            AnimatedVisibility(visible = searchQuery.value.isNotEmpty()) {
+                Icon(
+                    imageVector = Icons.Default.HighlightOff,
+                    contentDescription = null,
+                    modifier = Modifier.clickable {
+                        searchQuery.value = ""
+                        onSearch("")
+                    }
+                )
+            }
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        onValueChange = { query ->
+            searchQuery.value = query
+            onSearch(query)
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = MaterialTheme.colors.surface,
+            unfocusedIndicatorColor = MaterialTheme.colors.surface
+        )
+    )
 }

@@ -4,7 +4,6 @@ import com.yasinkacmaz.jetflix.util.Mapper
 import javax.inject.Inject
 
 class MovieRequestOptionsMapper @Inject constructor() : Mapper<FilterState?, Map<String, String>> {
-    @OptIn(ExperimentalStdlibApi::class)
     override fun map(input: FilterState?): Map<String, String> = buildMap {
         val filterState = input ?: FilterState()
         val sortBy = "${filterState.sortBy.by}.${filterState.sortOrder.order}"

@@ -13,9 +13,15 @@ import retrofit2.http.QueryMap
 interface MovieService {
     @GET("discover/movie")
     suspend fun fetchMovies(
-        @Query("with_genres") genreId: Int?,
         @Query("page") pageNumber: Int,
         @QueryMap options: Map<String, String>
+    ): MoviesResponse
+
+    @GET("search/movie")
+    suspend fun search(
+        @Query("page") pageNumber: Int,
+        @Query("query") searchQuery: String,
+        @Query("include_adult") includeAdult: Boolean = true
     ): MoviesResponse
 
     @GET("genre/movie/list")

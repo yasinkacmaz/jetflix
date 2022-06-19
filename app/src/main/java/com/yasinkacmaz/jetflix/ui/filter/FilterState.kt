@@ -22,7 +22,6 @@ data class FilterState(
     @Transient val genres: List<GenreUiModel> = emptyList()
 )
 
-@OptIn(ExperimentalStdlibApi::class)
 fun FilterState.toFilterOptions(): List<FilterOption<*>> = buildList {
     add(SortOrderOption(sortOrder))
     add(SortByOption(sortBy))
