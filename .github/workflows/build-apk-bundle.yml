@@ -8,9 +8,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: "11"
+          distribution: 'corretto'
+          java-version: "17"
       - name: Copy Signing Properties
         run: |
           echo "${{ secrets.JETFLIX_KEYSTORE }}" > jetflix.keystore.asc
