@@ -28,7 +28,7 @@ object Dependencies {
         const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
 
         object Ktx {
-            const val core = "androidx.core:core-ktx:1.9.0-alpha04"
+            const val core = "androidx.core:core-ktx:1.9.0-alpha05"
         }
     }
 
@@ -47,11 +47,11 @@ object Dependencies {
         const val tooling = "androidx.compose.ui:ui-tooling:$version"
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJunit = "androidx.compose.ui:ui-test-junit4:$version"
-        const val paging = "androidx.paging:paging-compose:1.0.0-alpha14"
-        const val activity = "androidx.activity:activity-compose:1.6.0-alpha03"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-rc01"
+        const val paging = "androidx.paging:paging-compose:1.0.0-alpha15"
+        const val activity = "androidx.activity:activity-compose:1.6.0-alpha05"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-rc02"
         const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha01"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha02"
 
         object Accompanist {
             private const val version = "0.24.9-beta"
@@ -76,6 +76,6 @@ object Dependencies {
         const val mockk = "io.mockk:mockk:1.12.3"
         const val striktAssertion = "io.strikt:strikt-core:0.34.1"
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
-        const val junitExt = "androidx.test.ext:junit:1.1.4-alpha06"
+        const val junitExt = "androidx.test.ext:junit:1.1.4-alpha07"
     }
 }
