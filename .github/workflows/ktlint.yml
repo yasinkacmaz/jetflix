@@ -28,7 +28,7 @@ jobs:
             ~/.gradle/caches/modules-*
             ~/.gradle/caches/jars-*
             ~/.gradle/caches/build-cache-*
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/Dependencies.kt') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/Config.kt') }}
       - name: Run ktlint
         run: ./gradlew ktlintCheck --continue
       - name: 🐶 Setup Review Dog
