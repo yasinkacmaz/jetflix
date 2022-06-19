@@ -54,7 +54,7 @@ object Dependencies {
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha02"
 
         object Accompanist {
-            private const val version = "0.24.9-beta"
+            private const val version = "0.24.11-rc"
 
             const val pager = "com.google.accompanist:accompanist-pager:$version"
             const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
