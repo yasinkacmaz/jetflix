@@ -5,6 +5,8 @@
     <!-- movies -->
     <string name="fetching_movies">Fetching Movies</string>
     <string name="fetching_more_movies">Fetching More Movies</string>
+    <string name="search_movies">Search Movies</string>
+    <string name="no_movies_found">No movies found for current search</string>
 
     <!-- filter -->
     <string name="loading_filter_options">Loading filter options, please wait…</string>

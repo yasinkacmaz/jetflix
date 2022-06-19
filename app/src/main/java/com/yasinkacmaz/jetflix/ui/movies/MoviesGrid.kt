@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -35,6 +34,7 @@ import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.util.toDp
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -44,12 +44,11 @@ private val GRID_SPACING = 8.dp
 private val span: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(COLUMN_COUNT) }
 
 @Composable
-fun MoviesGrid() {
-    val moviesViewModel = hiltViewModel<MoviesViewModel>()
+fun MoviesGrid(moviesViewModel: MoviesViewModel) {
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
     val state = rememberLazyGridState()
     LaunchedEffect(Unit) {
-        moviesViewModel.filterStateChanges
+        combine(moviesViewModel.filterStateChanges, moviesViewModel.searchQueryChanges) { _, _ -> }
             .onEach {
                 state.scrollToItem(0)
                 movies.refresh()
@@ -85,6 +84,11 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
         horizontalArrangement = Arrangement.spacedBy(GRID_SPACING, Alignment.CenterHorizontally),
         state = state,
         content = {
+            if (moviePagingItems.itemCount == 0 && moviePagingItems.loadState.refresh !is LoadState.Loading) {
+                item(span = span) {
+                    ErrorRow(stringResource(R.string.no_movies_found))
+                }
+            }
             items(moviePagingItems.itemCount) { index ->
                 val movie = moviePagingItems.peek(index) ?: return@items
                 MovieContent(

@@ -13,19 +13,23 @@ class MoviesPagingSource(
     private val movieMapper: MovieMapper,
     movieRequestOptionsMapper: MovieRequestOptionsMapper,
     filterState: FilterState? = null,
-    private val genreId: Int? = null
+    private val searchQuery: String = ""
 ) : PagingSource<Int, Movie>() {
     private val options = movieRequestOptionsMapper.map(filterState)
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val page = params.key ?: 1
-            val moviesResponse = movieService.fetchMovies(genreId, page, options)
+            val moviesResponse = if (searchQuery.isNotBlank()) {
+                movieService.search(page, searchQuery)
+            } else {
+                movieService.fetchMovies(page, options)
+            }
             val movies = moviesResponse.movies.map(movieMapper::map)
             LoadResult.Page(
                 data = movies,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = moviesResponse.page + 1
+                nextKey = if (page >= moviesResponse.totalPages) null else moviesResponse.page + 1
             )
         } catch (exception: Exception) {
             LoadResult.Error(exception)
