@@ -142,7 +142,7 @@ private fun MovieName(name: String) = Text(
         color = Color.White,
         letterSpacing = 1.5.sp,
         fontFamily = FontFamily.Serif,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.W500
     ),
     maxLines = 1,
     overflow = TextOverflow.Ellipsis
