@@ -44,7 +44,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 const val SETTINGS_DIALOG_TAG = "SettingsDialog"
 private const val FLAG_ID = "flag"
@@ -57,7 +56,6 @@ private val placeholder = Placeholder(
     placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun SettingsContent(onDialogDismiss: () -> Unit) {
     val settingsViewModel = hiltViewModel<SettingsViewModel>()

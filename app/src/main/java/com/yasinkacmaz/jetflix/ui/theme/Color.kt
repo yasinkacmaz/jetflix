@@ -1,9 +1,11 @@
 package com.yasinkacmaz.jetflix.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
+@SuppressLint("ConflictingOnColor")
 val LightThemeColors = lightColors(
     primary = Color(0xFFE50914),
     primaryVariant = Color(0xFF971C1C),
