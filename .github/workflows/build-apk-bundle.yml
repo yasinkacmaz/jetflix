@@ -11,7 +11,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
-          java-version: "17"
+          java-version: '17'
+          cache: 'gradle'
       - name: Copy Signing Properties
         run: |
           echo "${{ secrets.JETFLIX_KEYSTORE }}" > jetflix.keystore.asc
