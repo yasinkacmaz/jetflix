@@ -88,7 +88,6 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
-import com.yasinkacmaz.jetflix.ui.widget.SpacedRow
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
@@ -423,7 +422,7 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
 
 @Composable
 private fun MovieFields(movieDetail: MovieDetail, modifier: Modifier) {
-    SpacedRow(spaceBetween = 20.dp, modifier = modifier) {
+    Row(horizontalArrangement = Arrangement.spacedBy(20.dp), modifier = modifier) {
         val context = LocalContext.current
         MovieField(context.getString(R.string.release_date), movieDetail.releaseDate)
         MovieField(
