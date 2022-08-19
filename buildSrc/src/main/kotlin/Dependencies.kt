@@ -5,7 +5,7 @@ object Dependencies {
     const val daggerHiltVersion = "2.42"
 
     object Kotlin {
-        const val version = "1.6.21"
+        const val version = "1.7.10"
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version}"
         const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
     }
