@@ -80,10 +80,6 @@ kapt {
 }
 
 dependencies {
-    // Kotlin
-    implementation(Dependencies.Kotlin.stdLib)
-    implementation(Dependencies.Kotlin.jsonSerialization)
-
     // AndroidX
     implementation(Dependencies.AndroidX.palette)
     implementation(Dependencies.AndroidX.browser)
@@ -117,10 +113,11 @@ dependencies {
     implementation(Dependencies.Hilt.android)
     kapt(Dependencies.Hilt.androidCompiler)
 
-    // Network
+    // Network & IO
     implementation(Dependencies.Retrofit.retrofit)
     implementation(Dependencies.Retrofit.serializationConverter)
     implementation(Dependencies.okHttp)
+    implementation(Dependencies.Kotlin.jsonSerialization)
 
     // Test
     testImplementation(Dependencies.Test.junit)
