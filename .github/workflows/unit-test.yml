@@ -12,23 +12,11 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
+          cache: 'gradle'
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Fetch Gradle Wrapper Cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - name: Fetch Gradle Cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: ${{ runner.os }}-gradle-cache-${{ hashFiles('**/Config.kt') }}
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest --continue
       - name: Publish Unit Test Results
