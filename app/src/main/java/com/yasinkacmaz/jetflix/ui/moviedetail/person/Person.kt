@@ -11,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
@@ -28,6 +27,7 @@ import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.placeholderIcon
+import com.yasinkacmaz.jetflix.ui.theme.imageTint
 import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 
 @Composable
@@ -42,9 +42,8 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
             val placeholderPainter = rememberVectorPainter(person.gender.placeholderIcon)
             val painter =
                 rememberAsyncImagePainter(model = request, error = placeholderPainter, placeholder = placeholderPainter)
-            val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
             val colorFilter = when (painter.state) {
-                is Error, is Loading -> ColorFilter.tint(tintColor)
+                is Error, is Loading -> ColorFilter.tint(MaterialTheme.colors.imageTint)
                 else -> null
             }
             Image(

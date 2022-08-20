@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.theme
 
 import android.annotation.SuppressLint
+import androidx.compose.material.Colors
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
@@ -35,3 +36,6 @@ val DarkThemeColors = darkColors(
     onSurface = Color.White,
     onError = Color(0xFF1C1C1C)
 )
+
+val Colors.imageTint: Color
+    get() = if (isLight) Color.Gray else Color.DarkGray
