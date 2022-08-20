@@ -41,8 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImagePainter
+import coil.compose.AsyncImagePainter.State.Error
+import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.rememberAsyncImagePainter
 import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.ui.theme.imageTint
 import com.yasinkacmaz.jetflix.util.rateColors
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -79,15 +82,13 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
 
 @Composable
 private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
-    val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
     val painter = rememberAsyncImagePainter(
         model = posterPath,
         error = rememberVectorPainter(Icons.Filled.BrokenImage),
         placeholder = rememberVectorPainter(Icons.Default.Movie)
     )
     val colorFilter = when (painter.state) {
-        is AsyncImagePainter.State.Loading -> ColorFilter.tint(tintColor)
-        is AsyncImagePainter.State.Error -> ColorFilter.tint(tintColor)
+        is Loading, is Error -> ColorFilter.tint(MaterialTheme.colors.imageTint)
         else -> null
     }
     val scale = if (painter.state !is AsyncImagePainter.State.Success) ContentScale.Fit else ContentScale.FillBounds

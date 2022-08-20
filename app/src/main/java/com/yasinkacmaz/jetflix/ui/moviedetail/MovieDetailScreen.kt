@@ -90,6 +90,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
+import com.yasinkacmaz.jetflix.ui.theme.imageTint
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
@@ -540,9 +541,8 @@ private fun MovieImage(image: Image, index: Int) {
             placeholder = rememberVectorPainter(Icons.Default.Image),
             error = rememberVectorPainter(Icons.Default.BrokenImage)
         )
-        val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
         val (colorFilter, contentScale) = when (painter.state) {
-            is Error, is Loading -> ColorFilter.tint(tintColor) to ContentScale.Fit
+            is Error, is Loading -> ColorFilter.tint(MaterialTheme.colors.imageTint) to ContentScale.Fit
             else -> null to ContentScale.Crop
         }
         Image(
@@ -579,9 +579,8 @@ private fun ProductionCompany(company: ProductionCompany) {
                 placeholder = painterResource(id = R.drawable.ic_jetflix),
                 error = rememberVectorPainter(Icons.Default.BrokenImage)
             )
-            val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
             val colorFilter = when (painter.state) {
-                is Error -> ColorFilter.tint(tintColor)
+                is Error -> ColorFilter.tint(MaterialTheme.colors.imageTint)
                 else -> null
             }
             Image(
