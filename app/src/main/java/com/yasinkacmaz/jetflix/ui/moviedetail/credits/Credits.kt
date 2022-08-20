@@ -1,7 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 
-import androidx.annotation.DrawableRes
-import com.yasinkacmaz.jetflix.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Man
+import androidx.compose.material.icons.rounded.Woman
 
 data class Credits(val cast: List<Person>, val crew: List<Person>)
 
@@ -9,8 +10,8 @@ data class Person(val name: String, val role: String, val profilePhotoUrl: Strin
 
 enum class Gender { MALE, FEMALE }
 
-@DrawableRes
-fun Gender.toPlaceholderImageRes() = when (this) {
-    Gender.MALE -> R.drawable.ic_man
-    Gender.FEMALE -> R.drawable.ic_woman
-}
+val Gender.placeholderIcon
+    get() = when (this) {
+        Gender.MALE -> Icons.Rounded.Man
+        Gender.FEMALE -> Icons.Rounded.Woman
+    }

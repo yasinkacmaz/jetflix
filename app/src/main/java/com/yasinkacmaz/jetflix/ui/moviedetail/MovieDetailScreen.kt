@@ -44,7 +44,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.BrokenImage
-import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
@@ -59,7 +59,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -75,7 +77,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
+import coil.compose.AsyncImagePainter.State.Error
+import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
@@ -372,7 +375,6 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     ) {
         AsyncImage(
             model = posterUrl,
-            placeholder = painterResource(id = R.drawable.ic_image),
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight
         )
@@ -529,23 +531,26 @@ private fun MovieImage(image: Image, index: Int) {
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp
     ) {
+        val request = ImageRequest.Builder(LocalContext.current)
+            .data(image.url)
+            .crossfade(true)
+            .build()
         val painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current)
-                .data(data = image.url)
-                .placeholder(R.drawable.ic_image)
-                .build()
+            model = request,
+            placeholder = rememberVectorPainter(Icons.Default.Image),
+            error = rememberVectorPainter(Icons.Default.BrokenImage)
         )
+        val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
+        val (colorFilter, contentScale) = when (painter.state) {
+            is Error, is Loading -> ColorFilter.tint(tintColor) to ContentScale.Fit
+            else -> null to ContentScale.Crop
+        }
         Image(
             painter = painter,
+            colorFilter = colorFilter,
             contentDescription = stringResource(id = R.string.poster_content_description),
-            contentScale = ContentScale.Crop
+            contentScale = contentScale
         )
-        when (painter.state) {
-            is AsyncImagePainter.State.Error -> {
-                Icon(imageVector = Icons.Default.Movie, contentDescription = null, tint = Color.DarkGray)
-            }
-            else -> Unit
-        }
     }
 }
 
@@ -565,30 +570,30 @@ private fun ProductionCompany(company: ProductionCompany) {
                 .background(LocalVibrantColor.current.value.copy(alpha = 0.7f))
                 .padding(4.dp)
         ) {
+            val request = ImageRequest.Builder(LocalContext.current)
+                .data(company.logoUrl)
+                .crossfade(true)
+                .build()
             val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current)
-                    .data(company.logoUrl)
-                    .placeholder(R.drawable.ic_jetflix)
-                    .build()
+                model = request,
+                placeholder = painterResource(id = R.drawable.ic_jetflix),
+                error = rememberVectorPainter(Icons.Default.BrokenImage)
             )
-            if (painter.state is AsyncImagePainter.State.Error) {
-                Icon(
-                    imageVector = Icons.Default.BrokenImage,
-                    contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier.size(150.dp, 85.dp)
-                )
-            } else {
-                Image(
-                    painter = painter,
-                    contentDescription = stringResource(
-                        id = R.string.production_company_logo_content_description,
-                        company.name
-                    ),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(150.dp, 85.dp)
-                )
+            val tintColor = if (MaterialTheme.colors.isLight) Color.Gray else Color.DarkGray
+            val colorFilter = when (painter.state) {
+                is Error -> ColorFilter.tint(tintColor)
+                else -> null
             }
+            Image(
+                painter = painter,
+                colorFilter = colorFilter,
+                contentDescription = stringResource(
+                    id = R.string.production_company_logo_content_description,
+                    company.name
+                ),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(150.dp, 85.dp)
+            )
             Text(
                 text = company.name,
                 style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
