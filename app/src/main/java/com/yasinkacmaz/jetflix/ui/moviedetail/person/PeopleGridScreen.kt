@@ -33,7 +33,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun PeopleGridScreen(people: List<Person>) {
-    val statusBarPadding = WindowInsets.statusBars.getBottom(LocalDensity.current).toDp().dp
+    val statusBarPadding = WindowInsets.statusBars.getTop(LocalDensity.current).toDp().dp
     val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp
     val horizontalPadding = 4.dp
     val columnCount = 3
