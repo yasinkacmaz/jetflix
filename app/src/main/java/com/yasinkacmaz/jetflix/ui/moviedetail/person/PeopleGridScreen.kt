@@ -4,10 +4,10 @@ import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
@@ -48,17 +47,14 @@ fun PeopleGridScreen(people: List<Person>) {
             top = statusBarPadding,
             bottom = navigationBarPadding
         ),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(horizontalPadding),
         state = state,
-        content = { peopleGridContent(people, columnCount, state, horizontalPadding) }
+        content = { peopleGridContent(people, columnCount, state) }
     )
 }
 
-private fun LazyGridScope.peopleGridContent(
-    people: List<Person>,
-    columnCount: Int,
-    state: LazyGridState,
-    horizontalPadding: Dp
-) {
+private fun LazyGridScope.peopleGridContent(people: List<Person>, columnCount: Int, state: LazyGridState) {
     items(people.count()) { index ->
         val (delay, easing) = state.calculateDelayAndEasing(index, columnCount)
         val args = ItemAnimationArgs(
@@ -70,13 +66,11 @@ private fun LazyGridScope.peopleGridContent(
         val animationData = animateItem(args)
         Person(
             person = people[index],
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding, vertical = 8.dp)
-                .graphicsLayer(
-                    alpha = animationData.alpha,
-                    scaleX = animationData.scale,
-                    scaleY = animationData.scale
-                )
+            modifier = Modifier.graphicsLayer(
+                alpha = animationData.alpha,
+                scaleX = animationData.scale,
+                scaleY = animationData.scale
+            )
         )
     }
 }
