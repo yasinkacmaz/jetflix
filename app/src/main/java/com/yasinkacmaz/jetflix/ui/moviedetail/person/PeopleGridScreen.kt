@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -40,7 +41,9 @@ fun PeopleGridScreen(people: List<Person>) {
     val state = rememberLazyGridState()
     LazyVerticalGrid(
         columns = GridCells.Fixed(columnCount),
-        modifier = Modifier.background(MaterialTheme.colors.surface),
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(MaterialTheme.colors.surface),
         contentPadding = PaddingValues(
             start = horizontalPadding,
             end = horizontalPadding,
