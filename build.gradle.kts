@@ -18,7 +18,7 @@ buildscript {
 }
 
 plugins {
-   id(Dependencies.Gradle.VersionsPlugin.id) version Dependencies.Gradle.VersionsPlugin.version
+    id(Dependencies.Gradle.VersionsPlugin.id) version Dependencies.Gradle.VersionsPlugin.version
 }
 
 allprojects {
@@ -36,6 +36,22 @@ subprojects {
                 jvmTarget = Config.javaVersion.toString()
                 allWarningsAsErrors = true
                 freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xcontext-receivers")
+                // -Pandroidx.enableComposeCompilerMetrics=true
+                if (project.findProperty("composeCompilerReports") == "true") {
+                    freeCompilerArgs = freeCompilerArgs + listOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                                project.buildDir.absolutePath + "/compose/reports"
+                    )
+                }
+                // -Pandroidx.enableComposeCompilerReports=true
+                if (project.findProperty("composeCompilerMetrics") == "true") {
+                    freeCompilerArgs = freeCompilerArgs + listOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                                project.buildDir.absolutePath + "/compose/metrics"
+                    )
+                }
             }
         }
 
