@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 
-private enum class ItemState { PLACING, PLACED }
+enum class ItemState { PLACING, PLACED }
 
 data class ItemAnimationArgs(
     val scaleRange: ClosedRange<Float>,

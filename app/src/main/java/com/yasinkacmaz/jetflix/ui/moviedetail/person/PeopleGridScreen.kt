@@ -3,6 +3,10 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.person
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,12 +27,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
-import com.yasinkacmaz.jetflix.util.animation.ItemAnimationArgs
-import com.yasinkacmaz.jetflix.util.animation.animateItem
+import com.yasinkacmaz.jetflix.util.animation.ItemState
 import com.yasinkacmaz.jetflix.util.toDp
 import kotlin.math.absoluteValue
 
@@ -60,20 +63,10 @@ fun PeopleGridScreen(people: List<Person>) {
 private fun LazyGridScope.peopleGridContent(people: List<Person>, columnCount: Int, state: LazyGridState) {
     items(people.count()) { index ->
         val (delay, easing) = state.calculateDelayAndEasing(index, columnCount)
-        val args = ItemAnimationArgs(
-            scaleRange = 0f..1f,
-            alphaRange = 0f..1f,
-            delay = delay,
-            easing = easing
-        )
-        val animationData = animateItem(args)
+        val scale = animatePersonScale(delay, easing)
         Person(
             person = people[index],
-            modifier = Modifier.graphicsLayer(
-                alpha = animationData.alpha,
-                scaleX = animationData.scale,
-                scaleY = animationData.scale
-            )
+            modifier = Modifier.scale(scale)
         )
     }
 }
@@ -88,11 +81,11 @@ private fun LazyGridState.calculateDelayAndEasing(index: Int, columnCount: Int):
     }
     val rowDelay = when (scrollState) {
         ScrollState.INITIAL -> index / columnCount
-        ScrollState.UP -> (visibleItems.last().index - index).absoluteValue % (visibleItems.count() / columnCount)
-        ScrollState.DOWN -> (index - visibleItems.first().index).absoluteValue % (visibleItems.count() / columnCount)
-    } * 250
+        ScrollState.UP -> (visibleItems.last().index - index).absoluteValue % (visibleItems.count())
+        ScrollState.DOWN -> (index - visibleItems.first().index).absoluteValue % (visibleItems.count())
+    } * 150
     val scrollDirectionMultiplier = if (scrollState == ScrollState.UP) 1 else -1
-    val columnDelay = (columnCount - index % columnCount) * 150 * scrollDirectionMultiplier
+    val columnDelay = (columnCount - index % columnCount) * 100 * scrollDirectionMultiplier
     val easing = if (scrollState == ScrollState.UP) LinearOutSlowInEasing else FastOutSlowInEasing
     return rowDelay + columnDelay to easing
 }
@@ -116,4 +109,22 @@ private fun LazyGridState.isScrollingUp(): Boolean {
             }
         }
     }.value
+}
+
+@Composable
+private fun animatePersonScale(delay: Int = 0, easing: Easing): Float {
+    val transitionState = remember {
+        MutableTransitionState(ItemState.PLACING).apply { targetState = ItemState.PLACED }
+    }
+    val animationSpec = tween<Float>(durationMillis = 400, delayMillis = delay, easing = easing)
+    val label = "itemPlacement"
+    val transition = updateTransition(transitionState, label = label)
+
+    val scale by transition.animateFloat(transitionSpec = { animationSpec }, label = "$label-Scale") { state ->
+        when (state) {
+            ItemState.PLACING -> 0f
+            ItemState.PLACED -> 1f
+        }
+    }
+    return scale
 }
