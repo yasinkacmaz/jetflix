@@ -14,7 +14,7 @@ versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 
 [libraries]
 okhttp = { module = "com.squareup.okhttp3:okhttp", version = "5.0.0-alpha.10" }
-coil = { module = "io.coil-kt:coil-compose", version = "2.2.0" }
+coil = { module = "io.coil-kt:coil-compose", version = "2.2.2" }
 jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.4.0" }
 androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
 androidX_browser = { module = "androidx.browser:browser", version = "1.4.0" }
