@@ -3,7 +3,7 @@ package plugins
 val ktlint: Configuration by configurations.creating
 
 dependencies {
-    ktlint(Dependencies.ktlint)
+    ktlint("com.pinterest:ktlint:0.47.0")
 }
 
 val ktlintCheck by createKtlintTask(
