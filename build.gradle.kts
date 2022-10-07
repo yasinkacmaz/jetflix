@@ -9,23 +9,14 @@ buildscript {
         mavenCentral()
         maven("https://plugins.gradle.org/m2/")
     }
-    dependencies {
-        classpath(Dependencies.Gradle.androidBuildPlugin)
-        classpath(Dependencies.Gradle.hiltPlugin)
-        classpath(Dependencies.Gradle.kotlinPlugin)
-        classpath(Dependencies.Gradle.kotlinSerializationPlugin)
-    }
 }
 
 plugins {
-    id(Dependencies.Gradle.VersionsPlugin.id) version Dependencies.Gradle.VersionsPlugin.version
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+    alias(libs.plugins.agp) apply false
+    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.serialization) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.versions) apply true
 }
 
 subprojects {

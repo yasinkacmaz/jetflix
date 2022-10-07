@@ -16,7 +16,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.Compose.compilerVersion
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     signingConfigs {
@@ -80,52 +80,13 @@ kapt {
 }
 
 dependencies {
-    // AndroidX
-    implementation(Dependencies.AndroidX.palette)
-    implementation(Dependencies.AndroidX.browser)
-    implementation(Dependencies.AndroidX.dataStore)
-    implementation(Dependencies.AndroidX.Ktx.core)
-
-    // Compose
-    implementation(Dependencies.Compose.runtime)
-    implementation(Dependencies.Compose.foundation)
-    implementation(Dependencies.Compose.layout)
-    implementation(Dependencies.Compose.ui)
-    implementation(Dependencies.Compose.uiUtil)
-    implementation(Dependencies.Compose.material)
-    implementation(Dependencies.Compose.icons)
-    implementation(Dependencies.Compose.animation)
-    implementation(Dependencies.Compose.paging)
-    implementation(Dependencies.Compose.constraintLayout)
-    implementation(Dependencies.Compose.activity)
-    implementation(Dependencies.Compose.viewModel)
-    implementation(Dependencies.Compose.navigation)
-    implementation(Dependencies.Compose.hiltNavigation)
-    implementation(Dependencies.Compose.tooling)
-
-    // Accompanist
-    implementation(Dependencies.Compose.Accompanist.pager)
-    implementation(Dependencies.Compose.Accompanist.flowLayout)
-
-    // Coil Image
-    implementation(Dependencies.coil)
-
-    // Hilt
-    implementation(Dependencies.Hilt.android)
-    kapt(Dependencies.Hilt.androidCompiler)
-
-    // Network & IO
-    implementation(Dependencies.Retrofit.retrofit)
-    implementation(Dependencies.Retrofit.serializationConverter)
-    implementation(Dependencies.okHttp)
-    implementation(Dependencies.Kotlin.jsonSerialization)
-
-    // Test
-    testImplementation(Dependencies.Test.junit)
-    testImplementation(Dependencies.Test.mockk)
-    testImplementation(Dependencies.Test.striktAssertion)
-    testImplementation(Dependencies.Test.coroutines)
-    androidTestImplementation(Dependencies.Compose.uiTest)
-    androidTestImplementation(Dependencies.Compose.uiTestJunit)
-    androidTestImplementation(Dependencies.Test.junitExt)
+    implementation(libs.bundles.androidX)
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.accompanist)
+    implementation(libs.bundles.io)
+    implementation(libs.coil)
+    implementation(libs.hilt)
+    kapt(libs.hiltCompiler)
+    testImplementation(libs.bundles.test)
+    androidTestImplementation(libs.bundles.androidTest)
 }
