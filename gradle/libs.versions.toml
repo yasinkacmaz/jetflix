@@ -6,7 +6,7 @@ composeCompiler = "1.3.2"
 accompanist = "0.26.5-rc"
 
 [plugins]
-agp = { id = "com.android.application", version = "7.2.2" }
+agp = { id = "com.android.application", version = "7.3.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

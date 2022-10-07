@@ -73,6 +73,7 @@ android {
             )
         )
     }
+    namespace = "com.yasinkacmaz.jetflix"
 }
 
 kapt {
