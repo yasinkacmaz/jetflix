@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.getString(@StringRes resId: Int) =
@@ -18,10 +17,8 @@ fun ComposeContentTestRule.setTestContent(
     content: @Composable () -> Unit
 ) = setContent {
     JetflixTheme(isDarkTheme = isDarkTheme) {
-        ProvideWindowInsets {
-            Surface {
-                content()
-            }
+        Surface {
+            content()
         }
     }
 }
