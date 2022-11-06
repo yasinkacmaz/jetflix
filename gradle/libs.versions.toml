@@ -35,6 +35,7 @@ compose_paging = { module = "androidx.paging:paging-compose", version = "1.0.0-a
 compose_activity = { module = "androidx.activity:activity-compose", version = "1.7.0-alpha01" }
 compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.6.0-alpha02" }
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.6.0-alpha02" }
+compose_navigation_testing = { module = "androidx.navigation:navigation-testing", version = "2.6.0-alpha03" }
 compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha04" }
 accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
@@ -60,4 +61,4 @@ compose = [
 accompanist = ["accompanist_pager", "accompanist_flowLayout"]
 io = ["okhttp", "retrofit", "serializationConverter", "jsonSerialization"]
 test = ["junit", "mockK", "strikt", "coroutinesTest"]
-androidTest = ["compose_uiTest", "compose_uiTestJunit", "junitExt" ]
+androidTest = ["compose_uiTest", "compose_uiTestJunit", "junitExt", "compose_navigation_testing"]

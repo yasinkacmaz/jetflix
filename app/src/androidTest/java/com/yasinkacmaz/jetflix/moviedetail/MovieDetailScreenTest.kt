@@ -106,12 +106,12 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    @Ignore("hangs looking for cast tag")
+    @Ignore("doesn't wait until cast is displayed, then hangs looping through LazyRow verifying values")
     fun should_render_cast(): Unit = with(composeTestRule) {
-        val tony = Person("Al Pacino", "Tony Montana", "", Gender.MALE)
-        val natasha = Person("Scarlett Johansson", "Natasha Romanoff", "", Gender.FEMALE)
-        val hermione = Person("Emma Watson", "Hermione Granger", "", Gender.FEMALE)
-        val sparrow = Person("Johnny Depp", "Jack Sparrow", "", Gender.MALE)
+        val tony = Person("Al Pacino", "Tony Montana", null, Gender.MALE)
+        val natasha = Person("Scarlett Johansson", "Natasha Romanoff", null, Gender.FEMALE)
+        val hermione = Person("Emma Watson", "Hermione Granger", null, Gender.FEMALE)
+        val sparrow = Person("Johnny Depp", "Jack Sparrow", null, Gender.MALE)
         val cast = listOf(tony, natasha, hermione, sparrow)
         val credits = Credits(cast = cast, crew = emptyList())
 
@@ -121,14 +121,14 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    @Ignore("hangs looking for crew tag")
+    @Ignore("doesn't wait until crew is displayed, then hangs looping through LazyRow verifying values")
     fun should_render_crew(): Unit = with(composeTestRule) {
-        val klaus = Person("Klaus Badelt", "Composer", "", Gender.MALE)
-        val rowling = Person("J.K. Rowling", "Novel", "", Gender.FEMALE)
-        val hans = Person("Hans Zimmer", "Music Composer", "", Gender.MALE)
+        val klaus = Person("Klaus Badelt", "Composer", null, Gender.MALE)
+        val rowling = Person("J.K. Rowling", "Novel", null, Gender.FEMALE)
+        val hans = Person("Hans Zimmer", "Music Composer", null, Gender.MALE)
         // Stan and Quentin is not visible initially. We should scroll to them to make them visible, then assert.
-        val stan = Person("Stan Lee", "Characters", "", Gender.MALE)
-        val quentin = Person("Quentin Tarantino", "Director", "", Gender.MALE)
+        val stan = Person("Stan Lee", "Characters", null, Gender.MALE)
+        val quentin = Person("Quentin Tarantino", "Director", null, Gender.MALE)
         val crew = listOf(klaus, rowling, hans, stan, quentin)
         val credits = Credits(cast = emptyList(), crew = crew)
 

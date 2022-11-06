@@ -3,8 +3,9 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Man
 import androidx.compose.material.icons.rounded.Woman
+import androidx.compose.runtime.Stable
 
-data class Credits(val cast: List<Person>, val crew: List<Person>)
+data class Credits(@Stable val cast: List<Person>, @Stable val crew: List<Person>)
 
 data class Person(val name: String, val role: String, val profilePhotoUrl: String?, val gender: Gender)
 
