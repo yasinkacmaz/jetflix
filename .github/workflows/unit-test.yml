@@ -20,10 +20,9 @@ jobs:
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest --continue
       - name: Publish Unit Test Results
-        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Unit Test Results
-          comment_title: "Unit Test Results"
-          files: '**/test-results/**/*.xml'
+          junit_files: '**/test-results/**/*.xml'
