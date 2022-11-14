@@ -49,10 +49,9 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedCheck
       - name: Publish Ui Test Results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Ui Test Results
-          comment_title: "Ui Test Results"
-          files: '**/androidTest-results/**/*.xml'
+          junit_files: '**/androidTest-results/**/*.xml'
