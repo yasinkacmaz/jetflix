@@ -3,7 +3,7 @@ kotlin = "1.7.21"
 daggerHilt = "2.44"
 compose = "1.4.0-alpha02"
 composeCompiler = "1.4.0-alpha02"
-accompanist = "0.26.5-rc"
+accompanist = "0.27.1"
 
 [plugins]
 agp = { id = "com.android.application", version = "7.3.0" }
