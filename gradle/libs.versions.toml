@@ -17,8 +17,8 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version = "5.0.0-alpha.10" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.2.2" }
 jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.4.0" }
 androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
-androidX_browser = { module = "androidx.browser:browser", version = "1.4.0" }
-androidX_datastore = { module = "androidx.datastore:datastore-preferences", version = "1.1.0-dev01" }
+androidX_browser = { module = "androidx.browser:browser", version = "1.5.0-alpha01" }
+androidX_datastore = { module = "androidx.datastore:datastore-preferences", version = "1.1.0-alpha01" }
 androidX_corektx = { module = "androidx.core:core-ktx", version = "1.9.0" }
 compose_runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 compose_foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
@@ -32,10 +32,10 @@ compose_tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "co
 compose_uiTest = { module = "androidx.compose.ui:ui-test", version.ref = "compose" }
 compose_uiTestJunit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
-compose_paging = { module = "androidx.paging:paging-compose", version = "1.0.0-alpha16" }
-compose_activity = { module = "androidx.activity:activity-compose", version = "1.7.0-alpha01" }
-compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.6.0-alpha02" }
-compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.6.0-alpha02" }
+compose_paging = { module = "androidx.paging:paging-compose", version = "1.0.0-alpha17" }
+compose_activity = { module = "androidx.activity:activity-compose", version = "1.7.0-alpha02" }
+compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.6.0-alpha03" }
+compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.6.0-alpha04" }
 compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha04" }
 accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
@@ -45,7 +45,7 @@ hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref
 retrofit = { module = "com.squareup.retrofit2:retrofit", version = "2.9.0" }
 serializationConverter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "0.8.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
-junitExt = { module = "androidx.test.ext:junit", version = "1.1.4-beta01" }
+junitExt = { module = "androidx.test.ext:junit", version = "1.1.4" }
 mockK = { module = "io.mockk:mockk", version = "1.12.5" }
 strikt = { module = "io.strikt:strikt-core", version = "0.34.1" }
 coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.6.4" }
