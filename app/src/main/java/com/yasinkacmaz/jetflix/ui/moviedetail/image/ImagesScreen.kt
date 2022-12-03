@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
-import android.os.Build
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,25 +21,20 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.util.transformation.BlurTransformation
-import com.yasinkacmaz.jetflix.util.transformation.SizeTransformation
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -76,27 +70,14 @@ private fun Image(image: Image) {
 
 @Composable
 private fun BlurImage(url: String) {
-    val sampling = 4f
-    val radius = 16f
-    val context = LocalContext.current
-    val (transformation, modifier) = remember {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            BlurTransformation(context = context, radius = radius, sampling = sampling) to Modifier
-        } else {
-            val downscalePercentage = 100 / sampling.toInt()
-            // TODO: Modifier.blur works on Android 12 but you need to scroll tiny bit to it show
-            SizeTransformation(downscalePercentage) to Modifier.blur(radius.dp)
-        }
-    }
-
     AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current).data(url).transformations(transformation).build(),
+        model = url,
         contentDescription = stringResource(id = R.string.poster_content_description),
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
-            .then(modifier)
+            .blur(16.dp)
     )
 }
 
