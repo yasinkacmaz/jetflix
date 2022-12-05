@@ -45,6 +45,6 @@ fun GetVibrantColorFromPoster(
 
         val bitmap = (loader.execute(request) as? SuccessResult)?.drawable?.toBitmap() ?: return@LaunchedEffect
         val vibrantColor = Palette.from(bitmap).generate().getVibrantColor(color.value.toArgb())
-        color.animateTo(Color(vibrantColor), tween(800))
+        color.animateTo(Color(vibrantColor), tween(400))
     }
 }

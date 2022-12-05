@@ -65,4 +65,13 @@
     <string name="dark_theme_content_description">Use dark theme</string>
     <string name="light_theme_content_description">Use light theme</string>
     <string name="flag_content_description">Flag of the %1$s</string>
+
+    <!-- profile -->
+    <string name="fetching_profile">Fetching Profile</string>
+    <string name="birthday">Birthdate: %1$s</string>
+    <string name="birthplace">Birthplace: %1$s</string>
+    <string name="known_for">Known for: %1$s</string>
+    <string name="also_known_as">Also known as:</string>
+    <string name="open_imdb_profile">Open IMDB Profile</string>
+    <string name="open_imdb_content_description">Open IMDB Profile Page</string>
 </resources>
