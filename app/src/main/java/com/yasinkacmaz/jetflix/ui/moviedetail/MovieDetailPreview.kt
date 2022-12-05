@@ -40,7 +40,8 @@ private fun MovieDetailPreview() {
         ),
         homepage = "homepageUrl"
     )
-    val person = Person(profilePhotoUrl = "", name = "Yasin Kaçmaz", role = "Android Developer", gender = Gender.MALE)
+    val person =
+        Person(profilePhotoUrl = "", name = "Yasin Kaçmaz", role = "Android Developer", gender = Gender.MALE, id = 1337)
     val people = listOf(person, person, person, person)
     val credits = Credits(cast = people, crew = people)
     val vibrantColor = remember { Animatable(Color.randomColor()) }

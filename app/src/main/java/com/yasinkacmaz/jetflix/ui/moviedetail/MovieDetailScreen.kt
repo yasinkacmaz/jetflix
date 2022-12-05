@@ -1,10 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import android.content.Context
-import android.net.Uri
 import androidx.annotation.StringRes
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
@@ -60,7 +56,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -95,6 +90,7 @@ import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
+import com.yasinkacmaz.jetflix.util.openInChromeCustomTab
 
 val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color defined") }
 val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
@@ -143,7 +139,7 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
         }
         if (!homepage.isNullOrBlank()) {
             val context = LocalContext.current
-            IconButton(onClick = { openHomepage(context, homepage, vibrantColor) }) {
+            IconButton(onClick = { homepage.openInChromeCustomTab(context, vibrantColor) }) {
                 Icon(
                     Icons.Rounded.OpenInNew,
                     contentDescription = stringResource(id = R.string.open_website_content_description),
@@ -153,12 +149,6 @@ private fun AppBar(modifier: Modifier, homepage: String?) {
             }
         }
     }
-}
-
-private fun openHomepage(context: Context, homepage: String, vibrantColor: Color) {
-    val schemeParams = CustomTabColorSchemeParams.Builder().setToolbarColor(vibrantColor.toArgb()).build()
-    val customTabsIntent = CustomTabsIntent.Builder().setDefaultColorSchemeParams(schemeParams).build()
-    customTabsIntent.launchUrl(context, Uri.parse(homepage))
 }
 
 @Composable

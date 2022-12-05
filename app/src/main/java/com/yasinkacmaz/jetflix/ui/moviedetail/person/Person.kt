@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.person
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,14 +26,20 @@ import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.ui.main.LocalNavController
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.placeholderIcon
+import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.imageTint
 import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 
 @Composable
 fun Person(person: Person, modifier: Modifier = Modifier) {
-    Column(modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    val navController = LocalNavController.current
+    Column(
+        modifier.padding(4.dp).clickable { navController.navigate(Screen.PROFILE.createPath(person.id)) },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
             val request = ImageRequest.Builder(LocalContext.current)
                 .data(person.profilePhotoUrl)

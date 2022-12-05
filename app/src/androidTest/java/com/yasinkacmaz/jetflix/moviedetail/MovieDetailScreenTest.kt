@@ -104,10 +104,10 @@ class MovieDetailScreenTest {
 
     @Test
     fun should_render_cast(): Unit = with(composeTestRule) {
-        val tony = Person("Al Pacino", "Tony Montana", profilePhotoUrl, Gender.MALE)
-        val natasha = Person("Scarlett Johansson", "Natasha Romanoff", profilePhotoUrl, Gender.FEMALE)
-        val hermione = Person("Emma Watson", "Hermione Granger", profilePhotoUrl, Gender.FEMALE)
-        val sparrow = Person("Johnny Depp", "Jack Sparrow", profilePhotoUrl, Gender.MALE)
+        val tony = Person("Al Pacino", "Tony Montana", profilePhotoUrl, Gender.MALE, 1337)
+        val natasha = Person("Scarlett Johansson", "Natasha Romanoff", profilePhotoUrl, Gender.FEMALE, 1337)
+        val hermione = Person("Emma Watson", "Hermione Granger", profilePhotoUrl, Gender.FEMALE, 1337)
+        val sparrow = Person("Johnny Depp", "Jack Sparrow", profilePhotoUrl, Gender.MALE, 1337)
         val cast = listOf(tony, natasha, hermione, sparrow)
         val credits = Credits(cast = cast, crew = emptyList())
 
@@ -118,12 +118,12 @@ class MovieDetailScreenTest {
 
     @Test
     fun should_render_crew(): Unit = with(composeTestRule) {
-        val klaus = Person("Klaus Badelt", "Composer", profilePhotoUrl, Gender.MALE)
-        val rowling = Person("J.K. Rowling", "Novel", profilePhotoUrl, Gender.FEMALE)
-        val hans = Person("Hans Zimmer", "Music Composer", profilePhotoUrl, Gender.MALE)
+        val klaus = Person("Klaus Badelt", "Composer", profilePhotoUrl, Gender.MALE, 1337)
+        val rowling = Person("J.K. Rowling", "Novel", profilePhotoUrl, Gender.FEMALE, 1337)
+        val hans = Person("Hans Zimmer", "Music Composer", profilePhotoUrl, Gender.MALE, 1337)
         // Stan and Quentin is not visible initially. We should scroll to them to make them visible, then assert.
-        val stan = Person("Stan Lee", "Characters", profilePhotoUrl, Gender.MALE)
-        val quentin = Person("Quentin Tarantino", "Director", profilePhotoUrl, Gender.MALE)
+        val stan = Person("Stan Lee", "Characters", profilePhotoUrl, Gender.MALE, 1337)
+        val quentin = Person("Quentin Tarantino", "Director", profilePhotoUrl, Gender.MALE, 1337)
         val crew = listOf(klaus, rowling, hans, stan, quentin)
         val credits = Credits(cast = emptyList(), crew = crew)
 

@@ -19,7 +19,9 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_INITIAL_PAGE
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
+import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
+import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
@@ -63,6 +65,10 @@ fun MainContent(
             composable(route = Screen.CREW.route) {
                 val crew = movieDetailViewModel(it.movieId()).uiState.collectAsState().value.credits.crew
                 PeopleGridScreen(crew)
+            }
+
+            composable(route = Screen.PROFILE.route, arguments = listOf(navArgument(ARG_PERSON_ID) {})) {
+                ProfileScreen(hiltViewModel())
             }
         }
     }
