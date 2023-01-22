@@ -34,8 +34,8 @@ import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.util.toDp
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 
 private const val COLUMN_COUNT = 2
@@ -48,7 +48,7 @@ fun MoviesGrid(moviesViewModel: MoviesViewModel) {
     val movies = moviesViewModel.movies.collectAsLazyPagingItems()
     val state = rememberLazyGridState()
     LaunchedEffect(Unit) {
-        combine(moviesViewModel.filterStateChanges, moviesViewModel.searchQueryChanges) { _, _ -> }
+        merge(moviesViewModel.filterStateChanges, moviesViewModel.searchQueryChanges)
             .onEach {
                 state.scrollToItem(0)
                 movies.refresh()
