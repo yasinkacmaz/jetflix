@@ -20,7 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,46 +57,48 @@ private val placeholder = Placeholder(
 )
 
 @Composable
-fun SettingsContent(onDialogDismiss: () -> Unit) {
+fun SettingsContent(onDialogDismissed: () -> Unit) {
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
-    settingsViewModel.fetchLanguages()
+    LaunchedEffect(Unit) {
+        settingsViewModel.fetchLanguages()
+    }
     val uiState = settingsViewModel.uiState.collectAsState().value
-    val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default)
-    SettingsDialog(
-        uiState,
-        selectedLanguage,
-        onDialogDismiss = onDialogDismiss,
-        onLanguageSelected = { settingsViewModel.onLanguageSelected(it) }
-    )
+    val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default).value
+    SettingsDialog(uiState, selectedLanguage, settingsViewModel::onLanguageSelected, onDialogDismissed)
 }
 
 @Composable
 fun SettingsDialog(
     uiState: SettingsViewModel.UiState,
-    selectedLanguage: State<Language>,
+    selectedLanguage: Language,
     onLanguageSelected: (Language) -> Unit,
-    onDialogDismiss: () -> Unit
-) {
-    Dialog(onDismissRequest = onDialogDismiss) {
-        Card(
-            shape = MaterialTheme.shapes.medium,
-            backgroundColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.surface,
+    onDialogDismissed: () -> Unit
+) = Dialog(onDismissRequest = onDialogDismissed) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = MaterialTheme.colors.surface,
+        contentColor = MaterialTheme.colors.surface,
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { testTag = SETTINGS_DIALOG_TAG }
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .semantics { testTag = SETTINGS_DIALOG_TAG }
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (uiState.showLoading) {
-                    LoadingRow(title = stringResource(R.string.fetching_languages))
-                } else {
-                    LanguageRow(uiState.languages, selectedLanguage.value, onLanguageSelected)
-                }
+            if (uiState.showLoading) {
+                LoadingRow(title = stringResource(R.string.fetching_languages))
+            } else {
+                LanguageRow(
+                    uiState.languages,
+                    selectedLanguage,
+                    onLanguageSelected = {
+                        onLanguageSelected(it)
+                        onDialogDismissed()
+                    }
+                )
             }
         }
     }
