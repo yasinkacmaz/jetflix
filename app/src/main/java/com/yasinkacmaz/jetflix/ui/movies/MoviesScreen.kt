@@ -44,9 +44,11 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,14 +63,12 @@ import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
 import com.yasinkacmaz.jetflix.ui.filter.FilterHeader
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
+import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MoviesScreen(
-    isDarkTheme: MutableState<Boolean>,
-    showSettingsDialog: MutableState<Boolean>
-) {
+fun MoviesScreen(isDarkTheme: MutableState<Boolean>) {
     val filterViewModel = hiltViewModel<FilterViewModel>()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val filterState = filterViewModel.filterState.collectAsState().value
@@ -100,7 +100,7 @@ fun MoviesScreen(
             }
         },
         content = {
-            MoviesGrid(isDarkTheme, showSettingsDialog, sheetState)
+            MoviesGrid(isDarkTheme, sheetState)
         }
     )
 }
@@ -110,12 +110,12 @@ fun MoviesScreen(
 @Composable
 private fun MoviesGrid(
     isDarkTheme: MutableState<Boolean>,
-    showSettingsDialog: MutableState<Boolean>,
     bottomSheetState: ModalBottomSheetState
 ) {
     val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val searchQuery = remember { mutableStateOf("") }
+    var showSettingsDialog by remember { mutableStateOf(false) }
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         topBar = {
@@ -125,7 +125,7 @@ private fun MoviesGrid(
                         .background(MaterialTheme.colors.surface)
                         .padding(bottom = 2.dp)
                 ) {
-                    JetflixAppBar(isDarkTheme, showSettingsDialog)
+                    JetflixAppBar(isDarkTheme, onSettingsClicked = { showSettingsDialog = true })
                     SearchBar(searchQuery, moviesViewModel::onSearch)
                 }
             }
@@ -156,12 +156,15 @@ private fun MoviesGrid(
         },
         content = {
             MoviesGrid(moviesViewModel)
+            if (showSettingsDialog) {
+                SettingsContent(onDialogDismissed = { showSettingsDialog = false })
+            }
         }
     )
 }
 
 @Composable
-private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog: MutableState<Boolean>) {
+private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, onSettingsClicked: () -> Unit) {
     val colors = MaterialTheme.colors
     val tint = animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary).value
     Row(
@@ -171,7 +174,7 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, showSettingsDialog
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = { showSettingsDialog.value = true }) {
+        IconButton(onClick = onSettingsClicked) {
             Icon(
                 Icons.Default.Settings,
                 contentDescription = stringResource(id = R.string.settings_content_description),

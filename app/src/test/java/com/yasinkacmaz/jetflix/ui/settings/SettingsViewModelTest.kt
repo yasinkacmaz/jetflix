@@ -1,78 +1,61 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import com.yasinkacmaz.jetflix.service.ConfigurationService
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import io.mockk.MockKAnnotations
+import com.yasinkacmaz.jetflix.util.test
+import com.yasinkacmaz.jetflix.util.testDispatchers
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.spyk
-import io.mockk.verifyOrder
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class SettingsViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var configurationService: ConfigurationService
-
-    @RelaxedMockK
-    private lateinit var languageDataStore: LanguageDataStore
-
-    private lateinit var settingsViewModel: SettingsViewModel
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        settingsViewModel = spyk(SettingsViewModel(configurationService, languageDataStore))
-    }
+    private val configurationService: ConfigurationService = mockk(relaxed = true)
+    private val languageDataStore: LanguageDataStore = mockk(relaxed = true)
 
     @Test
-    fun `fetchLanguages success`() = runTest {
-        val languages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
-        coEvery { configurationService.fetchLanguages() } returns languages
-
-        settingsViewModel.fetchLanguages()
-
-        coVerify { configurationService.fetchLanguages() }
-        verifyOrder {
-            settingsViewModel.uiValue = SettingsViewModel.UiState(showLoading = true)
-            settingsViewModel.uiValue = SettingsViewModel.UiState(showLoading = false, languages)
-        }
-    }
-
-    @Test
-    fun `fetchLanguages should sort languages by englishName when success`() = runTest {
+    fun `Should sort languages by englishName when fetch languages succeed`() = runTest {
         val languages = listOf(Language(englishName = "2", "", ""), Language(englishName = "1", "", ""))
         coEvery { configurationService.fetchLanguages() } returns languages
 
+        val settingsViewModel = createViewModel()
+        val uiStates = settingsViewModel.uiState.test()
         settingsViewModel.fetchLanguages()
 
         coVerify { configurationService.fetchLanguages() }
-        verifyOrder {
-            settingsViewModel.uiValue = SettingsViewModel.UiState(showLoading = true)
-            val sortedLanguages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
-            settingsViewModel.uiValue = SettingsViewModel.UiState(showLoading = false, sortedLanguages)
-        }
+        expectThat(uiStates[uiStates.lastIndex - 1]).isEqualTo(SettingsViewModel.UiState(showLoading = true))
+        val sortedLanguages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
+        expectThat(uiStates.last()).isEqualTo(SettingsViewModel.UiState(showLoading = false, sortedLanguages))
     }
 
     @Test
-    fun `fetchLanguages error`() = runTest {
+    fun `Should create state with empty languages when fetch languages fails`() = runTest {
         coEvery { configurationService.fetchLanguages() } throws IOException()
 
+        val settingsViewModel = createViewModel()
+        val uiStates = settingsViewModel.uiState.test()
         settingsViewModel.fetchLanguages()
 
         coVerify { configurationService.fetchLanguages() }
-        verifyOrder {
-            settingsViewModel.uiValue = SettingsViewModel.UiState(showLoading = true)
-            settingsViewModel.uiValue = SettingsViewModel.UiState(showLoading = false)
-        }
+
+        expectThat(uiStates[uiStates.lastIndex - 1]).isEqualTo(SettingsViewModel.UiState(showLoading = true))
+        expectThat(uiStates.last()).isEqualTo(SettingsViewModel.UiState(showLoading = false))
     }
+
+    @Test
+    fun `Should call language data store when language selected`() = runTest {
+        val settingsViewModel = createViewModel()
+
+        settingsViewModel.onLanguageSelected(Language.default)
+
+        coVerify { languageDataStore.onLanguageSelected(Language.default) }
+    }
+
+    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, testDispatchers)
 }

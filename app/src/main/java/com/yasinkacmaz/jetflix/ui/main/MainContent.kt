@@ -22,18 +22,14 @@ import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
-import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
 
 @Composable
-fun MainContent(
-    isDarkTheme: MutableState<Boolean>,
-    showSettingsDialog: MutableState<Boolean>
-) {
+fun MainContent(isDarkTheme: MutableState<Boolean>) {
     val navController = LocalNavController.current
     NavHost(navController = navController, startDestination = Screen.MOVIES.route) {
-        composable(Screen.MOVIES.route) { MoviesScreen(isDarkTheme, showSettingsDialog) }
+        composable(Screen.MOVIES.route) { MoviesScreen(isDarkTheme) }
 
         navigation(startDestination = Screen.DETAIL.route, route = "movie") {
             argument(ARG_MOVIE_ID) { type = NavType.StringType }
@@ -70,12 +66,6 @@ fun MainContent(
             composable(route = Screen.PROFILE.route, arguments = listOf(navArgument(ARG_PERSON_ID) {})) {
                 ProfileScreen(hiltViewModel())
             }
-        }
-    }
-
-    if (showSettingsDialog.value) {
-        SettingsContent {
-            showSettingsDialog.value = false
         }
     }
 }

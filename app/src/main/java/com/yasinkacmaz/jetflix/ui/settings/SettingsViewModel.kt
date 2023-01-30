@@ -1,51 +1,47 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.ConfigurationService
+import com.yasinkacmaz.jetflix.util.Dispatchers
+import com.yasinkacmaz.jetflix.util.onIO
+import com.yasinkacmaz.jetflix.util.onMain
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val configurationService: ConfigurationService,
-    private val languageDataStore: LanguageDataStore
+    private val languageDataStore: LanguageDataStore,
+    private val dispatchers: Dispatchers
 ) : ViewModel() {
 
     val selectedLanguage = languageDataStore.language
-    val onSettingsChanged = MutableLiveData<Unit>()
-    val uiState = MutableStateFlow(UiState())
 
-    var uiValue
-        get() = uiState.value
-        set(value) {
-            uiState.value = value
-        }
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun fetchLanguages() {
-        val canFetchLanguages = uiValue.languages.isEmpty() && uiValue.showLoading.not()
-        if (canFetchLanguages) {
-            viewModelScope.launch {
-                uiValue = uiValue.copy(showLoading = true)
-                uiValue = try {
-                    val languages = configurationService.fetchLanguages().sortedBy(Language::englishName)
-                    uiValue.copy(showLoading = false, languages = languages)
-                } catch (exception: Exception) {
-                    uiValue.copy(showLoading = false)
-                }
+        val canFetchLanguages = uiState.value.languages.isEmpty() && uiState.value.showLoading.not()
+        if (!canFetchLanguages) return
+
+        _uiState.value = UiState(showLoading = true)
+        dispatchers.onMain {
+            val languages = try {
+                configurationService.fetchLanguages().sortedBy(Language::englishName)
+            } catch (exception: Exception) {
+                emptyList()
             }
+            _uiState.value = UiState(showLoading = false, languages = languages)
         }
     }
 
     fun onLanguageSelected(language: Language) {
-        viewModelScope.launch(Dispatchers.IO) {
+        dispatchers.onIO {
             languageDataStore.onLanguageSelected(language)
         }
-        onSettingsChanged.value = Unit
     }
 
     data class UiState(val showLoading: Boolean = false, val languages: List<Language> = emptyList())
