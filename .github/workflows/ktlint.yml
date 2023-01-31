@@ -1,5 +1,7 @@
 name: Ktlint
-on: pull_request
+on:
+  pull_request:
+  workflow_dispatch:
 jobs:
   ktlint:
     timeout-minutes: 5
