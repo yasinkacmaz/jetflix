@@ -63,12 +63,13 @@ import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
 import com.yasinkacmaz.jetflix.ui.filter.FilterHeader
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
+import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MoviesScreen(isDarkTheme: MutableState<Boolean>) {
+fun MoviesScreen() {
     val filterViewModel = hiltViewModel<FilterViewModel>()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val filterState = filterViewModel.filterState.collectAsState().value
@@ -100,7 +101,7 @@ fun MoviesScreen(isDarkTheme: MutableState<Boolean>) {
             }
         },
         content = {
-            MoviesGrid(isDarkTheme, sheetState)
+            MoviesGrid(sheetState)
         }
     )
 }
@@ -108,10 +109,7 @@ fun MoviesScreen(isDarkTheme: MutableState<Boolean>) {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun MoviesGrid(
-    isDarkTheme: MutableState<Boolean>,
-    bottomSheetState: ModalBottomSheetState
-) {
+private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
     val moviesViewModel = hiltViewModel<MoviesViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val searchQuery = remember { mutableStateOf("") }
@@ -125,7 +123,7 @@ private fun MoviesGrid(
                         .background(MaterialTheme.colors.surface)
                         .padding(bottom = 2.dp)
                 ) {
-                    JetflixAppBar(isDarkTheme, onSettingsClicked = { showSettingsDialog = true })
+                    JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
                     SearchBar(searchQuery, moviesViewModel::onSearch)
                 }
             }
@@ -142,8 +140,11 @@ private fun MoviesGrid(
                         }
                     },
                     content = {
-                        val color =
-                            if (isDarkTheme.value) MaterialTheme.colors.surface else MaterialTheme.colors.onPrimary
+                        val color = if (LocalDarkTheme.current.value) {
+                            MaterialTheme.colors.surface
+                        } else {
+                            MaterialTheme.colors.onPrimary
+                        }
                         val tint = animateColorAsState(color).value
                         Image(
                             imageVector = Icons.Default.FilterList,
@@ -164,9 +165,10 @@ private fun MoviesGrid(
 }
 
 @Composable
-private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, onSettingsClicked: () -> Unit) {
+private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
     val colors = MaterialTheme.colors
-    val tint = animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary).value
+    val isDarkTheme = LocalDarkTheme.current
+    val iconTint = animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary).value
     Row(
         Modifier
             .fillMaxWidth()
@@ -178,25 +180,25 @@ private fun JetflixAppBar(isDarkTheme: MutableState<Boolean>, onSettingsClicked:
             Icon(
                 Icons.Default.Settings,
                 contentDescription = stringResource(id = R.string.settings_content_description),
-                tint = tint
+                tint = iconTint
             )
         }
 
         Icon(
             painter = painterResource(id = R.drawable.ic_jetflix),
             contentDescription = stringResource(id = R.string.app_name),
-            tint = tint,
+            tint = iconTint,
             modifier = Modifier.size(82.dp)
         )
 
         val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
-        IconButton(onClick = { isDarkTheme.value = isDarkTheme.value.not() }) {
+        IconButton(onClick = { isDarkTheme.value = !isDarkTheme.value }) {
             val contentDescriptionResId = if (isDarkTheme.value) {
                 R.string.light_theme_content_description
             } else {
                 R.string.dark_theme_content_description
             }
-            Icon(icon, contentDescription = stringResource(id = contentDescriptionResId), tint = tint)
+            Icon(icon, contentDescription = stringResource(id = contentDescriptionResId), tint = iconTint)
         }
     }
 }
