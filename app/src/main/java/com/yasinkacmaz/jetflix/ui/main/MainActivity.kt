@@ -26,8 +26,11 @@ class MainActivity : ComponentActivity() {
         val isDarkTheme = remember { mutableStateOf(systemTheme) }
         val navController = rememberNavController()
         JetflixTheme(isDarkTheme = isDarkTheme.value) {
-            CompositionLocalProvider(LocalNavController provides navController) {
-                MainContent(isDarkTheme)
+            CompositionLocalProvider(
+                LocalNavController provides navController,
+                LocalDarkTheme provides isDarkTheme
+            ) {
+                MainContent()
             }
         }
     }

@@ -1,9 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.main
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -24,12 +24,13 @@ import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
+val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
-fun MainContent(isDarkTheme: MutableState<Boolean>) {
+fun MainContent() {
     val navController = LocalNavController.current
     NavHost(navController = navController, startDestination = Screen.MOVIES.route) {
-        composable(Screen.MOVIES.route) { MoviesScreen(isDarkTheme) }
+        composable(Screen.MOVIES.route) { MoviesScreen() }
 
         navigation(startDestination = Screen.DETAIL.route, route = "movie") {
             argument(ARG_MOVIE_ID) { type = NavType.StringType }
