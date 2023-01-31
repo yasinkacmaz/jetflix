@@ -1,8 +1,10 @@
 name: Ui Test
-on: pull_request
+on:
+  pull_request:
+  workflow_dispatch:
 jobs:
   ui-tests:
-    timeout-minutes: 35
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     env:
       androidApiVersion: 23
