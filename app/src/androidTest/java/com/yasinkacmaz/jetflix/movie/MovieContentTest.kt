@@ -1,13 +1,10 @@
 package com.yasinkacmaz.jetflix.movie
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
 import com.yasinkacmaz.jetflix.util.setTestContent
@@ -29,17 +26,13 @@ class MovieContentTest {
             voteCount = 1337
         )
 
-        renderMovieContent(movie)
+        setTestContent {
+            MovieContent(movie, Modifier.fillMaxSize(0.5f))
+        }
 
         onNodeWithText(movie.name, useUnmergedTree = true).assertIsDisplayed()
         onNodeWithText(movie.releaseDate, useUnmergedTree = true).assertIsDisplayed()
         onNodeWithText(movie.voteCount.toString(), useUnmergedTree = true).assertIsDisplayed()
         onNodeWithText(movie.voteAverage.toString(), useUnmergedTree = true).assertIsDisplayed()
-    }
-
-    private fun ComposeContentTestRule.renderMovieContent(movie: Movie) = setTestContent {
-        Box(Modifier.padding(72.dp)) {
-            MovieContent(movie)
-        }
     }
 }
