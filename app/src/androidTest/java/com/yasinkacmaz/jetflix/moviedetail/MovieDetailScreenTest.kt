@@ -32,8 +32,16 @@ class MovieDetailScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val movieDetail = MovieDetail(id = 1)
-    private val profilePhotoUrl = "https://t.ly/24r5"
+    private val movieDetail = MovieDetail(
+        id = 1,
+        releaseDate = "01.03.1337",
+        duration = 137,
+        voteAverage = 7.3,
+        voteCount = 1337,
+        genres = listOf(Genre(1, "Action"), Genre(2, "Drama"), Genre(3, "Family")),
+        tagline = "Tagline",
+        overview = "Overview"
+    )
 
     @Test
     fun should_not_render_original_title_if_same_with_name(): Unit = with(composeTestRule) {
@@ -57,79 +65,34 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun should_render_genre_chips(): Unit = with(composeTestRule) {
-        val genres = listOf(Genre(1, "Action"), Genre(2, "Drama"), Genre(3, "Family"))
-
-        renderMovieDetail(movieDetail.copy(genres = genres))
-
-        genres.forEach {
-            onNodeWithText(it.name!!, useUnmergedTree = false).assertIsDisplayed()
-        }
-    }
-
-    @Test
-    fun should_render_movie_fields(): Unit = with(composeTestRule) {
-        val releaseDate = "01.03.1337"
-        val duration = 137
-        val voteAverage = 7.3
-        val voteCount = 1337
-
-        renderMovieDetail(
-            movieDetail.copy(
-                releaseDate = releaseDate,
-                duration = duration,
-                voteAverage = voteAverage,
-                voteCount = voteCount
+    fun should_render_movie_info(): Unit = with(composeTestRule) {
+        val person =
+            Person(name = "", role = "", profilePhotoUrl = "https://t.ly/24r5", gender = Gender.FEMALE, id = 1337)
+        val credits = Credits(
+            cast = listOf(
+                person.copy("Scarlett Johansson", "Natasha Romanoff", gender = Gender.FEMALE),
+                person.copy("Stan Lee", "Characters", gender = Gender.MALE),
+                person.copy("Al Pacino", "Tony Montana", gender = Gender.MALE)
+            ),
+            crew = listOf(
+                person.copy("Quentin Tarantino", "Director", gender = Gender.MALE),
+                person.copy("J.K. Rowling", "Novel", gender = Gender.FEMALE),
+                person.copy("Hans Zimmer", "Music Composer", gender = Gender.MALE)
             )
         )
-
-        onNodeWithText(releaseDate, useUnmergedTree = false).assertIsDisplayed()
-        onNodeWithText("$duration min", useUnmergedTree = false).assertIsDisplayed()
-        onNodeWithText(voteAverage.toString(), useUnmergedTree = false).assertIsDisplayed()
-        onNodeWithText(voteCount.toString(), useUnmergedTree = false).assertIsDisplayed()
-    }
-
-    @Test
-    fun should_render_tagline_and_overview(): Unit = with(composeTestRule) {
-        val tagline = "Tagline"
-        val overview = "Overview"
-
-        renderMovieDetail(movieDetail.copy(tagline = tagline, overview = overview))
-
-        onNodeWithText(tagline).performScrollTo()
-        onNodeWithText(tagline, useUnmergedTree = false).assertIsDisplayed()
-        onNodeWithText(overview).performScrollTo()
-        onNodeWithText(overview, useUnmergedTree = false).assertIsDisplayed()
-    }
-
-    @Test
-    fun should_render_cast(): Unit = with(composeTestRule) {
-        val tony = Person("Al Pacino", "Tony Montana", profilePhotoUrl, Gender.MALE, 1337)
-        val natasha = Person("Scarlett Johansson", "Natasha Romanoff", profilePhotoUrl, Gender.FEMALE, 1337)
-        val hermione = Person("Emma Watson", "Hermione Granger", profilePhotoUrl, Gender.FEMALE, 1337)
-        val sparrow = Person("Johnny Depp", "Jack Sparrow", profilePhotoUrl, Gender.MALE, 1337)
-        val cast = listOf(tony, natasha, hermione, sparrow)
-        val credits = Credits(cast = cast, crew = emptyList())
-
         renderMovieDetail(movieDetail, credits)
 
-        assertPeople(R.string.cast, cast)
-    }
-
-    @Test
-    fun should_render_crew(): Unit = with(composeTestRule) {
-        val klaus = Person("Klaus Badelt", "Composer", profilePhotoUrl, Gender.MALE, 1337)
-        val rowling = Person("J.K. Rowling", "Novel", profilePhotoUrl, Gender.FEMALE, 1337)
-        val hans = Person("Hans Zimmer", "Music Composer", profilePhotoUrl, Gender.MALE, 1337)
-        // Stan and Quentin is not visible initially. We should scroll to them to make them visible, then assert.
-        val stan = Person("Stan Lee", "Characters", profilePhotoUrl, Gender.MALE, 1337)
-        val quentin = Person("Quentin Tarantino", "Director", profilePhotoUrl, Gender.MALE, 1337)
-        val crew = listOf(klaus, rowling, hans, stan, quentin)
-        val credits = Credits(cast = emptyList(), crew = crew)
-
-        renderMovieDetail(movieDetail, credits)
-
-        assertPeople(R.string.crew, crew)
+        onNodeWithText(movieDetail.releaseDate, useUnmergedTree = false).assertIsDisplayed()
+        onNodeWithText("${movieDetail.duration} min", useUnmergedTree = false).assertIsDisplayed()
+        onNodeWithText(movieDetail.voteAverage.toString(), useUnmergedTree = false).assertIsDisplayed()
+        onNodeWithText(movieDetail.voteCount.toString(), useUnmergedTree = false).assertIsDisplayed()
+        movieDetail.genres.forEach { onNodeWithText(it.name!!, useUnmergedTree = false).assertIsDisplayed() }
+        onNodeWithText(movieDetail.tagline).performScrollTo()
+        onNodeWithText(movieDetail.tagline, useUnmergedTree = false).assertIsDisplayed()
+        onNodeWithText(movieDetail.overview).performScrollTo()
+        onNodeWithText(movieDetail.overview, useUnmergedTree = false).assertIsDisplayed()
+        assertPeople(R.string.cast, credits.cast)
+        assertPeople(R.string.crew, credits.crew)
     }
 
     private fun ComposeContentTestRule.assertPeople(@StringRes tagResId: Int, people: List<Person>) {

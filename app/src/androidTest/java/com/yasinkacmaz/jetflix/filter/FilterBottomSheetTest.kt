@@ -2,11 +2,10 @@ package com.yasinkacmaz.jetflix.filter
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasAnyChild
 import androidx.compose.ui.test.hasText
@@ -17,7 +16,9 @@ import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.yasinkacmaz.jetflix.data.Genre
+import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
@@ -34,78 +35,52 @@ class FilterBottomSheetTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val genreNames = listOf("Action", "Drama", "Animation", "Comedy")
-    private val genres = genreNames.map { GenreUiModel(genre = Genre(id = -1, name = it)) }
+    private val genres = genreNames.mapIndexed { index, name -> GenreUiModel(genre = Genre(id = index, name = name)) }
 
     @Test
-    fun should_render_sort_order_as_selected(): Unit = with(composeTestRule) {
-        val filterState = FilterState(sortOrder = SortOrder.ASCENDING)
+    fun testFilterComponents(): Unit = with(composeTestRule) {
+        val filterState =
+            FilterState(sortOrder = SortOrder.ASCENDING, sortBy = SortBy.REVENUE, includeAdult = true, genres = genres)
 
-        renderFilterBottomSheet(filterState)
+        setTestContent {
+            Column {
+                FilterBottomSheetContent(filterState) {}
+            }
+        }
 
-        verifySortOrder(filterState.sortOrder)
-    }
-
-    @Test
-    fun should_render_sort_by_as_selected(): Unit = with(composeTestRule) {
-        val filterState = FilterState(sortBy = SortBy.REVENUE)
-
-        renderFilterBottomSheet(filterState)
-
-        verifySortBy(filterState.sortBy)
-    }
-
-    @Test
-    fun should_render_genres() = with(composeTestRule) {
-        val filterState = FilterState(genres = genres)
-
-        renderFilterBottomSheet(filterState)
+        verifySortOrderSelected(filterState.sortOrder)
+        verifySortBySelected(filterState.sortBy)
+        verifyIncludeAdult(filterState.includeAdult)
+        onNodeWithText(composeTestRule.getString(SortOrder.DESCENDING.titleResId)).performClick()
+        onNodeWithText(composeTestRule.getString(SortBy.POPULARITY.titleResId)).performClick()
+        includeAdultNode().performClick()
+        verifySortOrderSelected(SortOrder.DESCENDING)
+        verifySortBySelected(SortBy.POPULARITY)
+        verifyIncludeAdult(!filterState.includeAdult)
 
         genreNames.forEach { genreName ->
             onNodeWithText(genreName).assertIsDisplayed()
+            onNodeWithText(genreName).assertIsNotSelected()
         }
+        onNodeWithText(genreNames.first()).performClick()
+        onNodeWithText(genreNames.first()).assertIsSelected()
     }
 
-    @Test
-    fun should_render_selected_genres() = with(composeTestRule) {
-        val filterState = FilterState(genres = genres, selectedGenreIds = listOf(-1))
-
-        renderFilterBottomSheet(filterState)
-
-        genreNames.forEach { genreName ->
-            onNodeWithText(genreName).assertIsSelected()
-        }
-    }
-
-    @Test
-    fun should_render_include_adult() = with(composeTestRule) {
-        val filterState = FilterState(includeAdult = true)
-
-        renderFilterBottomSheet(filterState)
-
-        verifyIncludeAdult(filterState.includeAdult)
-    }
-
-    private fun ComposeContentTestRule.verifySortOrder(sortOrder: SortOrder) {
+    private fun ComposeContentTestRule.verifySortOrderSelected(sortOrder: SortOrder) {
         val sortOrderTitle = composeTestRule.getString(sortOrder.titleResId)
         onNode(withRole(Role.RadioButton).and(isSelected()).and(hasText(sortOrderTitle))).assertIsDisplayed()
     }
 
-    private fun ComposeContentTestRule.verifySortBy(sortBy: SortBy) {
+    private fun ComposeContentTestRule.verifySortBySelected(sortBy: SortBy) {
         val sortByTitle = composeTestRule.getString(sortBy.titleResId)
         onNode(withRole(Role.RadioButton).and(isSelected()).and(hasText(sortByTitle))).assertIsDisplayed()
     }
 
     private fun ComposeContentTestRule.verifyIncludeAdult(includeAdult: Boolean) {
         val matcher = if (includeAdult) isOn() else isOff()
-        onNodeWithText("Include Adult").assert(hasAnyChild(isToggleable().and(matcher)))
+        includeAdultNode().assert(hasAnyChild(isToggleable().and(matcher)))
     }
 
-    private fun ComposeContentTestRule.renderFilterBottomSheet(
-        filterState: FilterState,
-        onFilterStateChanged: (FilterState) -> Unit = { }
-    ) = setTestContent {
-        Column(Modifier.statusBarsPadding()) {
-            FilterBottomSheetContent(filterState, onFilterStateChanged)
-        }
-    }
+    private fun ComposeContentTestRule.includeAdultNode() =
+        onNodeWithText(composeTestRule.getString(R.string.include_adult))
 }
