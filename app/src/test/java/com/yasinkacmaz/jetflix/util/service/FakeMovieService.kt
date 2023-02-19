@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.util
+package com.yasinkacmaz.jetflix.util.service
 
 import com.yasinkacmaz.jetflix.data.CreditsResponse
 import com.yasinkacmaz.jetflix.data.Genre
@@ -8,6 +8,7 @@ import com.yasinkacmaz.jetflix.data.MovieDetailResponse
 import com.yasinkacmaz.jetflix.data.MovieResponse
 import com.yasinkacmaz.jetflix.data.MoviesResponse
 import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.util.parseJson
 
 class FakeMovieService : MovieService {
     val genre = Genre(1, "Name")

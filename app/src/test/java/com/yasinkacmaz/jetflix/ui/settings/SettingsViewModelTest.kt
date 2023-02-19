@@ -1,11 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
-import com.yasinkacmaz.jetflix.service.ConfigurationService
+import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.json
+import com.yasinkacmaz.jetflix.util.service.FakeConfigurationService
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -16,19 +15,18 @@ import java.io.IOException
 @ExperimentalCoroutinesApi
 class SettingsViewModelTest {
 
-    private val configurationService: ConfigurationService = mockk(relaxed = true)
-    private val languageDataStore: LanguageDataStore = mockk(relaxed = true)
+    private val configurationService = FakeConfigurationService()
+    private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
 
     @Test
     fun `Should sort languages by englishName when fetch languages succeed`() = runTest {
         val languages = listOf(Language(englishName = "2", "", ""), Language(englishName = "1", "", ""))
-        coEvery { configurationService.fetchLanguages() } returns languages
+        configurationService.languages = languages
 
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
         settingsViewModel.fetchLanguages()
 
-        coVerify { configurationService.fetchLanguages() }
         expectThat(uiStates[uiStates.lastIndex - 1]).isEqualTo(SettingsViewModel.UiState(showLoading = true))
         val sortedLanguages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
         expectThat(uiStates.last()).isEqualTo(SettingsViewModel.UiState(showLoading = false, sortedLanguages))
@@ -36,13 +34,11 @@ class SettingsViewModelTest {
 
     @Test
     fun `Should create state with empty languages when fetch languages fails`() = runTest {
-        coEvery { configurationService.fetchLanguages() } throws IOException()
+        configurationService.fetchLanguagesException = IOException()
 
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
         settingsViewModel.fetchLanguages()
-
-        coVerify { configurationService.fetchLanguages() }
 
         expectThat(uiStates[uiStates.lastIndex - 1]).isEqualTo(SettingsViewModel.UiState(showLoading = true))
         expectThat(uiStates.last()).isEqualTo(SettingsViewModel.UiState(showLoading = false))
@@ -52,9 +48,10 @@ class SettingsViewModelTest {
     fun `Should call language data store when language selected`() = runTest {
         val settingsViewModel = createViewModel()
 
-        settingsViewModel.onLanguageSelected(Language.default)
+        val language = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
+        settingsViewModel.onLanguageSelected(language)
 
-        coVerify { languageDataStore.onLanguageSelected(Language.default) }
+        expectThat(languageDataStore.language.test().last()).isEqualTo(language)
     }
 
     private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, testDispatchers)

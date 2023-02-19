@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.profile
 import androidx.lifecycle.SavedStateHandle
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import com.yasinkacmaz.jetflix.util.FakePersonService
+import com.yasinkacmaz.jetflix.util.service.FakePersonService
 import com.yasinkacmaz.jetflix.util.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
