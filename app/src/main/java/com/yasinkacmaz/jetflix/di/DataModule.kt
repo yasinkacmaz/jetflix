@@ -30,8 +30,8 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideLanguageDataStore(@ApplicationContext context: Context, json: Json): LanguageDataStore {
-        return LanguageDataStore(json, context.preferencesDataStore)
+    fun provideLanguageDataStore(json: Json, localDataStore: LocalDataStore): LanguageDataStore {
+        return LanguageDataStore(json, localDataStore)
     }
 
     @Provides
