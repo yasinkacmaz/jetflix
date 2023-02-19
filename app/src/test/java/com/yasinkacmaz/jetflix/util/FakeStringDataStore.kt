@@ -8,7 +8,7 @@ import kotlinx.serialization.encodeToString
 class FakeStringDataStore : LocalDataStore {
     private var values: MutableStateFlow<String> = MutableStateFlow("")
 
-    override fun get(key: String): Flow<String> = MutableStateFlow("").also { values = it }
+    override fun get(key: String): Flow<String> = values
 
     override suspend fun set(key: String, newValue: String) {
         values.value = newValue
