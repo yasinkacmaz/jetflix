@@ -7,11 +7,14 @@ import com.yasinkacmaz.jetflix.data.ImagesResponse
 import com.yasinkacmaz.jetflix.data.MovieDetailResponse
 import com.yasinkacmaz.jetflix.data.MoviesResponse
 import com.yasinkacmaz.jetflix.service.MovieService
-import java.io.IOException
 
 class FakeMovieService : MovieService {
     val genre = Genre(1, "Name")
-    var fetchGenresShouldFail = false
+    var fetchGenresException: Exception? = null
+    var movieDetailException: Exception? = null
+    val movieDetailResponse: MovieDetailResponse = parseJson("movie_detail.json")
+    val creditsResponse: CreditsResponse = parseJson("credits.json")
+    val imagesResponse: ImagesResponse = parseJson("images.json")
 
     override suspend fun fetchMovies(pageNumber: Int, options: Map<String, String>): MoviesResponse {
         TODO("Not yet implemented")
@@ -22,18 +25,26 @@ class FakeMovieService : MovieService {
     }
 
     override suspend fun fetchGenres(): GenresResponse {
-        return if (!fetchGenresShouldFail) GenresResponse(listOf(genre)) else throw IOException()
+        return if (fetchGenresException == null) {
+            GenresResponse(listOf(genre))
+        } else {
+            throw fetchGenresException!!.also { fetchGenresException = null }
+        }
     }
 
     override suspend fun fetchMovieDetail(movieId: Int): MovieDetailResponse {
-        TODO("Not yet implemented")
+        return if (movieDetailException == null) {
+            movieDetailResponse
+        } else {
+            throw movieDetailException!!.also { movieDetailException = null }
+        }
     }
 
     override suspend fun fetchMovieCredits(movieId: Int): CreditsResponse {
-        TODO("Not yet implemented")
+        return creditsResponse
     }
 
     override suspend fun fetchMovieImages(movieId: Int): ImagesResponse {
-        TODO("Not yet implemented")
+        return imagesResponse
     }
 }

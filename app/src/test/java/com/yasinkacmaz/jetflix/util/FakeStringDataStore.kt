@@ -14,7 +14,7 @@ class FakeStringDataStore : LocalDataStore {
         values.value = newValue
     }
 
-    suspend inline fun <reified T: Any> set(newValue: T) {
+    suspend inline fun <reified T : Any> set(newValue: T) {
         set("", json.encodeToString(newValue))
     }
 }

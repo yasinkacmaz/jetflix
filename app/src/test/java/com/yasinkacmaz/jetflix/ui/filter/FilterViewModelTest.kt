@@ -15,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class FilterViewModelTest {
@@ -39,14 +40,13 @@ class FilterViewModelTest {
 
     @Test
     fun `Should set genres as empty when fetch genres error`() = runTest {
-        movieService.fetchGenresShouldFail = true
+        movieService.fetchGenresException = IOException()
         val filterState = FilterState(sortBy = SortBy.REVENUE)
         fakeStringDataStore.set(filterState)
 
         val filterViewModel = createViewModel()
 
         expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = emptyList()))
-        movieService.fetchGenresShouldFail = false
     }
 
     @Test
