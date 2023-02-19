@@ -32,7 +32,7 @@ class FilterDataStoreTest {
     @Test
     fun `Should set filterState when preference is exists`() = runTest {
         val filterState = FilterState(sortBy = SortBy.VOTE_AVERAGE)
-        fakeStringDataStore.set("", json.encodeToString(filterState))
+        fakeStringDataStore.set(filterState)
 
         val filterDataStore = createFilterDataStore()
 

@@ -21,7 +21,7 @@ class LanguageDataStoreTest {
 
     @Test
     fun `Should return default language when preference is not present`() = runTest {
-        fakeStringDataStore.set("", "")
+        fakeStringDataStore.set("")
 
         val languageDataStore = createLanguageDataStore()
 
@@ -31,7 +31,7 @@ class LanguageDataStoreTest {
     @Test
     fun `Should return saved language when preference is present`() = runTest {
         val turkishLanguage = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
-        fakeStringDataStore.set("", json.encodeToString(turkishLanguage))
+        fakeStringDataStore.set(turkishLanguage)
 
         val languageDataStore = createLanguageDataStore()
 

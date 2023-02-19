@@ -1,23 +1,24 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
+import com.yasinkacmaz.jetflix.util.Dispatchers
+import com.yasinkacmaz.jetflix.util.onIO
+import com.yasinkacmaz.jetflix.util.onMain
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FilterViewModel @Inject constructor(
     private val filterDataStore: FilterDataStore,
     private val movieService: MovieService,
-    private val genreUiModelMapper: GenreUiModelMapper
+    private val genreUiModelMapper: GenreUiModelMapper,
+    private val dispatchers: Dispatchers
 ) : ViewModel() {
 
     private val _filterState: MutableStateFlow<FilterState?> = MutableStateFlow(null)
@@ -25,7 +26,7 @@ class FilterViewModel @Inject constructor(
         listenFilterStateChanges()
     }
 
-    private fun listenFilterStateChanges() = viewModelScope.launch {
+    private fun listenFilterStateChanges() = dispatchers.onMain {
         val genres = try {
             movieService.fetchGenres().genres.map(genreUiModelMapper::map)
         } catch (exception: Exception) {
@@ -38,13 +39,13 @@ class FilterViewModel @Inject constructor(
     }
 
     fun onResetClicked() {
-        viewModelScope.launch(Dispatchers.IO) {
+        dispatchers.onIO {
             filterDataStore.resetFilterState()
         }
     }
 
     fun onFilterStateChanged(filterState: FilterState) {
-        viewModelScope.launch(Dispatchers.IO) {
+        dispatchers.onIO {
             filterDataStore.onFilterStateChanged(filterState)
         }
     }

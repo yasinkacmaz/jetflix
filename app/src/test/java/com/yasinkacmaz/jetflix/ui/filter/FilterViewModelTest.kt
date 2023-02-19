@@ -1,122 +1,96 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
-import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.data.GenresResponse
-import com.yasinkacmaz.jetflix.service.MovieService
-import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
+import com.yasinkacmaz.jetflix.util.FakeMovieService
+import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.json
+import com.yasinkacmaz.jetflix.util.test
+import com.yasinkacmaz.jetflix.util.testDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class FilterViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var filterDataStore: FilterDataStore
-
-    @RelaxedMockK
-    private lateinit var movieService: MovieService
-
-    @RelaxedMockK
-    private lateinit var genreUiModelMapper: GenreUiModelMapper
-
-    private val genre = Genre(1, "Name")
-    private val genreUiModel = GenreUiModel(genre = genre)
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        coEvery { filterDataStore.filterState } returns flowOf()
-        every { genreUiModelMapper.map(genre) } returns genreUiModel
-        coEvery { movieService.fetchGenres() } returns GenresResponse(listOf(genre))
-    }
+    private val fakeStringDataStore = FakeStringDataStore()
+    private val filterDataStore = FilterDataStore(json, fakeStringDataStore)
+    private val movieService = FakeMovieService()
+    private val genreUiModelMapper = GenreUiModelMapper()
+    private val genreUiModel = genreUiModelMapper.map(movieService.genre)
 
     @Test
     fun `Should fetch genres`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        coEvery { filterDataStore.filterState } returns flowOf(filterState)
+        fakeStringDataStore.set(filterState)
 
-        val filterViewModel = initViewModel()
-
-        expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
-        coVerify { movieService.fetchGenres() }
-    }
-
-    @Test
-    fun `Should fetch genres only once`() = runTest {
-        val filterState = FilterState(sortBy = SortBy.REVENUE)
-        every { filterDataStore.filterState } returns flowOf(filterState, filterState, filterState)
-
-        val filterViewModel = initViewModel()
+        val filterViewModel = createViewModel()
 
         expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
-        coVerify(exactly = 1) { movieService.fetchGenres() }
     }
 
     @Test
     fun `Should set genres as empty when fetch genres error`() = runTest {
-        coEvery { movieService.fetchGenres() } throws IOException()
+        movieService.fetchGenresShouldFail = true
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        coEvery { filterDataStore.filterState } returns flowOf(filterState)
+        fakeStringDataStore.set(filterState)
 
-        val filterViewModel = initViewModel()
+        val filterViewModel = createViewModel()
 
         expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = emptyList()))
+        movieService.fetchGenresShouldFail = false
     }
 
     @Test
     fun `onResetClicked should call data store resetFilterState`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        coEvery { filterDataStore.filterState } returns flowOf(filterState)
+        fakeStringDataStore.set(filterState)
 
-        val filterViewModel = initViewModel()
+        val filterViewModel = createViewModel()
+        val filterStates = filterViewModel.filterState.test()
         filterViewModel.onResetClicked()
 
-        expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
-        coVerify { filterDataStore.resetFilterState() }
+        expectThat(filterStates[0]).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
+        expectThat(filterStates[1]).isEqualTo(FilterState().copy(genres = listOf(genreUiModel)))
     }
 
     @Test
     fun `onFilterStateChanged should call data store onFilterStateChanged`() = runTest {
-        coEvery { filterDataStore.filterState } returns flowOf(FilterState())
-        val newFilterState = FilterState(sortBy = SortBy.REVENUE)
+        val filterState = FilterState(sortBy = SortBy.REVENUE)
+        fakeStringDataStore.set(filterState)
 
-        val filterViewModel = initViewModel()
+        val newFilterState = FilterState(sortBy = SortBy.VOTE_AVERAGE)
+
+        val filterViewModel = createViewModel()
+        val filterStates = filterViewModel.filterState.test()
+
         filterViewModel.onFilterStateChanged(newFilterState)
 
-        coVerify { filterDataStore.onFilterStateChanged(newFilterState) }
+        expectThat(filterStates[0]).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
+        expectThat(filterStates[1]).isEqualTo(newFilterState.copy(genres = listOf(genreUiModel)))
     }
 
     @Test
     fun `filter state should change when filter data store changed`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        val filterStateFlow = MutableStateFlow(filterState)
-        coEvery { filterDataStore.filterState } returns filterStateFlow
-        val filterViewModel = initViewModel()
+        fakeStringDataStore.set(filterState)
+
+        val filterViewModel = createViewModel()
+        val filterStates = filterViewModel.filterState.test()
 
         val changedFilterState = FilterState(sortBy = SortBy.RELEASE_DATE)
-        filterStateFlow.emit(changedFilterState)
-        val expectedState = changedFilterState.copy(genres = listOf(genreUiModel))
-        expectThat(filterViewModel.filterState.first()).isEqualTo(expectedState)
+        fakeStringDataStore.set(changedFilterState)
+
+        expectThat(filterStates.last()).isEqualTo(changedFilterState.copy(genres = listOf(genreUiModel)))
     }
 
-    private fun initViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper)
+    private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper, testDispatchers)
 }

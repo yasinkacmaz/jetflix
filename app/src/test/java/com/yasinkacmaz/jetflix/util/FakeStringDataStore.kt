@@ -2,16 +2,19 @@ package com.yasinkacmaz.jetflix.util
 
 import com.yasinkacmaz.jetflix.data.local.LocalDataStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.serialization.encodeToString
 
 class FakeStringDataStore : LocalDataStore {
-    var currentValue: String? = null
+    private var values: MutableStateFlow<String> = MutableStateFlow("")
 
-    override fun get(key: String): Flow<String?> {
-        return flowOf(currentValue)
-    }
+    override fun get(key: String): Flow<String> = MutableStateFlow("").also { values = it }
 
     override suspend fun set(key: String, newValue: String) {
-        currentValue = newValue
+        values.value = newValue
+    }
+
+    suspend inline fun <reified T: Any> set(newValue: T) {
+        set("", json.encodeToString(newValue))
     }
 }
