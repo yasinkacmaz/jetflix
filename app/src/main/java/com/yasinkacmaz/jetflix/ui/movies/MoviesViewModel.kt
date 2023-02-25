@@ -39,13 +39,10 @@ class MoviesViewModel @Inject constructor(
     val filterStateChanges = MutableSharedFlow<FilterState>()
     private var filterState: FilterState? = null
 
-    private val searchQuery = MutableStateFlow("")
+    @VisibleForTesting
+    val searchQuery = MutableStateFlow("")
     private val _searchQueryChanges = MutableSharedFlow<Unit>()
     val searchQueryChanges: SharedFlow<Unit> = _searchQueryChanges.asSharedFlow()
-
-    @VisibleForTesting
-    lateinit var pagingSource: MoviesPagingSource
-        private set
 
     init {
         filterDataStore.filterState
@@ -62,14 +59,13 @@ class MoviesViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    @VisibleForTesting
-    fun initPagingSource() = MoviesPagingSource(
+    private fun initPagingSource() = MoviesPagingSource(
         movieService,
         movieMapper,
         movieRequestOptionsMapper,
         filterState,
         searchQuery.value
-    ).also(::pagingSource::set)
+    )
 
     fun onSearch(query: String) {
         if (searchQuery.value.isEmpty() && query.isBlank()) return

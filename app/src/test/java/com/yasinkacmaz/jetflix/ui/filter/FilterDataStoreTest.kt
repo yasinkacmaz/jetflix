@@ -1,20 +1,12 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore.Companion.KEY_FILTER_STATE
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
+import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
@@ -25,25 +17,13 @@ class FilterDataStoreTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    @RelaxedMockK
-    private lateinit var preferencesDataStore: DataStore<Preferences>
-
-    @RelaxedMockK
-    private lateinit var preferences: Preferences
-
-    private lateinit var filterDataStore: FilterDataStore
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        every { preferencesDataStore.data } returns flowOf(preferences)
-        every { preferences[KEY_FILTER_STATE] } returns null
-        filterDataStore = FilterDataStore(json, preferencesDataStore)
-    }
+    private val fakeStringDataStore = FakeStringDataStore()
 
     @Test
     fun `Should set filterState as default when preference is not exists`() = runTest {
-        every { preferences[KEY_FILTER_STATE] } returns null
+        fakeStringDataStore.set("", "")
+
+        val filterDataStore = createFilterDataStore()
 
         expectThat(filterDataStore.filterState.first()).isEqualTo(FilterState())
     }
@@ -51,8 +31,12 @@ class FilterDataStoreTest {
     @Test
     fun `Should set filterState when preference is exists`() = runTest {
         val filterState = FilterState(sortBy = SortBy.VOTE_AVERAGE)
-        every { preferences[KEY_FILTER_STATE] } returns json.encodeToString(filterState)
+        fakeStringDataStore.set(filterState)
+
+        val filterDataStore = createFilterDataStore()
 
         expectThat(filterDataStore.filterState.first()).isEqualTo(filterState)
     }
+
+    private fun createFilterDataStore() = FilterDataStore(json, fakeStringDataStore)
 }

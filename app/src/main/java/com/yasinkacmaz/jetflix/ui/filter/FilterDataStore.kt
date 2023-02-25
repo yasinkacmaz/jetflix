@@ -1,9 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import com.yasinkacmaz.jetflix.data.local.LocalDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -11,10 +8,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class FilterDataStore(private val json: Json, private val preferences: DataStore<Preferences>) {
-    val filterState: Flow<FilterState> = preferences.data
-        .map { preferences ->
-            val filterStateString = preferences[KEY_FILTER_STATE]
+class FilterDataStore(private val json: Json, private val localDataStore: LocalDataStore) {
+    val filterState: Flow<FilterState> = localDataStore.get(KEY_FILTER_STATE)
+        .map { filterStateString ->
             if (filterStateString != null) {
                 json.decodeFromString(filterStateString)
             } else {
@@ -26,18 +22,14 @@ class FilterDataStore(private val json: Json, private val preferences: DataStore
         }
 
     suspend fun onFilterStateChanged(filterState: FilterState) {
-        preferences.edit { preferences ->
-            preferences[KEY_FILTER_STATE] = json.encodeToString(filterState)
-        }
+        localDataStore.set(KEY_FILTER_STATE, json.encodeToString(filterState))
     }
 
     suspend fun resetFilterState() {
-        preferences.edit { preferences ->
-            preferences[KEY_FILTER_STATE] = json.encodeToString(FilterState())
-        }
+        localDataStore.set(KEY_FILTER_STATE, json.encodeToString(FilterState()))
     }
 
     companion object {
-        val KEY_FILTER_STATE = stringPreferencesKey("filter_state")
+        private const val KEY_FILTER_STATE = "filter_state"
     }
 }
