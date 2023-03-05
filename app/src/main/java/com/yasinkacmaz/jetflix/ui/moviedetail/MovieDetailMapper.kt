@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import com.yasinkacmaz.jetflix.data.MovieDetailResponse
+import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toBackdropUrl
 import com.yasinkacmaz.jetflix.util.toPosterUrl

@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import com.yasinkacmaz.jetflix.data.Genre
+import com.yasinkacmaz.jetflix.data.remote.Genre
 
 data class MovieDetail(
     val id: Int,

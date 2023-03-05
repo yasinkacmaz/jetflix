@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.filter.genres
 
-import com.yasinkacmaz.jetflix.data.Genre
+import com.yasinkacmaz.jetflix.data.remote.Genre
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo

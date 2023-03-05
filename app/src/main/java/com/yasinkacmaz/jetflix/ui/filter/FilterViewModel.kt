@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
 import androidx.lifecycle.ViewModel
-import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
 import com.yasinkacmaz.jetflix.util.Dispatchers
 import com.yasinkacmaz.jetflix.util.onIO

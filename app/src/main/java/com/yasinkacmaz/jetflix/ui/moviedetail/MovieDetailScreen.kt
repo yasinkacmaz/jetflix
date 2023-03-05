@@ -77,7 +77,7 @@ import coil.compose.AsyncImagePainter.State.Loading
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.data.Genre
+import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.main.LocalNavController

@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.profile
 import androidx.lifecycle.SavedStateHandle
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import com.yasinkacmaz.jetflix.util.service.FakePersonService
+import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -22,7 +22,7 @@ class ProfileViewModelTest {
 
     private val personId = 1337
     private val savedStateHandle = SavedStateHandle(mapOf(ARG_PERSON_ID to personId.toString()))
-    private val personService = FakePersonService()
+    private val personService = FakePersonClient()
     private val profileMapper = ProfileMapper()
 
     private lateinit var profileViewModel: ProfileViewModel

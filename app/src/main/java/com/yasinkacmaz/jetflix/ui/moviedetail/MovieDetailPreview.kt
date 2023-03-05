@@ -6,7 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.yasinkacmaz.jetflix.data.Genre
+import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person

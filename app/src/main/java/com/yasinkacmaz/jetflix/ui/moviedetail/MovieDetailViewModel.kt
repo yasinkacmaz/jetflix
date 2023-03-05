@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.moviedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image

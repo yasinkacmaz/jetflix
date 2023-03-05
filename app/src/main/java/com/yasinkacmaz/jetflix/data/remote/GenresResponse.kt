@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.data
+package com.yasinkacmaz.jetflix.data.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

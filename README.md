@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/4olQKn0.png" width="57%"/>
 </p>
 <h1 align="center">Jetflix</h1>
-<h4 align="center">Movie listing app that demonstrates various UI's written with Jetpack Compose using TheMovieDb API</h1>
+<h4 align="center">Movie listing app that demonstrates various UI's written with Jetpack Compose using TheMovieDb API</h4>
 
 </br>
 
@@ -24,7 +24,7 @@ Go to [Releases](https://github.com/yasinkacmaz/jetflix/releases) page to downlo
 
 ## Technologies
 
-- [Kotlin](https://kotlinlang.org/) - %100 Kotlin, No XML
+- [Kotlin](https://kotlinlang.org/) - %100 Kotlin
 - [Jetpack Compose](https://developer.android.com/jetpack/compose) for Declarative UI
 - [Accompanist](https://github.com/google/accompanist) for Compose UI Widgets
 - [Coil](https://github.com/coil-kt/coil) for image loading
@@ -32,5 +32,5 @@ Go to [Releases](https://github.com/yasinkacmaz/jetflix/releases) page to downlo
 - [StateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
 - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) for Dependency Injection
-- [OkHttp](https://github.com/square/okhttp) and [Retrofit](https://github.com/square/retrofit) for network operations
+- [OkHttp](https://github.com/square/okhttp) and [Ktor](https://github.com/ktorio/ktor) for network operations
 - [TheMovieDb(Tmdb) Api](https://developers.themoviedb.org/3) for movies

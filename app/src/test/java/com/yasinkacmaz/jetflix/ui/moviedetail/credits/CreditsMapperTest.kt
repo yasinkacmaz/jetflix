@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 
-import com.yasinkacmaz.jetflix.data.CreditsResponse
+import com.yasinkacmaz.jetflix.data.remote.CreditsResponse
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toProfilePhotoUrl
 import org.junit.Test

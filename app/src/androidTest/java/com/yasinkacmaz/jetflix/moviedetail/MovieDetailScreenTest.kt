@@ -16,7 +16,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.data.Genre
+import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetail
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits

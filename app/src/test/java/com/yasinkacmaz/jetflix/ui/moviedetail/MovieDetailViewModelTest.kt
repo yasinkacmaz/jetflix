@@ -5,7 +5,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import com.yasinkacmaz.jetflix.util.service.FakeMovieService
+import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -21,7 +21,7 @@ class MovieDetailViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    private val movieService = FakeMovieService()
+    private val movieService = FakeMovieClient()
 
     private val movieId = 1337
 

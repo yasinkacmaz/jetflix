@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import androidx.lifecycle.ViewModel
-import com.yasinkacmaz.jetflix.service.ConfigurationService
+import com.yasinkacmaz.jetflix.data.service.ConfigurationService
 import com.yasinkacmaz.jetflix.util.Dispatchers
 import com.yasinkacmaz.jetflix.util.onIO
 import com.yasinkacmaz.jetflix.util.onMain

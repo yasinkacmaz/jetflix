@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.movies
 
-import com.yasinkacmaz.jetflix.data.MovieResponse
+import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.toPosterUrl
 import org.junit.Test
