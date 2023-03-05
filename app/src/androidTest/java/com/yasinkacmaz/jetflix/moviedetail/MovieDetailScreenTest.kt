@@ -66,8 +66,7 @@ class MovieDetailScreenTest {
 
     @Test
     fun should_render_movie_info(): Unit = with(composeTestRule) {
-        val person =
-            Person(name = "", role = "", profilePhotoUrl = "https://t.ly/24r5", gender = Gender.FEMALE, id = 1337)
+        val person = Person(name = "", role = "", profilePhotoUrl = null, gender = Gender.FEMALE, id = 1337)
         val credits = Credits(
             cast = listOf(
                 person.copy("Scarlett Johansson", "Natasha Romanoff", gender = Gender.FEMALE),
