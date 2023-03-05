@@ -355,8 +355,11 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
 @Composable
 private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
-    val scale =
-        animateFloatAsState(targetValue = if (isScaled.value) 2.2f else 1f, animationSpec = springAnimation).value
+    val scale = animateFloatAsState(
+        targetValue = if (isScaled.value) 2.2f else 1f,
+        animationSpec = springAnimation,
+        label = "scale"
+    ).value
 
     Card(
         elevation = 24.dp,

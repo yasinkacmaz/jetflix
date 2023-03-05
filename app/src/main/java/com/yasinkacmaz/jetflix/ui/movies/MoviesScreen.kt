@@ -145,7 +145,7 @@ private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
                         } else {
                             MaterialTheme.colors.onPrimary
                         }
-                        val tint = animateColorAsState(color).value
+                        val tint = animateColorAsState(color, label = "fabTint").value
                         Image(
                             imageVector = Icons.Default.FilterList,
                             contentDescription = stringResource(id = R.string.title_filter_bottom_sheet),
@@ -168,7 +168,8 @@ private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
 private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
     val colors = MaterialTheme.colors
     val isDarkTheme = LocalDarkTheme.current
-    val iconTint = animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary).value
+    val iconTint =
+        animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary, label = "appIconTint").value
     Row(
         Modifier
             .fillMaxWidth()
