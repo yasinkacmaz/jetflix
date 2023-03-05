@@ -8,5 +8,5 @@ data class Profile(
     val alsoKnownAs: List<String> = emptyList(),
     val imdbProfileUrl: String?,
     val profilePhotoUrl: String,
-    val knownFor: String
+    val knownFor: String,
 )

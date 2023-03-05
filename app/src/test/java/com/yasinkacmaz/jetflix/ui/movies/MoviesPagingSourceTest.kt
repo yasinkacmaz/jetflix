@@ -37,8 +37,8 @@ class MoviesPagingSourceTest {
             PagingSource.LoadResult.Page(
                 data = movieService.moviesResponse.movies.map(movieMapper::map),
                 prevKey = null,
-                nextKey = null
-            )
+                nextKey = null,
+            ),
         )
     }
 
@@ -53,8 +53,8 @@ class MoviesPagingSourceTest {
             PagingSource.LoadResult.Page(
                 data = movieService.searchResponse.movies.map(movieMapper::map),
                 prevKey = null,
-                nextKey = null
-            )
+                nextKey = null,
+            ),
         )
     }
 

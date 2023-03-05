@@ -34,7 +34,7 @@ class ProfileViewModelTest {
         val stateValues = profileViewModel.uiState.test()
 
         expectThat(stateValues.last()).isEqualTo(
-            ProfileViewModel.ProfileUiState(profileMapper.map(personService.profileResponse), loading = false)
+            ProfileViewModel.ProfileUiState(profileMapper.map(personService.profileResponse), loading = false),
         )
     }
 

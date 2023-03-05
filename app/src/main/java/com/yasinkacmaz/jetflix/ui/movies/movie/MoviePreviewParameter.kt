@@ -22,7 +22,7 @@ private fun Series(@PreviewParameter(MovieProvider::class) movie: Movie) {
 }
 
 class MovieCollectionProvider : CollectionPreviewParameterProvider<Movie>(
-    listOf(fakeMovie.copy(name = "Godfather"), fakeMovie.copy(name = "Harry Potter"))
+    listOf(fakeMovie.copy(name = "Godfather"), fakeMovie.copy(name = "Harry Potter")),
 )
 
 @Composable

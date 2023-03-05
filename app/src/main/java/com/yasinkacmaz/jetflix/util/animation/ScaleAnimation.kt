@@ -34,7 +34,7 @@ fun scale(toScale: Float, animation: FiniteAnimationSpec<Float>): Float {
 
     val scale by scaleTransition.animateFloat(
         transitionSpec = { animation },
-        label = label
+        label = label,
     ) { state ->
         when (state) {
             ScaleState.DEFAULT -> 1f
@@ -70,7 +70,7 @@ private fun ScalingDot(scale: Float) {
             modifier = Modifier
                 .wrapContentSize()
                 .size(60.dp)
-                .scale(scale)
+                .scale(scale),
         ) {
         }
     }

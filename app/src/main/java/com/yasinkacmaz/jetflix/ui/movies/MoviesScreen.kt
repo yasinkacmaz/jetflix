@@ -91,18 +91,18 @@ fun MoviesScreen() {
             if (filterState == null) {
                 LoadingColumn(
                     title = stringResource(id = R.string.loading_filter_options),
-                    modifier = Modifier.fillMaxHeight(0.4f)
+                    modifier = Modifier.fillMaxHeight(0.4f),
                 )
             } else {
                 FilterBottomSheetContent(
                     filterState = filterState,
-                    onFilterStateChanged = filterViewModel::onFilterStateChanged
+                    onFilterStateChanged = filterViewModel::onFilterStateChanged,
                 )
             }
         },
         content = {
             MoviesGrid(sheetState)
-        }
+        },
     )
 }
 
@@ -121,7 +121,7 @@ private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
                 Column(
                     Modifier
                         .background(MaterialTheme.colors.surface)
-                        .padding(bottom = 2.dp)
+                        .padding(bottom = 2.dp),
                 ) {
                     JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
                     SearchBar(searchQuery, moviesViewModel::onSearch)
@@ -149,9 +149,9 @@ private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
                         Image(
                             imageVector = Icons.Default.FilterList,
                             contentDescription = stringResource(id = R.string.title_filter_bottom_sheet),
-                            colorFilter = ColorFilter.tint(tint)
+                            colorFilter = ColorFilter.tint(tint),
                         )
-                    }
+                    },
                 )
             }
         },
@@ -160,7 +160,7 @@ private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
             if (showSettingsDialog) {
                 SettingsContent(onDialogDismissed = { showSettingsDialog = false })
             }
-        }
+        },
     )
 }
 
@@ -174,13 +174,13 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             .fillMaxWidth()
             .height(50.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         IconButton(onClick = onSettingsClicked) {
             Icon(
                 Icons.Default.Settings,
                 contentDescription = stringResource(id = R.string.settings_content_description),
-                tint = iconTint
+                tint = iconTint,
             )
         }
 
@@ -188,7 +188,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             painter = painterResource(id = R.drawable.ic_jetflix),
             contentDescription = stringResource(id = R.string.app_name),
             tint = iconTint,
-            modifier = Modifier.size(82.dp)
+            modifier = Modifier.size(82.dp),
         )
 
         val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
@@ -224,7 +224,7 @@ private fun SearchBar(searchQuery: MutableState<String>, onSearch: (String) -> U
                     modifier = Modifier.clickable {
                         searchQuery.value = ""
                         onSearch("")
-                    }
+                    },
                 )
             }
         },
@@ -235,7 +235,7 @@ private fun SearchBar(searchQuery: MutableState<String>, onSearch: (String) -> U
         },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = MaterialTheme.colors.surface,
-            unfocusedIndicatorColor = MaterialTheme.colors.surface
-        )
+            unfocusedIndicatorColor = MaterialTheme.colors.surface,
+        ),
     )
 }

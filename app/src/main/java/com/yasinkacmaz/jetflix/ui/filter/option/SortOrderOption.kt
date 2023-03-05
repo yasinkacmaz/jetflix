@@ -26,7 +26,7 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
         val sortOrderState = remember(defaultValue) { mutableStateOf(currentValue) }
         FilterSectionTitle(
             painter = rememberVectorPainter(image = Icons.Default.SwapVert),
-            title = R.string.sort_order
+            title = R.string.sort_order,
         )
         val sortOrderValues = SortOrder.values().toList()
         FilterGrid(items = sortOrderValues) { index, _ ->
@@ -45,5 +45,5 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
 @Serializable
 enum class SortOrder(@StringRes val titleResId: Int, val order: String) {
     DESCENDING(R.string.sort_order_descending, "desc"),
-    ASCENDING(R.string.sort_order_ascending, "asc")
+    ASCENDING(R.string.sort_order_ascending, "asc"),
 }

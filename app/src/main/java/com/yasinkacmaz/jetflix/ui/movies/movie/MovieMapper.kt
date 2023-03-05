@@ -12,6 +12,6 @@ class MovieMapper @Inject constructor() : Mapper<MovieResponse, Movie> {
         releaseDate = input.firstAirDate.orEmpty(),
         posterPath = input.posterPath.orEmpty().toPosterUrl(),
         voteAverage = input.voteAverage,
-        voteCount = input.voteCount
+        voteCount = input.voteCount,
     )
 }

@@ -47,7 +47,7 @@ fun MainContent() {
 
             composable(
                 route = Screen.IMAGES.route,
-                arguments = listOf(navArgument(ARG_INITIAL_PAGE) { defaultValue = "0" })
+                arguments = listOf(navArgument(ARG_INITIAL_PAGE) { defaultValue = "0" }),
             ) {
                 val initialPage = it.arguments?.getString(ARG_INITIAL_PAGE)!!.toInt()
                 val images = movieDetailViewModel(it.movieId()).uiState.collectAsState().value.images

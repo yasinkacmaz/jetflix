@@ -7,5 +7,5 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 val testDispatchers = Dispatchers(
     io = UnconfinedTestDispatcher(),
     main = UnconfinedTestDispatcher(),
-    default = UnconfinedTestDispatcher()
+    default = UnconfinedTestDispatcher(),
 )

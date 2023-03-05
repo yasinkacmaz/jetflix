@@ -9,14 +9,14 @@ import java.util.Locale
 data class Language(
     @SerialName("english_name") val englishName: String,
     @SerialName("iso_639_1") val iso6391: String,
-    @SerialName("name") val name: String
+    @SerialName("name") val name: String,
 ) {
     companion object {
         @SuppressLint("ConstantLocale")
         val default = Language(
             englishName = Locale.getDefault().displayLanguage,
             iso6391 = Locale.getDefault().language,
-            name = Locale.getDefault().displayLanguage
+            name = Locale.getDefault().displayLanguage,
         )
     }
 }

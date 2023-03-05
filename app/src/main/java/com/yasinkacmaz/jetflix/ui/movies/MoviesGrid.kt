@@ -79,7 +79,7 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
         contentPadding = PaddingValues(
             start = GRID_SPACING,
             end = GRID_SPACING,
-            bottom = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp.plus(GRID_SPACING)
+            bottom = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp.plus(GRID_SPACING),
         ),
         horizontalArrangement = Arrangement.spacedBy(GRID_SPACING, Alignment.CenterHorizontally),
         state = state,
@@ -96,12 +96,12 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
                     Modifier
                         .height(320.dp)
                         .padding(vertical = GRID_SPACING),
-                    onMovieClicked
+                    onMovieClicked,
                 )
             }
             renderLoading(moviePagingItems.loadState)
             renderError(moviePagingItems.loadState)
-        }
+        },
     )
 }
 

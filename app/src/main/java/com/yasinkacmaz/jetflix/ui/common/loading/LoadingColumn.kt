@@ -18,7 +18,7 @@ fun LoadingColumn(title: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(title)
         CircularProgressIndicator(modifier = Modifier.size(40.dp).padding(top = 16.dp))

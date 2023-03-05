@@ -53,7 +53,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             mainAxisSpacing = 12.dp,
             crossAxisSpacing = 8.dp,
             mainAxisAlignment = FlowMainAxisAlignment.Center,
-            lastLineMainAxisAlignment = FlowMainAxisAlignment.Center
+            lastLineMainAxisAlignment = FlowMainAxisAlignment.Center,
         ) {
             genreUiModels.forEach { genreUiModel ->
                 val genreId = genreUiModel.genre.id
@@ -95,7 +95,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
                 onClick = {
                     selected = selected.not()
                     onClicked(selected)
-                }
+                },
             )
             .padding(horizontal = 10.dp, vertical = 3.dp)
 
@@ -104,7 +104,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.body2.copy(fontSize = 17.sp),
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }

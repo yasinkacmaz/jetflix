@@ -16,7 +16,7 @@ class MovieRequestOptionsMapperTest {
             sortBy = SortBy.POPULARITY,
             sortOrder = SortOrder.ASCENDING,
             includeAdult = true,
-            selectedGenreIds = listOf(1, 2)
+            selectedGenreIds = listOf(1, 2),
         )
 
         val options = mapper.map(filterState)
@@ -24,7 +24,7 @@ class MovieRequestOptionsMapperTest {
         val expectedOptions = mapOf(
             "sort_by" to "${filterState.sortBy.by}.${filterState.sortOrder.order}",
             "include_adult" to filterState.includeAdult.toString(),
-            "with_genres" to filterState.selectedGenreIds.joinToString("|")
+            "with_genres" to filterState.selectedGenreIds.joinToString("|"),
         )
         expectThat(options).isEqualTo(expectedOptions)
     }
@@ -36,7 +36,7 @@ class MovieRequestOptionsMapperTest {
         val defaultFilterState = FilterState()
         val expectedOptions = mapOf(
             "sort_by" to "${defaultFilterState.sortBy.by}.${defaultFilterState.sortOrder.order}",
-            "include_adult" to defaultFilterState.includeAdult.toString()
+            "include_adult" to defaultFilterState.includeAdult.toString(),
         )
         expectThat(options).isEqualTo(expectedOptions)
     }

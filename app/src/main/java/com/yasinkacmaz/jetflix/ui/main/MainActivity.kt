@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         JetflixTheme(isDarkTheme = isDarkTheme.value) {
             CompositionLocalProvider(
                 LocalNavController provides navController,
-                LocalDarkTheme provides isDarkTheme
+                LocalDarkTheme provides isDarkTheme,
             ) {
                 MainContent()
             }

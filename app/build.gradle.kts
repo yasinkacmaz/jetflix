@@ -56,8 +56,8 @@ android {
                 "**/attach_hotspot_windows.dll",
                 "META-INF/licenses/**",
                 "META-INF/AL2.0",
-                "META-INF/LGPL2.1"
-            )
+                "META-INF/LGPL2.1",
+            ),
         )
     }
 }

@@ -35,7 +35,7 @@ fun VerticalStaggeredGrid(
     columnSpacing: Dp = 0.dp,
     rowSpacing: Dp = 0.dp,
     contentPadding: PaddingValues = PaddingValues(),
-    itemContent: @Composable (Int, Modifier) -> Unit
+    itemContent: @Composable (Int, Modifier) -> Unit,
 ) {
     Layout(
         content = {
@@ -47,12 +47,12 @@ fun VerticalStaggeredGrid(
                     Modifier.graphicsLayer(
                         alpha = animation.alpha,
                         scaleX = animation.scale,
-                        scaleY = animation.scale
-                    )
+                        scaleY = animation.scale,
+                    ),
                 )
             }
         },
-        modifier = modifier.verticalScroll(rememberScrollState())
+        modifier = modifier.verticalScroll(rememberScrollState()),
     ) { measurables, constraints ->
         val rowSpacingPx = rowSpacing.roundToPx()
         val columnSpacingPx = columnSpacing.roundToPx()
@@ -114,7 +114,7 @@ private fun VerticalStaggeredGridPreview() {
         columnCount = 4,
         columnSpacing = 4.dp,
         rowSpacing = 4.dp,
-        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 64.dp)
+        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 64.dp),
     ) { index, modifier ->
         val height = remember(index) { (80..240).random().dp }
         val color = remember(index) { Color.randomColor() }
@@ -122,13 +122,13 @@ private fun VerticalStaggeredGridPreview() {
             backgroundColor = color,
             modifier = modifier
                 .height(height)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = index.toString(),
                     fontSize = 32.sp,
-                    color = Color.White
+                    color = Color.White,
                 )
             }
         }

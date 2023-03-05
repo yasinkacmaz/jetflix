@@ -13,5 +13,5 @@ data class ProfileResponse(
     @SerialName("known_for_department") val knownForDepartment: String,
     @SerialName("name") val name: String,
     @SerialName("place_of_birth") val placeOfBirth: String?,
-    @SerialName("profile_path") val profilePath: String? = null
+    @SerialName("profile_path") val profilePath: String? = null,
 )

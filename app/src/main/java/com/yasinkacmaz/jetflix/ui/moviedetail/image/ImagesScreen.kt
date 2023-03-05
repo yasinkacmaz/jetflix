@@ -58,7 +58,7 @@ private fun Image(image: Image) {
             Modifier
                 .padding(12.dp)
                 .shadow(16.dp, RoundedCornerShape(12.dp))
-                .animateContentSize()
+                .animateContentSize(),
         ) {
             Box {
                 Poster(image.url)
@@ -77,7 +77,7 @@ private fun BlurImage(url: String) {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
-            .blur(16.dp)
+            .blur(16.dp),
     )
 }
 
@@ -100,7 +100,7 @@ private fun BoxScope.Poster(url: String) {
         painter = painter,
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
-        modifier = modifier
+        modifier = modifier,
     )
 
     if (painter.state is AsyncImagePainter.State.Loading) {
@@ -117,15 +117,15 @@ private fun BoxScope.VoteCount(voteCount: Int) {
             .align(Alignment.BottomStart)
             .background(
                 color = MaterialTheme.colors.surface.copy(alpha = 0.3f),
-                shape = RoundedCornerShape(bottomStart = 12.dp, topEnd = 12.dp)
+                shape = RoundedCornerShape(bottomStart = 12.dp, topEnd = 12.dp),
             )
-            .padding(4.dp)
+            .padding(4.dp),
     ) {
         Icon(
             imageVector = Icons.Filled.Favorite,
             tint = MaterialTheme.colors.primary,
             contentDescription = stringResource(id = R.string.likes_content_description),
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier.padding(end = 4.dp),
         )
         Text(text = voteCount.toString(), style = MaterialTheme.typography.body2)
     }
@@ -142,6 +142,6 @@ private fun BoxScope.Index(position: Int, imageCount: Int) {
             .padding(16.dp)
             .shadow(16.dp, RoundedCornerShape(16.dp))
             .background(color = MaterialTheme.colors.surface.copy(alpha = 0.3f))
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 8.dp, vertical = 4.dp),
     )
 }

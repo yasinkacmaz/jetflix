@@ -23,7 +23,7 @@ class MovieContentTest {
             releaseDate = "01.03.1337",
             posterPath = "",
             voteAverage = 9.24,
-            voteCount = 1337
+            voteCount = 1337,
         )
 
         setTestContent {

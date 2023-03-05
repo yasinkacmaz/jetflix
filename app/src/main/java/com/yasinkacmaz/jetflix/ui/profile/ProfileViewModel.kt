@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val personService: PersonService,
-    private val profileMapper: ProfileMapper
+    private val profileMapper: ProfileMapper,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -41,6 +41,6 @@ class ProfileViewModel @Inject constructor(
     data class ProfileUiState(
         val profile: Profile? = null,
         val loading: Boolean = false,
-        val error: Throwable? = null
+        val error: Throwable? = null,
     )
 }

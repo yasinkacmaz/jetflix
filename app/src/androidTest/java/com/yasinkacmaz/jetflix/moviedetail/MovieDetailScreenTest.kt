@@ -40,7 +40,7 @@ class MovieDetailScreenTest {
         voteCount = 1337,
         genres = listOf(Genre(1, "Action"), Genre(2, "Drama"), Genre(3, "Family")),
         tagline = "Tagline",
-        overview = "Overview"
+        overview = "Overview",
     )
 
     @Test
@@ -72,13 +72,13 @@ class MovieDetailScreenTest {
             cast = listOf(
                 person.copy("Scarlett Johansson", "Natasha Romanoff", gender = Gender.FEMALE),
                 person.copy("Stan Lee", "Characters", gender = Gender.MALE),
-                person.copy("Al Pacino", "Tony Montana", gender = Gender.MALE)
+                person.copy("Al Pacino", "Tony Montana", gender = Gender.MALE),
             ),
             crew = listOf(
                 person.copy("Quentin Tarantino", "Director", gender = Gender.MALE),
                 person.copy("J.K. Rowling", "Novel", gender = Gender.FEMALE),
-                person.copy("Hans Zimmer", "Music Composer", gender = Gender.MALE)
-            )
+                person.copy("Hans Zimmer", "Music Composer", gender = Gender.MALE),
+            ),
         )
         renderMovieDetail(movieDetail, credits)
 
@@ -106,7 +106,7 @@ class MovieDetailScreenTest {
 
     private fun ComposeContentTestRule.renderMovieDetail(
         movieDetail: MovieDetail,
-        credits: Credits = Credits(emptyList(), emptyList())
+        credits: Credits = Credits(emptyList(), emptyList()),
     ) = setTestContent {
         val dominantColor = remember(movieDetail.id) { Animatable(Color.randomColor()) }
         CompositionLocalProvider(LocalVibrantColor provides dominantColor) {

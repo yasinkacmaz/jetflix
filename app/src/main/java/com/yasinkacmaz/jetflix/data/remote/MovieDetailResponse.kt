@@ -25,7 +25,7 @@ data class MovieDetailResponse(
     @SerialName("tagline") val tagline: String,
     @SerialName("title") val title: String,
     @SerialName("vote_average") val voteAverage: Double,
-    @SerialName("vote_count") val voteCount: Int
+    @SerialName("vote_count") val voteCount: Int,
 )
 
 @Serializable
@@ -33,11 +33,11 @@ data class ProductionCompanyResponse(
     @SerialName("id") val id: Int,
     @SerialName("logo_path") val logoPath: String?,
     @SerialName("name") val name: String,
-    @SerialName("origin_country") val originCountry: String
+    @SerialName("origin_country") val originCountry: String,
 )
 
 @Serializable
 data class SpokenLanguage(
     @SerialName("iso_639_1") val iso6391: String,
-    @SerialName("name") val name: String
+    @SerialName("name") val name: String,
 )

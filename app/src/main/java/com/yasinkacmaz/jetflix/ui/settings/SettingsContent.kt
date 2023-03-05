@@ -53,7 +53,7 @@ private const val DROPDOWN_ID = "dropdownIcon"
 private val placeholder = Placeholder(
     width = 2.5.em,
     height = 1.5.em,
-    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
+    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
 )
 
 @Composable
@@ -72,7 +72,7 @@ fun SettingsDialog(
     uiState: SettingsViewModel.UiState,
     selectedLanguage: Language,
     onLanguageSelected: (Language) -> Unit,
-    onDialogDismissed: () -> Unit
+    onDialogDismissed: () -> Unit,
 ) = Dialog(onDismissRequest = onDialogDismissed) {
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -80,13 +80,13 @@ fun SettingsDialog(
         contentColor = MaterialTheme.colors.surface,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = SETTINGS_DIALOG_TAG }
+            .semantics { testTag = SETTINGS_DIALOG_TAG },
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             if (uiState.showLoading) {
                 LoadingRow(title = stringResource(R.string.fetching_languages))
@@ -97,7 +97,7 @@ fun SettingsDialog(
                     onLanguageSelected = {
                         onLanguageSelected(it)
                         onDialogDismissed()
-                    }
+                    },
                 )
             }
         }
@@ -108,19 +108,19 @@ fun SettingsDialog(
 private fun LanguageRow(
     languages: List<Language>,
     selectedLanguage: Language,
-    onLanguageSelected: (Language) -> Unit
+    onLanguageSelected: (Language) -> Unit,
 ) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         var showDropdown by remember { mutableStateOf(false) }
         Text(stringResource(R.string.language))
         DropdownMenu(
             expanded = showDropdown,
             modifier = Modifier.fillMaxHeight(0.4f),
-            onDismissRequest = { showDropdown = false }
+            onDismissRequest = { showDropdown = false },
         ) {
             languages.forEach { language ->
                 val selected = language == selectedLanguage
@@ -147,7 +147,7 @@ private fun ToggleContent(countryName: String, flagUrl: String, onClick: () -> U
             appendInlineContent(DROPDOWN_ID)
         },
         inlineContent = mapOf(arrowContent, flagContent),
-        modifier = Modifier.clickable(onClick = onClick)
+        modifier = Modifier.clickable(onClick = onClick),
     )
 }
 
@@ -162,7 +162,7 @@ private fun DropdownItem(countryName: String, flagUrl: String, selected: Boolean
                 appendInlineContent(FLAG_ID)
                 append("  $countryName")
             },
-            inlineContent = inlineContent(flagUrl, countryName, selected)
+            inlineContent = inlineContent(flagUrl, countryName, selected),
         )
     }
 }
@@ -178,9 +178,9 @@ private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent
         Image(
             imageVector = icon,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface)
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
         )
-    }
+    },
 )
 
 private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to InlineTextContent(
@@ -190,7 +190,7 @@ private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to Inlin
             model = flagUrl,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize(),
-            contentDescription = stringResource(id = R.string.flag_content_description, countryName)
+            contentDescription = stringResource(id = R.string.flag_content_description, countryName),
         )
-    }
+    },
 )

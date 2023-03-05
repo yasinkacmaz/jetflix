@@ -36,9 +36,9 @@ private fun MovieDetailPreview() {
         productionCompanies = listOf(
             ProductionCompany("Marvel", ""),
             ProductionCompany("Pixar", ""),
-            ProductionCompany("Warner Bros", "")
+            ProductionCompany("Warner Bros", ""),
         ),
-        homepage = "homepageUrl"
+        homepage = "homepageUrl",
     )
     val person =
         Person(profilePhotoUrl = "", name = "Yasin Kaçmaz", role = "Android Developer", gender = Gender.MALE, id = 1337)
