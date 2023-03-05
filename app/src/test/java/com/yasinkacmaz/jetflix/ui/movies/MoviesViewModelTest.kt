@@ -6,7 +6,7 @@ import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
-import com.yasinkacmaz.jetflix.util.service.FakeMovieService
+import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -21,7 +21,7 @@ class MoviesViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    private val movieService = FakeMovieService()
+    private val movieService = FakeMovieClient()
     private val filterDataStore = FilterDataStore(json, FakeStringDataStore())
     private val movieMapper = MovieMapper()
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()

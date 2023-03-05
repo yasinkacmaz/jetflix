@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
-import com.yasinkacmaz.jetflix.data.ImagesResponse
+import com.yasinkacmaz.jetflix.data.remote.ImagesResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
 import javax.inject.Inject

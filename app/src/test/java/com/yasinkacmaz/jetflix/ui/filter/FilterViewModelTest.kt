@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.filter
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
-import com.yasinkacmaz.jetflix.util.service.FakeMovieService
+import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
@@ -24,7 +24,7 @@ class FilterViewModelTest {
 
     private val fakeStringDataStore = FakeStringDataStore()
     private val filterDataStore = FilterDataStore(json, fakeStringDataStore)
-    private val movieService = FakeMovieService()
+    private val movieService = FakeMovieClient()
     private val genreUiModelMapper = GenreUiModelMapper()
     private val genreUiModel = genreUiModelMapper.map(movieService.genre)
 

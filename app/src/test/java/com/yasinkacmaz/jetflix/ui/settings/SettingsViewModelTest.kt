@@ -2,7 +2,7 @@ package com.yasinkacmaz.jetflix.ui.settings
 
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
-import com.yasinkacmaz.jetflix.util.service.FakeConfigurationService
+import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +15,7 @@ import java.io.IOException
 @ExperimentalCoroutinesApi
 class SettingsViewModelTest {
 
-    private val configurationService = FakeConfigurationService()
+    private val configurationService = FakeConfigurationClient()
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
 
     @Test

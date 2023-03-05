@@ -2,7 +2,7 @@ package com.yasinkacmaz.jetflix.ui.movies
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie

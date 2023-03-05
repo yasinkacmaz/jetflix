@@ -1,9 +1,9 @@
-package com.yasinkacmaz.jetflix.util.service
+package com.yasinkacmaz.jetflix.util.client
 
-import com.yasinkacmaz.jetflix.service.ConfigurationService
+import com.yasinkacmaz.jetflix.data.service.ConfigurationService
 import com.yasinkacmaz.jetflix.ui.settings.Language
 
-class FakeConfigurationService : ConfigurationService {
+class FakeConfigurationClient : ConfigurationService {
     var fetchLanguagesException: Exception? = null
     var languages = listOf<Language>()
 

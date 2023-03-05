@@ -1,6 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import com.yasinkacmaz.jetflix.data.ProfileResponse
+import com.yasinkacmaz.jetflix.data.remote.ProfileResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toImdbProfileUrl
 import com.yasinkacmaz.jetflix.util.toOriginalUrl

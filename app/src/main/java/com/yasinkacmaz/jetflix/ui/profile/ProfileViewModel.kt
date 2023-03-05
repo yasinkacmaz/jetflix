@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.profile
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinkacmaz.jetflix.service.PersonService
+import com.yasinkacmaz.jetflix.data.service.PersonService
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

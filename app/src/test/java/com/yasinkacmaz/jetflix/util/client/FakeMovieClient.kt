@@ -1,16 +1,16 @@
-package com.yasinkacmaz.jetflix.util.service
+package com.yasinkacmaz.jetflix.util.client
 
-import com.yasinkacmaz.jetflix.data.CreditsResponse
-import com.yasinkacmaz.jetflix.data.Genre
-import com.yasinkacmaz.jetflix.data.GenresResponse
-import com.yasinkacmaz.jetflix.data.ImagesResponse
-import com.yasinkacmaz.jetflix.data.MovieDetailResponse
-import com.yasinkacmaz.jetflix.data.MovieResponse
-import com.yasinkacmaz.jetflix.data.MoviesResponse
-import com.yasinkacmaz.jetflix.service.MovieService
+import com.yasinkacmaz.jetflix.data.remote.CreditsResponse
+import com.yasinkacmaz.jetflix.data.remote.Genre
+import com.yasinkacmaz.jetflix.data.remote.GenresResponse
+import com.yasinkacmaz.jetflix.data.remote.ImagesResponse
+import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
+import com.yasinkacmaz.jetflix.data.remote.MovieResponse
+import com.yasinkacmaz.jetflix.data.remote.MoviesResponse
+import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.util.parseJson
 
-class FakeMovieService : MovieService {
+class FakeMovieClient : MovieService {
     val genre = Genre(1, "Name")
     var fetchGenresException: Exception? = null
     var movieDetailException: Exception? = null
