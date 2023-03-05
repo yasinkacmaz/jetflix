@@ -1,5 +1,3 @@
-package plugins
-
 val ktlint: Configuration by configurations.creating
 
 dependencies {

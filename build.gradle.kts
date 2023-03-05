@@ -2,6 +2,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.BaseExtension
+import com.android.builder.model.ApiVersion
 
 buildscript {
     repositories {
@@ -20,11 +21,11 @@ plugins {
 }
 
 subprojects {
-    apply(plugin = "plugins.ktlint")
+    apply(from = "../ktlint.gradle.kts")
     afterEvaluate {
         tasks.withType<KotlinCompile>().configureEach {
             kotlinOptions {
-                jvmTarget = Config.javaVersion.toString()
+                jvmTarget = libs.versions.java.get()
                 allWarningsAsErrors = true
                 freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xcontext-receivers")
                 // -Pandroidx.enableComposeCompilerMetrics=true
@@ -48,17 +49,17 @@ subprojects {
 
         extensions.findByType<BaseExtension>() ?: return@afterEvaluate
         configure<BaseExtension> {
-            compileSdkVersion(Config.compileSdk)
+            compileSdkVersion(libs.versions.compileSdk.get().toInt())
             defaultConfig {
-                minSdk = Config.minSdk
-                targetSdk = Config.targetSdk
-                versionName = Config.versionName
-                versionCode = Config.versionCode
+                minSdk = libs.versions.minSdk.get().toInt()
+                targetSdk = libs.versions.targetSdk.get().toInt()
+                versionName = libs.versions.versionName.get()
+                versionCode = libs.versions.versionCode.get().toInt()
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
             compileOptions {
-                sourceCompatibility = Config.javaVersion
-                targetCompatibility = Config.javaVersion
+                sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
+                targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
             }
 
             testOptions {
