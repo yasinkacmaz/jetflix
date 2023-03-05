@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val configurationService: ConfigurationService,
     private val languageDataStore: LanguageDataStore,
-    private val dispatchers: Dispatchers
+    private val dispatchers: Dispatchers,
 ) : ViewModel() {
 
     val selectedLanguage = languageDataStore.language

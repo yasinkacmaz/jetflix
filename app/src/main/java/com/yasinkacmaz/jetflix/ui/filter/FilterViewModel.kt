@@ -18,7 +18,7 @@ class FilterViewModel @Inject constructor(
     private val filterDataStore: FilterDataStore,
     private val movieService: MovieService,
     private val genreUiModelMapper: GenreUiModelMapper,
-    private val dispatchers: Dispatchers
+    private val dispatchers: Dispatchers,
 ) : ViewModel() {
 
     private val _filterState: MutableStateFlow<FilterState?> = MutableStateFlow(null)

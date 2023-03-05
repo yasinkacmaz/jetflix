@@ -17,7 +17,7 @@ data class ItemAnimationArgs(
     val alphaRange: ClosedRange<Float>,
     val durationMillis: Int = 400,
     val delay: Int = 0,
-    val easing: Easing = FastOutSlowInEasing
+    val easing: Easing = FastOutSlowInEasing,
 )
 
 data class ItemAnimationData(val scale: Float, val alpha: Float)
@@ -36,7 +36,7 @@ fun animateItem(args: ItemAnimationArgs): ItemAnimationData = with(args) {
 
     val scale by transition.animateFloat(
         transitionSpec = { animationSpec },
-        label = "$label-Scale"
+        label = "$label-Scale",
     ) { state ->
         when (state) {
             ItemState.PLACING -> scaleRange.start
@@ -45,7 +45,7 @@ fun animateItem(args: ItemAnimationArgs): ItemAnimationData = with(args) {
     }
     val alpha by transition.animateFloat(
         transitionSpec = { animationSpec },
-        label = "$label-Alpha"
+        label = "$label-Alpha",
     ) { state ->
         when (state) {
             ItemState.PLACING -> alphaRange.start

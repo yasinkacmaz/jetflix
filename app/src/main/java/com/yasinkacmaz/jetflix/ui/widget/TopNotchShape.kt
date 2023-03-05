@@ -63,7 +63,7 @@ fun TopNotchShapePreview() {
         color = Color.Magenta,
         modifier = Modifier
             .size(300.dp, 400.dp)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
     }
 }

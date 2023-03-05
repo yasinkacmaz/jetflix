@@ -30,7 +30,7 @@ class BottomArcShape(private val arcHeight: Float) : Shape {
                 left = 0f - arcOffset,
                 top = size.height - arcHeight,
                 right = size.width + arcOffset,
-                bottom = size.height
+                bottom = size.height,
             )
             arcTo(rect, 0f, 180f, false)
             lineTo(0f, 0f)
@@ -47,12 +47,12 @@ fun BottomArcShapePreview() {
     Surface(
         Modifier
             .wrapContentSize()
-            .padding(32.dp)
+            .padding(32.dp),
     ) {
         Box(
             Modifier
                 .size(320.dp, 480.dp)
-                .background(color = Color.Magenta, shape = shape)
+                .background(color = Color.Magenta, shape = shape),
         )
     }
 }

@@ -31,7 +31,7 @@ class MoviesViewModel @Inject constructor(
     private val movieService: MovieService,
     private val movieMapper: MovieMapper,
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
-    filterDataStore: FilterDataStore
+    filterDataStore: FilterDataStore,
 ) : ViewModel() {
     private val pager: Pager<Int, Movie> =
         Pager(config = PagingConfig(pageSize = 20), pagingSourceFactory = ::initPagingSource)
@@ -64,7 +64,7 @@ class MoviesViewModel @Inject constructor(
         movieMapper,
         movieRequestOptionsMapper,
         filterState,
-        searchQuery.value
+        searchQuery.value,
     )
 
     fun onSearch(query: String) {

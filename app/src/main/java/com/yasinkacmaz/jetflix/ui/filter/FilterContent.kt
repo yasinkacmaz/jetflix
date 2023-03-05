@@ -35,7 +35,7 @@ fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: (() -> Unit)? = null
     Surface(
         Modifier.fillMaxWidth(),
         elevation = 8.dp,
-        color = MaterialTheme.colors.primary
+        color = MaterialTheme.colors.primary,
     ) {
         Row(
             Modifier
@@ -43,19 +43,19 @@ fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: (() -> Unit)? = null
                 .padding(2.dp)
                 .padding(end = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onHideClicked) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.close_content_description)
+                        contentDescription = stringResource(id = R.string.close_content_description),
                     )
                 }
                 Text(
                     text = stringResource(id = R.string.title_filter_bottom_sheet),
                     color = MaterialTheme.colors.onPrimary,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.body1,
                 )
             }
             if (onResetClicked != null) {
@@ -63,7 +63,7 @@ fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: (() -> Unit)? = null
                     Text(
                         text = stringResource(id = R.string.reset),
                         color = MaterialTheme.colors.onPrimary,
-                        style = MaterialTheme.typography.body2
+                        style = MaterialTheme.typography.body2,
                     )
                 }
             }

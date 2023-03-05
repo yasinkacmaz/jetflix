@@ -47,7 +47,7 @@ class SettingsDialogTest {
         val languages = listOf(
             Language(englishName = firstLanguageName, iso6391 = "en", ""),
             Language(englishName = secondLanguageName, iso6391 = "ru", ""),
-            Language(englishName = thirdLanguageName, iso6391 = "ch", "")
+            Language(englishName = thirdLanguageName, iso6391 = "ch", ""),
         )
         val uiState = SettingsViewModel.UiState(languages = languages)
 
@@ -61,13 +61,13 @@ class SettingsDialogTest {
 
     private fun ComposeContentTestRule.showSettingsDialog(
         uiState: SettingsViewModel.UiState,
-        selectedLanguage: Language
+        selectedLanguage: Language,
     ) = setTestContent {
         SettingsDialog(
             uiState = uiState,
             selectedLanguage = selectedLanguage,
             onLanguageSelected = {},
-            onDialogDismissed = {}
+            onDialogDismissed = {},
         )
     }
 }

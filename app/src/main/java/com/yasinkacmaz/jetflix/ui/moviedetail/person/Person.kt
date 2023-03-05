@@ -38,7 +38,7 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
     val navController = LocalNavController.current
     Column(
         modifier.padding(4.dp).clickable { navController.navigate(Screen.PROFILE.createPath(person.id)) },
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
             val request = ImageRequest.Builder(LocalContext.current)
@@ -57,7 +57,7 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
                 painter = painter,
                 colorFilter = colorFilter,
                 contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
-                contentScale = ContentScale.FillHeight
+                contentScale = ContentScale.FillHeight,
             )
         }
         Text(
@@ -65,17 +65,17 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 4.dp)
+            modifier = Modifier.padding(top = 4.dp),
         )
         Text(
             text = person.role,
             style = MaterialTheme.typography.subtitle2.copy(
                 fontWeight = FontWeight.Normal,
-                fontStyle = FontStyle.Italic
+                fontStyle = FontStyle.Italic,
             ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 2.dp)
+            modifier = Modifier.padding(top = 2.dp),
         )
     }
 }

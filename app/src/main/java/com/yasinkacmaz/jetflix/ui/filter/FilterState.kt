@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
+import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.filter.option.FilterOption
 import com.yasinkacmaz.jetflix.ui.filter.option.GenresFilterOption
 import com.yasinkacmaz.jetflix.ui.filter.option.GenresOption
@@ -8,7 +9,6 @@ import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortByOption
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrderOption
-import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -19,7 +19,7 @@ data class FilterState(
     @SerialName("sort_by") val sortBy: SortBy = SortBy.POPULARITY,
     @SerialName("includeAdult") val includeAdult: Boolean = false,
     @SerialName("selected_genre_ids") val selectedGenreIds: List<Int> = emptyList(),
-    @Transient val genres: List<GenreUiModel> = emptyList()
+    @Transient val genres: List<GenreUiModel> = emptyList(),
 )
 
 fun FilterState.toFilterOptions(): List<FilterOption<*>> = buildList {

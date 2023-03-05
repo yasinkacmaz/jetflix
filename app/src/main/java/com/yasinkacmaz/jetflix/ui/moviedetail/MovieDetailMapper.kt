@@ -25,7 +25,7 @@ class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailResponse, Movi
             voteCount = input.voteCount,
             duration = input.runtime ?: -1,
             productionCompanies = productionCompanies,
-            homepage = input.homepage
+            homepage = input.homepage,
         )
     }
 }

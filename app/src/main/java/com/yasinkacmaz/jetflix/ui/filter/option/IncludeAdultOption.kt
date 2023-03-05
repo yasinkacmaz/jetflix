@@ -33,11 +33,11 @@ data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption
             Modifier
                 .clickable(onClick = onClick)
                 .navigationBarsPadding(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             FilterSectionTitle(
                 painter = rememberVectorPainter(Icons.Default.NoAdultContent),
-                title = R.string.include_adult
+                title = R.string.include_adult,
             )
             Switch(checked = isChecked.value, onCheckedChange = { onClick() })
         }

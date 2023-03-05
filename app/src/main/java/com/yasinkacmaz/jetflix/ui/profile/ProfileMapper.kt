@@ -15,6 +15,6 @@ class ProfileMapper @Inject constructor() : Mapper<ProfileResponse, Profile> {
         alsoKnownAs = input.alsoKnownAs,
         imdbProfileUrl = input.imdbId?.toImdbProfileUrl(),
         profilePhotoUrl = input.profilePath?.toOriginalUrl().orEmpty(),
-        knownFor = input.knownForDepartment
+        knownFor = input.knownForDepartment,
     )
 }

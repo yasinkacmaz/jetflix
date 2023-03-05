@@ -85,7 +85,7 @@ private fun Profile(profile: Profile) = JetflixTheme {
             model = profile.profilePhotoUrl,
             contentDescription = null,
             alignment = Alignment.TopCenter,
-            modifier = Modifier.fillMaxSize().onSizeChanged { imageHeight = it.height }
+            modifier = Modifier.fillMaxSize().onSizeChanged { imageHeight = it.height },
         )
         GetVibrantColorFromPoster(profile.profilePhotoUrl, vibrantColor)
         val imageHeightToScreenHeightRatio = try {
@@ -99,14 +99,14 @@ private fun Profile(profile: Profile) = JetflixTheme {
                 .background(
                     Brush.verticalGradient(
                         0f to vibrantColor.value.copy(alpha = 0f),
-                        imageHeightToScreenHeightRatio - 0.05f to vibrantColor.value
-                    )
-                )
+                        imageHeightToScreenHeightRatio - 0.05f to vibrantColor.value,
+                    ),
+                ),
         )
         Column(
             Modifier.fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) {
             Spacer(Modifier.fillMaxHeight(imageHeightToScreenHeightRatio - 0.2f))
             Text(
@@ -116,20 +116,20 @@ private fun Profile(profile: Profile) = JetflixTheme {
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 1.5.sp,
                     fontFamily = FontFamily.Cursive,
-                    color = Color.White.copy(alpha = 0.8f)
+                    color = Color.White.copy(alpha = 0.8f),
                 ),
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.height(16.dp))
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                    .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
             ) {
                 Column(
                     Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     ProfileField(R.string.birthday, profile.birthday)
                     ProfileField(R.string.birthplace, profile.placeOfBirth)
@@ -164,7 +164,7 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier
                     .border(1.25.dp, vibrantColor, RoundedCornerShape(50))
-                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                    .padding(horizontal = 8.dp, vertical = 2.dp),
             )
         }
     }
@@ -178,18 +178,18 @@ private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Colo
     Row(
         Modifier
             .clickable { imdbProfileUrl.openInChromeCustomTab(context, currentVibrantColor) }
-            .padding(all = 4.dp)
+            .padding(all = 4.dp),
     ) {
         Icon(
             Icons.Rounded.OpenInNew,
             contentDescription = stringResource(id = R.string.open_imdb_content_description),
             tint = currentVibrantColor,
-            modifier = Modifier.scale(1.1f)
+            modifier = Modifier.scale(1.1f),
         )
         Text(
             stringResource(R.string.open_imdb_profile),
             Modifier.padding(start = 8.dp),
-            color = currentVibrantColor
+            color = currentVibrantColor,
         )
     }
 }
@@ -206,7 +206,7 @@ private fun ProfilePreview() {
         alsoKnownAs = listOf("Yasin"),
         imdbProfileUrl = "www",
         profilePhotoUrl = "it is not working :(",
-        knownFor = "Development, Acting"
+        knownFor = "Development, Acting",
     )
     Profile(profile)
 }

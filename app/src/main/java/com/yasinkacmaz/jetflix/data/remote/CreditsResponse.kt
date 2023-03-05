@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class CreditsResponse(
     @SerialName("id") val id: Int,
     @SerialName("cast") val cast: List<CastResponse>,
-    @SerialName("crew") val crew: List<CrewResponse>
+    @SerialName("crew") val crew: List<CrewResponse>,
 )
 
 @Serializable
@@ -19,7 +19,7 @@ data class CastResponse(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("order") val order: Int,
-    @SerialName("profile_path") val profilePath: String?
+    @SerialName("profile_path") val profilePath: String?,
 )
 
 @Serializable
@@ -30,5 +30,5 @@ data class CrewResponse(
     @SerialName("id") val id: Int,
     @SerialName("job") val job: String,
     @SerialName("name") val name: String,
-    @SerialName("profile_path") val profilePath: String?
+    @SerialName("profile_path") val profilePath: String?,
 )

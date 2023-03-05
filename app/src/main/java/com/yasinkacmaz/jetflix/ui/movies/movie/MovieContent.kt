@@ -56,7 +56,7 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
             movie.voteAverage,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .zIndex(2f)
+                .zIndex(2f),
         )
         Card(
             modifier = Modifier
@@ -64,7 +64,7 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
                 .offset(y = 12.dp),
             shape = RoundedCornerShape(size = 8.dp),
             elevation = 8.dp,
-            onClick = { onMovieClicked(movie.id) }
+            onClick = { onMovieClicked(movie.id) },
         ) {
             Box {
                 MoviePoster(movie.posterPath, movie.name)
@@ -73,7 +73,7 @@ fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (I
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
-                        .background(Color(0x97000000))
+                        .background(Color(0x97000000)),
                 )
             }
         }
@@ -85,7 +85,7 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
     val painter = rememberAsyncImagePainter(
         model = posterPath,
         error = rememberVectorPainter(Icons.Filled.BrokenImage),
-        placeholder = rememberVectorPainter(Icons.Default.Movie)
+        placeholder = rememberVectorPainter(Icons.Default.Movie),
     )
     val colorFilter = when (painter.state) {
         is Loading, is Error -> ColorFilter.tint(MaterialTheme.colors.imageTint)
@@ -100,7 +100,7 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
         contentScale = scale,
         modifier = Modifier
             .fillMaxSize()
-            .align(Alignment.Center)
+            .align(Alignment.Center),
     )
 }
 
@@ -110,14 +110,14 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
     Surface(
         shape = shape,
         elevation = 12.dp,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = rate.toString(),
             style = MaterialTheme.typography.body1.copy(color = Color.White),
             modifier = Modifier
                 .background(Brush.horizontalGradient(Color.rateColors(movieRate = rate)))
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = 10.dp),
         )
     }
 }
@@ -126,7 +126,7 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
 private fun MovieInfo(movie: Movie, modifier: Modifier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier.padding(horizontal = 6.dp, vertical = 4.dp)
+        modifier = modifier.padding(horizontal = 6.dp, vertical = 4.dp),
     ) {
         MovieName(name = movie.name)
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
@@ -143,10 +143,10 @@ private fun MovieName(name: String) = Text(
         color = Color.White,
         letterSpacing = 1.5.sp,
         fontFamily = FontFamily.Serif,
-        fontWeight = FontWeight.W500
+        fontWeight = FontWeight.W500,
     ),
     maxLines = 1,
-    overflow = TextOverflow.Ellipsis
+    overflow = TextOverflow.Ellipsis,
 )
 
 @Composable
@@ -159,11 +159,11 @@ private fun MovieFeature(icon: ImageVector, field: String) {
                 color = Color.White,
                 letterSpacing = 1.5.sp,
                 fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.W400
+                fontWeight = FontWeight.W400,
             ),
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.padding(horizontal = 2.dp)
+            modifier = Modifier.padding(horizontal = 2.dp),
         )
     }
 }

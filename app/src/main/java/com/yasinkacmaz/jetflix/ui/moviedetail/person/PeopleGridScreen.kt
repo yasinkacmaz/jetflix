@@ -51,12 +51,12 @@ fun PeopleGridScreen(people: List<Person>) {
             start = horizontalPadding,
             end = horizontalPadding,
             top = statusBarPadding,
-            bottom = navigationBarPadding
+            bottom = navigationBarPadding,
         ),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(horizontalPadding),
         state = state,
-        content = { peopleGridContent(people, columnCount, state) }
+        content = { peopleGridContent(people, columnCount, state) },
     )
 }
 
@@ -66,7 +66,7 @@ private fun LazyGridScope.peopleGridContent(people: List<Person>, columnCount: I
         val scale = animatePersonScale(delay, easing)
         Person(
             person = people[index],
-            modifier = Modifier.scale(scale)
+            modifier = Modifier.scale(scale),
         )
     }
 }

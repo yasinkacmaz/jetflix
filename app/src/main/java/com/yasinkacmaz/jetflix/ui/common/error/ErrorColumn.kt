@@ -22,7 +22,7 @@ fun ErrorColumn(message: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(message)
         Icon(
@@ -30,7 +30,7 @@ fun ErrorColumn(message: String, modifier: Modifier = Modifier) {
             contentDescription = stringResource(id = R.string.error_icon_content_description),
             modifier = Modifier
                 .size(40.dp)
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
         )
     }
 }

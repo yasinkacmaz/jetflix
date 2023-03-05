@@ -31,7 +31,7 @@ fun FilterSectionTitle(painter: Painter, @StringRes title: Int) {
         Text(
             text = stringResource(id = title),
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp),
         )
     }
 }
@@ -41,7 +41,7 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
     ) {
         val radioIcon = if (selected) Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked
         val color = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
@@ -49,7 +49,7 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
         Text(
             text = title,
             style = MaterialTheme.typography.body2.copy(fontSize = 17.sp),
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp),
         )
     }
 }
@@ -57,14 +57,14 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
 @Composable
 fun <T : Any> FilterGrid(
     items: List<T>,
-    itemContent: @Composable (Int, Modifier) -> Unit
+    itemContent: @Composable (Int, Modifier) -> Unit,
 ) = VerticalStaggeredGrid(
     itemCount = items.lastIndex,
     columnCount = 2,
     rowSpacing = 4.dp,
     columnSpacing = 6.dp,
     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-    itemContent = itemContent
+    itemContent = itemContent,
 )
 
 @Composable

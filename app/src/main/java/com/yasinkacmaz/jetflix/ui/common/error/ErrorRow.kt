@@ -24,12 +24,12 @@ fun ErrorRow(title: String, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = Icons.Filled.ErrorOutline,
             contentDescription = stringResource(id = R.string.error_icon_content_description),
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp),
         )
         Text(title)
     }

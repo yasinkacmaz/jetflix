@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class ImagesResponse(
     @SerialName("backdrops") val backdrops: List<ImageResponse>,
     @SerialName("id") val id: Int,
-    @SerialName("posters") val posters: List<ImageResponse>
+    @SerialName("posters") val posters: List<ImageResponse>,
 )
 
 @Serializable
@@ -18,5 +18,5 @@ data class ImageResponse(
     @SerialName("iso_639_1") val iso6391: String,
     @SerialName("vote_average") val voteAverage: Double,
     @SerialName("vote_count") val voteCount: Int,
-    @SerialName("width") val width: Int
+    @SerialName("width") val width: Int,
 )

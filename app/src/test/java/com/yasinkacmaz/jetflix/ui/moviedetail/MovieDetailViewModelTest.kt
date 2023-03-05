@@ -44,8 +44,8 @@ class MovieDetailViewModelTest {
                 movieDetailMapper.map(movieService.movieDetailResponse),
                 creditsMapper.map(movieService.creditsResponse),
                 imageMapper.map(movieService.imagesResponse),
-                loading = false
-            )
+                loading = false,
+            ),
         )
     }
 

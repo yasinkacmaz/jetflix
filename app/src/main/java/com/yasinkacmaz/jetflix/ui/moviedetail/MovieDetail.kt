@@ -16,7 +16,7 @@ data class MovieDetail(
     val voteCount: Int = 0,
     val duration: Int = 0,
     val productionCompanies: List<ProductionCompany> = emptyList(),
-    val homepage: String? = null
+    val homepage: String? = null,
 )
 
 data class ProductionCompany(val name: String, val logoUrl: String)

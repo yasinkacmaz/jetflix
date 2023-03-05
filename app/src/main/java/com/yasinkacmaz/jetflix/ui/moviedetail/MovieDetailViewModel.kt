@@ -24,7 +24,7 @@ class MovieDetailViewModel @Inject constructor(
     private val movieService: MovieService,
     private val movieDetailMapper: MovieDetailMapper,
     private val creditsMapper: CreditsMapper,
-    private val imageMapper: ImageMapper
+    private val imageMapper: ImageMapper,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieDetailUiState())
@@ -46,7 +46,7 @@ class MovieDetailViewModel @Inject constructor(
                     movieDetail = movieDetailMapper.map(movieDetailResponse.await()),
                     credits = creditsMapper.map(creditsResponse.await()),
                     images = imageMapper.map(imagesResponse.await()),
-                    loading = false
+                    loading = false,
                 )
             }
         } catch (exception: Exception) {
@@ -59,6 +59,6 @@ class MovieDetailViewModel @Inject constructor(
         val credits: Credits = Credits(listOf(), listOf()),
         val images: List<Image> = listOf(),
         val loading: Boolean = false,
-        val error: Throwable? = null
+        val error: Throwable? = null,
     )
 }

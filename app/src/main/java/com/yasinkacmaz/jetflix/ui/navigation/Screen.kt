@@ -10,7 +10,8 @@ enum class Screen(val route: String) {
     IMAGES("movie/{$ARG_MOVIE_ID}/images?$ARG_INITIAL_PAGE={$ARG_INITIAL_PAGE}"),
     CAST("movie/{$ARG_MOVIE_ID}/cast"),
     CREW("movie/{$ARG_MOVIE_ID}/crew"),
-    PROFILE("profile/{$ARG_PERSON_ID}");
+    PROFILE("profile/{$ARG_PERSON_ID}"),
+    ;
 
     fun createPath(vararg args: Any): String {
         var route = route

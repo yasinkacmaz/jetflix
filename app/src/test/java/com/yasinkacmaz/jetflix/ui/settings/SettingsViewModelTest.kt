@@ -1,8 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
-import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
+import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
