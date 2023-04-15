@@ -5,12 +5,12 @@ on:
   workflow_dispatch:
 jobs:
   dependency-updates:
-    runs-on: ubuntu-latest
     timeout-minutes: 10
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Use Java 11
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
@@ -25,16 +25,17 @@ jobs:
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
       - name: 💌 Send email report
-        if: ${{ github.event_name == 'schedule' }}
         uses: actions/github-script@v6
         env:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         with:
           script: |
-            const scriptPath = '/./.github/scripts/dependency-update-report-mail-sender.js'
-            const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
-            script({ })
+            const subject = `Dependency update report of Jetflix ¯\\_(ツ)_/¯`
+            const report = require('fs').readFileSync('build/dependencyUpdates/dependency_update_report.txt', 'utf8')
+            const mailSenderScriptPath = '/./.github/scripts/report-mail-sender.js'
+            const mailSenderScript = require(`${process.env.GITHUB_WORKSPACE}${mailSenderScriptPath}`)
+            mailSenderScript(subject, report)
       - name: Share dependency update reports
         uses: actions/upload-artifact@v3
         with:
