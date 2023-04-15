@@ -1,0 +1,77 @@
+name: Update Build Cache
+on:
+  schedule:
+    - cron: "37 13 * * SAT"
+  workflow_dispatch:
+jobs:
+  update-cache:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      androidApiVersion: 23
+      buildToolsVersion: 33.0.0
+      # TODO: Build tools version at here is fixed:
+      # https://github.com/ReactiveCircus/android-emulator-runner/blob/main/src/sdk-installer.ts#L7
+      # Update the version when it changes
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Make user owner of Android Sdk directory
+        run: sudo chown $USER:$USER /usr/local/lib/android/sdk -R
+      - name: Fetch AVD Cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: ${{ runner.os }}-avd-${{ env.androidApiVersion }}
+      - name: Fetch Android SDK Cache
+        uses: actions/cache@v3
+        id: android-sdk-cache
+        with:
+          path: |
+           /usr/local/lib/android/sdk/emulator
+           /usr/local/lib/android/sdk/build-tools/${{ env.buildToolsVersion }}
+           /usr/local/lib/android/sdk/platform-tools
+           /usr/local/lib/android/sdk/platforms/android-${{ env.androidApiVersion }}
+           /usr/local/lib/android/sdk/system-images/android-${{ env.androidApiVersion }}
+          key: ${{ runner.os }}-android-sdk-${{ env.androidApiVersion }}
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ env.androidApiVersion }}
+          arch: x86_64
+          ram-size: 2048M
+          disk-size: 1536M
+          force-avd-creation: false
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: echo "Generated AVD snapshot for caching."
+      - name: 🚧 Build and Update Cache
+        run: ./gradlew build
+      - name: 💌 Send email report
+        uses: actions/github-script@v6
+        env:
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+        with:
+          script: |
+            const subject = `Github Actions cache status of Jetflix ¯\\_(ツ)_/¯`
+            const reportGeneratorScriptPath = '/./.github/scripts/cache-update-report-generator.js'
+            const reportGeneratorScript = require(`${process.env.GITHUB_WORKSPACE}${reportGeneratorScriptPath}`)
+            const report = reportGeneratorScript()
+            const mailSenderScriptPath = '/./.github/scripts/dependency-update-report-mail-sender.js'
+            const mailSenderScript = require(`${process.env.GITHUB_WORKSPACE}${mailSenderScriptPath}`)
+            mailSenderScript(subject, report)
