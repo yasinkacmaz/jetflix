@@ -1,4 +1,4 @@
-module.exports = ({ }) => {
+module.exports = (subject, report) => {
     const execSync = require('child_process').execSync
     execSync(`npm install nodemailer`)
     const nodemailer = require('nodemailer')
@@ -9,7 +9,6 @@ module.exports = ({ }) => {
             pass: `${process.env.MAIL_PASSWORD}`
         }
     });
-    const report = require('fs').readFileSync('build/dependencyUpdates/dependency_update_report.txt', 'utf8')
 
     const mailOptions = {
         from: {
@@ -17,7 +16,7 @@ module.exports = ({ }) => {
             address: process.env.MAIL_USERNAME
         },
         to: 'yasinkacmaz57@gmail.com',
-        subject: 'Dependency update report of Jetflix ¯\\_(ツ)_/¯',
+        subject: `${subject}`,
         text: `${report}`
     };
 
