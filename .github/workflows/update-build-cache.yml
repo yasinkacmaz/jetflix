@@ -21,7 +21,22 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-          cache: 'gradle'
+      - name: Detect gradle version
+        uses: actions/github-script@v6
+        id: gradle-version-detector
+        with:
+          result-encoding: string
+          script: |
+            const scriptPath = '/./.github/scripts/gradle-version-detector.js'
+            const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
+            return script()
+      - name: Fetch gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
       - name: Make gradlew executable
@@ -60,7 +75,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: echo "Generated AVD snapshot for caching."
       - name: 🚧 Build and Update Cache
-        run: ./gradlew build
+        run: ./gradlew assembleDebug
       - name: 💌 Send email report
         uses: actions/github-script@v6
         env:

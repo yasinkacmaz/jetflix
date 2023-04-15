@@ -12,7 +12,22 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-          cache: 'gradle'
+      - name: Detect gradle version
+        uses: actions/github-script@v6
+        id: gradle-version-detector
+        with:
+          result-encoding: string
+          script: |
+            const scriptPath = '/./.github/scripts/gradle-version-detector.js'
+            const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
+            return script()
+      - name: Fetch gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
       - name: Copy Signing Properties
         run: |
           echo "${{ secrets.JETFLIX_KEYSTORE }}" > jetflix.keystore.asc
