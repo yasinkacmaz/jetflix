@@ -33,7 +33,7 @@ fun MainContent() {
         composable(Screen.MOVIES.route) { MoviesScreen() }
 
         navigation(startDestination = Screen.DETAIL.route, route = "movie") {
-            argument(ARG_MOVIE_ID) { type = NavType.StringType }
+            navArgument(ARG_MOVIE_ID) { type = NavType.StringType }
 
             fun NavBackStackEntry.movieId(): Int {
                 return arguments?.getString(ARG_MOVIE_ID)!!.toInt()
