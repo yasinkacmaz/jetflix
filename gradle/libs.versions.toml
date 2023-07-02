@@ -3,7 +3,6 @@ kotlin = "1.8.0"
 daggerHilt = "2.46.1"
 compose = "1.6.0-alpha01"
 composeCompiler = "1.4.0"
-accompanist = "0.31.4-beta"
 ktor = "2.3.2"
 java = "11"
 minSdk = "21"
@@ -49,8 +48,6 @@ compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose",
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.0-beta02" }
 compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.1.0-alpha01" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha10" }
-accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
-accompanist_flowLayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 junit = { module = "junit:junit", version = "4.13.2" }
@@ -66,7 +63,6 @@ compose = [
     "compose_paging", "compose_activity", "compose_viewModel", "compose_navigation",
     "compose_hiltNavigation", "compose_constraintLayout"
 ]
-accompanist = ["accompanist_pager", "accompanist_flowLayout"]
 io = ["okhttp", "jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization"]
 test = ["junit", "strikt", "coroutinesTest"]
 androidTest = ["compose_uiTest", "compose_uiTestJunit", "junitExt" ]
