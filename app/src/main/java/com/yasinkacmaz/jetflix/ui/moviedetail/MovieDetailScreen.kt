@@ -104,9 +104,11 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
             val title = stringResource(id = R.string.fetching_movie_detail)
             LoadingColumn(title)
         }
+
         uiState.error != null -> {
             ErrorColumn(uiState.error.message.orEmpty())
         }
+
         uiState.movieDetail != null -> {
             val defaultTextColor = MaterialTheme.colors.onBackground
             val vibrantColor = remember { Animatable(defaultTextColor) }
@@ -159,7 +161,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
             .background(MaterialTheme.colors.surface)
             .verticalScroll(rememberScrollState()),
     ) {
-        val (appbar, backdrop, poster, title, originalTitle, genres, specs, rateStars, tagline, overview) = createRefs()
+        val (appbar, backdrop, poster, title, genres, specs, rateStars, tagline, overview) = createRefs()
         val (castSection, crewSection, imagesSection, productionCompanies, space) = createRefs()
         val startGuideline = createGuidelineFromStart(16.dp)
         val endGuideline = createGuidelineFromEnd(16.dp)
@@ -186,50 +188,18 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
                     linkTo(startGuideline, endGuideline)
                 },
         )
-
-        Text(
-            text = movieDetail.title,
-            style = MaterialTheme.typography.h1.copy(
-                fontSize = 26.sp,
-                letterSpacing = 3.sp,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center,
-            ),
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .constrainAs(title) {
-                    top.linkTo(poster.bottom, 8.dp)
-                    linkTo(startGuideline, endGuideline)
-                },
+        Title(
+            title = movieDetail.title,
+            originalTitle = movieDetail.originalTitle,
+            modifier = Modifier.constrainAs(title) {
+                top.linkTo(poster.bottom, 8.dp)
+                linkTo(startGuideline, endGuideline)
+            }
         )
-
-        if (movieDetail.title != movieDetail.originalTitle) {
-            Text(
-                text = "(${movieDetail.originalTitle})",
-                style = MaterialTheme.typography.subtitle2.copy(
-                    fontStyle = FontStyle.Italic,
-                    letterSpacing = 2.sp,
-                ),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .constrainAs(originalTitle) {
-                        top.linkTo(title.bottom)
-                        linkTo(startGuideline, endGuideline)
-                    },
-            )
-        } else {
-            Spacer(
-                modifier = Modifier.constrainAs(originalTitle) {
-                    top.linkTo(title.bottom)
-                    linkTo(startGuideline, endGuideline)
-                },
-            )
-        }
-
         GenreChips(
             movieDetail.genres.take(4),
             modifier = Modifier.constrainAs(genres) {
-                top.linkTo(originalTitle.bottom, 16.dp)
+                top.linkTo(title.bottom, 16.dp)
                 linkTo(startGuideline, endGuideline)
             },
         )
@@ -372,6 +342,31 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
             contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
             contentScale = ContentScale.FillHeight,
         )
+    }
+}
+
+@Composable
+private fun Title(title: String, originalTitle: String, modifier: Modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.body1.copy(
+                fontSize = 26.sp,
+                letterSpacing = 3.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+            ),
+        )
+        if (originalTitle.isNotBlank() && title != originalTitle) {
+            Text(
+                text = "(${originalTitle})",
+                style = MaterialTheme.typography.subtitle2.copy(
+                    fontStyle = FontStyle.Italic,
+                    letterSpacing = 2.sp,
+                    textAlign = TextAlign.Center,
+                ),
+            )
+        }
     }
 }
 
