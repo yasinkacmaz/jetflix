@@ -5,6 +5,9 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
@@ -25,9 +29,6 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionDivider
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionTitle
@@ -43,17 +44,15 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
 
     override fun modifyFilterState(filterState: FilterState) = filterState.copy(selectedGenreIds = currentValue.second)
 
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Render(onChanged: () -> Unit) {
         val (genreUiModels, selectedGenreIds) = currentValue
         FilterSectionTitle(painter = rememberVectorPainter(image = Icons.Default.Category), title = R.string.genres)
         FlowRow(
             modifier = Modifier.padding(horizontal = 16.dp),
-            mainAxisSize = SizeMode.Expand,
-            mainAxisSpacing = 12.dp,
-            crossAxisSpacing = 8.dp,
-            mainAxisAlignment = FlowMainAxisAlignment.Center,
-            lastLineMainAxisAlignment = FlowMainAxisAlignment.Center,
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             genreUiModels.forEach { genreUiModel ->
                 val genreId = genreUiModel.genre.id
