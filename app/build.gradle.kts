@@ -69,7 +69,6 @@ kapt {
 dependencies {
     implementation(libs.bundles.androidX)
     implementation(libs.bundles.compose)
-    implementation(libs.bundles.accompanist)
     implementation(libs.bundles.io)
     implementation(libs.coil)
     implementation(libs.hilt)
