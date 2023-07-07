@@ -48,6 +48,7 @@ compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose",
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.0-beta02" }
 compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.1.0-alpha01" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha10" }
+compose_tracing = { module = "androidx.compose.runtime:runtime-tracing", version = "1.0.0-alpha03" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 junit = { module = "junit:junit", version = "4.13.2" }
@@ -61,7 +62,7 @@ compose = [
     "compose_runtime", "compose_foundation", "compose_layout", "compose_ui", "compose_uiUtil",
     "compose_material", "compose_materialIcons", "compose_animation", "compose_tooling",
     "compose_paging", "compose_activity", "compose_viewModel", "compose_navigation",
-    "compose_hiltNavigation", "compose_constraintLayout"
+    "compose_hiltNavigation", "compose_constraintLayout", "compose_tracing"
 ]
 io = ["okhttp", "jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization"]
 test = ["junit", "strikt", "coroutinesTest"]
