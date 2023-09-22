@@ -2,7 +2,7 @@ package com.yasinkacmaz.jetflix.ui.filter.option
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +24,10 @@ data class SortByOption(override val defaultValue: SortBy) : FilterOption<SortBy
     @Composable
     override fun Render(onChanged: () -> Unit) {
         val sortByState = remember(defaultValue) { mutableStateOf(currentValue) }
-        FilterSectionTitle(painter = rememberVectorPainter(image = Icons.Default.Sort), title = R.string.sort_by)
+        FilterSectionTitle(
+            painter = rememberVectorPainter(image = Icons.AutoMirrored.Default.Sort),
+            title = R.string.sort_by
+        )
         val sortByValues = SortBy.values().toList()
         FilterGrid(items = sortByValues) { index, _ ->
             val sortBy = sortByValues[index]
