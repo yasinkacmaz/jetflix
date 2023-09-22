@@ -27,7 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -181,7 +181,7 @@ private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Colo
             .padding(all = 4.dp),
     ) {
         Icon(
-            Icons.Rounded.OpenInNew,
+            Icons.AutoMirrored.Rounded.OpenInNew,
             contentDescription = stringResource(id = R.string.open_imdb_content_description),
             tint = currentVibrantColor,
             modifier = Modifier.scale(1.1f),
