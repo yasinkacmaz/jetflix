@@ -2,7 +2,7 @@
 kotlin = "1.9.10"
 daggerHilt = "2.46.1"
 compose = "1.6.0-alpha01"
-composeCompiler = "1.4.8"
+composeCompiler = "1.5.3"
 ktor = "2.3.2"
 java = "11"
 minSdk = "21"
