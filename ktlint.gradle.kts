@@ -1,7 +1,7 @@
 val ktlint: Configuration by configurations.creating
 
 dependencies {
-    ktlint("com.pinterest:ktlint:0.48.2")
+    ktlint("com.pinterest:ktlint:0.50.0")
 }
 
 val ktlintCheck by createKtlintTask(
