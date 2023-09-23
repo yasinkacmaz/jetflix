@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("dagger.hilt.android.plugin")
     id("kotlinx-serialization")
+    id("com.google.devtools.ksp")
     kotlin("android")
     kotlin("kapt")
 }
@@ -72,7 +73,7 @@ dependencies {
     implementation(libs.bundles.io)
     implementation(libs.coil)
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    ksp(libs.hiltCompiler)
     debugImplementation(libs.compose.testManifest)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)
