@@ -7,7 +7,6 @@ plugins {
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
     kotlin("android")
-    kotlin("kapt")
 }
 
 android {
@@ -61,10 +60,6 @@ android {
             ),
         )
     }
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 dependencies {
