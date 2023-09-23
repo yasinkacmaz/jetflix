@@ -15,8 +15,9 @@ versionCode = "4"
 agp = { id = "com.android.application", version = "8.1.1" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-versions = { id = "com.github.ben-manes.versions", version = "0.47.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.48.0" }
 
 [libraries]
 ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

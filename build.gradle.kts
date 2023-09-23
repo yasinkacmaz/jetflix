@@ -14,6 +14,7 @@ buildscript {
 plugins {
     alias(libs.plugins.agp) apply false
     alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.ksp) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.versions) apply true
