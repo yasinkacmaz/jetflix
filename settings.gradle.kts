@@ -1,4 +1,4 @@
-rootProject.name = "Jetflix"
+rootProject.name = "jetflix"
 include(":app")
 pluginManagement {
     repositories {
