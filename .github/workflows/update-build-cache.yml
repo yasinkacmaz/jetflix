@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       androidApiVersion: 31
-      buildToolsVersion: 34.0.0
-      # TODO: Build tools version at here is fixed:
-      # https://github.com/ReactiveCircus/android-emulator-runner/blob/main/src/sdk-installer.ts#L7
-      # Update the version when it changes
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -41,8 +37,6 @@ jobs:
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Make user owner of Android Sdk directory
-        run: sudo chown $USER:$USER /usr/local/lib/android/sdk -R
       - name: Fetch AVD Cache
         uses: actions/cache@v3
         id: avd-cache
@@ -51,17 +45,6 @@ jobs:
             ~/.android/avd/*
             ~/.android/adb*
           key: ${{ runner.os }}-avd-${{ env.androidApiVersion }}
-      - name: Fetch Android SDK Cache
-        uses: actions/cache@v3
-        id: android-sdk-cache
-        with:
-          path: |
-           /usr/local/lib/android/sdk/emulator
-           /usr/local/lib/android/sdk/build-tools/${{ env.buildToolsVersion }}
-           /usr/local/lib/android/sdk/platform-tools
-           /usr/local/lib/android/sdk/platforms/android-${{ env.androidApiVersion }}
-           /usr/local/lib/android/sdk/system-images/android-${{ env.androidApiVersion }}
-          key: ${{ runner.os }}-android-sdk-${{ env.androidApiVersion }}
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -69,7 +52,7 @@ jobs:
           api-level: ${{ env.androidApiVersion }}
           target: aosp_atd
           channel: canary
-          arch: arm64-v8
+          arch: x86_64
           ram-size: 3072M
           disk-size: 2048M
           force-avd-creation: false
