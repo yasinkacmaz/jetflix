@@ -77,7 +77,3 @@ tasks.named<Wrapper>("wrapper") {
     distributionType = Wrapper.DistributionType.BIN
     gradleVersion = "8.5"
 }
-
-task("clean", Delete::class) {
-    delete(rootProject.buildDir)
-}
