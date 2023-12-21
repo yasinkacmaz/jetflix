@@ -67,7 +67,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ env.androidApiVersion }}
-          arch: x86_64
+          target: aosp_atd
+          channel: canary
+          arch: arm64-v8
           ram-size: 3072M
           disk-size: 2048M
           force-avd-creation: false
