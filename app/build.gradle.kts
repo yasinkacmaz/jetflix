@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.hilt)
     ksp(libs.hiltCompiler)
+    debugImplementation(libs.androidX.tracing)
     debugImplementation(libs.compose.testManifest)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)
