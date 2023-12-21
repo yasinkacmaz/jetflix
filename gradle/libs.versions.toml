@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.21"
-daggerHilt = "2.48"
+daggerHilt = "2.50"
 compose = "1.6.0-beta03"
 composeCompiler = "1.5.7"
 ktor = "2.3.4"
