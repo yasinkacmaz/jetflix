@@ -31,6 +31,7 @@ androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
 androidX_browser = { module = "androidx.browser:browser", version = "1.8.0-beta01" }
 androidX_datastore = { module = "androidx.datastore:datastore-preferences", version = "1.1.0-alpha07" }
 androidX_corektx = { module = "androidx.core:core-ktx", version = "1.13.0-alpha02" }
+androidX_tracing = { module = "androidx.tracing:tracing", version = "1.2.0" }
 compose_runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 compose_foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose_layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose" }
@@ -49,7 +50,6 @@ compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose",
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.6" }
 compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0-alpha01" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha13" }
-compose_tracing = { module = "androidx.compose.runtime:runtime-tracing", version = "1.0.0-beta01" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 junit = { module = "junit:junit", version = "4.13.2" }
@@ -63,7 +63,7 @@ compose = [
     "compose_runtime", "compose_foundation", "compose_layout", "compose_ui", "compose_uiUtil",
     "compose_material", "compose_materialIcons", "compose_animation", "compose_tooling",
     "compose_paging", "compose_activity", "compose_viewModel", "compose_navigation",
-    "compose_hiltNavigation", "compose_constraintLayout", "compose_tracing"
+    "compose_hiltNavigation", "compose_constraintLayout"
 ]
 io = ["okhttp", "jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization"]
 test = ["junit", "strikt", "coroutinesTest"]
