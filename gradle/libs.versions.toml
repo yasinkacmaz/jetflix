@@ -24,7 +24,7 @@ ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktorSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-okhttp = { module = "com.squareup.okhttp3:okhttp", version = "5.0.0-alpha.11" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version = "5.0.0-alpha.12" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.5.0" }
 jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.2" }
 androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
