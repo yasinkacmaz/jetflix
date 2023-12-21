@@ -15,7 +15,7 @@ versionCode = "4"
 agp = { id = "com.android.application", version = "8.3.0-alpha18" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.16" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.50.0" }
 
