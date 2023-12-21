@@ -8,8 +8,8 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
-      androidApiVersion: 23
-      buildToolsVersion: 33.0.0
+      androidApiVersion: 31
+      buildToolsVersion: 34.0.0
       # TODO: Build tools version at here is fixed:
       # https://github.com/ReactiveCircus/android-emulator-runner/blob/main/src/sdk-installer.ts#L7
       # Update the version when it changes
@@ -68,8 +68,8 @@ jobs:
         with:
           api-level: ${{ env.androidApiVersion }}
           arch: x86_64
-          ram-size: 2048M
-          disk-size: 1536M
+          ram-size: 3072M
+          disk-size: 2048M
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
