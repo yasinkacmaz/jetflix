@@ -17,7 +17,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
@@ -25,8 +24,10 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -51,31 +52,28 @@ import com.yasinkacmaz.jetflix.util.rateColors
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
-    Box(modifier = modifier) {
-        MovieRate(
-            movie.voteAverage,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .zIndex(2f),
-        )
-        Card(
-            modifier = Modifier
-                .fillMaxSize()
-                .offset(y = 12.dp),
-            shape = RoundedCornerShape(size = 8.dp),
-            elevation = 8.dp,
-            onClick = { onMovieClicked(movie.id) },
-        ) {
-            Box {
-                MoviePoster(movie.posterPath, movie.name)
-                MovieInfo(
-                    movie,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .background(Color(0x97000000)),
-                )
-            }
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(size = 8.dp),
+        elevation = 8.dp,
+        onClick = { onMovieClicked(movie.id) },
+    ) {
+        Box {
+            MoviePoster(movie.posterPath, movie.name)
+            MovieInfo(
+                movie,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(Color(0x97000000)),
+            )
+            MovieRate(
+                movie.voteAverage,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .zIndex(2f)
+                    .offset(y = 4.dp),
+            )
         }
     }
 }
@@ -106,20 +104,16 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
 
 @Composable
 private fun MovieRate(rate: Double, modifier: Modifier) {
-    val shape = RoundedCornerShape(percent = 50)
-    Surface(
-        shape = shape,
-        elevation = 12.dp,
-        modifier = modifier,
-    ) {
-        Text(
-            text = rate.toString(),
-            style = MaterialTheme.typography.body1.copy(color = Color.White),
-            modifier = Modifier
-                .background(Brush.horizontalGradient(Color.rateColors(movieRate = rate)))
-                .padding(horizontal = 10.dp),
-        )
-    }
+    val colors = Color.rateColors(movieRate = rate)
+    val brush = remember(rate) { Brush.horizontalGradient(colors) }
+    Text(
+        text = rate.toString(),
+        style = MaterialTheme.typography.body1.copy(color = Color.White),
+        modifier = modifier
+            .background(brush, RoundedCornerShape(50))
+            .padding(horizontal = 10.dp)
+            .shadow(8.dp)
+    )
 }
 
 @Composable
