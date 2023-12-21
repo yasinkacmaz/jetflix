@@ -2,7 +2,7 @@
 kotlin = "1.9.21"
 daggerHilt = "2.48"
 compose = "1.6.0-beta03"
-composeCompiler = "1.5.3"
+composeCompiler = "1.5.7"
 ktor = "2.3.4"
 java = "17"
 minSdk = "21"
@@ -49,7 +49,7 @@ compose_viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose",
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.6" }
 compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0-alpha01" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha13" }
-compose_tracing = { module = "androidx.compose.runtime:runtime-tracing", version = "1.0.0-alpha03" }
+compose_tracing = { module = "androidx.compose.runtime:runtime-tracing", version = "1.0.0-beta01" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 junit = { module = "junit:junit", version = "4.13.2" }
