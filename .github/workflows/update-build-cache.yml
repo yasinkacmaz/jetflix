@@ -51,7 +51,7 @@ jobs:
         with:
           api-level: ${{ env.androidApiVersion }}
           target: aosp_atd
-          channel: canary
+          channel: stable
           arch: x86_64
           ram-size: 3072M
           disk-size: 2048M
