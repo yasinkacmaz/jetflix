@@ -91,9 +91,14 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
                     ErrorRow(stringResource(R.string.no_movies_found))
                 }
             }
-            items(moviePagingItems.itemCount) { index ->
-                val movie = moviePagingItems.peek(index) ?: return@items
-                MovieContent(movie, Modifier.height(320.dp), onMovieClicked,)
+            items(
+                moviePagingItems.itemCount,
+                key = { moviePagingItems[it]?.id ?: -1 }
+            ) { index ->
+                val movie = moviePagingItems.peek(index)
+                movie?.let {
+                    MovieContent(it, Modifier.height(320.dp), onMovieClicked)
+                }
             }
             renderLoading(moviePagingItems.loadState)
             renderError(moviePagingItems.loadState)
