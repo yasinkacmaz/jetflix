@@ -7,16 +7,13 @@ plugins {
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
     kotlin("android")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.yasinkacmaz.jetflix"
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     signingConfigs {
