@@ -2,7 +2,6 @@
 kotlin = "1.9.21"
 daggerHilt = "2.50"
 compose = "1.6.0-beta03"
-composeCompiler = "1.5.7"
 ktor = "3.0.0-beta-1"
 java = "17"
 minSdk = "28"
@@ -15,9 +14,10 @@ versionCode = "4"
 agp = { id = "com.android.application", version = "8.3.2" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.16" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.50.0" }
+dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 
 [libraries]
 ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
