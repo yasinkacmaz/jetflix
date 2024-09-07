@@ -52,7 +52,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
         FlowRow(
             modifier = Modifier.padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             genreUiModels.forEach { genreUiModel ->
                 val genreId = genreUiModel.genre.id

@@ -194,7 +194,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(poster.bottom, 8.dp)
                 linkTo(startGuideline, endGuideline)
-            }
+            },
         )
         GenreChips(
             movieDetail.genres.take(4),
@@ -328,7 +328,7 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val scale = animateFloatAsState(
         targetValue = if (isScaled.value) 2.2f else 1f,
         animationSpec = springAnimation,
-        label = "scale"
+        label = "scale",
     ).value
 
     Card(
@@ -359,7 +359,7 @@ private fun Title(title: String, originalTitle: String, modifier: Modifier) {
         )
         if (originalTitle.isNotBlank() && title != originalTitle) {
             Text(
-                text = "(${originalTitle})",
+                text = "($originalTitle)",
                 style = MaterialTheme.typography.subtitle2.copy(
                     fontStyle = FontStyle.Italic,
                     letterSpacing = 2.sp,
@@ -469,11 +469,7 @@ private fun <T : Any> MovieSection(
 }
 
 @Composable
-private fun SectionHeader(
-    @StringRes headerResId: Int,
-    count: Int,
-    onClick: (() -> Unit)? = null,
-) {
+private fun SectionHeader(@StringRes headerResId: Int, count: Int, onClick: (() -> Unit)? = null) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier

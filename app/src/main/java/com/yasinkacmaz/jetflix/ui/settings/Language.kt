@@ -1,9 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import android.annotation.SuppressLint
+import java.util.Locale
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Locale
 
 @Serializable
 data class Language(
