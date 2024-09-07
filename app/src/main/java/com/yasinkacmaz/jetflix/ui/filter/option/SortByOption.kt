@@ -28,7 +28,7 @@ data class SortByOption(override val defaultValue: SortBy) : FilterOption<SortBy
             painter = rememberVectorPainter(image = Icons.AutoMirrored.Default.Sort),
             title = R.string.sort_by
         )
-        val sortByValues = SortBy.values().toList()
+        val sortByValues = SortBy.entries
         FilterGrid(items = sortByValues) { index, _ ->
             val sortBy = sortByValues[index]
             val selected = sortByState.value == sortBy
