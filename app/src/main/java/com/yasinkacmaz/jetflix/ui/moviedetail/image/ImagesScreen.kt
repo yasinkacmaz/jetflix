@@ -41,7 +41,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
 
     val pagerState = rememberPagerState(
         initialPage = initialPage,
-        initialPageOffsetFraction = 0f
+        initialPageOffsetFraction = 0f,
     ) { images.size }
     Box {
         HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondBoundsPageCount = 4) {
@@ -61,7 +61,7 @@ private fun Poster(image: Image) {
                 .padding(12.dp)
                 .shadow(16.dp, RoundedCornerShape(12.dp))
                 .animateContentSize()
-                .wrapContentSize()
+                .wrapContentSize(),
         ) {
             Box {
                 androidx.compose.foundation.Image(

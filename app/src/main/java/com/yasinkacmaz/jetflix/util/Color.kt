@@ -30,10 +30,7 @@ fun Color.Companion.rateColors(movieRate: Double): List<Color> = remember(movieR
 }
 
 @Composable
-fun GetVibrantColorFromPoster(
-    posterUrl: String,
-    color: Animatable<Color, AnimationVector4D>,
-) {
+fun GetVibrantColorFromPoster(posterUrl: String, color: Animatable<Color, AnimationVector4D>) {
     val context = LocalContext.current
     LaunchedEffect(posterUrl) {
         val loader = ImageLoader(context)

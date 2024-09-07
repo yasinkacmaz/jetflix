@@ -8,6 +8,7 @@ import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -15,7 +16,6 @@ import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class FilterViewModelTest {

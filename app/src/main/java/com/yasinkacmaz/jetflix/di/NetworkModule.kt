@@ -23,9 +23,9 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
+import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
-import javax.inject.Singleton
 
 private const val BASE_URL = "https://api.themoviedb.org/3/"
 

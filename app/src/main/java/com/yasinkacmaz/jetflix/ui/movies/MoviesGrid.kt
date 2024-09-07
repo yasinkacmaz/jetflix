@@ -93,7 +93,7 @@ private fun LazyMoviesGrid(state: LazyGridState, moviePagingItems: LazyPagingIte
             }
             items(
                 moviePagingItems.itemCount,
-                key = { moviePagingItems[it]?.id ?: -1 }
+                key = { moviePagingItems[it]?.id ?: -1 },
             ) { index ->
                 val movie = moviePagingItems.peek(index)
                 movie?.let {

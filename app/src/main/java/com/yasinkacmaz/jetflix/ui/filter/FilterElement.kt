@@ -55,10 +55,7 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun <T : Any> FilterGrid(
-    items: List<T>,
-    itemContent: @Composable (Int, Modifier) -> Unit,
-) = VerticalStaggeredGrid(
+fun <T : Any> FilterGrid(items: List<T>, itemContent: @Composable (Int, Modifier) -> Unit) = VerticalStaggeredGrid(
     itemCount = items.lastIndex,
     columnCount = 2,
     rowSpacing = 4.dp,

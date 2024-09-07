@@ -112,7 +112,7 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
         modifier = modifier
             .background(brush, RoundedCornerShape(50))
             .padding(horizontal = 10.dp)
-            .shadow(8.dp)
+            .shadow(8.dp),
     )
 }
 

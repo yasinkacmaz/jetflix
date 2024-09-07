@@ -13,8 +13,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
 import javax.inject.Singleton
+import kotlinx.serialization.json.Json
 
 val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
