@@ -3,6 +3,7 @@ import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.BaseExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 buildscript {
     repositories {
@@ -20,10 +21,27 @@ plugins {
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.dependencyVersions) apply true
+    alias(libs.plugins.ktlint) apply true
+}
+
+allprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    ktlint {
+        reporters {
+            reporter(ReporterType.CHECKSTYLE)
+        }
+        filter {
+            include("*.kt", "*.kts")
+            exclude("**/generated/**")
+        }
+        tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.GenerateReportsTask> {
+            reportsOutputDirectory.set(project.layout.buildDirectory.dir("reports/ktlint"))
+        }
+    }
 }
 
 subprojects {
-    apply(from = "../ktlint.gradle.kts")
     afterEvaluate {
         tasks.withType<KotlinCompile>().configureEach {
             compilerOptions {

@@ -17,6 +17,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.25" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
 
 [libraries]
 ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

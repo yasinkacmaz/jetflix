@@ -28,7 +28,7 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
             painter = rememberVectorPainter(image = Icons.Default.SwapVert),
             title = R.string.sort_order,
         )
-        val sortOrderValues = SortOrder.values().toList()
+        val sortOrderValues = SortOrder.entries
         FilterGrid(items = sortOrderValues) { index, _ ->
             val sortOrder = sortOrderValues[index]
             val selected = sortOrderState.value == sortOrder
