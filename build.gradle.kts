@@ -2,6 +2,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.BaseExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 buildscript {
     repositories {
@@ -25,10 +26,9 @@ subprojects {
     apply(from = "../ktlint.gradle.kts")
     afterEvaluate {
         tasks.withType<KotlinCompile>().configureEach {
-            kotlinOptions {
-                jvmTarget = libs.versions.java.get()
-                allWarningsAsErrors = true
-                freeCompilerArgs = freeCompilerArgs + listOf("-opt-in=kotlin.RequiresOptIn", "-Xcontext-receivers")
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
+                freeCompilerArgs.add("-Xcontext-receivers")
             }
         }
 
@@ -43,8 +43,8 @@ subprojects {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
             compileOptions {
-                sourceCompatibility = JavaVersion.toVersion(libs.versions.java.get())
-                targetCompatibility = JavaVersion.toVersion(libs.versions.java.get())
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
             }
 
             testOptions {
