@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class MoviesViewModel @Inject constructor(
     filterDataStore: FilterDataStore,
 ) : ViewModel() {
     private val pager: Pager<Int, Movie> =
-        Pager(config = PagingConfig(pageSize = 20), pagingSourceFactory = ::initPagingSource)
+        Pager(config = PagingConfig(pageSize = 20, initialLoadSize = 20), pagingSourceFactory = ::initPagingSource)
     val movies: Flow<PagingData<Movie>> = pager.flow
     val filterStateChanges = MutableSharedFlow<FilterState>()
     private var filterState: FilterState? = null
@@ -46,13 +47,13 @@ class MoviesViewModel @Inject constructor(
 
     init {
         filterDataStore.filterState
-            .onEach { filterState ->
-                this.filterState = filterState
-                filterStateChanges.emit(filterState)
-            }
+            .onEach { filterState -> this.filterState = filterState }
+            .drop(1)
+            .onEach { filterStateChanges.emit(it) }
             .launchIn(viewModelScope)
 
         searchQuery
+            .drop(1)
             .debounce(SEARCH_DEBOUNCE_MS)
             .distinctUntilChanged()
             .onEach { _searchQueryChanges.emit(Unit) }
