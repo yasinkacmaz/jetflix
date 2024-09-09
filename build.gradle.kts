@@ -64,10 +64,6 @@ subprojects {
             }
 
             testOptions {
-                unitTests.apply {
-                    isIncludeAndroidResources = true
-                    isReturnDefaultValues = true
-                }
                 animationsDisabled = true
             }
         }
