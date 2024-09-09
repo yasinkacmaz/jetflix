@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -67,7 +66,6 @@ import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoviesScreen() {
     val filterViewModel = koinViewModel<FilterViewModel>()
@@ -107,7 +105,6 @@ fun MoviesScreen() {
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
     val moviesViewModel = koinViewModel<MoviesViewModel>()

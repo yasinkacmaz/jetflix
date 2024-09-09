@@ -5,8 +5,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,7 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -95,8 +95,8 @@ enum class ScrollState { INITIAL, UP, DOWN }
 // Taken from: https://stackoverflow.com/a/68731559
 @Composable
 private fun LazyGridState.isScrollingUp(): Boolean {
-    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    var previousIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableIntStateOf(firstVisibleItemScrollOffset) }
     return remember(this) {
         derivedStateOf {
             if (previousIndex != firstVisibleItemIndex) {
@@ -118,7 +118,7 @@ private fun animatePersonScale(delay: Int = 0, easing: Easing): Float {
     }
     val animationSpec = tween<Float>(durationMillis = 400, delayMillis = delay, easing = easing)
     val label = "itemPlacement"
-    val transition = updateTransition(transitionState, label = label)
+    val transition = rememberTransition(transitionState, label = label)
 
     val scale by transition.animateFloat(transitionSpec = { animationSpec }, label = "$label-Scale") { state ->
         when (state) {

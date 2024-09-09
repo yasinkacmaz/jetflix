@@ -4,8 +4,8 @@ import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,10 +29,9 @@ fun animateItem(args: ItemAnimationArgs): ItemAnimationData = with(args) {
             targetState = ItemState.PLACED
         }
     }
-    val animationSpec =
-        tween<Float>(durationMillis = durationMillis, delayMillis = delay, easing = easing)
+    val animationSpec = tween<Float>(durationMillis = durationMillis, delayMillis = delay, easing = easing)
     val label = "itemPlacement"
-    val transition = updateTransition(transitionState, label = label)
+    val transition = rememberTransition(transitionState, label = label)
 
     val scale by transition.animateFloat(
         transitionSpec = { animationSpec },

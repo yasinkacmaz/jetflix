@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -34,7 +33,6 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.yasinkacmaz.jetflix.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagesScreen(images: List<Image>, initialPage: Int) {
     if (images.isEmpty() || initialPage !in images.indices) return
@@ -44,7 +42,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
         initialPageOffsetFraction = 0f,
     ) { images.size }
     Box {
-        HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondBoundsPageCount = 4) {
+        HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 3) {
             Poster(images[it])
         }
         Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
