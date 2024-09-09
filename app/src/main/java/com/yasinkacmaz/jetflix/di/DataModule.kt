@@ -8,35 +8,15 @@ import com.yasinkacmaz.jetflix.data.local.LocalDataStore
 import com.yasinkacmaz.jetflix.data.local.PreferencesDataStore
 import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
-import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-
-    @Provides
-    @Singleton
-    fun providePreferencesDataStore(@ApplicationContext context: Context): LocalDataStore {
-        return PreferencesDataStore(context.preferencesDataStore)
-    }
-
-    @Provides
-    @Singleton
-    fun provideLanguageDataStore(json: Json, localDataStore: LocalDataStore): LanguageDataStore {
-        return LanguageDataStore(json, localDataStore)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFilterDataStore(json: Json, localDataStore: LocalDataStore): FilterDataStore {
-        return FilterDataStore(json, localDataStore)
-    }
+val dataModule = module {
+    single<DataStore<Preferences>> { get<Context>().preferencesDataStore }
+    singleOf(::PreferencesDataStore).bind(LocalDataStore::class)
+    singleOf(::LanguageDataStore)
+    singleOf(::FilterDataStore)
 }

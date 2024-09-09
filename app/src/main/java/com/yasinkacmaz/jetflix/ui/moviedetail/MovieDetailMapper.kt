@@ -4,9 +4,8 @@ import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toBackdropUrl
 import com.yasinkacmaz.jetflix.util.toPosterUrl
-import javax.inject.Inject
 
-class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailResponse, MovieDetail> {
+class MovieDetailMapper : Mapper<MovieDetailResponse, MovieDetail> {
     override fun map(input: MovieDetailResponse): MovieDetail {
         val productionCompanies = input.productionCompanies.map {
             ProductionCompany(it.name, it.logoPath.orEmpty().toPosterUrl())

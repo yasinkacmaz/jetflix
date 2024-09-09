@@ -1,9 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
 import com.yasinkacmaz.jetflix.util.Mapper
-import javax.inject.Inject
 
-class MovieRequestOptionsMapper @Inject constructor() : Mapper<FilterState?, Map<String, String>> {
+class MovieRequestOptionsMapper : Mapper<FilterState?, Map<String, String>> {
     override fun map(input: FilterState?): Map<String, String> = buildMap {
         val filterState = input ?: FilterState()
         val sortBy = "${filterState.sortBy.by}.${filterState.sortOrder.order}"

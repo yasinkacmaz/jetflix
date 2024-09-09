@@ -9,8 +9,6 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
-class MovieDetailViewModel @Inject constructor(
+class MovieDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val movieService: MovieService,
     private val movieDetailMapper: MovieDetailMapper,

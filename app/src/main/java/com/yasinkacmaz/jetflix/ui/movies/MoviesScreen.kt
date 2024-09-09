@@ -57,7 +57,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
@@ -66,11 +65,12 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoviesScreen() {
-    val filterViewModel = hiltViewModel<FilterViewModel>()
+    val filterViewModel = koinViewModel<FilterViewModel>()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val filterState = filterViewModel.filterState.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
@@ -110,7 +110,7 @@ fun MoviesScreen() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
-    val moviesViewModel = hiltViewModel<MoviesViewModel>()
+    val moviesViewModel = koinViewModel<MoviesViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val searchQuery = remember { mutableStateOf("") }
     var showSettingsDialog by remember { mutableStateOf(false) }

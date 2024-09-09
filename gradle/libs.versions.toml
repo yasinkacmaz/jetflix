@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.0.20"
-daggerHilt = "2.50"
+koin = "4.0.0-RC2"
 compose = "1.6.0-beta03"
 ktor = "3.0.0-beta-1"
 minSdk = "28"
@@ -11,15 +11,17 @@ versionCode = "4"
 
 [plugins]
 agp = { id = "com.android.application", version = "8.6.0" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.25" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
 
 [libraries]
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
@@ -43,10 +45,7 @@ compose_uiTestJunit = { module = "androidx.compose.ui:ui-test-junit4", version.r
 compose_paging = { module = "androidx.paging:paging-compose", version = "3.3.0-alpha02" }
 compose_activity = { module = "androidx.activity:activity-compose", version = "1.9.0-alpha01" }
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.6" }
-compose_hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0-alpha01" }
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-alpha13" }
-hilt = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
-hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHilt" }
 junit = { module = "junit:junit", version = "4.13.2" }
 junitExt = { module = "androidx.test.ext:junit", version = "1.2.0-alpha02" }
 strikt = { module = "io.strikt:strikt-core", version = "0.34.1" }
@@ -54,10 +53,11 @@ coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ver
 
 [bundles]
 androidX = ["androidX_palette", "androidX_browser", "androidX_datastore", "androidX_corektx"]
+koin = ["koin-core", "koin-android", "koin-compose", "koin-compose-viewmodel"]
 compose = [
-    "compose_runtime", "compose_foundation", "compose_ui",  "compose_animation", "compose_tooling",
+    "compose_runtime", "compose_foundation", "compose_ui", "compose_animation", "compose_tooling",
     "compose_material", "compose_materialIcons", "compose_paging", "compose_activity",
-    "compose_navigation", "compose_hiltNavigation", "compose_constraintLayout"
+    "compose_navigation", "compose_constraintLayout"
 ]
 io = ["jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization"]
 test = ["junit", "strikt", "coroutinesTest"]

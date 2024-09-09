@@ -40,10 +40,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
+import org.koin.compose.viewmodel.koinViewModel
 
 const val SETTINGS_DIALOG_TAG = "SettingsDialog"
 private const val FLAG_ID = "flag"
@@ -58,7 +58,7 @@ private val placeholder = Placeholder(
 
 @Composable
 fun SettingsContent(onDialogDismissed: () -> Unit) {
-    val settingsViewModel = hiltViewModel<SettingsViewModel>()
+    val settingsViewModel = koinViewModel<SettingsViewModel>()
     LaunchedEffect(Unit) {
         settingsViewModel.fetchLanguages()
     }

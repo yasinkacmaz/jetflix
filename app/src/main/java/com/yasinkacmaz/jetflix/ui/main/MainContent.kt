@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -22,6 +21,7 @@ import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
 val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
@@ -39,7 +39,7 @@ fun MainContent() {
                 return arguments?.getString(ARG_MOVIE_ID)!!.toInt()
             }
 
-            val movieDetailViewModel: @Composable (movieId: Int) -> MovieDetailViewModel = { hiltViewModel() }
+            val movieDetailViewModel: @Composable (movieId: Int) -> MovieDetailViewModel = { koinViewModel() }
 
             composable(route = Screen.DETAIL.route) {
                 MovieDetailScreen(movieDetailViewModel(it.movieId()))
@@ -65,7 +65,7 @@ fun MainContent() {
             }
 
             composable(route = Screen.PROFILE.route, arguments = listOf(navArgument(ARG_PERSON_ID) {})) {
-                ProfileScreen(hiltViewModel())
+                ProfileScreen(koinViewModel())
             }
         }
     }

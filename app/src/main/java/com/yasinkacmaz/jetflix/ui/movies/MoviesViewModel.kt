@@ -12,8 +12,6 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,8 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
-class MoviesViewModel @Inject constructor(
+class MoviesViewModel(
     private val movieService: MovieService,
     private val movieMapper: MovieMapper,
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,

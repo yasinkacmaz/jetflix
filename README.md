@@ -31,6 +31,6 @@ Go to [Releases](https://github.com/yasinkacmaz/jetflix/releases) page to downlo
 - [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) for asynchronous operations
 - [StateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
 - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-- [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) for Dependency Injection
+- [Koin](https://github.com/InsertKoinIO/koin) for Dependency Injection
 - [OkHttp](https://github.com/square/okhttp) and [Ktor](https://github.com/ktorio/ktor) for network operations
 - [TheMovieDb(Tmdb) Api](https://developers.themoviedb.org/3) for movies
