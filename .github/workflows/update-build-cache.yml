@@ -5,10 +5,10 @@ on:
   workflow_dispatch:
 jobs:
   update-cache:
-    timeout-minutes: 30
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
-      androidApiVersion: 31
+      androidApiVersion: 34
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
           target: aosp_atd
           channel: stable
           arch: x86_64
-          ram-size: 3072M
+          ram-size: 4096M
           disk-size: 2048M
           force-avd-creation: false
           disable-animations: true
