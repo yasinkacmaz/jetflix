@@ -11,22 +11,22 @@ import kotlin.math.min
 
 class CircleTopCropTransformation : Transformation {
 
-    override val cacheKey: String = CircleTopCropTransformation::class.java.name
+    override val cacheKey: String = javaClass.name
 
     override suspend fun transform(input: Bitmap, size: Size): Bitmap {
         val minSize = min(input.width, input.height)
         val radius = minSize / 2f
-        val output = Bitmap.createBitmap(minSize, minSize, input.config)
+        val config = input.config ?: Bitmap.Config.ARGB_8888
+        val output = Bitmap.createBitmap(minSize, minSize, config)
         val top = if (input.height == input.width) 0f else -20f
-        return output.applyCanvas {
+
+        output.applyCanvas {
             val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
             drawCircle(radius, radius, radius, paint)
-            paint.xfermode = MODE
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
             drawBitmap(input, radius - input.width / 2f, top, paint)
         }
-    }
 
-    companion object {
-        private val MODE = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        return output
     }
 }
