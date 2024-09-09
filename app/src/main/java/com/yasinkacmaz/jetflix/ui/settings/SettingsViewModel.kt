@@ -5,14 +5,11 @@ import com.yasinkacmaz.jetflix.data.service.ConfigurationService
 import com.yasinkacmaz.jetflix.util.Dispatchers
 import com.yasinkacmaz.jetflix.util.onIO
 import com.yasinkacmaz.jetflix.util.onMain
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
+class SettingsViewModel(
     private val configurationService: ConfigurationService,
     private val languageDataStore: LanguageDataStore,
     private val dispatchers: Dispatchers,

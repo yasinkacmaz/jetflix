@@ -3,9 +3,7 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("dagger.hilt.android.plugin")
     id("kotlinx-serialization")
-    id("com.google.devtools.ksp")
     kotlin("android")
     alias(libs.plugins.compose.compiler)
 }
@@ -63,9 +61,8 @@ dependencies {
     implementation(libs.bundles.androidX)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.io)
+    implementation(libs.bundles.koin)
     implementation(libs.coil)
-    implementation(libs.hilt)
-    ksp(libs.hiltCompiler)
     debugImplementation(libs.androidX.tracing)
     debugImplementation(libs.compose.testManifest)
     testImplementation(libs.bundles.test)

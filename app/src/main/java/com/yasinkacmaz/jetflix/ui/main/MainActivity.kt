@@ -10,9 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.compose.KoinContext
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +29,9 @@ class MainActivity : ComponentActivity() {
                 LocalNavController provides navController,
                 LocalDarkTheme provides isDarkTheme,
             ) {
-                MainContent()
+                KoinContext {
+                    MainContent()
+                }
             }
         }
     }

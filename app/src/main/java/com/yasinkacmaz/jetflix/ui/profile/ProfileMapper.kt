@@ -4,9 +4,8 @@ import com.yasinkacmaz.jetflix.data.remote.ProfileResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.toImdbProfileUrl
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
-import javax.inject.Inject
 
-class ProfileMapper @Inject constructor() : Mapper<ProfileResponse, Profile> {
+class ProfileMapper : Mapper<ProfileResponse, Profile> {
     override fun map(input: ProfileResponse) = Profile(
         name = input.name,
         biography = input.biography,
