@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.0.20"
 koin = "4.0.0-RC2"
-compose = "1.6.0-beta03"
+compose = "1.7.0"
 ktor = "3.0.0-beta-1"
 minSdk = "28"
 targetSdk = "34"

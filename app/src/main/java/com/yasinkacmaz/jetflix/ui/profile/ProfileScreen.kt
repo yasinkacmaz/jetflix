@@ -31,7 +31,7 @@ import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -78,8 +78,8 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 private fun Profile(profile: Profile) = JetflixTheme {
     val defaultVibrantColor = MaterialTheme.colors.onSurface
     val vibrantColor = remember { Animatable(defaultVibrantColor) }
-    var screenHeight by remember { mutableStateOf(0) }
-    var imageHeight by remember { mutableStateOf(0) }
+    var screenHeight by remember { mutableIntStateOf(0) }
+    var imageHeight by remember { mutableIntStateOf(0) }
     Surface(Modifier.fillMaxSize().onSizeChanged { screenHeight = it.height }) {
         AsyncImage(
             model = profile.profilePhotoUrl,

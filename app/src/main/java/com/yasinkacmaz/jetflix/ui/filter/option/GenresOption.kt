@@ -80,12 +80,12 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             mutableStateOf(uiModel.genre.id in currentValue.second)
         }
         val animatedColors = List(colors.size) { i ->
-            animateColorAsState(if (selected) colors[i] else colors[i].copy(alpha = 0f)).value
+            animateColorAsState(if (selected) colors[i] else colors[i].copy(alpha = 0f), label = "GenreColor").value
         }
-        val scale = animateFloatAsState(if (selected) 1.1f else 1f).value
+        val scale = animateFloatAsState(if (selected) 1.1f else 1f, label = "GenreScale").value
         val modifier = Modifier
             .scale(scale)
-            .shadow(animateDpAsState(if (selected) 8.dp else 4.dp).value, shape)
+            .shadow(animateDpAsState(if (selected) 8.dp else 4.dp, label = "GenreShadow").value, shape)
             .background(MaterialTheme.colors.surface)
             .border(2.dp, Brush.horizontalGradient(colors), shape)
             .background(Brush.horizontalGradient(animatedColors), shape)
