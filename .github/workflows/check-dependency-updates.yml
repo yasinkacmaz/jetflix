@@ -31,8 +31,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Check Dependency Updates

@@ -34,8 +34,6 @@ jobs:
           gpg -d --passphrase "${{ secrets.JETFLIX_PASSPHRASE }}" --batch jetflix.keystore.asc > jetflix.keystore
           echo "${{ secrets.JETFLIX_SIGNING_PROPERTIES }}" > signing.properties.asc
           gpg -d --passphrase "${{ secrets.JETFLIX_PASSPHRASE }}" --batch signing.properties.asc > signing.properties
-      - name: Copy CI gradle.properties
-        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
       - name: Build release apk and bundle
         run: ./gradlew assembleRelease bundleRelease
       - name: Share build output
