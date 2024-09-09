@@ -6,6 +6,7 @@ jobs:
   ui-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    container: reactnativecommunity/react-native-android
     env:
       androidApiVersion: 34
     steps:
