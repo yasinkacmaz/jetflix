@@ -16,7 +16,7 @@ import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 @Composable
 private fun MovieMultiPreview() {
     MoviePreview {
-        MovieContent(fakeMovie)
+        MovieItem(fakeMovie)
     }
 }
 
