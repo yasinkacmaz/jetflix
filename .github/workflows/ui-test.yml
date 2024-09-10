@@ -16,11 +16,19 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: 🔍 Detect Gradle Version And Cache
+        id: gradle-cache
+        uses: actions/github-script@v7
         with:
-          gradle-version: wrapper
-          cache-read-only: true
+          script: |
+            const gradleCacheDetectorScriptPath = '/./.github/scripts/gradle-version-cache-detector.js'
+            const gradleCacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${gradleCacheDetectorScriptPath}`)
+            await gradleCacheDetectorScript({core});
+      - name: Fetch gradle cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.gradle-cache.outputs['cache-paths'] }}
+          key: ${{ steps.gradle-cache.outputs['cache-key'] }}
       - name: Fetch AVD Cache
         uses: actions/cache@v4
         id: avd-cache

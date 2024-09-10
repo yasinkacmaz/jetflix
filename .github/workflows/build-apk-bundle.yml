@@ -12,11 +12,11 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: wrapper
-          cache-read-only: true
+      - name: Enable KVM group permissions for emulator hardware acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: Copy Signing Properties
         run: |
           echo "${{ secrets.JETFLIX_KEYSTORE }}" > jetflix.keystore.asc
