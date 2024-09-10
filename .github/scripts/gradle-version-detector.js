@@ -9,14 +9,17 @@ module.exports = () => {
     let gradleVersion = '';
     lines.forEach((line) => {
         if (line.includes("distributionUrl")) {
-            gradleVersion = line.split('/').pop();
+            const versionMatch = line.match(/gradle-(\d+\.\d+(?:\.\d+)?)-/);
+            if (versionMatch && versionMatch[1]) {
+                gradleVersion = versionMatch[1];
+            }
         }
     });
 
     if (gradleVersion === "") {
         throw new Error('Unable to find gradle version from gradle-wrapper.properties file');
     } else {
-        console.log(`Found gradle version : ${gradleVersion}`);
+        console.log(`Found gradle version: ${gradleVersion}`);
         return gradleVersion;
     }
 }
