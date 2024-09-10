@@ -34,7 +34,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Check Dependency Updates
-        run: ./gradlew dependencyUpdates
+        run: ./gradlew dependencyUpdates --no-configuration-cache
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
       - name: 💌 Send email report

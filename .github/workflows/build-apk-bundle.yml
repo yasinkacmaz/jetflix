@@ -35,7 +35,7 @@ jobs:
           echo "${{ secrets.JETFLIX_SIGNING_PROPERTIES }}" > signing.properties.asc
           gpg -d --passphrase "${{ secrets.JETFLIX_PASSPHRASE }}" --batch signing.properties.asc > signing.properties
       - name: Build release apk and bundle
-        run: ./gradlew assembleRelease bundleRelease
+        run: ./gradlew assembleRelease bundleRelease --no-configuration-cache
       - name: Share build output
         uses: actions/upload-artifact@v4
         with:
