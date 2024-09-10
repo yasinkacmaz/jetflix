@@ -22,12 +22,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -76,7 +76,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 
 @Composable
 private fun Profile(profile: Profile) = JetflixTheme {
-    val defaultVibrantColor = MaterialTheme.colors.onSurface
+    val defaultVibrantColor = MaterialTheme.colorScheme.onSurface
     val vibrantColor = remember { Animatable(defaultVibrantColor) }
     var screenHeight by remember { mutableIntStateOf(0) }
     var imageHeight by remember { mutableIntStateOf(0) }
@@ -111,7 +111,7 @@ private fun Profile(profile: Profile) = JetflixTheme {
             Spacer(Modifier.fillMaxHeight(imageHeightToScreenHeightRatio - 0.2f))
             Text(
                 text = profile.name,
-                style = MaterialTheme.typography.h1.copy(
+                style = MaterialTheme.typography.displayLarge.copy(
                     fontSize = 40.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 1.5.sp,
@@ -147,7 +147,7 @@ private fun Profile(profile: Profile) = JetflixTheme {
 private fun ProfileField(@StringRes resId: Int, field: String) {
     if (field.isEmpty()) return
 
-    Text(stringResource(resId, field), style = MaterialTheme.typography.body1)
+    Text(stringResource(resId, field), style = MaterialTheme.typography.bodyLarge)
 }
 
 @Composable
@@ -156,12 +156,12 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
 
     LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         item {
-            Text(stringResource(R.string.also_known_as), style = MaterialTheme.typography.body1)
+            Text(stringResource(R.string.also_known_as), style = MaterialTheme.typography.bodyLarge)
         }
         items(alsoKnownAs) {
             Text(
                 it,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .border(1.25.dp, vibrantColor, RoundedCornerShape(50))
                     .padding(horizontal = 8.dp, vertical = 2.dp),

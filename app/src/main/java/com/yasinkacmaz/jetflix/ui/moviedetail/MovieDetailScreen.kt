@@ -30,12 +30,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -45,6 +39,12 @@ import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -110,7 +110,7 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
         }
 
         uiState.movieDetail != null -> {
-            val defaultTextColor = MaterialTheme.colors.onBackground
+            val defaultTextColor = MaterialTheme.colorScheme.onBackground
             val vibrantColor = remember { Animatable(defaultTextColor) }
             CompositionLocalProvider(
                 LocalVibrantColor provides vibrantColor,
@@ -158,7 +158,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
     ConstraintLayout(
         Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState()),
     ) {
         val (appbar, backdrop, poster, title, genres, specs, rateStars, tagline, overview) = createRefs()
@@ -223,7 +223,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         Text(
             text = movieDetail.tagline,
             color = LocalVibrantColor.current.value,
-            style = MaterialTheme.typography.body1.copy(
+            style = MaterialTheme.typography.bodyLarge.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 24.sp,
                 fontFamily = FontFamily.Serif,
@@ -238,7 +238,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
 
         Text(
             text = movieDetail.overview,
-            style = MaterialTheme.typography.body2.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 letterSpacing = 2.sp,
                 lineHeight = 30.sp,
                 fontFamily = FontFamily.SansSerif,
@@ -307,9 +307,9 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
 @Composable
 private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier) {
     Card(
-        elevation = 16.dp,
+        elevation = CardDefaults.cardElevation(16.dp),
         shape = BottomArcShape(arcHeight = 120.dpToPx()),
-        backgroundColor = LocalVibrantColor.current.value.copy(alpha = 0.1f),
+        colors = CardDefaults.cardColors(containerColor = LocalVibrantColor.current.value),
         modifier = modifier.height(360.dp),
     ) {
         AsyncImage(
@@ -321,7 +321,6 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
@@ -332,7 +331,7 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     ).value
 
     Card(
-        elevation = 24.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 24.dp),
         shape = RoundedCornerShape(8.dp),
         modifier = modifier.scale(scale),
         onClick = { isScaled.value = !isScaled.value },
@@ -350,7 +349,7 @@ private fun Title(title: String, originalTitle: String, modifier: Modifier) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = title,
-            style = MaterialTheme.typography.body1.copy(
+            style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = 26.sp,
                 letterSpacing = 3.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -360,7 +359,7 @@ private fun Title(title: String, originalTitle: String, modifier: Modifier) {
         if (originalTitle.isNotBlank() && title != originalTitle) {
             Text(
                 text = "($originalTitle)",
-                style = MaterialTheme.typography.subtitle2.copy(
+                style = MaterialTheme.typography.titleSmall.copy(
                     fontStyle = FontStyle.Italic,
                     letterSpacing = 2.sp,
                     textAlign = TextAlign.Center,
@@ -380,7 +379,7 @@ private fun GenreChips(genres: List<Genre>, modifier: Modifier) {
         genres.map(Genre::name).forEachIndexed { index, name ->
             Text(
                 text = name.orEmpty(),
-                style = MaterialTheme.typography.subtitle1.copy(letterSpacing = 2.sp),
+                style = MaterialTheme.typography.titleMedium.copy(letterSpacing = 2.sp),
                 modifier = Modifier
                     .border(1.25.dp, LocalVibrantColor.current.value, RoundedCornerShape(50))
                     .padding(horizontal = 6.dp, vertical = 3.dp),
@@ -430,12 +429,12 @@ private fun MovieField(name: String, value: String) {
     Column {
         Text(
             text = name,
-            style = MaterialTheme.typography.subtitle2.copy(fontSize = 13.sp, letterSpacing = 1.sp),
+            style = MaterialTheme.typography.titleSmall.copy(fontSize = 13.sp, letterSpacing = 1.sp),
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 4.dp),
@@ -479,7 +478,7 @@ private fun SectionHeader(@StringRes headerResId: Int, count: Int, onClick: (() 
         Text(
             text = stringResource(headerResId),
             color = LocalVibrantColor.current.value,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
         )
         if (onClick != null) {
             Row(
@@ -491,7 +490,7 @@ private fun SectionHeader(@StringRes headerResId: Int, count: Int, onClick: (() 
                 Text(
                     text = stringResource(R.string.see_all, count),
                     color = LocalVibrantColor.current.value,
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(end = 4.dp),
                 )
                 Icon(
@@ -514,7 +513,7 @@ private fun MovieImage(image: Image, index: Int) {
             .height(160.dp)
             .clickable { navController.navigate(Screen.MovieImages(movieId, index)) },
         shape = RoundedCornerShape(12.dp),
-        elevation = 8.dp,
+        elevation = CardDefaults.cardElevation(8.dp),
     ) {
         val request = ImageRequest.Builder(LocalContext.current)
             .data(image.url)
@@ -526,7 +525,7 @@ private fun MovieImage(image: Image, index: Int) {
             error = rememberVectorPainter(Icons.Default.BrokenImage),
         )
         val (colorFilter, contentScale) = when (painter.state) {
-            is Error, is Loading -> ColorFilter.tint(MaterialTheme.colors.imageTint) to ContentScale.Fit
+            is Error, is Loading -> ColorFilter.tint(MaterialTheme.colorScheme.imageTint()) to ContentScale.Fit
             else -> null to ContentScale.Crop
         }
         Image(
@@ -545,7 +544,7 @@ private fun ProductionCompany(company: ProductionCompany) {
             .width(160.dp)
             .height(120.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = 8.dp,
+        elevation = CardDefaults.cardElevation(8.dp),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -564,7 +563,7 @@ private fun ProductionCompany(company: ProductionCompany) {
                 error = rememberVectorPainter(Icons.Default.BrokenImage),
             )
             val colorFilter = when (painter.state) {
-                is Error -> ColorFilter.tint(MaterialTheme.colors.imageTint)
+                is Error -> ColorFilter.tint(MaterialTheme.colorScheme.imageTint())
                 else -> null
             }
             Image(
@@ -579,7 +578,7 @@ private fun ProductionCompany(company: ProductionCompany) {
             )
             Text(
                 text = company.name,
-                style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier

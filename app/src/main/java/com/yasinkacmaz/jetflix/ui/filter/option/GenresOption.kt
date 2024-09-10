@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -86,7 +86,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
         val modifier = Modifier
             .scale(scale)
             .shadow(animateDpAsState(if (selected) 8.dp else 4.dp, label = "GenreShadow").value, shape)
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colorScheme.surface)
             .border(2.dp, Brush.horizontalGradient(colors), shape)
             .background(Brush.horizontalGradient(animatedColors), shape)
             .selectable(
@@ -102,7 +102,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             text = uiModel.genre.name.orEmpty(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.body2.copy(fontSize = 17.sp),
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
             modifier = modifier,
         )
     }

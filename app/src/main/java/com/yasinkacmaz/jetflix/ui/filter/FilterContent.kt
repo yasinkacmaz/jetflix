@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +34,8 @@ fun FilterBottomSheetContent(filterState: FilterState, onFilterStateChanged: (Fi
 fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: (() -> Unit)? = null) {
     Surface(
         Modifier.fillMaxWidth(),
-        elevation = 8.dp,
-        color = MaterialTheme.colors.primary,
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.primary,
     ) {
         Row(
             Modifier
@@ -54,16 +54,16 @@ fun FilterHeader(onHideClicked: () -> Unit, onResetClicked: (() -> Unit)? = null
                 }
                 Text(
                     text = stringResource(id = R.string.title_filter_bottom_sheet),
-                    color = MaterialTheme.colors.onPrimary,
-                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
             }
             if (onResetClicked != null) {
                 IconButton(onClick = { onResetClicked() }) {
                     Text(
                         text = stringResource(id = R.string.reset),
-                        color = MaterialTheme.colors.onPrimary,
-                        style = MaterialTheme.typography.body2,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
             }

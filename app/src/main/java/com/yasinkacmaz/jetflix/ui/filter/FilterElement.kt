@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +30,7 @@ fun FilterSectionTitle(painter: Painter, @StringRes title: Int) {
         Icon(painter = painter, contentDescription = null, modifier = Modifier.size(26.dp))
         Text(
             text = stringResource(id = title),
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 8.dp),
         )
     }
@@ -44,11 +44,17 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
             .selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
     ) {
         val radioIcon = if (selected) Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked
-        val color = if (selected) MaterialTheme.colors.secondary else MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+        val color = if (selected) {
+            MaterialTheme.colorScheme.secondary
+        } else {
+            MaterialTheme.colorScheme.onSurface.copy(
+                alpha = 0.6f,
+            )
+        }
         Icon(imageVector = radioIcon, contentDescription = null, tint = color)
         Text(
             text = title,
-            style = MaterialTheme.typography.body2.copy(fontSize = 17.sp),
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
             modifier = Modifier.padding(start = 8.dp),
         )
     }
@@ -65,4 +71,4 @@ fun <T : Any> FilterGrid(items: List<T>, itemContent: @Composable (Int, Modifier
 )
 
 @Composable
-fun FilterSectionDivider() = Divider(Modifier.padding(vertical = 4.dp))
+fun FilterSectionDivider() = HorizontalDivider(Modifier.padding(vertical = 4.dp))

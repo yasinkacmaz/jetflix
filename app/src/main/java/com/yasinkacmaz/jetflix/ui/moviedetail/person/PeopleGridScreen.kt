@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -46,7 +46,7 @@ fun PeopleGridScreen(people: List<Person>) {
         columns = GridCells.Fixed(columnCount),
         modifier = Modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colors.surface),
+            .background(MaterialTheme.colorScheme.surface),
         contentPadding = PaddingValues(
             start = horizontalPadding,
             end = horizontalPadding,
