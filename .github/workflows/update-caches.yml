@@ -17,15 +17,6 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - name: Detect gradle version
-        uses: actions/github-script@v7
-        id: gradle-version-detector
-        with:
-          result-encoding: string
-          script: |
-            const scriptPath = '/./.github/scripts/gradle-version-detector.js'
-            const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
-            return script()
       - name: 📦💥 Cleanup Existing Caches
         run: |
           gh extension install actions/gh-actions-cache
@@ -48,7 +39,6 @@ jobs:
           gradle-version: wrapper
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
           cache-overwrite-existing: true
-          cache-key-prefix: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
           gradle-home-cache-includes: |
             caches
             notifications
