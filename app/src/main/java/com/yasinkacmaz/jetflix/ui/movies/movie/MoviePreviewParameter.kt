@@ -17,7 +17,7 @@ class MovieProvider : PreviewParameterProvider<Movie> {
 @Preview(group = "Series")
 private fun Series(@PreviewParameter(MovieProvider::class) movie: Movie) {
     MoviePreview {
-        MovieContent(movie)
+        MovieItem(movie)
     }
 }
 
@@ -29,6 +29,6 @@ class MovieCollectionProvider : CollectionPreviewParameterProvider<Movie>(
 @Preview(group = "Films")
 private fun Films(@PreviewParameter(MovieCollectionProvider::class) movie: Movie) {
     MoviePreview {
-        MovieContent(movie)
+        MovieItem(movie)
     }
 }

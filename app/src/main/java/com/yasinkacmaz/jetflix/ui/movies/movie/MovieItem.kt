@@ -51,7 +51,7 @@ import com.yasinkacmaz.jetflix.util.rateColors
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MovieContent(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
+fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(size = 8.dp),

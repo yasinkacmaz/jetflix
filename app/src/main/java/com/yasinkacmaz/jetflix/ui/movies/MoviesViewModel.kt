@@ -5,15 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
-import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,9 +29,18 @@ class MoviesViewModel(
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
     filterDataStore: FilterDataStore,
 ) : ViewModel() {
-    private val pager: Pager<Int, Movie> =
-        Pager(config = PagingConfig(pageSize = 20, initialLoadSize = 20), pagingSourceFactory = ::initPagingSource)
-    val movies: Flow<PagingData<Movie>> = pager.flow
+    val moviesPagingData = Pager(
+        config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+        pagingSourceFactory = {
+            MoviesPagingSource(
+                movieService,
+                movieMapper,
+                movieRequestOptionsMapper,
+                filterState,
+                searchQuery.value,
+            )
+        },
+    ).flow.cachedIn(viewModelScope)
     val filterStateChanges = MutableSharedFlow<FilterState>()
     private var filterState: FilterState? = null
 
@@ -56,14 +63,6 @@ class MoviesViewModel(
             .onEach { _searchQueryChanges.emit(Unit) }
             .launchIn(viewModelScope)
     }
-
-    private fun initPagingSource() = MoviesPagingSource(
-        movieService,
-        movieMapper,
-        movieRequestOptionsMapper,
-        filterState,
-        searchQuery.value,
-    )
 
     fun onSearch(query: String) {
         if (searchQuery.value.isEmpty() && query.isBlank()) return

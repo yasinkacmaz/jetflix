@@ -6,7 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
-import com.yasinkacmaz.jetflix.ui.movies.movie.MovieContent
+import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.util.setTestContent
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +27,7 @@ class MovieContentTest {
         )
 
         setTestContent {
-            MovieContent(movie, Modifier.fillMaxSize(0.5f))
+            MovieItem(movie, Modifier.fillMaxSize(0.5f))
         }
 
         onNodeWithText(movie.name, useUnmergedTree = true).assertIsDisplayed()
