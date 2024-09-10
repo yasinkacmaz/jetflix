@@ -44,20 +44,6 @@ jobs:
             echo "Gradle version: $GRADLE_VERSION"
             echo "gradle_version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
           fi
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: ${{ steps.gradle-version.outputs.gradle_version }}
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-          cache-overwrite-existing: true
-          gradle-home-cache-includes: |
-            caches
-            notifications
-            jdks
-            wrapper
-          gradle-home-cache-excludes: |
-            .tmp
-            .gradle
       - name: Enable KVM group permissions for emulator hardware acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -77,7 +63,21 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: echo "Generated AVD snapshot for caching."
       - name: 🚧 Build
-        run: ./gradlew assembleDebug
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ steps.gradle-version.outputs.gradle_version }}
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+          cache-encryption-key: ${{ secrets.MAIL_USERNAME }}
+          cache-overwrite-existing: true
+          gradle-home-cache-includes: |
+            caches
+            notifications
+            jdks
+            wrapper
+          gradle-home-cache-excludes: |
+            .tmp
+            .gradle
+        run: gradlew build --configuration-cache
       - name: 💾 Save AVD Cache
         uses: actions/cache/save@v4
         if: always()
