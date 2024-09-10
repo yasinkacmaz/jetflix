@@ -1,17 +1,15 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.PersonService
-import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val personId: Int,
     private val personService: PersonService,
     private val profileMapper: ProfileMapper,
 ) : ViewModel() {
@@ -20,7 +18,6 @@ class ProfileViewModel(
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     init {
-        val personId: Int = savedStateHandle.get<String>(ARG_PERSON_ID)!!.toInt()
         fetchProfile(personId)
     }
 

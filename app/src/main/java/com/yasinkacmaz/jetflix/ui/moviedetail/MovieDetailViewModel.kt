@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.MovieService
@@ -8,7 +7,6 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
-import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MovieDetailViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val movieId: Int,
     private val movieService: MovieService,
     private val movieDetailMapper: MovieDetailMapper,
     private val creditsMapper: CreditsMapper,
@@ -28,7 +26,6 @@ class MovieDetailViewModel(
     val uiState: StateFlow<MovieDetailUiState> = _uiState.asStateFlow()
 
     init {
-        val movieId: Int = savedStateHandle.get<String>(ARG_MOVIE_ID)!!.toInt()
         fetchMovieDetail(movieId = movieId)
     }
 
