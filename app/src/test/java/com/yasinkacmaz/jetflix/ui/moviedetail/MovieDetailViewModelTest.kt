@@ -1,13 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import androidx.lifecycle.SavedStateHandle
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
-import com.yasinkacmaz.jetflix.ui.navigation.ARG_MOVIE_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.test
-import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -15,6 +12,7 @@ import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class MovieDetailViewModelTest {
@@ -24,8 +22,6 @@ class MovieDetailViewModelTest {
     private val movieService = FakeMovieClient()
 
     private val movieId = 1337
-
-    private val savedStateHandle = SavedStateHandle(mapOf(ARG_MOVIE_ID to movieId.toString()))
 
     private val movieDetailMapper = MovieDetailMapper()
     private val creditsMapper = CreditsMapper()
@@ -60,5 +56,5 @@ class MovieDetailViewModelTest {
     }
 
     private fun createViewModel() =
-        MovieDetailViewModel(savedStateHandle, movieService, movieDetailMapper, creditsMapper, imageMapper)
+        MovieDetailViewModel(movieId, movieService, movieDetailMapper, creditsMapper, imageMapper)
 }

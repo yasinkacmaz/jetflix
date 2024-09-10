@@ -64,11 +64,9 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MoviesScreen() {
-    val filterViewModel = koinViewModel<FilterViewModel>()
+fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewModel) {
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val filterState = filterViewModel.filterState.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
@@ -99,15 +97,14 @@ fun MoviesScreen() {
             }
         },
         content = {
-            MoviesGrid(sheetState)
+            MoviesGrid(sheetState, moviesViewModel)
         },
     )
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-private fun MoviesGrid(bottomSheetState: ModalBottomSheetState) {
-    val moviesViewModel = koinViewModel<MoviesViewModel>()
+private fun MoviesGrid(bottomSheetState: ModalBottomSheetState, moviesViewModel: MoviesViewModel) {
     val coroutineScope = rememberCoroutineScope()
     val searchQuery = remember { mutableStateOf("") }
     var showSettingsDialog by remember { mutableStateOf(false) }

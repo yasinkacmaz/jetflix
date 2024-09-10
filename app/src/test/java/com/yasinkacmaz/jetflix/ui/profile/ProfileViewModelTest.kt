@@ -1,11 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import androidx.lifecycle.SavedStateHandle
-import com.yasinkacmaz.jetflix.ui.navigation.ARG_PERSON_ID
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
-import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -14,6 +11,7 @@ import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class ProfileViewModelTest {
@@ -21,7 +19,6 @@ class ProfileViewModelTest {
     val coroutineTestRule = CoroutineTestRule()
 
     private val personId = 1337
-    private val savedStateHandle = SavedStateHandle(mapOf(ARG_PERSON_ID to personId.toString()))
     private val personService = FakePersonClient()
     private val profileMapper = ProfileMapper()
 
@@ -49,5 +46,5 @@ class ProfileViewModelTest {
         expectThat(stateValues.last().profile).isNull()
     }
 
-    private fun createViewModel() = ProfileViewModel(savedStateHandle, personService, profileMapper)
+    private fun createViewModel() = ProfileViewModel(personId, personService, profileMapper)
 }

@@ -37,7 +37,7 @@ import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 fun Person(person: Person, modifier: Modifier = Modifier) {
     val navController = LocalNavController.current
     Column(
-        modifier.padding(4.dp).clickable { navController.navigate(Screen.PROFILE.createPath(person.id)) },
+        modifier.padding(4.dp).clickable { navController.navigate(Screen.Profile(person.id)) },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {

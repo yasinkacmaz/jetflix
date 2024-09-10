@@ -27,7 +27,7 @@ ktorContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", v
 ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktorSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.5.0" }
-jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.2" }
+jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.2" }
 androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
 androidX_browser = { module = "androidx.browser:browser", version = "1.8.0" }
 androidX_datastore = { module = "androidx.datastore:datastore-preferences", version = "1.1.1" }

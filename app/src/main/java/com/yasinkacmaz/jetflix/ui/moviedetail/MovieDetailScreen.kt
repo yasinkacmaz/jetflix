@@ -255,7 +255,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = cast,
             headerResId = R.string.cast,
-            onSeeAllClicked = { navController.navigate(Screen.CAST.createPath(movieDetail.id)) },
+            onSeeAllClicked = { navController.navigate(Screen.MovieCast(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
             modifier = Modifier.constrainAs(castSection) {
                 top.linkTo(overview.bottom, 16.dp)
@@ -266,7 +266,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = crew,
             headerResId = R.string.crew,
-            onSeeAllClicked = { navController.navigate(Screen.CREW.createPath(movieDetail.id)) },
+            onSeeAllClicked = { navController.navigate(Screen.MovieCrew(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
             modifier = Modifier.constrainAs(crewSection) {
                 top.linkTo(castSection.bottom, 16.dp)
@@ -277,7 +277,7 @@ fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>
         MovieSection(
             items = images,
             headerResId = R.string.images,
-            onSeeAllClicked = { navController.navigate(Screen.IMAGES.createPath(movieDetail.id, 0)) },
+            onSeeAllClicked = { navController.navigate(Screen.MovieImages(movieDetail.id, 0)) },
             itemContent = { item, index -> MovieImage(item, index) },
             modifier = Modifier.constrainAs(imagesSection) {
                 top.linkTo(crewSection.bottom, 16.dp)
@@ -512,7 +512,7 @@ private fun MovieImage(image: Image, index: Int) {
         Modifier
             .width(240.dp)
             .height(160.dp)
-            .clickable { navController.navigate(Screen.IMAGES.createPath(movieId, index)) },
+            .clickable { navController.navigate(Screen.MovieImages(movieId, index)) },
         shape = RoundedCornerShape(12.dp),
         elevation = 8.dp,
     ) {
