@@ -33,31 +33,19 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           BRANCH: ${{ github.ref_name }}
-      - name: Extract Gradle Version
-        id: gradle-version
-        run: |
-          GRADLE_VERSION=$(grep -oP "distributionUrl=.*gradle-\K[0-9]+\.[0-9]+(\.[0-9]+)?" gradle/wrapper/gradle-wrapper.properties)
-          if [ -z "$GRADLE_VERSION" ]; then
-            echo "Unable to find gradle version. Fallback to wrapper"
-            echo "gradle_version=wrapper" >> $GITHUB_OUTPUT
-          else
-            echo "Gradle version: $GRADLE_VERSION"
-            echo "gradle_version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
-          fi
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: 🔍 Detect Gradle Version And Cache
+        id: gradle-cache
+        uses: actions/github-script@v7
         with:
-          gradle-version: ${{ steps.gradle-version.outputs.gradle_version }}
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
-          cache-overwrite-existing: true
-          gradle-home-cache-includes: |
-            caches
-            notifications
-            jdks
-            wrapper
-          gradle-home-cache-excludes: |
-            .tmp
-            .gradle
+          script: |
+            const gradleCacheDetectorScriptPath = '/./.github/scripts/gradle-version-cache-detector.js'
+            const gradleCacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${gradleCacheDetectorScriptPath}`)
+            await gradleCacheDetectorScript({core});
+      - name: Fetch gradle cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.gradle-cache.outputs['cache-paths'] }}
+          key: ${{ steps.gradle-cache.outputs['cache-key'] }}
       - name: Enable KVM group permissions for emulator hardware acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
