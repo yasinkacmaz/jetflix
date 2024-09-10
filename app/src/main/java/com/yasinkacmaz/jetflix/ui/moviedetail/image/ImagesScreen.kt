@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,7 +85,7 @@ private fun BlurImage(url: String) {
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colorScheme.surface)
             .blur(16.dp),
     )
 }
@@ -98,18 +98,18 @@ private fun BoxScope.VoteCount(voteCount: Int) {
             .wrapContentSize()
             .align(Alignment.BottomStart)
             .background(
-                color = MaterialTheme.colors.surface.copy(alpha = 0.3f),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
                 shape = RoundedCornerShape(bottomStart = 12.dp, topEnd = 12.dp),
             )
             .padding(4.dp),
     ) {
         Icon(
             imageVector = Icons.Filled.Favorite,
-            tint = MaterialTheme.colors.primary,
+            tint = MaterialTheme.colorScheme.primary,
             contentDescription = stringResource(id = R.string.likes_content_description),
             modifier = Modifier.padding(end = 4.dp),
         )
-        Text(text = voteCount.toString(), style = MaterialTheme.typography.body2)
+        Text(text = voteCount.toString(), style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -117,13 +117,13 @@ private fun BoxScope.VoteCount(voteCount: Int) {
 private fun BoxScope.Index(position: Int, imageCount: Int) {
     Text(
         text = "$position / $imageCount",
-        style = MaterialTheme.typography.body2,
+        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier
             .align(Alignment.BottomCenter)
             .navigationBarsPadding()
             .padding(4.dp)
             .shadow(16.dp, RoundedCornerShape(16.dp))
-            .background(color = MaterialTheme.colors.surface.copy(alpha = 0.3f))
+            .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f))
             .padding(horizontal = 8.dp, vertical = 2.dp),
     )
 }

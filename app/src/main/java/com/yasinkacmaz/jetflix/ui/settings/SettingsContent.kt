@@ -11,14 +11,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.Card
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -76,8 +77,10 @@ fun SettingsDialog(
 ) = Dialog(onDismissRequest = onDialogDismissed) {
     Card(
         shape = MaterialTheme.shapes.medium,
-        backgroundColor = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .semantics { testTag = SETTINGS_DIALOG_TAG },
@@ -153,18 +156,23 @@ private fun ToggleContent(countryName: String, flagUrl: String, onClick: () -> U
 
 @Composable
 private fun DropdownItem(countryName: String, flagUrl: String, selected: Boolean, onClick: () -> Unit) {
-    DropdownMenuItem(enabled = !selected, onClick = onClick, modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = buildAnnotatedString {
-                if (selected) {
-                    appendInlineContent(TICK_ID)
-                }
-                appendInlineContent(FLAG_ID)
-                append("  $countryName")
-            },
-            inlineContent = inlineContent(flagUrl, countryName, selected),
-        )
-    }
+    DropdownMenuItem(
+        enabled = !selected,
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        text = {
+            Text(
+                text = buildAnnotatedString {
+                    if (selected) {
+                        appendInlineContent(TICK_ID)
+                    }
+                    appendInlineContent(FLAG_ID)
+                    append("  $countryName")
+                },
+                inlineContent = inlineContent(flagUrl, countryName, selected),
+            )
+        },
+    )
 }
 
 private fun inlineContent(flagUrl: String, countryName: String, selected: Boolean): Map<String, InlineTextContent> {
@@ -178,7 +186,7 @@ private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent
         Image(
             imageVector = icon,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
         )
     },
 )

@@ -3,6 +3,7 @@ package com.yasinkacmaz.jetflix.ui.profile
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -11,7 +12,6 @@ import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class ProfileViewModelTest {

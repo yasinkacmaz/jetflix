@@ -6,9 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
         modifier.padding(4.dp).clickable { navController.navigate(Screen.Profile(person.id)) },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Card(shape = CircleShape, elevation = 8.dp, modifier = Modifier.size(120.dp)) {
+        Card(shape = CircleShape, elevation = CardDefaults.cardElevation(8.dp), modifier = Modifier.size(120.dp)) {
             val request = ImageRequest.Builder(LocalContext.current)
                 .data(person.profilePhotoUrl)
                 .crossfade(true)
@@ -50,7 +51,7 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
             val painter =
                 rememberAsyncImagePainter(model = request, error = placeholderPainter, placeholder = placeholderPainter)
             val colorFilter = when (painter.state) {
-                is Error, is Loading -> ColorFilter.tint(MaterialTheme.colors.imageTint)
+                is Error, is Loading -> ColorFilter.tint(MaterialTheme.colorScheme.imageTint())
                 else -> null
             }
             Image(
@@ -62,14 +63,14 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
         }
         Text(
             text = person.name,
-            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.SemiBold),
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp),
         )
         Text(
             text = person.role,
-            style = MaterialTheme.typography.subtitle2.copy(
+            style = MaterialTheme.typography.titleSmall.copy(
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Italic,
             ),

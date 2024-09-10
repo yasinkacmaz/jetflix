@@ -1,17 +1,21 @@
 package com.yasinkacmaz.jetflix.ui.theme
 
 import android.annotation.SuppressLint
-import androidx.compose.material.Colors
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @SuppressLint("ConflictingOnColor")
-val LightThemeColors = lightColors(
+val LightThemeColors = lightColorScheme(
     primary = Color(0xFFE50914),
-    primaryVariant = Color(0xFF971C1C),
-    secondary = Color(0xFFE50914),
-    secondaryVariant = Color(0xFF831010),
+    primaryContainer = Color(0xFFE50914),
+    secondary = Color(0xFF971C1C),
+    secondaryContainer = Color(0xFF971C1C),
+    tertiary = Color(0xFFE50914),
+    tertiaryContainer = Color(0xFFE50914),
     background = Color.White,
     surface = Color.White,
     error = Color(0xFFE50914),
@@ -22,11 +26,13 @@ val LightThemeColors = lightColors(
     onError = Color.White,
 )
 
-val DarkThemeColors = darkColors(
+val DarkThemeColors = darkColorScheme(
     primary = Color(0xFFE50914),
-    primaryVariant = Color(0xFF971C1C),
-    secondary = Color(0xFFE50914),
-    secondaryVariant = Color(0xFF831010),
+    primaryContainer = Color(0xFFE50914),
+    secondary = Color(0xFF971C1C),
+    secondaryContainer = Color(0xFF971C1C),
+    tertiary = Color(0xFFE50914),
+    tertiaryContainer = Color(0xFFE50914),
     background = Color(0xFF1C1C1C),
     surface = Color(0xFF1C1C1C),
     error = Color(0xFFCF6679),
@@ -37,5 +43,5 @@ val DarkThemeColors = darkColors(
     onError = Color(0xFF1C1C1C),
 )
 
-val Colors.imageTint: Color
-    get() = if (isLight) Color.Gray else Color.DarkGray
+@Composable
+fun ColorScheme.imageTint(): Color = if (!isSystemInDarkTheme()) Color.Gray else Color.DarkGray

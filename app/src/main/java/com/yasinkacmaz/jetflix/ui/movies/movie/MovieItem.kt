@@ -13,16 +13,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,13 +49,12 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.theme.imageTint
 import com.yasinkacmaz.jetflix.util.rateColors
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(size = 8.dp),
-        elevation = 8.dp,
+        elevation = CardDefaults.cardElevation(8.dp),
         onClick = { onMovieClicked(movie.id) },
     ) {
         Box {
@@ -86,7 +85,7 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
         placeholder = rememberVectorPainter(Icons.Default.Movie),
     )
     val colorFilter = when (painter.state) {
-        is Loading, is Error -> ColorFilter.tint(MaterialTheme.colors.imageTint)
+        is Loading, is Error -> ColorFilter.tint(MaterialTheme.colorScheme.imageTint())
         else -> null
     }
     val scale = if (painter.state !is AsyncImagePainter.State.Success) ContentScale.Fit else ContentScale.FillBounds
@@ -108,7 +107,7 @@ private fun MovieRate(rate: Double, modifier: Modifier) {
     val brush = remember(rate) { Brush.horizontalGradient(colors) }
     Text(
         text = rate.toString(),
-        style = MaterialTheme.typography.body1.copy(color = Color.White),
+        style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
         modifier = modifier
             .background(brush, RoundedCornerShape(50))
             .padding(horizontal = 10.dp)
@@ -133,7 +132,7 @@ private fun MovieInfo(movie: Movie, modifier: Modifier) {
 @Composable
 private fun MovieName(name: String) = Text(
     text = name,
-    style = MaterialTheme.typography.subtitle1.copy(
+    style = MaterialTheme.typography.titleMedium.copy(
         color = Color.White,
         letterSpacing = 1.5.sp,
         fontFamily = FontFamily.Serif,
@@ -149,7 +148,7 @@ private fun MovieFeature(icon: ImageVector, field: String) {
         Icon(imageVector = icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(13.dp))
         Text(
             text = field,
-            style = MaterialTheme.typography.subtitle2.copy(
+            style = MaterialTheme.typography.titleSmall.copy(
                 color = Color.White,
                 letterSpacing = 1.5.sp,
                 fontFamily = FontFamily.SansSerif,
