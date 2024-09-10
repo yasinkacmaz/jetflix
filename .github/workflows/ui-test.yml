@@ -25,15 +25,12 @@ jobs:
             const scriptPath = '/./.github/scripts/gradle-version-detector.js'
             const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
             return script()
-      - name: Fetch gradle cache
-        uses: actions/cache@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+          gradle-version: wrapper
+          cache-read-only: true
+          cache-key-prefix: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
       - name: Fetch AVD Cache
         uses: actions/cache@v4
         id: avd-cache
@@ -78,7 +75,7 @@ jobs:
             adb uninstall com.yasinkacmaz.jetflix.debug.test || true
             adb uninstall com.yasinkacmaz.jetflix.debug || true
             echo "Successfully uninstalled debug and test apks"
-            ./gradlew connectedCheck --no-configuration-cache
+            ./gradlew connectedCheck
       - name: Publish Ui Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: ${{ github.event_name == 'pull_request' }}

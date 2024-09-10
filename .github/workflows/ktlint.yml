@@ -23,15 +23,12 @@ jobs:
             const scriptPath = '/./.github/scripts/gradle-version-detector.js'
             const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
             return script()
-      - name: Fetch gradle cache
-        uses: actions/cache@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+          gradle-version: wrapper
+          cache-read-only: true
+          cache-key-prefix: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
       - name: 🐶 Run Ktlint and Report with Review Dog
         uses: ScaCap/action-ktlint@master
         with:

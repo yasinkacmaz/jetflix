@@ -21,13 +21,12 @@ jobs:
             const scriptPath = '/./.github/scripts/gradle-version-detector.js'
             const script = require(`${process.env.GITHUB_WORKSPACE}${scriptPath}`)
             return script()
-      - name: Fetch gradle cache
-        uses: actions/cache@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
+          gradle-version: wrapper
+          cache-read-only: true
+          cache-key-prefix: ${{ runner.os }}-${{ steps.gradle-version-detector.outputs.result }}
       - name: Copy Signing Properties
         run: |
           echo "${{ secrets.JETFLIX_KEYSTORE }}" > jetflix.keystore.asc
@@ -35,7 +34,7 @@ jobs:
           echo "${{ secrets.JETFLIX_SIGNING_PROPERTIES }}" > signing.properties.asc
           gpg -d --passphrase "${{ secrets.JETFLIX_PASSPHRASE }}" --batch signing.properties.asc > signing.properties
       - name: Build release apk and bundle
-        run: ./gradlew assembleRelease bundleRelease --no-configuration-cache
+        run: ./gradlew assembleRelease bundleRelease
       - name: Share build output
         uses: actions/upload-artifact@v4
         with:
