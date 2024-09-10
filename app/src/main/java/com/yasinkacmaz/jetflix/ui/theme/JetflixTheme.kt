@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun JetflixTheme(isDarkTheme: Boolean = false, content: @Composable () -> Unit) {
-    val colorScheme = if (isDarkTheme) DarkThemeColors else LightThemeColors
+    val colorScheme = if (isDarkTheme) darkColorScheme else lightColorScheme
     MaterialTheme(colorScheme = colorScheme, content = content)
 }
