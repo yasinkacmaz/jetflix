@@ -7,6 +7,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
@@ -16,6 +17,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         renderUi()
     }
@@ -25,11 +27,11 @@ class MainActivity : ComponentActivity() {
         val isDarkTheme = remember { mutableStateOf(systemTheme) }
         val navController = rememberNavController()
         JetflixTheme(isDarkTheme = isDarkTheme.value) {
-            CompositionLocalProvider(
-                LocalNavController provides navController,
-                LocalDarkTheme provides isDarkTheme,
-            ) {
-                KoinContext {
+            KoinContext {
+                CompositionLocalProvider(
+                    LocalNavController provides navController,
+                    LocalDarkTheme provides isDarkTheme,
+                ) {
                     MainContent()
                 }
             }

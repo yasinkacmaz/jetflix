@@ -32,6 +32,7 @@ androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
 androidX_browser = { module = "androidx.browser:browser", version = "1.8.0" }
 androidX_datastore = { module = "androidx.datastore:datastore-preferences", version = "1.1.1" }
 androidX_tracing = { module = "androidx.tracing:tracing", version = "1.2.0" }
+androidX-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.2.0-alpha02" }
 compose_runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 compose_foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose_ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -51,7 +52,7 @@ strikt = { module = "io.strikt:strikt-core", version = "0.34.1" }
 coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.8.0-RC" }
 
 [bundles]
-androidX = ["androidX_palette", "androidX_browser", "androidX_datastore"]
+androidX = ["androidX_palette", "androidX_browser", "androidX_datastore", "androidX-splashscreen"]
 koin = ["koin-core", "koin-android", "koin-compose", "koin-compose-viewmodel"]
 compose = [
     "compose_runtime", "compose_foundation", "compose_ui", "compose_animation", "compose_tooling",
