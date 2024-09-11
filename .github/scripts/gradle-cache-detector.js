@@ -34,14 +34,16 @@ async function extractGradleVersion() {
 }
 
 function cacheGradleFiles(gradleVersion, core) {
-    const cacheKey = `${process.platform}-gradle-${gradleVersion}`;
-    const cachePaths = [
+    const gradleCachePaths = [
         '~/.gradle/caches',
         '~/.gradle/wrapper',
         '~/.gradle/configuration-cache',
         `~/.gradle/${gradleVersion}`
     ];
 
-    core.setOutput('cache-key', cacheKey);
-    core.setOutput('cache-paths', cachePaths.join('\n'));
+    core.setOutput('gradle-version', gradleVersion);
+    core.setOutput('gradle-cache-key', `${process.platform}-gradle-${gradleVersion}`);
+    core.setOutput('gradle-cache-paths', gradleCachePaths.join('\n'));
+    core.setOutput('build-cache-key', `${process.platform}-build-${gradleVersion}`);
+    core.setOutput('build-cache-paths', `**/build`);
 }
