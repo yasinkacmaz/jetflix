@@ -24,6 +24,11 @@ jobs:
             const cacheDetectorScriptPath = '/./.github/scripts/gradle-cache-detector.js'
             const cacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${cacheDetectorScriptPath}`)
             await cacheDetectorScript({core});
+      - name: 🤖 Fetch Android Sdk cache
+        uses: actions/cache/restore@v4
+        with:
+          path: /usr/local/android-sdk
+          key: ${{ runner.os }}-android-sdk${{ env.androidApiVersion }}
       - name: 🐘 Fetch gradle cache
         uses: actions/cache/restore@v4
         with:

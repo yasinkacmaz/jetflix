@@ -78,6 +78,11 @@ jobs:
         with:
           path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
+      - name: 💾 🤖 Save Android Sdk Cache
+        uses: actions/cache/save/@v4
+        with:
+          path: /usr/local/android-sdk
+          key: ${{ runner.os }}-android-sdk${{ env.androidApiVersion }}
       - name: 💌 Send email report
         uses: actions/github-script@v7
         env:
