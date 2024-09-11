@@ -16,21 +16,26 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - name: 🔍 Detect Gradle Version And Cache
+      - name: 🔍 Detect Cache Key And Paths
         id: gradle-cache
         uses: actions/github-script@v7
         with:
           script: |
-            const gradleCacheDetectorScriptPath = '/./.github/scripts/gradle-version-cache-detector.js'
-            const gradleCacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${gradleCacheDetectorScriptPath}`)
-            await gradleCacheDetectorScript({core});
-      - name: Fetch gradle cache
-        uses: actions/cache@v4
+            const cacheDetectorScriptPath = '/./.github/scripts/gradle-cache-detector.js'
+            const cacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${cacheDetectorScriptPath}`)
+            await cacheDetectorScript({core});
+      - name: 🐘 Fetch gradle cache
+        uses: actions/cache/restore@v4
         with:
-          path: ${{ steps.gradle-cache.outputs['cache-paths'] }}
-          key: ${{ steps.gradle-cache.outputs['cache-key'] }}
-      - name: Fetch AVD Cache
-        uses: actions/cache@v4
+          path: ${{ steps.gradle-cache.outputs['gradle-cache-paths'] }}
+          key: ${{ steps.gradle-cache.outputs['gradle-cache-key'] }}
+      - name: 🐘 Fetch build cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
+          key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
+      - name: 📱 Fetch AVD Cache
+        uses: actions/cache/restore@v4
         id: avd-cache
         with:
           path: |
@@ -42,20 +47,6 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: 📱 Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.androidApiVersion }}
-          target: aosp_atd
-          channel: stable
-          arch: x86_64
-          ram-size: 4096M
-          disk-size: 2048M
-          force-avd-creation: false
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot for caching."
       - name: 🤖 Run Ui Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
