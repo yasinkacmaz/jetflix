@@ -50,3 +50,5 @@ jetflix.keystore
 *.hprof
 *.txt
 *.DS_STORE
+
+.kotlin
