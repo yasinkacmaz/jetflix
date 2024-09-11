@@ -64,7 +64,7 @@ jobs:
             adb uninstall com.yasinkacmaz.jetflix.debug.test || true
             adb uninstall com.yasinkacmaz.jetflix.debug || true
             echo "Successfully uninstalled debug and test apks"
-            ./gradlew connectedCheck
+            ./gradlew --no-configuration-cache connectedCheck
       - name: Publish Ui Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: ${{ github.event_name == 'pull_request' }}

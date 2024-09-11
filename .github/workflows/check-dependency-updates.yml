@@ -21,7 +21,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Check Dependency Updates
-        run: ./gradlew dependencyUpdates
+        run: ./gradlew --no-configuration-cache dependencyUpdates
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
       - name: 💌 Send email report
