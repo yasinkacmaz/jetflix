@@ -37,7 +37,6 @@ function cacheGradleFiles(gradleVersion, core) {
     const gradleCachePaths = [
         '~/.gradle/caches',
         '~/.gradle/wrapper',
-        '~/.gradle/configuration-cache',
         `~/.gradle/${gradleVersion}`
     ];
 

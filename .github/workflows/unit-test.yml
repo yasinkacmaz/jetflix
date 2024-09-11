@@ -33,7 +33,7 @@ jobs:
           path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --continue
+        run: ./gradlew --no-configuration-cache testDebugUnitTest --continue
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: ${{ github.event_name == 'pull_request' }}
