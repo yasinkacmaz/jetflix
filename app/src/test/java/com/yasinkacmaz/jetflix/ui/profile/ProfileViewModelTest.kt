@@ -4,7 +4,6 @@ import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
 import java.io.IOException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -13,7 +12,6 @@ import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
 
-@ExperimentalCoroutinesApi
 class ProfileViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()

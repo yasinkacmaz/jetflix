@@ -57,15 +57,13 @@ class SettingsDialogTest {
         }
     }
 
-    private fun ComposeUiTest.showSettingsDialog(
-        uiState: SettingsViewModel.UiState,
-        selectedLanguage: Language,
-    ) = setTestContent {
-        SettingsDialog(
-            uiState = uiState,
-            selectedLanguage = selectedLanguage,
-            onLanguageSelected = {},
-            onDialogDismissed = {},
-        )
-    }
+    private fun ComposeUiTest.showSettingsDialog(uiState: SettingsViewModel.UiState, selectedLanguage: Language) =
+        setTestContent {
+            SettingsDialog(
+                uiState = uiState,
+                selectedLanguage = selectedLanguage,
+                onLanguageSelected = {},
+                onDialogDismissed = {},
+            )
+        }
 }

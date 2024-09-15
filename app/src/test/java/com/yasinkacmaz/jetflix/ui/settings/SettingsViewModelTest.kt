@@ -6,13 +6,11 @@ import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
 import java.io.IOException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
-@ExperimentalCoroutinesApi
 class SettingsViewModelTest {
 
     private val configurationService = FakeConfigurationClient()
