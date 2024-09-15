@@ -5,13 +5,12 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.test
-import java.io.IOException
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isA
-import strikt.assertions.isEqualTo
+import java.io.IOException
 
 class MovieDetailViewModelTest {
     @get:Rule
@@ -33,14 +32,13 @@ class MovieDetailViewModelTest {
 
         val stateValues = movieDetailViewModel.uiState.test()
 
-        expectThat(stateValues.last()).isEqualTo(
-            MovieDetailViewModel.MovieDetailUiState(
-                movieDetailMapper.map(movieService.movieDetailResponse),
-                creditsMapper.map(movieService.creditsResponse),
-                imageMapper.map(movieService.imagesResponse),
-                loading = false,
-            ),
+        val expectedState = MovieDetailViewModel.MovieDetailUiState(
+            movieDetailMapper.map(movieService.movieDetailResponse),
+            creditsMapper.map(movieService.creditsResponse),
+            imageMapper.map(movieService.imagesResponse),
+            loading = false,
         )
+        stateValues.last() shouldBe expectedState
     }
 
     @Test
@@ -50,7 +48,7 @@ class MovieDetailViewModelTest {
         movieDetailViewModel = createViewModel()
         val stateValues = movieDetailViewModel.uiState.test()
 
-        expectThat(stateValues.last().error).isA<IOException>()
+        stateValues.last().error.shouldBeInstanceOf<IOException>()
     }
 
     private fun createViewModel() =

@@ -39,11 +39,11 @@ compose_navigation = { module = "androidx.navigation:navigation-compose", versio
 compose_constraintLayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.0-beta01" }
 compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version = "1.8.0-alpha01" }
 junit = { module = "junit:junit", version = "4.13.2" }
-strikt = { module = "io.strikt:strikt-core", version = "0.35.1" }
+kotest_assertions = { module = "io.kotest:kotest-assertions-core", version = "5.9.1" }
 coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.9.0" }
 
 [bundles]
 androidX = ["androidX_palette", "androidX_browser", "androidX_datastore", "androidX-splashscreen"]
 koin = ["koin-core", "koin-android", "koin-compose", "koin-compose-viewmodel"]
 io = ["jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization"]
-test = ["junit", "strikt", "coroutinesTest"]
+test = ["junit", "kotest_assertions", "coroutinesTest"]

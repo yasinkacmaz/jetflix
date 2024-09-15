@@ -5,9 +5,8 @@ import com.yasinkacmaz.jetflix.data.remote.ProductionCompanyResponse
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toBackdropUrl
 import com.yasinkacmaz.jetflix.util.toPosterUrl
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class MovieDetailMapperTest {
     private val mapper = MovieDetailMapper()
@@ -18,25 +17,25 @@ class MovieDetailMapperTest {
     fun map() {
         val movieDetail = mapper.map(movieDetailResponse)
 
-        expectThat(movieDetail.id).isEqualTo(movieDetailResponse.id)
-        expectThat(movieDetail.title).isEqualTo(movieDetailResponse.title)
-        expectThat(movieDetail.originalTitle).isEqualTo(movieDetailResponse.originalTitle)
-        expectThat(movieDetail.overview).isEqualTo(movieDetailResponse.overview)
-        expectThat(movieDetail.backdropUrl).isEqualTo(movieDetailResponse.backdropPath.orEmpty().toBackdropUrl())
-        expectThat(movieDetail.posterUrl).isEqualTo(movieDetailResponse.posterPath.toPosterUrl())
-        expectThat(movieDetail.genres).isEqualTo(movieDetailResponse.genres)
-        expectThat(movieDetail.releaseDate).isEqualTo(movieDetailResponse.releaseDate)
-        expectThat(movieDetail.voteAverage).isEqualTo(movieDetailResponse.voteAverage)
-        expectThat(movieDetail.voteCount).isEqualTo(movieDetailResponse.voteCount)
-        expectThat(movieDetail.duration).isEqualTo(movieDetailResponse.runtime)
-        expectThat(movieDetail.homepage).isEqualTo(movieDetailResponse.homepage)
+        movieDetail.id shouldBe movieDetailResponse.id
+        movieDetail.title shouldBe movieDetailResponse.title
+        movieDetail.originalTitle shouldBe movieDetailResponse.originalTitle
+        movieDetail.overview shouldBe movieDetailResponse.overview
+        movieDetail.backdropUrl shouldBe movieDetailResponse.backdropPath.orEmpty().toBackdropUrl()
+        movieDetail.posterUrl shouldBe movieDetailResponse.posterPath.toPosterUrl()
+        movieDetail.genres shouldBe movieDetailResponse.genres
+        movieDetail.releaseDate shouldBe movieDetailResponse.releaseDate
+        movieDetail.voteAverage shouldBe movieDetailResponse.voteAverage
+        movieDetail.voteCount shouldBe movieDetailResponse.voteCount
+        movieDetail.duration shouldBe movieDetailResponse.runtime
+        movieDetail.homepage shouldBe movieDetailResponse.homepage
     }
 
     @Test
     fun `Map should remove last dots from tagline`() {
         val movieDetail = mapper.map(movieDetailResponse.copy(tagline = "Tagline.."))
 
-        expectThat(movieDetail.tagline).isEqualTo("Tagline")
+        movieDetail.tagline shouldBe "Tagline"
     }
 
     @Test
@@ -46,6 +45,6 @@ class MovieDetailMapperTest {
         val movieDetail = mapper.map(movieDetailResponse.copy(productionCompanies = listOf(productionCompanyResponse)))
 
         val expectedProductionCompany = ProductionCompany("Name", "logoUrl".toPosterUrl())
-        expectThat(movieDetail.productionCompanies.first()).isEqualTo(expectedProductionCompany)
+        movieDetail.productionCompanies.first() shouldBe expectedProductionCompany
     }
 }

@@ -2,9 +2,8 @@ package com.yasinkacmaz.jetflix.ui.filter
 
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class MovieRequestOptionsMapperTest {
 
@@ -26,7 +25,7 @@ class MovieRequestOptionsMapperTest {
             "include_adult" to filterState.includeAdult.toString(),
             "with_genres" to filterState.selectedGenreIds.joinToString("|"),
         )
-        expectThat(options).isEqualTo(expectedOptions)
+        options shouldBe expectedOptions
     }
 
     @Test
@@ -38,6 +37,6 @@ class MovieRequestOptionsMapperTest {
             "sort_by" to "${defaultFilterState.sortBy.by}.${defaultFilterState.sortOrder.order}",
             "include_adult" to defaultFilterState.includeAdult.toString(),
         )
-        expectThat(options).isEqualTo(expectedOptions)
+        options shouldBe expectedOptions
     }
 }

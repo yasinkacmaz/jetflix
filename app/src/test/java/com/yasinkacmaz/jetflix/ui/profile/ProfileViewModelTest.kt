@@ -3,14 +3,12 @@ package com.yasinkacmaz.jetflix.ui.profile
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import java.io.IOException
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isA
-import strikt.assertions.isEqualTo
-import strikt.assertions.isNull
 
 class ProfileViewModelTest {
     @get:Rule
@@ -28,8 +26,9 @@ class ProfileViewModelTest {
 
         val stateValues = profileViewModel.uiState.test()
 
-        expectThat(stateValues.last()).isEqualTo(
-            ProfileViewModel.ProfileUiState(profileMapper.map(personService.profileResponse), loading = false),
+        stateValues.last() shouldBe ProfileViewModel.ProfileUiState(
+            profileMapper.map(personService.profileResponse),
+            loading = false,
         )
     }
 
@@ -40,8 +39,8 @@ class ProfileViewModelTest {
         profileViewModel = createViewModel()
         val stateValues = profileViewModel.uiState.test()
 
-        expectThat(stateValues.last().error).isA<IOException>()
-        expectThat(stateValues.last().profile).isNull()
+        stateValues.last().error.shouldBeInstanceOf<IOException>()
+        stateValues.last().profile shouldBe null
     }
 
     private fun createViewModel() = ProfileViewModel(personId, personService, profileMapper)

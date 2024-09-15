@@ -3,9 +3,8 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 import com.yasinkacmaz.jetflix.data.remote.CreditsResponse
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toProfilePhotoUrl
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class CreditsMapperTest {
     private val mapper = CreditsMapper()
@@ -19,7 +18,7 @@ class CreditsMapperTest {
         val credits = mapper.map(creditsResponse.copy(cast = listOf(castResponse)))
 
         val person = credits.cast.first()
-        expectThat(person.gender).isEqualTo(Gender.MALE)
+        person.gender shouldBe Gender.MALE
     }
 
     @Test
@@ -29,7 +28,7 @@ class CreditsMapperTest {
         val credits = mapper.map(creditsResponse.copy(cast = listOf(castResponse)))
 
         val person = credits.cast.first()
-        expectThat(person.gender).isEqualTo(Gender.FEMALE)
+        person.gender shouldBe Gender.FEMALE
     }
 
     @Test
@@ -38,9 +37,9 @@ class CreditsMapperTest {
 
         val castPerson = credits.cast.first()
         val castResponse = creditsResponse.cast.first()
-        expectThat(castPerson.name).isEqualTo(castResponse.name)
-        expectThat(castPerson.role).isEqualTo(castResponse.character)
-        expectThat(castPerson.profilePhotoUrl).isEqualTo(castResponse.profilePath?.toProfilePhotoUrl())
+        castPerson.name shouldBe castResponse.name
+        castPerson.role shouldBe castResponse.character
+        castPerson.profilePhotoUrl shouldBe castResponse.profilePath?.toProfilePhotoUrl()
     }
 
     @Test
@@ -49,8 +48,8 @@ class CreditsMapperTest {
 
         val crewPerson = credits.crew.first()
         val crewResponse = creditsResponse.crew.first()
-        expectThat(crewPerson.name).isEqualTo(crewResponse.name)
-        expectThat(crewPerson.role).isEqualTo(crewResponse.job)
-        expectThat(crewPerson.profilePhotoUrl).isEqualTo(crewResponse.profilePath?.toProfilePhotoUrl())
+        crewPerson.name shouldBe crewResponse.name
+        crewPerson.role shouldBe crewResponse.job
+        crewPerson.profilePhotoUrl shouldBe crewResponse.profilePath?.toProfilePhotoUrl()
     }
 }

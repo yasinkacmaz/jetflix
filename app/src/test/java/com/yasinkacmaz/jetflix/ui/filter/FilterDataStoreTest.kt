@@ -4,12 +4,11 @@ import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class FilterDataStoreTest {
     @get:Rule
@@ -23,7 +22,7 @@ class FilterDataStoreTest {
 
         val filterDataStore = createFilterDataStore()
 
-        expectThat(filterDataStore.filterState.first()).isEqualTo(FilterState())
+        filterDataStore.filterState.first() shouldBe FilterState()
     }
 
     @Test
@@ -33,7 +32,7 @@ class FilterDataStoreTest {
 
         val filterDataStore = createFilterDataStore()
 
-        expectThat(filterDataStore.filterState.first()).isEqualTo(filterState)
+        filterDataStore.filterState.first() shouldBe filterState
     }
 
     private fun createFilterDataStore() = FilterDataStore(json, fakeStringDataStore)
