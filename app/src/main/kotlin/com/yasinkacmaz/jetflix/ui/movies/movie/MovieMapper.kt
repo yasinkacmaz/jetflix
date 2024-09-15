@@ -10,7 +10,7 @@ class MovieMapper : Mapper<MovieResponse, Movie> {
         name = input.name,
         releaseDate = input.firstAirDate.orEmpty(),
         posterPath = input.posterPath.orEmpty().toPosterUrl(),
-        voteAverage = input.voteAverage,
+        voteAverage = (input.voteAverage * 10).toInt() / 10.0,
         voteCount = input.voteCount,
     )
 }
