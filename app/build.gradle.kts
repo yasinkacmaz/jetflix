@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("kotlinx-serialization")
     kotlin("android")
+    alias(libs.plugins.compose)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -59,12 +60,22 @@ android {
 
 dependencies {
     implementation(libs.bundles.androidX)
-    implementation(libs.bundles.compose)
+    implementation(compose.runtime)
+    implementation(compose.foundation)
+    implementation(compose.ui)
+    implementation(compose.animation)
+    implementation(compose.uiTooling)
+    implementation(compose.material3)
+    implementation(compose.materialIconsExtended)
+    implementation(libs.compose.paging)
+    implementation(libs.compose.activity)
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.constraintLayout)
     implementation(libs.bundles.io)
     implementation(libs.bundles.koin)
     implementation(libs.coil)
     debugImplementation(libs.androidX.tracing)
     debugImplementation(libs.compose.testManifest)
     testImplementation(libs.bundles.test)
-    androidTestImplementation(libs.bundles.androidTest)
+    androidTestImplementation(compose.desktop.uiTestJUnit4)
 }

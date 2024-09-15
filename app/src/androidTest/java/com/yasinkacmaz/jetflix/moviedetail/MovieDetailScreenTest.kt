@@ -1,20 +1,20 @@
 package com.yasinkacmaz.jetflix.moviedetail
 
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.Animatable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
@@ -25,12 +25,10 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.randomColor
 import com.yasinkacmaz.jetflix.util.setTestContent
-import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalTestApi::class)
 class MovieDetailScreenTest {
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val movieDetail = MovieDetail(
         id = 1,
@@ -44,7 +42,7 @@ class MovieDetailScreenTest {
     )
 
     @Test
-    fun should_not_render_original_title_if_same_with_name(): Unit = with(composeTestRule) {
+    fun should_not_render_original_title_if_same_with_name() = runComposeUiTest {
         val title = "Title"
         val originalTitle = "Title"
 
@@ -54,7 +52,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun should_render_original_title_with_parentheses_if_different_from_name(): Unit = with(composeTestRule) {
+    fun should_render_original_title_with_parentheses_if_different_from_name() = runComposeUiTest {
         val title = "Title"
         val originalTitle = "Original Title"
 
@@ -65,7 +63,7 @@ class MovieDetailScreenTest {
     }
 
     @Test
-    fun should_render_movie_info(): Unit = with(composeTestRule) {
+    fun should_render_movie_info() = runComposeUiTest {
         val person = Person(name = "", role = "", profilePhotoUrl = null, gender = Gender.FEMALE, id = 1337)
         val credits = Credits(
             cast = listOf(
@@ -94,8 +92,8 @@ class MovieDetailScreenTest {
         assertPeople(R.string.crew, credits.crew)
     }
 
-    private fun ComposeContentTestRule.assertPeople(@StringRes tagResId: Int, people: List<Person>) {
-        val peopleLazyRow = onNodeWithTag(composeTestRule.getString(tagResId)).performScrollTo()
+    private fun ComposeUiTest.assertPeople(@StringRes tagResId: Int, people: List<Person>) {
+        val peopleLazyRow = onNodeWithTag(getString(tagResId)).performScrollTo()
         people.forEachIndexed { index, person ->
             peopleLazyRow.performScrollToIndex(index)
             onNodeWithText(person.name, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
@@ -103,7 +101,7 @@ class MovieDetailScreenTest {
         }
     }
 
-    private fun ComposeContentTestRule.renderMovieDetail(
+    private fun ComposeUiTest.renderMovieDetail(
         movieDetail: MovieDetail,
         credits: Credits = Credits(emptyList(), emptyList()),
     ) = setTestContent {
