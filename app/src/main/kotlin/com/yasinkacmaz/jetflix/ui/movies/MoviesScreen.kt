@@ -111,7 +111,7 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
             }
         },
         content = { contentPadding ->
-            MoviesGrid(Modifier.consumeWindowInsets(contentPadding), moviesViewModel)
+            MoviesGrid(Modifier.padding(contentPadding), moviesViewModel)
             if (showSettingsDialog) {
                 SettingsContent(onDialogDismissed = { showSettingsDialog = false })
             }
