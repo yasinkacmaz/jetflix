@@ -3,19 +3,16 @@ package com.yasinkacmaz.jetflix.ui.movies
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +31,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -62,6 +58,7 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterHeader
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
+import com.yasinkacmaz.jetflix.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,15 +73,9 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         topBar = {
-            Surface(modifier = Modifier.fillMaxWidth(), shadowElevation = 16.dp) {
-                Column(
-                    Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(bottom = 2.dp),
-                ) {
-                    JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
-                    SearchBar(searchQuery, moviesViewModel::onSearch)
-                }
+            Column(Modifier.fillMaxWidth().padding(bottom = MaterialTheme.spacing.xs)) {
+                JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
+                JetflixSearchBar(searchQuery, moviesViewModel::onSearch)
             }
         },
         floatingActionButton = {
@@ -146,14 +137,13 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
 
 @Composable
 private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
-    val colors = MaterialTheme.colorScheme
-    val isDarkTheme = LocalDarkTheme.current
-    val iconTint =
-        animateColorAsState(if (isDarkTheme.value) colors.onSurface else colors.primary, label = "appIconTint").value
+    var isDarkTheme by LocalDarkTheme.current
+    val iconTint = animateColorAsState(
+        if (isDarkTheme) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
+        label = "appIconTint",
+    ).value
     Row(
-        Modifier
-            .fillMaxWidth()
-            .height(50.dp),
+        Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -169,30 +159,33 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             painter = painterResource(id = R.drawable.ic_jetflix),
             contentDescription = stringResource(id = R.string.app_name),
             tint = iconTint,
-            modifier = Modifier.size(82.dp),
+            modifier = Modifier.height(32.dp),
         )
 
-        val icon = if (isDarkTheme.value) Icons.Default.NightsStay else Icons.Default.WbSunny
-        IconButton(onClick = { isDarkTheme.value = !isDarkTheme.value }) {
-            val contentDescriptionResId = if (isDarkTheme.value) {
+        IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
+            val contentDescriptionResId = if (isDarkTheme) {
                 R.string.light_theme_content_description
             } else {
                 R.string.dark_theme_content_description
             }
-            Icon(icon, contentDescription = stringResource(id = contentDescriptionResId), tint = iconTint)
+            Icon(
+                imageVector = if (isDarkTheme) Icons.Default.NightsStay else Icons.Default.WbSunny,
+                contentDescription = stringResource(id = contentDescriptionResId),
+                tint = iconTint,
+            )
         }
     }
 }
 
 @Composable
-private fun SearchBar(searchQuery: MutableState<String>, onSearch: (String) -> Unit) {
+private fun JetflixSearchBar(searchQuery: MutableState<String>, onSearch: (String) -> Unit) {
     TextField(
         modifier = Modifier
-            .padding(horizontal = 12.dp)
-            .heightIn(max = 50.dp)
+            .padding(horizontal = MaterialTheme.spacing.m)
+            .heightIn(max = 52.dp)
             .fillMaxWidth(),
         value = searchQuery.value,
-        textStyle = MaterialTheme.typography.titleMedium,
+        textStyle = MaterialTheme.typography.titleSmall,
         singleLine = true,
         shape = RoundedCornerShape(50),
         placeholder = { Text(stringResource(id = R.string.search_movies), color = Color.Gray) },
@@ -215,8 +208,8 @@ private fun SearchBar(searchQuery: MutableState<String>, onSearch: (String) -> U
             onSearch(query)
         },
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.surface,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.surface,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
         ),
     )
 }
