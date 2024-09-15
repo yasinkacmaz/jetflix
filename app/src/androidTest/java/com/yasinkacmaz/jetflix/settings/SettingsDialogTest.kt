@@ -1,28 +1,26 @@
 package com.yasinkacmaz.jetflix.settings
 
-import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.settings.Language
 import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
-import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalTestApi::class)
 class SettingsDialogTest {
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val defaultLanguage = Language("Turkish", "tr", "")
 
     @Test
-    fun should_render_loading_when_uiState_showLoading_is_true(): Unit = with(composeTestRule) {
+    fun should_render_loading_when_uiState_showLoading_is_true() = runComposeUiTest {
         val uiState = SettingsViewModel.UiState(showLoading = true)
 
         showSettingsDialog(uiState, defaultLanguage)
@@ -31,7 +29,7 @@ class SettingsDialogTest {
     }
 
     @Test
-    fun should_render_selected_language(): Unit = with(composeTestRule) {
+    fun should_render_selected_language() = runComposeUiTest {
         val uiState = SettingsViewModel.UiState()
 
         showSettingsDialog(uiState, defaultLanguage)
@@ -40,7 +38,7 @@ class SettingsDialogTest {
     }
 
     @Test
-    fun should_render_languages_when_selected_language_clicked() = with(composeTestRule) {
+    fun should_render_languages_when_selected_language_clicked() = runComposeUiTest {
         val firstLanguageName = "English"
         val secondLanguageName = "Russian"
         val thirdLanguageName = "Chinese"
@@ -59,7 +57,7 @@ class SettingsDialogTest {
         }
     }
 
-    private fun ComposeContentTestRule.showSettingsDialog(
+    private fun ComposeUiTest.showSettingsDialog(
         uiState: SettingsViewModel.UiState,
         selectedLanguage: Language,
     ) = setTestContent {

@@ -2,21 +2,20 @@ package com.yasinkacmaz.jetflix.movie
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.util.setTestContent
-import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalTestApi::class)
 class MovieContentTest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
 
     @Test
-    fun should_render_basic_movie_information(): Unit = with(composeTestRule) {
+    fun should_render_basic_movie_information() = runComposeUiTest {
         val movie = Movie(
             id = 1337,
             name = "Movie Name",
