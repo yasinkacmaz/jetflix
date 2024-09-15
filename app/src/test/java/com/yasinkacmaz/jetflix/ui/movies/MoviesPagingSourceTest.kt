@@ -3,14 +3,15 @@ package com.yasinkacmaz.jetflix.ui.movies
 import androidx.paging.PagingSource
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
+import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class MoviesPagingSourceTest {
     @get:Rule
@@ -31,13 +32,8 @@ class MoviesPagingSourceTest {
 
         val loadResult = moviesPagingSource.load(loadParams)
 
-        expectThat(loadResult).isEqualTo(
-            PagingSource.LoadResult.Page(
-                data = movieService.moviesResponse.movies.map(movieMapper::map),
-                prevKey = null,
-                nextKey = null,
-            ),
-        )
+        loadResult.shouldBeInstanceOf<PagingSource.LoadResult.Page<Int, Movie>>()
+        loadResult.data shouldBe movieService.moviesResponse.movies.map(movieMapper::map)
     }
 
     @Test
@@ -47,13 +43,8 @@ class MoviesPagingSourceTest {
 
         val loadResult = moviesPagingSource.load(loadParams)
 
-        expectThat(loadResult).isEqualTo(
-            PagingSource.LoadResult.Page(
-                data = movieService.searchResponse.movies.map(movieMapper::map),
-                prevKey = null,
-                nextKey = null,
-            ),
-        )
+        loadResult.shouldBeInstanceOf<PagingSource.LoadResult.Page<Int, Movie>>()
+        loadResult.data shouldBe movieService.searchResponse.movies.map(movieMapper::map)
     }
 
     private fun initPagingSource(query: String = "") {

@@ -3,9 +3,8 @@ package com.yasinkacmaz.jetflix.ui.movies
 import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.toPosterUrl
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class MovieMapperTest {
     @Test
@@ -14,11 +13,11 @@ class MovieMapperTest {
 
         val movie = MovieMapper().map(movieResponse)
 
-        expectThat(movie.id).isEqualTo(movieResponse.id)
-        expectThat(movie.name).isEqualTo(movieResponse.name)
-        expectThat(movie.releaseDate).isEqualTo(movieResponse.firstAirDate)
-        expectThat(movie.posterPath).isEqualTo(movieResponse.posterPath.orEmpty().toPosterUrl())
-        expectThat(movie.voteAverage).isEqualTo(movieResponse.voteAverage)
-        expectThat(movie.voteCount).isEqualTo(movieResponse.voteCount)
+        movie.id shouldBe movieResponse.id
+        movie.name shouldBe movieResponse.name
+        movie.releaseDate shouldBe movieResponse.firstAirDate
+        movie.posterPath shouldBe movieResponse.posterPath.orEmpty().toPosterUrl()
+        movie.voteAverage shouldBe movieResponse.voteAverage
+        movie.voteCount shouldBe movieResponse.voteCount
     }
 }

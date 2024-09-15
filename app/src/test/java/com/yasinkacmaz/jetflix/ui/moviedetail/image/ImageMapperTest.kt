@@ -3,9 +3,8 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.image
 import com.yasinkacmaz.jetflix.data.remote.ImagesResponse
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
+import io.kotest.matchers.collections.shouldContainAll
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.contains
 
 class ImageMapperTest {
     private val mapper = ImageMapper()
@@ -18,7 +17,7 @@ class ImageMapperTest {
 
         val expectedBackdrops = imagesResponse.backdrops.map { Image(it.filePath.toOriginalUrl(), it.voteCount) }
         val expectedPosters = imagesResponse.posters.map { Image(it.filePath.toOriginalUrl(), it.voteCount) }
-        expectThat(images).contains(expectedBackdrops)
-        expectThat(images).contains(expectedPosters)
+        images shouldContainAll expectedBackdrops
+        images shouldContainAll expectedPosters
     }
 }

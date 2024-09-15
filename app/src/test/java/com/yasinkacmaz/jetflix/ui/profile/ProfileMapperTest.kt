@@ -4,9 +4,8 @@ import com.yasinkacmaz.jetflix.data.remote.ProfileResponse
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toImdbProfileUrl
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class ProfileMapperTest {
     private val mapper = ProfileMapper()
@@ -17,13 +16,13 @@ class ProfileMapperTest {
     fun map() {
         val profile = mapper.map(profileResponse)
 
-        expectThat(profile.name).isEqualTo(profileResponse.name)
-        expectThat(profile.biography).isEqualTo(profileResponse.biography)
-        expectThat(profile.birthday).isEqualTo(profileResponse.birthday)
-        expectThat(profile.placeOfBirth).isEqualTo(profileResponse.placeOfBirth)
-        expectThat(profile.alsoKnownAs).isEqualTo(profileResponse.alsoKnownAs)
-        expectThat(profile.imdbProfileUrl).isEqualTo(profileResponse.imdbId?.toImdbProfileUrl())
-        expectThat(profile.profilePhotoUrl).isEqualTo(profileResponse.profilePath?.toOriginalUrl())
-        expectThat(profile.knownFor).isEqualTo(profileResponse.knownForDepartment)
+        profile.name shouldBe profileResponse.name
+        profile.biography shouldBe profileResponse.biography
+        profile.birthday shouldBe profileResponse.birthday
+        profile.placeOfBirth shouldBe profileResponse.placeOfBirth
+        profile.alsoKnownAs shouldBe profileResponse.alsoKnownAs
+        profile.imdbProfileUrl shouldBe profileResponse.imdbId?.toImdbProfileUrl()
+        profile.profilePhotoUrl shouldBe profileResponse.profilePath?.toOriginalUrl()
+        profile.knownFor shouldBe profileResponse.knownForDepartment
     }
 }

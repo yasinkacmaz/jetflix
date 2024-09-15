@@ -3,12 +3,11 @@ package com.yasinkacmaz.jetflix.ui.settings
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class LanguageDataStoreTest {
     @get:Rule
@@ -22,7 +21,7 @@ class LanguageDataStoreTest {
 
         val languageDataStore = createLanguageDataStore()
 
-        expectThat(languageDataStore.language.first()).isEqualTo(Language.default)
+        languageDataStore.language.first() shouldBe Language.default
     }
 
     @Test
@@ -32,7 +31,7 @@ class LanguageDataStoreTest {
 
         val languageDataStore = createLanguageDataStore()
 
-        expectThat(languageDataStore.language.first()).isEqualTo(turkishLanguage)
+        languageDataStore.language.first() shouldBe turkishLanguage
     }
 
     private fun createLanguageDataStore() = LanguageDataStore(json, fakeStringDataStore)

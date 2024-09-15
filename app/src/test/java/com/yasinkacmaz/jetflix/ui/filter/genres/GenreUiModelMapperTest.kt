@@ -1,9 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.filter.genres
 
 import com.yasinkacmaz.jetflix.data.remote.Genre
+import io.kotest.matchers.shouldBe
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class GenreUiModelMapperTest {
     @Test
@@ -13,6 +12,6 @@ class GenreUiModelMapperTest {
 
         val uiModel = mapper.map(input)
 
-        expectThat(uiModel.genre).isEqualTo(input)
+        uiModel.genre shouldBe input
     }
 }

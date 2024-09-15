@@ -8,13 +8,12 @@ import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
+import io.kotest.matchers.shouldBe
 import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class FilterViewModelTest {
     @get:Rule
@@ -33,7 +32,7 @@ class FilterViewModelTest {
 
         val filterViewModel = createViewModel()
 
-        expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
+        filterViewModel.filterState.first() shouldBe filterState.copy(genres = listOf(genreUiModel))
     }
 
     @Test
@@ -44,7 +43,7 @@ class FilterViewModelTest {
 
         val filterViewModel = createViewModel()
 
-        expectThat(filterViewModel.filterState.first()).isEqualTo(filterState.copy(genres = emptyList()))
+        filterViewModel.filterState.first() shouldBe filterState.copy(genres = emptyList())
     }
 
     @Test
@@ -56,8 +55,8 @@ class FilterViewModelTest {
         val filterStates = filterViewModel.filterState.test()
         filterViewModel.onResetClicked()
 
-        expectThat(filterStates[0]).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
-        expectThat(filterStates[1]).isEqualTo(FilterState().copy(genres = listOf(genreUiModel)))
+        filterStates[0] shouldBe filterState.copy(genres = listOf(genreUiModel))
+        filterStates[1] shouldBe FilterState().copy(genres = listOf(genreUiModel))
     }
 
     @Test
@@ -72,8 +71,8 @@ class FilterViewModelTest {
 
         filterViewModel.onFilterStateChanged(newFilterState)
 
-        expectThat(filterStates[0]).isEqualTo(filterState.copy(genres = listOf(genreUiModel)))
-        expectThat(filterStates[1]).isEqualTo(newFilterState.copy(genres = listOf(genreUiModel)))
+        filterStates[0] shouldBe filterState.copy(genres = listOf(genreUiModel))
+        filterStates[1] shouldBe newFilterState.copy(genres = listOf(genreUiModel))
     }
 
     @Test
@@ -87,7 +86,7 @@ class FilterViewModelTest {
         val changedFilterState = FilterState(sortBy = SortBy.RELEASE_DATE)
         fakeStringDataStore.set(changedFilterState)
 
-        expectThat(filterStates.last()).isEqualTo(changedFilterState.copy(genres = listOf(genreUiModel)))
+        filterStates.last() shouldBe changedFilterState.copy(genres = listOf(genreUiModel))
     }
 
     private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper, testDispatchers)

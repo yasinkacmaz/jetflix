@@ -8,12 +8,10 @@ import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEmpty
-import strikt.assertions.isEqualTo
 
 class MoviesViewModelTest {
     @get:Rule
@@ -31,7 +29,7 @@ class MoviesViewModelTest {
 
         moviesViewModel.onSearch("")
 
-        expectThat(queryChanges.last()).isEmpty()
+        queryChanges.last() shouldBe ""
     }
 
     @Test
@@ -41,7 +39,7 @@ class MoviesViewModelTest {
 
         moviesViewModel.onSearch("qu")
 
-        expectThat(queryChanges.last()).isEmpty()
+        queryChanges.last() shouldBe ""
     }
 
     @Test
@@ -52,7 +50,7 @@ class MoviesViewModelTest {
         val query = "query"
         moviesViewModel.onSearch(query)
 
-        expectThat(queryChanges.last()).isEqualTo(query)
+        queryChanges.last() shouldBe query
     }
 
     private fun createViewModel() =

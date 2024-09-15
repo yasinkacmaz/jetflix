@@ -5,11 +5,10 @@ import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import com.yasinkacmaz.jetflix.util.testDispatchers
+import io.kotest.matchers.shouldBe
 import java.io.IOException
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class SettingsViewModelTest {
 
@@ -25,9 +24,9 @@ class SettingsViewModelTest {
         val uiStates = settingsViewModel.uiState.test()
         settingsViewModel.fetchLanguages()
 
-        expectThat(uiStates[uiStates.lastIndex - 1]).isEqualTo(SettingsViewModel.UiState(showLoading = true))
+        uiStates[uiStates.lastIndex - 1] shouldBe SettingsViewModel.UiState(showLoading = true)
         val sortedLanguages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
-        expectThat(uiStates.last()).isEqualTo(SettingsViewModel.UiState(showLoading = false, sortedLanguages))
+        uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false, sortedLanguages)
     }
 
     @Test
@@ -38,8 +37,8 @@ class SettingsViewModelTest {
         val uiStates = settingsViewModel.uiState.test()
         settingsViewModel.fetchLanguages()
 
-        expectThat(uiStates[uiStates.lastIndex - 1]).isEqualTo(SettingsViewModel.UiState(showLoading = true))
-        expectThat(uiStates.last()).isEqualTo(SettingsViewModel.UiState(showLoading = false))
+        uiStates[uiStates.lastIndex - 1] shouldBe SettingsViewModel.UiState(showLoading = true)
+        uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false)
     }
 
     @Test
@@ -49,7 +48,7 @@ class SettingsViewModelTest {
         val language = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
         settingsViewModel.onLanguageSelected(language)
 
-        expectThat(languageDataStore.language.test().last()).isEqualTo(language)
+        languageDataStore.language.test().last() shouldBe language
     }
 
     private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, testDispatchers)
