@@ -37,7 +37,7 @@ private const val COLUMN_COUNT = 2
 private val fullWidthSpan: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(COLUMN_COUNT) }
 
 @Composable
-fun MoviesGrid(modifier: Modifier, moviesViewModel: MoviesViewModel) {
+fun MoviesGrid(contentPadding: PaddingValues, moviesViewModel: MoviesViewModel) {
     val movies = moviesViewModel.moviesPagingData.collectAsLazyPagingItems()
     val state = rememberLazyGridState()
     LaunchedEffect(Unit) {
@@ -52,11 +52,17 @@ fun MoviesGrid(modifier: Modifier, moviesViewModel: MoviesViewModel) {
     val navController = LocalNavController.current
     val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.MovieDetail(movieId)) }
     LazyVerticalGrid(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = contentPadding.calculateTopPadding()),
         columns = GridCells.Fixed(COLUMN_COUNT),
-        contentPadding = PaddingValues(MaterialTheme.spacing.m),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.m, Alignment.CenterHorizontally),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.m, Alignment.CenterVertically),
+        contentPadding = PaddingValues(
+            bottom = contentPadding.calculateBottomPadding(),
+            start = MaterialTheme.spacing.s,
+            end = MaterialTheme.spacing.s,
+        ),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
         state = state,
         content = {
             items(movies.itemCount) { index ->
