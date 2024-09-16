@@ -1,11 +1,15 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RadioButtonChecked
@@ -22,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yasinkacmaz.jetflix.ui.widget.VerticalStaggeredGrid
+import com.yasinkacmaz.jetflix.ui.theme.spacing
 
 @Composable
 fun FilterSectionTitle(painter: Painter, @StringRes title: Int) {
@@ -61,14 +65,18 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun <T : Any> FilterGrid(items: List<T>, itemContent: @Composable (Int, Modifier) -> Unit) = VerticalStaggeredGrid(
-    itemCount = items.lastIndex,
-    columnCount = 2,
-    rowSpacing = 4.dp,
-    columnSpacing = 6.dp,
-    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
-    itemContent = itemContent,
-)
+fun <T : Any> FilterGrid(items: List<T>, itemContent: @Composable (T) -> Unit) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
+        contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
+    ) {
+        items(items) {
+            itemContent(it)
+        }
+    }
+}
 
 @Composable
-fun FilterSectionDivider() = HorizontalDivider(Modifier.padding(vertical = 4.dp))
+fun FilterSectionDivider() = HorizontalDivider(Modifier.padding(vertical = MaterialTheme.spacing.xs))

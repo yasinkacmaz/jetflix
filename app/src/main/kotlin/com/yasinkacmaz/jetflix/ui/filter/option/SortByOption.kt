@@ -29,8 +29,7 @@ data class SortByOption(override val defaultValue: SortBy) : FilterOption<SortBy
             title = R.string.sort_by,
         )
         val sortByValues = SortBy.entries
-        FilterGrid(items = sortByValues) { index, _ ->
-            val sortBy = sortByValues[index]
+        FilterGrid(sortByValues) { sortBy ->
             val selected = sortByState.value == sortBy
             FilterRadioItem(title = stringResource(id = sortBy.titleResId), selected = selected) {
                 currentValue = sortBy
