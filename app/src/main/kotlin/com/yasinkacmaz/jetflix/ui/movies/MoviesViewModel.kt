@@ -52,7 +52,6 @@ class MoviesViewModel(
     init {
         filterDataStore.filterState
             .onEach { filterState -> this.filterState = filterState }
-            .drop(1)
             .onEach { filterStateChanges.emit(it) }
             .launchIn(viewModelScope)
 
