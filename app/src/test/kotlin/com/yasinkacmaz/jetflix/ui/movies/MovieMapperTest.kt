@@ -7,7 +7,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.Test
 
 class MovieMapperTest {
-    private val movieResponse = MovieResponse(1, "Date", "Name", "Title", "Language", "Overview", "Poster", 1.1, 1)
+    private val movieResponse = MovieResponse(1, "", "Name", "Title", "Language", "Overview", "Poster", 1.1, 1)
 
     @Test
     fun map() {
@@ -15,7 +15,6 @@ class MovieMapperTest {
 
         movie.id shouldBe movieResponse.id
         movie.name shouldBe movieResponse.name
-        movie.releaseDate shouldBe movieResponse.firstAirDate
         movie.posterPath shouldBe movieResponse.posterPath.orEmpty().toPosterUrl()
         movie.voteAverage shouldBe movieResponse.voteAverage
         movie.voteCount shouldBe movieResponse.voteCount
@@ -26,5 +25,12 @@ class MovieMapperTest {
         val movie = MovieMapper().map(movieResponse.copy(voteAverage = 1.234))
 
         movie.voteAverage shouldBe 1.2
+    }
+
+    @Test
+    fun `Should format release date correctly`() {
+        val movie = MovieMapper().map(movieResponse.copy(firstAirDate = "1994-12-06"))
+
+        movie.releaseDate shouldBe "06.12.1994"
     }
 }

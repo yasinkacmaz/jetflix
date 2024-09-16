@@ -7,10 +7,10 @@ import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import java.io.IOException
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import java.io.IOException
 
 class MovieDetailViewModelTest {
     @get:Rule

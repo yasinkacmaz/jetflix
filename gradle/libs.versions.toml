@@ -26,6 +26,7 @@ ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktorSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlinx_datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.1" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
 jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.2" }
 androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
@@ -45,5 +46,5 @@ coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ver
 [bundles]
 androidX = ["androidX_palette", "androidX_browser", "androidX_datastore", "androidX-splashscreen"]
 koin = ["koin-core", "koin-android", "koin-compose", "koin-compose-viewmodel"]
-io = ["jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization"]
+io = ["jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization", "kotlinx_datetime"]
 test = ["junit", "kotest_assertions", "coroutinesTest"]
