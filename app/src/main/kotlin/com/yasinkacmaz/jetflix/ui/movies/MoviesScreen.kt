@@ -6,10 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -67,9 +69,13 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
     val searchQuery = remember { mutableStateOf("") }
     var showSettingsDialog by remember { mutableStateOf(false) }
     Scaffold(
-        modifier = Modifier.statusBarsPadding(),
         topBar = {
-            Column(Modifier.fillMaxWidth().padding(bottom = MaterialTheme.spacing.xs)) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(bottom = MaterialTheme.spacing.s),
+            ) {
                 JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
                 JetflixSearchBar(searchQuery, moviesViewModel::onSearch)
             }
@@ -87,8 +93,9 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
                 )
             }
         },
+        contentWindowInsets = WindowInsets.navigationBars,
         content = { contentPadding ->
-            MoviesGrid(Modifier.padding(contentPadding), moviesViewModel)
+            MoviesGrid(contentPadding, moviesViewModel)
             if (showSettingsDialog) {
                 SettingsContent(onDialogDismissed = { showSettingsDialog = false })
             }
@@ -145,7 +152,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             painter = painterResource(id = R.drawable.ic_jetflix),
             contentDescription = stringResource(id = R.string.app_name),
             tint = iconTint,
-            modifier = Modifier.height(32.dp),
+            modifier = Modifier.height(24.dp),
         )
 
         IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
@@ -167,7 +174,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
 private fun JetflixSearchBar(searchQuery: MutableState<String>, onSearch: (String) -> Unit) {
     TextField(
         modifier = Modifier
-            .padding(horizontal = MaterialTheme.spacing.m)
+            .padding(horizontal = MaterialTheme.spacing.s)
             .heightIn(max = 52.dp)
             .fillMaxWidth(),
         value = searchQuery.value,
