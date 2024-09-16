@@ -29,8 +29,7 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
             title = R.string.sort_order,
         )
         val sortOrderValues = SortOrder.entries
-        FilterGrid(items = sortOrderValues) { index, _ ->
-            val sortOrder = sortOrderValues[index]
+        FilterGrid(sortOrderValues) { sortOrder ->
             val selected = sortOrderState.value == sortOrder
             FilterRadioItem(title = stringResource(id = sortOrder.titleResId), selected = selected) {
                 currentValue = sortOrder
