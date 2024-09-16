@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 
 @Stable
 data object Spacing {
+    val xxs: Dp = 2.dp
     val xs: Dp = 4.dp
     val s: Dp = 8.dp
     val m: Dp = 12.dp

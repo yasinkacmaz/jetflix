@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.util
 
-import kotlinx.serialization.json.Json
 import java.io.Reader
+import kotlinx.serialization.json.Json
 
 val json = Json {
     isLenient = true
