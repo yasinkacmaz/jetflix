@@ -8,7 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.settings.Language
-import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
+import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
@@ -59,7 +59,7 @@ class SettingsDialogTest {
 
     private fun ComposeUiTest.showSettingsDialog(uiState: SettingsViewModel.UiState, selectedLanguage: Language) =
         setTestContent {
-            SettingsDialog(
+            SettingsContent(
                 uiState = uiState,
                 selectedLanguage = selectedLanguage,
                 onLanguageSelected = {},
