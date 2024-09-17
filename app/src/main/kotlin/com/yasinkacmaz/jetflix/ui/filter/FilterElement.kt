@@ -25,17 +25,19 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 
 @Composable
 fun FilterSectionTitle(painter: Painter, @StringRes title: Int) {
-    Row(Modifier.padding(horizontal = 16.dp, vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
-        Icon(painter = painter, contentDescription = null, modifier = Modifier.size(26.dp))
+    Row(
+        Modifier.padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(painter = painter, contentDescription = null, modifier = Modifier.size(28.dp))
         Text(
             text = stringResource(id = title),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(start = MaterialTheme.spacing.s),
         )
     }
 }
@@ -51,15 +53,13 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
         val color = if (selected) {
             MaterialTheme.colorScheme.secondary
         } else {
-            MaterialTheme.colorScheme.onSurface.copy(
-                alpha = 0.6f,
-            )
+            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         }
         Icon(imageVector = radioIcon, contentDescription = null, tint = color)
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 17.sp),
-            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = MaterialTheme.spacing.s),
         )
     }
 }

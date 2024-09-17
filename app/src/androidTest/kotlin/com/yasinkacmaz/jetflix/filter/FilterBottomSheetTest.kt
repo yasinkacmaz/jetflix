@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.remote.Genre
-import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
+import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
@@ -42,7 +42,7 @@ class FilterBottomSheetTest {
 
         setTestContent {
             Column {
-                FilterBottomSheetContent(filterState) {}
+                FilterBottomSheet(filterState = filterState, onDismiss = {}, onFilterStateChanged = {})
             }
         }
 

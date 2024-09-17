@@ -2,7 +2,6 @@ package com.yasinkacmaz.jetflix.ui.filter.option
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NoAdultContent
 import androidx.compose.material3.Switch
@@ -30,9 +29,7 @@ data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption
             onChanged()
         }
         Row(
-            Modifier
-                .clickable(onClick = onClick)
-                .navigationBarsPadding(),
+            Modifier.clickable { onClick() },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             FilterSectionTitle(

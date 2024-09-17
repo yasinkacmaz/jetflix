@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -23,17 +22,14 @@ import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -50,21 +46,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheetContent
-import com.yasinkacmaz.jetflix.ui.filter.FilterHeader
+import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
 import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewModel) {
-    val sheetState = rememberModalBottomSheetState()
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
     val filterState = filterViewModel.filterState.collectAsState().value
-    val hideFilterBottomSheet: () -> Unit = { openBottomSheet = false }
 
     val searchQuery = remember { mutableStateOf("") }
     var showSettingsDialog by remember { mutableStateOf(false) }
@@ -103,28 +94,7 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
     )
 
     if (openBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { openBottomSheet = false },
-            sheetState = sheetState,
-            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-            scrimColor = Color.DarkGray.copy(alpha = 0.7f),
-            content = {
-                val onResetClicked = if (filterState == null) null else filterViewModel::onResetClicked
-                FilterHeader(onHideClicked = hideFilterBottomSheet, onResetClicked = onResetClicked)
-
-                if (filterState == null) {
-                    LoadingColumn(
-                        title = stringResource(id = R.string.loading_filter_options),
-                        modifier = Modifier.fillMaxHeight(0.4f),
-                    )
-                } else {
-                    FilterBottomSheetContent(
-                        filterState = filterState,
-                        onFilterStateChanged = filterViewModel::onFilterStateChanged,
-                    )
-                }
-            },
-        )
+        FilterBottomSheet(filterState, { openBottomSheet = false }, filterViewModel::onFilterStateChanged)
     }
 }
 
