@@ -1,16 +1,13 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
@@ -30,31 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import org.koin.compose.viewmodel.koinViewModel
-
-const val SETTINGS_DIALOG_TAG = "SettingsDialog"
-private const val FLAG_ID = "flag"
-private const val TICK_ID = "tickIcon"
-private const val DROPDOWN_ID = "dropdownIcon"
-
-private val placeholder = Placeholder(
-    width = 2.5.em,
-    height = 1.5.em,
-    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
-)
 
 @Composable
 fun SettingsDialog(onDialogDismissed: () -> Unit) {
@@ -63,8 +43,8 @@ fun SettingsDialog(onDialogDismissed: () -> Unit) {
         settingsViewModel.fetchLanguages()
     }
     val uiState = settingsViewModel.uiState.collectAsState().value
-    val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default).value
-    SettingsContent(uiState, selectedLanguage, settingsViewModel::onLanguageSelected, onDialogDismissed)
+    val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default)
+    SettingsContent(uiState, selectedLanguage.value, settingsViewModel::onLanguageSelected, onDialogDismissed)
 }
 
 @Composable
@@ -74,24 +54,12 @@ fun SettingsContent(
     onLanguageSelected: (Language) -> Unit,
     onDialogDismissed: () -> Unit,
 ) = Dialog(onDismissRequest = onDialogDismissed) {
-    Card(modifier = Modifier.semantics { testTag = SETTINGS_DIALOG_TAG }) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.spacing.l),
-            verticalArrangement = Arrangement.Center,
-        ) {
+    Card {
+        Column(modifier = Modifier.padding(MaterialTheme.spacing.m), verticalArrangement = Arrangement.Center) {
             if (uiState.showLoading) {
                 LoadingRow(title = stringResource(R.string.fetching_languages))
             } else {
-                LanguageRow(
-                    uiState.languages,
-                    selectedLanguage,
-                    onLanguageSelected = {
-                        onLanguageSelected(it)
-                        onDialogDismissed()
-                    },
-                )
+                LanguageRow(uiState.languages, selectedLanguage, onLanguageSelected = { onLanguageSelected(it) })
             }
         }
     }
@@ -116,80 +84,54 @@ private fun LanguageRow(
             onDismissRequest = { showDropdown = false },
         ) {
             languages.forEach { language ->
-                val selected = language == selectedLanguage
-                DropdownItem(language.englishName, language.flagUrl, selected) {
+                val selected = language.iso6391 == selectedLanguage.iso6391
+                DropdownItem(
+                    countryName = language.displayName,
+                    flagUrl = language.flagUrl,
+                    trailingIcon = if (selected) Icons.Default.Done else null,
+                    selected = selected,
+                ) {
                     onLanguageSelected(language)
                     showDropdown = false
                 }
             }
         }
-        ToggleContent(selectedLanguage.englishName, selectedLanguage.flagUrl) {
-            showDropdown = true
-        }
+        DropdownItem(
+            selectedLanguage.displayName,
+            selectedLanguage.flagUrl,
+            trailingIcon = Icons.Default.ArrowDropDown,
+        ) { showDropdown = true }
     }
 }
 
 @Composable
-private fun ToggleContent(countryName: String, flagUrl: String, onClick: () -> Unit) {
-    val flagContent = flagContent(flagUrl, countryName)
-    val arrowContent = iconContent(DROPDOWN_ID, Icons.Default.ArrowDropDown)
-    Text(
-        text = buildAnnotatedString {
-            appendInlineContent(FLAG_ID)
-            append("  $countryName")
-            appendInlineContent(DROPDOWN_ID)
-        },
-        inlineContent = mapOf(arrowContent, flagContent),
-        modifier = Modifier.clickable(onClick = onClick),
-    )
-}
-
-@Composable
-private fun DropdownItem(countryName: String, flagUrl: String, selected: Boolean, onClick: () -> Unit) {
+private fun DropdownItem(
+    countryName: String,
+    flagUrl: String,
+    selected: Boolean = false,
+    trailingIcon: ImageVector?,
+    onClick: () -> Unit = {},
+) {
     DropdownMenuItem(
         enabled = !selected,
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        text = {
-            Text(
-                text = buildAnnotatedString {
-                    if (selected) {
-                        appendInlineContent(TICK_ID)
-                    }
-                    appendInlineContent(FLAG_ID)
-                    append("  $countryName")
-                },
-                style = MaterialTheme.typography.labelMedium,
-                inlineContent = inlineContent(flagUrl, countryName, selected),
+        text = { Text(countryName) },
+        leadingIcon = {
+            AsyncImage(
+                model = flagUrl,
+                modifier = Modifier.size(32.dp),
+                contentDescription = stringResource(id = R.string.flag_content_description, countryName),
             )
+        },
+        trailingIcon = {
+            trailingIcon?.let {
+                Image(
+                    imageVector = trailingIcon,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                )
+            }
         },
     )
 }
-
-private fun inlineContent(flagUrl: String, countryName: String, selected: Boolean): Map<String, InlineTextContent> {
-    val flagContent = flagContent(flagUrl, countryName)
-    return if (selected) mapOf(iconContent(TICK_ID, Icons.Default.Done), flagContent) else mapOf(flagContent)
-}
-
-private fun iconContent(id: String, icon: ImageVector) = id to InlineTextContent(
-    placeholder = placeholder,
-    children = {
-        Image(
-            imageVector = icon,
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-        )
-    },
-)
-
-private fun flagContent(flagUrl: String, countryName: String) = FLAG_ID to InlineTextContent(
-    placeholder = placeholder,
-    children = {
-        AsyncImage(
-            model = flagUrl,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize(),
-            contentDescription = stringResource(id = R.string.flag_content_description, countryName),
-        )
-    },
-)

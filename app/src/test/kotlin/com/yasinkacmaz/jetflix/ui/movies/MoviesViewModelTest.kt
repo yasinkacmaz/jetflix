@@ -3,6 +3,7 @@ package com.yasinkacmaz.jetflix.ui.movies
 import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
@@ -19,6 +20,7 @@ class MoviesViewModelTest {
 
     private val movieService = FakeMovieClient()
     private val filterDataStore = FilterDataStore(json, FakeStringDataStore())
+    private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
     private val movieMapper = MovieMapper()
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
 
@@ -54,5 +56,5 @@ class MoviesViewModelTest {
     }
 
     private fun createViewModel() =
-        MoviesViewModel(movieService, movieMapper, movieRequestOptionsMapper, filterDataStore)
+        MoviesViewModel(movieService, movieMapper, movieRequestOptionsMapper, filterDataStore, languageDataStore)
 }

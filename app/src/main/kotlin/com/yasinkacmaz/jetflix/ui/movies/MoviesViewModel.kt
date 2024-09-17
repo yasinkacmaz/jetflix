@@ -11,6 +11,7 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,7 @@ class MoviesViewModel(
     private val movieMapper: MovieMapper,
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
     filterDataStore: FilterDataStore,
+    languageDataStore: LanguageDataStore,
 ) : ViewModel() {
     val moviesPagingData = Pager(
         config = PagingConfig(pageSize = 20, enablePlaceholders = false),
@@ -41,13 +43,20 @@ class MoviesViewModel(
             )
         },
     ).flow.cachedIn(viewModelScope)
-    val filterStateChanges = MutableSharedFlow<FilterState>()
     private var filterState: FilterState? = null
 
     @VisibleForTesting
     val searchQuery = MutableStateFlow("")
-    private val _searchQueryChanges = MutableSharedFlow<Unit>()
-    val searchQueryChanges: SharedFlow<Unit> = _searchQueryChanges.asSharedFlow()
+
+    private val searchQueryChanges = MutableSharedFlow<Unit>()
+    private val filterStateChanges = MutableSharedFlow<FilterState>()
+    private val selectedLanguageChanges = MutableSharedFlow<Unit>()
+
+    val stateChanges: Array<SharedFlow<*>> get() = arrayOf(
+        filterStateChanges.asSharedFlow(),
+        searchQueryChanges.asSharedFlow(),
+        selectedLanguageChanges.asSharedFlow(),
+    )
 
     init {
         filterDataStore.filterState
@@ -55,11 +64,16 @@ class MoviesViewModel(
             .onEach { filterStateChanges.emit(it) }
             .launchIn(viewModelScope)
 
+        languageDataStore.languageCode
+            .drop(1)
+            .onEach { selectedLanguageChanges.emit(Unit) }
+            .launchIn(viewModelScope)
+
         searchQuery
             .drop(1)
             .debounce(SEARCH_DEBOUNCE_MS)
             .distinctUntilChanged()
-            .onEach { _searchQueryChanges.emit(Unit) }
+            .onEach { searchQueryChanges.emit(Unit) }
             .launchIn(viewModelScope)
     }
 
