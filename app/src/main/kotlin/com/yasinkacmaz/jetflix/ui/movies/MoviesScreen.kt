@@ -49,7 +49,7 @@ import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
-import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
+import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 
 @Composable
@@ -88,7 +88,7 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
         content = { contentPadding ->
             MoviesGrid(contentPadding, moviesViewModel)
             if (showSettingsDialog) {
-                SettingsContent(onDialogDismissed = { showSettingsDialog = false })
+                SettingsDialog(onDialogDismissed = { showSettingsDialog = false })
             }
         },
     )

@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -38,12 +37,12 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
+import com.yasinkacmaz.jetflix.ui.theme.spacing
 import org.koin.compose.viewmodel.koinViewModel
 
 const val SETTINGS_DIALOG_TAG = "SettingsDialog"
@@ -58,37 +57,28 @@ private val placeholder = Placeholder(
 )
 
 @Composable
-fun SettingsContent(onDialogDismissed: () -> Unit) {
+fun SettingsDialog(onDialogDismissed: () -> Unit) {
     val settingsViewModel = koinViewModel<SettingsViewModel>()
     LaunchedEffect(Unit) {
         settingsViewModel.fetchLanguages()
     }
     val uiState = settingsViewModel.uiState.collectAsState().value
     val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default).value
-    SettingsDialog(uiState, selectedLanguage, settingsViewModel::onLanguageSelected, onDialogDismissed)
+    SettingsContent(uiState, selectedLanguage, settingsViewModel::onLanguageSelected, onDialogDismissed)
 }
 
 @Composable
-fun SettingsDialog(
+fun SettingsContent(
     uiState: SettingsViewModel.UiState,
     selectedLanguage: Language,
     onLanguageSelected: (Language) -> Unit,
     onDialogDismissed: () -> Unit,
 ) = Dialog(onDismissRequest = onDialogDismissed) {
-    Card(
-        shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.surface,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .semantics { testTag = SETTINGS_DIALOG_TAG },
-    ) {
+    Card(modifier = Modifier.semantics { testTag = SETTINGS_DIALOG_TAG }) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(MaterialTheme.spacing.l),
             verticalArrangement = Arrangement.Center,
         ) {
             if (uiState.showLoading) {
@@ -122,7 +112,7 @@ private fun LanguageRow(
         Text(stringResource(R.string.language))
         DropdownMenu(
             expanded = showDropdown,
-            modifier = Modifier.fillMaxHeight(0.4f),
+            modifier = Modifier.fillMaxHeight(0.5f),
             onDismissRequest = { showDropdown = false },
         ) {
             languages.forEach { language ->
@@ -169,6 +159,7 @@ private fun DropdownItem(countryName: String, flagUrl: String, selected: Boolean
                     appendInlineContent(FLAG_ID)
                     append("  $countryName")
                 },
+                style = MaterialTheme.typography.labelMedium,
                 inlineContent = inlineContent(flagUrl, countryName, selected),
             )
         },
