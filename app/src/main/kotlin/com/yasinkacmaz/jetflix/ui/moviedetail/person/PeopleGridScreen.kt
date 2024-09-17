@@ -31,9 +31,10 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
-import com.yasinkacmaz.jetflix.util.animation.ItemState
 import com.yasinkacmaz.jetflix.util.toDp
 import kotlin.math.absoluteValue
+
+enum class ItemState { PLACING, PLACED }
 
 @Composable
 fun PeopleGridScreen(people: List<Person>) {

@@ -1,10 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val LightColorScheme = lightColorScheme(
@@ -40,6 +37,3 @@ val DarkColorScheme = darkColorScheme(
     onSurface = Color.White,
     onError = Color(0xFF1C1C1C),
 )
-
-@Composable
-fun ColorScheme.imageTint(): Color = if (!isSystemInDarkTheme()) Color.Gray else Color.DarkGray

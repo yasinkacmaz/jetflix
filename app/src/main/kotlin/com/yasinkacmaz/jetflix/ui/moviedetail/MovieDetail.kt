@@ -1,7 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import com.yasinkacmaz.jetflix.data.remote.Genre
-
 data class MovieDetail(
     val id: Int,
     val title: String = "",
@@ -10,7 +8,7 @@ data class MovieDetail(
     val overview: String = "",
     val backdropUrl: String = "",
     val posterUrl: String = "",
-    val genres: List<Genre> = emptyList(),
+    val genres: List<String> = emptyList(),
     val releaseDate: String = "",
     val voteAverage: Double = 0.0,
     val voteCount: Int = 0,

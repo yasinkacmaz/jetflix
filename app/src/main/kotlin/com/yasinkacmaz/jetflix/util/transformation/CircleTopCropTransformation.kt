@@ -18,7 +18,7 @@ class CircleTopCropTransformation : Transformation {
         val radius = minSize / 2f
         val config = input.config ?: Bitmap.Config.ARGB_8888
         val output = Bitmap.createBitmap(minSize, minSize, config)
-        val top = if (input.height == input.width) 0f else -20f
+        val top = if (input.height == input.width) 0f else -24f
 
         output.applyCanvas {
             val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)

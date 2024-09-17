@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.ui.moviedetail
 
 import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
 import com.yasinkacmaz.jetflix.data.remote.ProductionCompanyResponse
+import com.yasinkacmaz.jetflix.util.parseAsDate
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toBackdropUrl
 import com.yasinkacmaz.jetflix.util.toPosterUrl
@@ -23,8 +24,8 @@ class MovieDetailMapperTest {
         movieDetail.overview shouldBe movieDetailResponse.overview
         movieDetail.backdropUrl shouldBe movieDetailResponse.backdropPath.orEmpty().toBackdropUrl()
         movieDetail.posterUrl shouldBe movieDetailResponse.posterPath.toPosterUrl()
-        movieDetail.genres shouldBe movieDetailResponse.genres
-        movieDetail.releaseDate shouldBe movieDetailResponse.releaseDate
+        movieDetail.genres shouldBe movieDetailResponse.genres.map { it.name }
+        movieDetail.releaseDate shouldBe movieDetailResponse.releaseDate.parseAsDate()
         movieDetail.voteAverage shouldBe movieDetailResponse.voteAverage
         movieDetail.voteCount shouldBe movieDetailResponse.voteCount
         movieDetail.duration shouldBe movieDetailResponse.runtime
