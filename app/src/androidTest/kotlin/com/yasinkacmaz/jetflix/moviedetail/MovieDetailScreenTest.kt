@@ -16,7 +16,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetail
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
@@ -36,7 +35,7 @@ class MovieDetailScreenTest {
         duration = 137,
         voteAverage = 7.3,
         voteCount = 1337,
-        genres = listOf(Genre(1, "Action"), Genre(2, "Drama"), Genre(3, "Family")),
+        genres = listOf("Action", "Drama", "Family"),
         tagline = "Tagline",
         overview = "Overview",
     )
@@ -69,12 +68,10 @@ class MovieDetailScreenTest {
             cast = listOf(
                 person.copy("Scarlett Johansson", "Natasha Romanoff", gender = Gender.FEMALE),
                 person.copy("Stan Lee", "Characters", gender = Gender.MALE),
-                person.copy("Al Pacino", "Tony Montana", gender = Gender.MALE),
             ),
             crew = listOf(
                 person.copy("Quentin Tarantino", "Director", gender = Gender.MALE),
                 person.copy("J.K. Rowling", "Novel", gender = Gender.FEMALE),
-                person.copy("Hans Zimmer", "Music Composer", gender = Gender.MALE),
             ),
         )
         renderMovieDetail(movieDetail, credits)
@@ -83,7 +80,7 @@ class MovieDetailScreenTest {
         onNodeWithText("${movieDetail.duration} min", useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(movieDetail.voteAverage.toString(), useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(movieDetail.voteCount.toString(), useUnmergedTree = false).assertIsDisplayed()
-        movieDetail.genres.forEach { onNodeWithText(it.name!!, useUnmergedTree = false).assertIsDisplayed() }
+        movieDetail.genres.forEach { onNodeWithText(it, useUnmergedTree = false).assertIsDisplayed() }
         onNodeWithText(movieDetail.tagline).performScrollTo()
         onNodeWithText(movieDetail.tagline, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(movieDetail.overview).performScrollTo()

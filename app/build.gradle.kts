@@ -70,7 +70,6 @@ dependencies {
     implementation(libs.compose.paging)
     implementation(libs.compose.activity)
     implementation(libs.compose.navigation)
-    implementation(libs.compose.constraintLayout)
     implementation(libs.bundles.io)
     implementation(libs.bundles.koin)
     implementation(libs.coil)

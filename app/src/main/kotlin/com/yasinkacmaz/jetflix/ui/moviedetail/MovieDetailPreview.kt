@@ -6,7 +6,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
@@ -28,7 +27,7 @@ private fun MovieDetailPreview() {
         tagline = "My first movie",
         backdropUrl = "url",
         posterUrl = "url",
-        genres = listOf(Genre(1, "Action"), Genre(2, "Comedy"), Genre(3, "Fantasy")),
+        genres = listOf("Action", "Comedy", "Fantasy"),
         releaseDate = "06.12.1994",
         voteAverage = 5.7,
         voteCount = 1337,

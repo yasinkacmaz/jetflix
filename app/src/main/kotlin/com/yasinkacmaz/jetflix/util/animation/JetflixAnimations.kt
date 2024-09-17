@@ -8,3 +8,9 @@ val springAnimation = spring(
     stiffness = Spring.StiffnessLow,
     visibilityThreshold = 0.001f,
 )
+
+enum class AnimationDuration(val duration: Int) {
+    SHORT(400),
+    MEDIUM(800),
+    LONG(1200),
+}
