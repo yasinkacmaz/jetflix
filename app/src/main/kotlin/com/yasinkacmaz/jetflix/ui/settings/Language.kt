@@ -22,3 +22,4 @@ data class Language(
 }
 
 inline val Language.flagUrl get() = "https://www.unknown.nu/flags/images/$iso6391-100"
+inline val Language.displayName get() = name.ifBlank { englishName }

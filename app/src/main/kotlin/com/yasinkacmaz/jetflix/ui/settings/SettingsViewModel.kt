@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.yasinkacmaz.jetflix.data.service.ConfigurationService
 import com.yasinkacmaz.jetflix.util.Dispatchers
 import com.yasinkacmaz.jetflix.util.onIO
-import com.yasinkacmaz.jetflix.util.onMain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +24,7 @@ class SettingsViewModel(
         if (!canFetchLanguages) return
 
         _uiState.value = UiState(showLoading = true)
-        dispatchers.onMain {
+        dispatchers.onIO {
             val languages = try {
                 configurationService.fetchLanguages().sortedBy(Language::englishName)
             } catch (exception: Exception) {
