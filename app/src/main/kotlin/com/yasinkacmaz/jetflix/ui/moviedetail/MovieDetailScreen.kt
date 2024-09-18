@@ -36,6 +36,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -107,7 +108,9 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
                 LocalVibrantColor provides vibrantColor,
                 LocalMovieId provides uiState.movieDetail.id,
             ) {
-                MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
+                Surface {
+                    MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
+                }
             }
         }
     }
