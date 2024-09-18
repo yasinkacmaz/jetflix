@@ -7,11 +7,10 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -31,6 +31,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
+import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 import com.yasinkacmaz.jetflix.util.toDp
 import kotlin.math.absoluteValue
 
@@ -40,25 +42,25 @@ enum class ItemState { PLACING, PLACED }
 fun PeopleGridScreen(people: List<Person>) {
     val statusBarPadding = WindowInsets.statusBars.getTop(LocalDensity.current).toDp().dp
     val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp
-    val horizontalPadding = 4.dp
+    val horizontalPadding = MaterialTheme.spacing.xs
     val columnCount = 3
-    val state = rememberLazyGridState()
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(columnCount),
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.surface),
-        contentPadding = PaddingValues(
-            start = horizontalPadding,
-            end = horizontalPadding,
-            top = statusBarPadding,
-            bottom = navigationBarPadding,
-        ),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(horizontalPadding),
-        state = state,
-        content = { peopleGridContent(people, columnCount, state) },
-    )
+    val gridState = rememberLazyGridState()
+    Surface {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(columnCount),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                start = horizontalPadding,
+                end = horizontalPadding,
+                top = statusBarPadding,
+                bottom = navigationBarPadding,
+            ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
+            horizontalArrangement = Arrangement.spacedBy(horizontalPadding),
+            state = gridState,
+            content = { peopleGridContent(people, columnCount, gridState) },
+        )
+    }
 }
 
 private fun LazyGridScope.peopleGridContent(people: List<Person>, columnCount: Int, state: LazyGridState) {
@@ -117,7 +119,8 @@ private fun animatePersonScale(delay: Int = 0, easing: Easing): Float {
     val transitionState = remember {
         MutableTransitionState(ItemState.PLACING).apply { targetState = ItemState.PLACED }
     }
-    val animationSpec = tween<Float>(durationMillis = 400, delayMillis = delay, easing = easing)
+    val animationSpec =
+        tween<Float>(durationMillis = AnimationDuration.SHORT.duration, delayMillis = delay, easing = easing)
     val label = "itemPlacement"
     val transition = rememberTransition(transitionState, label = label)
 

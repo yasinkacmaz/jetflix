@@ -1,18 +1,18 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.person
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -42,27 +42,28 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
         modifier.clickable { navController.navigate(Screen.Profile(person.id)) },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Card(shape = CircleShape, modifier = Modifier.size(120.dp)) {
-            val request = ImageRequest.Builder(LocalContext.current)
-                .data(person.profilePhotoUrl)
-                .crossfade(true)
-                .transformations(CircleTopCropTransformation())
-                .build()
-            val placeholderPainter = rememberVectorPainter(person.gender.placeholderIcon)
-            val painter =
-                rememberAsyncImagePainter(model = request, error = placeholderPainter, placeholder = placeholderPainter)
-            val colorFilter = when (painter.state) {
-                is Error, is Loading -> ColorFilter.tint(Color.LightGray)
-                else -> null
-            }
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painter,
-                colorFilter = colorFilter,
-                contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
-                contentScale = ContentScale.FillWidth,
-            )
+        val request = ImageRequest.Builder(LocalContext.current)
+            .data(person.profilePhotoUrl)
+            .crossfade(true)
+            .transformations(CircleTopCropTransformation())
+            .build()
+        val placeholderPainter = rememberVectorPainter(person.gender.placeholderIcon)
+        val painter =
+            rememberAsyncImagePainter(model = request, error = placeholderPainter, placeholder = placeholderPainter)
+        val colorFilter = when (painter.state) {
+            is Error, is Loading -> ColorFilter.tint(Color.LightGray)
+            else -> null
         }
+        Image(
+            modifier = Modifier
+                .size(120.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceContainerHighest),
+            painter = painter,
+            colorFilter = colorFilter,
+            contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
+            contentScale = ContentScale.FillWidth,
+        )
         Text(
             text = person.name,
             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
