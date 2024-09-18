@@ -30,18 +30,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.ui.theme.spacing
 
 @Composable
 fun ImagesScreen(images: List<Image>, initialPage: Int) {
     if (images.isEmpty() || initialPage !in images.indices) return
 
-    val pagerState = rememberPagerState(
-        initialPage = initialPage,
-        initialPageOffsetFraction = 0f,
-    ) { images.size }
-    Box {
+    val pagerState = rememberPagerState(initialPage = initialPage, initialPageOffsetFraction = 0f) { images.size }
+    Box(Modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 3) {
             Poster(images[it])
         }
@@ -54,22 +51,22 @@ private fun Poster(image: Image) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         BlurImage(image.url)
         Card(
-            Modifier
+            modifier = Modifier
                 .systemBarsPadding()
-                .padding(12.dp)
+                .padding(MaterialTheme.spacing.m)
                 .shadow(16.dp, RoundedCornerShape(12.dp))
-                .animateContentSize()
-                .wrapContentSize(),
+                .wrapContentSize()
+                .animateContentSize(),
         ) {
             Box {
-                androidx.compose.foundation.Image(
-                    painter = rememberAsyncImagePainter(image.url),
+                AsyncImage(
+                    model = image.url,
                     contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    contentScale = ContentScale.FillWidth,
                 )
                 VoteCount(image.voteCount)
             }
@@ -85,7 +82,6 @@ private fun BlurImage(url: String) {
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
             .blur(16.dp),
     )
 }
@@ -101,13 +97,13 @@ private fun BoxScope.VoteCount(voteCount: Int) {
                 color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
                 shape = RoundedCornerShape(bottomStart = 12.dp, topEnd = 12.dp),
             )
-            .padding(4.dp),
+            .padding(MaterialTheme.spacing.xs),
     ) {
         Icon(
             imageVector = Icons.Filled.Favorite,
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = stringResource(id = R.string.likes_content_description),
-            modifier = Modifier.padding(end = 4.dp),
+            modifier = Modifier.padding(end = MaterialTheme.spacing.xs),
         )
         Text(text = voteCount.toString(), style = MaterialTheme.typography.bodyMedium)
     }
@@ -121,9 +117,9 @@ private fun BoxScope.Index(position: Int, imageCount: Int) {
         modifier = Modifier
             .align(Alignment.BottomCenter)
             .navigationBarsPadding()
-            .padding(4.dp)
+            .padding(MaterialTheme.spacing.xs)
             .shadow(16.dp, RoundedCornerShape(16.dp))
             .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f))
-            .padding(horizontal = 8.dp, vertical = 2.dp),
+            .padding(horizontal = MaterialTheme.spacing.s, vertical = MaterialTheme.spacing.xxs),
     )
 }
