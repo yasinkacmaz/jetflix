@@ -67,7 +67,7 @@ jobs:
             ./gradlew --no-configuration-cache connectedCheck
       - name: Publish Ui Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ ! cancelled() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Ui Test Results
