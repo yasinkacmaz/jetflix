@@ -15,7 +15,6 @@ import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -48,32 +47,30 @@ class MoviesViewModel(
     @VisibleForTesting
     val searchQuery = MutableStateFlow("")
 
-    private val searchQueryChanges = MutableSharedFlow<Unit>()
-    private val filterStateChanges = MutableSharedFlow<FilterState>()
-    private val selectedLanguageChanges = MutableSharedFlow<Unit>()
+    private val _searchQueryChanges = MutableSharedFlow<Unit>()
+    private val _filterStateChanges = MutableSharedFlow<FilterState>()
+    private val _selectedLanguageChanges = MutableSharedFlow<Unit>()
 
-    val stateChanges: Array<SharedFlow<*>> = arrayOf(
-        filterStateChanges.asSharedFlow(),
-        searchQueryChanges.asSharedFlow(),
-        selectedLanguageChanges.asSharedFlow(),
-    )
+    val searchQueryChanges = _searchQueryChanges.asSharedFlow()
+    val filterStateChanges = _filterStateChanges.asSharedFlow()
+    val selectedLanguageChanges = _selectedLanguageChanges.asSharedFlow()
 
     init {
         filterDataStore.filterState
             .onEach { filterState -> this.filterState = filterState }
-            .onEach { filterStateChanges.emit(it) }
+            .onEach { _filterStateChanges.emit(it) }
             .launchIn(viewModelScope)
 
         languageDataStore.languageCode
             .drop(1)
-            .onEach { selectedLanguageChanges.emit(Unit) }
+            .onEach { _selectedLanguageChanges.emit(Unit) }
             .launchIn(viewModelScope)
 
         searchQuery
             .drop(1)
             .debounce(SEARCH_DEBOUNCE_MS)
             .distinctUntilChanged()
-            .onEach { searchQueryChanges.emit(Unit) }
+            .onEach { _searchQueryChanges.emit(Unit) }
             .launchIn(viewModelScope)
     }
 

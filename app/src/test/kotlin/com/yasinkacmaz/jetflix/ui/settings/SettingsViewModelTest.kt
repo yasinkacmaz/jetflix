@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
+import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.json
@@ -8,9 +9,12 @@ import com.yasinkacmaz.jetflix.util.testDispatchers
 import io.kotest.matchers.shouldBe
 import java.io.IOException
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 
 class SettingsViewModelTest {
+    @get:Rule
+    val coroutineTestRule = CoroutineTestRule()
 
     private val configurationService = FakeConfigurationClient()
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
@@ -22,9 +26,7 @@ class SettingsViewModelTest {
 
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
-        settingsViewModel.fetchLanguages()
 
-        uiStates[uiStates.lastIndex - 1] shouldBe SettingsViewModel.UiState(showLoading = true)
         val sortedLanguages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
         uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false, sortedLanguages)
     }
@@ -35,14 +37,23 @@ class SettingsViewModelTest {
 
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
-        settingsViewModel.fetchLanguages()
 
-        uiStates[uiStates.lastIndex - 1] shouldBe SettingsViewModel.UiState(showLoading = true)
         uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false)
     }
 
     @Test
-    fun `Should call language data store when language selected`() = runTest {
+    fun `Should update ui state when language selected`() = runTest {
+        val settingsViewModel = createViewModel()
+        val uiStates = settingsViewModel.uiState.test()
+
+        val language = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
+        settingsViewModel.onLanguageSelected(language)
+
+        uiStates.last() shouldBe SettingsViewModel.UiState(selectedLanguage = language)
+    }
+
+    @Test
+    fun `Should update language data store when language selected`() = runTest {
         val settingsViewModel = createViewModel()
 
         val language = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
