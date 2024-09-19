@@ -10,11 +10,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 
 private val colorRange = 0..256
@@ -43,7 +44,7 @@ fun GetVibrantColorFromPoster(posterUrl: String, color: Animatable<Color, Animat
             .allowHardware(false)
             .build()
 
-        val bitmap = (loader.execute(request) as? SuccessResult)?.drawable?.toBitmap() ?: return@LaunchedEffect
+        val bitmap = (loader.execute(request) as? SuccessResult)?.image?.toBitmap() ?: return@LaunchedEffect
         val vibrantColor = Palette.from(bitmap).generate().getVibrantColor(color.value.toArgb())
         color.animateTo(Color(vibrantColor), tween(AnimationDuration.LONG.duration))
     }

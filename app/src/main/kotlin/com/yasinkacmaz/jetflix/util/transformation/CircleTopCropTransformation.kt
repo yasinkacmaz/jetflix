@@ -5,11 +5,11 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import androidx.core.graphics.applyCanvas
-import coil.size.Size
-import coil.transform.Transformation
+import coil3.size.Size
+import coil3.transform.Transformation
 import kotlin.math.min
 
-class CircleTopCropTransformation : Transformation {
+class CircleTopCropTransformation : Transformation() {
 
     override val cacheKey: String = javaClass.name
 

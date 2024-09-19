@@ -5,7 +5,6 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -48,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
@@ -64,11 +62,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State.Error
-import coil.compose.AsyncImagePainter.State.Loading
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
@@ -80,6 +73,7 @@ import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
+import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
@@ -218,14 +212,12 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
         colors = CardDefaults.cardColors(containerColor = LocalVibrantColor.current.value),
         modifier = modifier.height(360.dp),
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(data = backdropUrl)
-                .crossfade(AnimationDuration.LONG.duration)
-                .build(),
+        JetflixImage(
+            data = backdropUrl,
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(R.string.backdrop_content_description, movieName),
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
+            crossfade = AnimationDuration.LONG,
         )
     }
 }
@@ -244,11 +236,11 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
         modifier = modifier.scale(scale),
         onClick = { isScaled.value = !isScaled.value },
     ) {
-        AsyncImage(
-            model = posterUrl,
-            modifier = Modifier.fillMaxSize(),
-            contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
+        JetflixImage(
+            Modifier.fillMaxSize(),
+            data = posterUrl,
             contentScale = ContentScale.Fit,
+            contentDescription = stringResource(R.string.poster_content_description, movieName),
         )
     }
 }
@@ -427,21 +419,13 @@ private fun MovieImage(image: Image, index: Int) {
             .height(200.dp)
             .clickable { navController.navigate(Screen.MovieImages(movieId, index)) },
     ) {
-        val painter = rememberAsyncImagePainter(
-            model = image.url,
+        JetflixImage(
+            modifier = Modifier.fillMaxSize(),
+            data = image.url,
             placeholder = rememberVectorPainter(Icons.Default.Image),
             error = rememberVectorPainter(Icons.Default.BrokenImage),
-        )
-        val (colorFilter, contentScale) = when (painter.state) {
-            is Error, is Loading -> ColorFilter.tint(Color.LightGray) to ContentScale.Fit
-            else -> null to ContentScale.Crop
-        }
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painter,
-            colorFilter = colorFilter,
-            contentDescription = stringResource(id = R.string.poster_content_description),
-            contentScale = contentScale,
+            contentDescription = stringResource(R.string.poster_content_description),
+            contentScale = ContentScale.Crop,
         )
     }
 }
@@ -461,23 +445,15 @@ private fun ProductionCompany(company: ProductionCompany) {
                 .fillMaxSize()
                 .padding(MaterialTheme.spacing.xs),
         ) {
-            val request = ImageRequest.Builder(LocalContext.current)
-                .data(company.logoUrl)
-                .crossfade(true)
-                .build()
-            val painter = rememberAsyncImagePainter(
-                model = request,
+            JetflixImage(
+                modifier = Modifier.size(200.dp, 120.dp),
+                data = company.logoUrl,
+                contentScale = ContentScale.Fit,
                 placeholder = painterResource(id = R.drawable.ic_jetflix),
-                error = painterResource(id = R.drawable.ic_jetflix),
-            )
-            Image(
-                painter = painter,
                 contentDescription = stringResource(
                     id = R.string.production_company_logo_content_description,
                     company.name,
                 ),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(200.dp, 120.dp),
             )
             Text(
                 text = company.name,

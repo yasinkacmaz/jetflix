@@ -60,6 +60,9 @@ android {
 
 dependencies {
     implementation(libs.bundles.androidX)
+    implementation(libs.bundles.io)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.coil)
     implementation(compose.runtime)
     implementation(compose.foundation)
     implementation(compose.ui)
@@ -70,9 +73,6 @@ dependencies {
     implementation(libs.compose.paging)
     implementation(libs.compose.activity)
     implementation(libs.compose.navigation)
-    implementation(libs.bundles.io)
-    implementation(libs.bundles.koin)
-    implementation(libs.coil)
     debugImplementation(libs.androidX.tracing)
     debugImplementation(libs.compose.testManifest)
     testImplementation(libs.bundles.test)
