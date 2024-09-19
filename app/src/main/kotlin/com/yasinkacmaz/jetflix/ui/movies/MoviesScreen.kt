@@ -126,9 +126,12 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
 fun MoviesGrid(contentPadding: PaddingValues, moviesViewModel: MoviesViewModel) {
     val movies = moviesViewModel.moviesPagingData.collectAsLazyPagingItems()
     val gridState = rememberLazyGridState()
-    val stateChanges = remember { moviesViewModel.stateChanges }
     LaunchedEffect(Unit) {
-        merge(*stateChanges)
+        merge(
+            moviesViewModel.searchQueryChanges,
+            moviesViewModel.filterStateChanges,
+            moviesViewModel.selectedLanguageChanges,
+        )
             .onEach {
                 gridState.scrollToItem(0)
                 movies.refresh()

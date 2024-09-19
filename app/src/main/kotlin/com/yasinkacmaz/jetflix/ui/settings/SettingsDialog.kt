@@ -17,7 +17,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,40 +36,28 @@ import com.yasinkacmaz.jetflix.util.JetflixImage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SettingsDialog(onDialogDismissed: () -> Unit) {
-    val settingsViewModel = koinViewModel<SettingsViewModel>()
-    LaunchedEffect(Unit) {
-        settingsViewModel.fetchLanguages()
-    }
+fun SettingsDialog(settingsViewModel: SettingsViewModel = koinViewModel(), onDialogDismissed: () -> Unit) {
     val uiState = settingsViewModel.uiState.collectAsState().value
-    val selectedLanguage = settingsViewModel.selectedLanguage.collectAsState(initial = Language.default)
-    SettingsContent(uiState, selectedLanguage.value, settingsViewModel::onLanguageSelected, onDialogDismissed)
+    Dialog(onDismissRequest = onDialogDismissed) {
+        SettingsDialogContent(uiState, settingsViewModel::onLanguageSelected)
+    }
 }
 
 @Composable
-fun SettingsContent(
-    uiState: SettingsViewModel.UiState,
-    selectedLanguage: Language,
-    onLanguageSelected: (Language) -> Unit,
-    onDialogDismissed: () -> Unit,
-) = Dialog(onDismissRequest = onDialogDismissed) {
+fun SettingsDialogContent(uiState: SettingsViewModel.UiState, onLanguageSelected: (Language) -> Unit) {
     Card {
         Column(modifier = Modifier.padding(MaterialTheme.spacing.m), verticalArrangement = Arrangement.Center) {
             if (uiState.showLoading) {
                 LoadingRow(title = stringResource(R.string.fetching_languages))
             } else {
-                LanguageRow(uiState.languages, selectedLanguage, onLanguageSelected = { onLanguageSelected(it) })
+                LanguageRow(uiState = uiState, onLanguageSelected = onLanguageSelected)
             }
         }
     }
 }
 
 @Composable
-private fun LanguageRow(
-    languages: List<Language>,
-    selectedLanguage: Language,
-    onLanguageSelected: (Language) -> Unit,
-) {
+private fun LanguageRow(uiState: SettingsViewModel.UiState, onLanguageSelected: (Language) -> Unit) {
     Row(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -83,8 +70,8 @@ private fun LanguageRow(
             modifier = Modifier.fillMaxHeight(0.5f),
             onDismissRequest = { showDropdown = false },
         ) {
-            languages.forEach { language ->
-                val selected = language == selectedLanguage
+            uiState.languages.forEach { language ->
+                val selected = language == uiState.selectedLanguage
                 DropdownItem(
                     countryName = language.displayName,
                     flagUrl = language.flagUrl,
@@ -97,8 +84,8 @@ private fun LanguageRow(
             }
         }
         DropdownItem(
-            selectedLanguage.displayName,
-            selectedLanguage.flagUrl,
+            uiState.selectedLanguage.displayName,
+            uiState.selectedLanguage.flagUrl,
             trailingIcon = Icons.Default.ArrowDropDown,
         ) { showDropdown = true }
     }
