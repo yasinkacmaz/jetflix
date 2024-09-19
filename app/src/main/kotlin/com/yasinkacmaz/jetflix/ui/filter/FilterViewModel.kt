@@ -1,15 +1,17 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
 import com.yasinkacmaz.jetflix.util.Dispatchers
 import com.yasinkacmaz.jetflix.util.onIO
-import com.yasinkacmaz.jetflix.util.onMain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class FilterViewModel(
     private val filterDataStore: FilterDataStore,
@@ -19,11 +21,13 @@ class FilterViewModel(
 ) : ViewModel() {
 
     private val _filterState: MutableStateFlow<FilterState?> = MutableStateFlow(null)
-    val filterState: StateFlow<FilterState?> = _filterState.asStateFlow().also {
+    val filterState: StateFlow<FilterState?> = _filterState.asStateFlow()
+
+    init {
         listenFilterStateChanges()
     }
 
-    private fun listenFilterStateChanges() = dispatchers.onMain {
+    private fun listenFilterStateChanges() = viewModelScope.launch {
         val genres = try {
             movieService.fetchGenres().genres.map(genreUiModelMapper::map)
         } catch (exception: Exception) {
@@ -31,8 +35,8 @@ class FilterViewModel(
         }
 
         filterDataStore.filterState
-            .map { filterState -> filterState.copy(genres = genres) }
-            .collect(_filterState::value::set)
+            .onEach { _filterState.emit(it.copy(genres = genres)) }
+            .launchIn(this)
     }
 
     fun onResetClicked() {
