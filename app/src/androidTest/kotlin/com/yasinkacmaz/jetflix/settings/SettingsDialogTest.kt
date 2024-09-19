@@ -8,8 +8,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.settings.Language
-import com.yasinkacmaz.jetflix.ui.settings.SettingsContent
+import com.yasinkacmaz.jetflix.ui.settings.SettingsDialogContent
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
+import com.yasinkacmaz.jetflix.ui.settings.displayName
 import com.yasinkacmaz.jetflix.util.getString
 import com.yasinkacmaz.jetflix.util.setTestContent
 import org.junit.Test
@@ -17,24 +18,24 @@ import org.junit.Test
 @OptIn(ExperimentalTestApi::class)
 class SettingsDialogTest {
 
-    private val defaultLanguage = Language("Turkish", "tr", "")
+    private val defaultLanguage = Language("Turkish", "tr", "Türkçe")
 
     @Test
     fun should_render_loading_when_uiState_showLoading_is_true() = runComposeUiTest {
         val uiState = SettingsViewModel.UiState(showLoading = true)
 
-        showSettingsDialog(uiState, defaultLanguage)
+        showSettingsDialog(uiState)
 
         onNodeWithText(getString(R.string.fetching_languages), useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
     fun should_render_selected_language() = runComposeUiTest {
-        val uiState = SettingsViewModel.UiState()
+        val uiState = SettingsViewModel.UiState(selectedLanguage = defaultLanguage)
 
-        showSettingsDialog(uiState, defaultLanguage)
+        showSettingsDialog(uiState)
 
-        onNodeWithText(defaultLanguage.englishName, substring = true, useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(defaultLanguage.displayName, substring = true, useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
@@ -47,23 +48,17 @@ class SettingsDialogTest {
             Language(englishName = secondLanguageName, iso6391 = "ru", ""),
             Language(englishName = thirdLanguageName, iso6391 = "ch", ""),
         )
-        val uiState = SettingsViewModel.UiState(languages = languages)
+        val uiState = SettingsViewModel.UiState(languages = languages, selectedLanguage = defaultLanguage)
 
-        showSettingsDialog(uiState, defaultLanguage)
-        onNodeWithText(defaultLanguage.englishName, substring = true, useUnmergedTree = true).performClick()
+        showSettingsDialog(uiState)
+        onNodeWithText(defaultLanguage.displayName, substring = true, useUnmergedTree = true).performClick()
 
         languages.forEach {
             onNodeWithText(it.englishName, substring = true, useUnmergedTree = true).assertIsDisplayed()
         }
     }
 
-    private fun ComposeUiTest.showSettingsDialog(uiState: SettingsViewModel.UiState, selectedLanguage: Language) =
-        setTestContent {
-            SettingsContent(
-                uiState = uiState,
-                selectedLanguage = selectedLanguage,
-                onLanguageSelected = {},
-                onDialogDismissed = {},
-            )
-        }
+    private fun ComposeUiTest.showSettingsDialog(uiState: SettingsViewModel.UiState) = setTestContent {
+        SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+    }
 }

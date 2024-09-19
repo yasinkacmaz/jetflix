@@ -1,12 +1,17 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.ConfigurationService
 import com.yasinkacmaz.jetflix.util.Dispatchers
 import com.yasinkacmaz.jetflix.util.onIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val configurationService: ConfigurationService,
@@ -14,24 +19,27 @@ class SettingsViewModel(
     private val dispatchers: Dispatchers,
 ) : ViewModel() {
 
-    val selectedLanguage = languageDataStore.language
-
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun fetchLanguages() {
-        val canFetchLanguages = uiState.value.languages.isEmpty() && uiState.value.showLoading.not()
-        if (!canFetchLanguages) return
-
-        _uiState.value = UiState(showLoading = true)
-        dispatchers.onIO {
-            val languages = try {
-                configurationService.fetchLanguages().sortedBy(Language::englishName)
-            } catch (exception: Exception) {
-                emptyList()
+    init {
+        languageDataStore.language
+            .onEach { selectedLanguage ->
+                _uiState.update { it.copy(selectedLanguage = selectedLanguage) }
             }
-            _uiState.value = UiState(showLoading = false, languages = languages)
+            .launchIn(viewModelScope)
+
+        fetchLanguages()
+    }
+
+    private fun fetchLanguages() = viewModelScope.launch {
+        _uiState.value = UiState(showLoading = true)
+        val languages = try {
+            configurationService.fetchLanguages().sortedBy(Language::englishName)
+        } catch (exception: Exception) {
+            emptyList()
         }
+        _uiState.value = UiState(showLoading = false, languages = languages)
     }
 
     fun onLanguageSelected(language: Language) {
@@ -40,5 +48,9 @@ class SettingsViewModel(
         }
     }
 
-    data class UiState(val showLoading: Boolean = false, val languages: List<Language> = emptyList())
+    data class UiState(
+        val showLoading: Boolean = false,
+        val languages: List<Language> = emptyList(),
+        val selectedLanguage: Language = Language.default,
+    )
 }
