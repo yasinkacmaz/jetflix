@@ -76,6 +76,7 @@ class MovieDetailScreenTest {
         )
         renderMovieDetail(movieDetail, credits)
 
+        onNodeWithText(movieDetail.releaseDate).performScrollTo()
         onNodeWithText(movieDetail.releaseDate, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText("${movieDetail.duration} min", useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(movieDetail.voteAverage.toString(), useUnmergedTree = false).assertIsDisplayed()

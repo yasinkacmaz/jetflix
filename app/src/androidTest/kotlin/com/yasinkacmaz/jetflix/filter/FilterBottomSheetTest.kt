@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.filter
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -16,7 +15,9 @@ import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.swipeUp
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
@@ -41,12 +42,10 @@ class FilterBottomSheetTest {
             FilterState(sortOrder = SortOrder.ASCENDING, sortBy = SortBy.REVENUE, includeAdult = true, genres = genres)
 
         setTestContent {
-            Column {
-                FilterBottomSheet(filterState = filterState, onDismiss = {}, onFilterStateChanged = {})
-            }
+            FilterBottomSheet(filterState = filterState, onDismiss = {}, onFilterStateChanged = {})
         }
 
-        verifySortOrderSelected(filterState.sortOrder)
+        ensureBottomSheetFullyVisible()
         verifySortBySelected(filterState.sortBy)
         verifyIncludeAdult(filterState.includeAdult)
         onNodeWithText(getString(SortOrder.DESCENDING.titleResId)).performClick()
@@ -62,6 +61,10 @@ class FilterBottomSheetTest {
         }
         onNodeWithText(genreNames.first()).performClick()
         onNodeWithText(genreNames.first()).assertIsSelected()
+    }
+
+    private fun ComposeUiTest.ensureBottomSheetFullyVisible() {
+        includeAdultNode().performTouchInput { swipeUp() }
     }
 
     private fun ComposeUiTest.verifySortOrderSelected(sortOrder: SortOrder) {
