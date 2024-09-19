@@ -27,8 +27,21 @@ class SettingsViewModelTest {
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
 
-        val sortedLanguages = listOf(Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
+        val sortedLanguages =
+            listOf(Language.default, Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
         uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false, sortedLanguages)
+    }
+
+    @Test
+    fun `Should move default language to the first position when fetch languages succeed`() = runTest {
+        val languages = listOf(Language(englishName = "1", "", ""), Language.default)
+        configurationService.languages = languages
+
+        val settingsViewModel = createViewModel()
+        val uiStates = settingsViewModel.uiState.test()
+
+        uiStates.last().languages.first() shouldBe Language.default
+        uiStates.last().languages.count { it == Language.default } shouldBe 1
     }
 
     @Test
@@ -49,7 +62,7 @@ class SettingsViewModelTest {
         val language = Language(englishName = "Turkish", iso6391 = "tr", name = "Türkçe")
         settingsViewModel.onLanguageSelected(language)
 
-        uiStates.last() shouldBe SettingsViewModel.UiState(selectedLanguage = language)
+        uiStates.last().selectedLanguage shouldBe language
     }
 
     @Test

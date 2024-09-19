@@ -34,10 +34,13 @@ class SettingsViewModel(
 
     private fun fetchLanguages() = viewModelScope.launch {
         _uiState.update { it.copy(showLoading = true) }
-        val languages = try {
-            configurationService.fetchLanguages().sortedBy(Language::englishName)
-        } catch (exception: Exception) {
-            emptyList()
+        val languages = buildList<Language> {
+            try {
+                addAll(configurationService.fetchLanguages().sortedBy(Language::englishName))
+                removeAll { it.iso6391 == Language.default.iso6391 }
+                add(0, Language.default)
+            } catch (_: Exception) {
+            }
         }
         _uiState.update { it.copy(showLoading = false, languages = languages) }
     }
