@@ -37,7 +37,7 @@ androidX-splashscreen = { module = "androidx.core:core-splashscreen", version = 
 compose_paging = { module = "androidx.paging:paging-compose", version = "3.3.2" }
 compose_activity = { module = "androidx.activity:activity-compose", version = "1.10.0-alpha02" }
 compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.8.0" }
-compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version = "1.8.0-alpha01" }
+compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version = "1.8.0-alpha02" }
 junit = { module = "junit:junit", version = "4.13.2" }
 kotest_assertions = { module = "io.kotest:kotest-assertions-core", version = "5.9.1" }
 coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.9.0" }
