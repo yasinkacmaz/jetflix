@@ -84,7 +84,7 @@ private fun LanguageRow(
             onDismissRequest = { showDropdown = false },
         ) {
             languages.forEach { language ->
-                val selected = language.iso6391 == selectedLanguage.iso6391
+                val selected = language == selectedLanguage
                 DropdownItem(
                     countryName = language.displayName,
                     flagUrl = language.flagUrl,
