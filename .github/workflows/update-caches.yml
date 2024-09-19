@@ -46,7 +46,10 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: 📱 Create AVD and generate snapshot for caching
+      - name: 🚧 Build
+        run: ./gradlew --no-configuration-cache assembleDebug
+      - name: 📱 Create AVD and Run UI tests
+        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ env.androidApiVersion }}
@@ -58,9 +61,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot for caching."
-      - name: 🚧 Build
-        run: ./gradlew --no-configuration-cache assembleDebug
+          script: ./gradlew --no-configuration-cache connectedCheck
       - name: 💾 📱 Save AVD Cache
         uses: actions/cache/save@v4
         with:
