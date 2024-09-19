@@ -52,7 +52,7 @@ class MoviesViewModel(
     private val filterStateChanges = MutableSharedFlow<FilterState>()
     private val selectedLanguageChanges = MutableSharedFlow<Unit>()
 
-    val stateChanges: Array<SharedFlow<*>> get() = arrayOf(
+    val stateChanges: Array<SharedFlow<*>> = arrayOf(
         filterStateChanges.asSharedFlow(),
         searchQueryChanges.asSharedFlow(),
         selectedLanguageChanges.asSharedFlow(),
