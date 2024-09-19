@@ -30,10 +30,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.util.JetflixImage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -118,8 +118,8 @@ private fun DropdownItem(
         modifier = Modifier.fillMaxWidth(),
         text = { Text(countryName) },
         leadingIcon = {
-            AsyncImage(
-                model = flagUrl,
+            JetflixImage(
+                data = flagUrl,
                 modifier = Modifier.size(32.dp),
                 contentDescription = stringResource(id = R.string.flag_content_description, countryName),
             )

@@ -22,14 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
@@ -38,9 +33,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.rateColor
 
 @Composable
@@ -64,20 +59,12 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int)
 
 @Composable
 private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
-    var colorFilter by remember { mutableStateOf<ColorFilter?>(null) }
-    var contentScale by remember { mutableStateOf(ContentScale.Fit) }
-    AsyncImage(
-        model = posterPath,
-        error = rememberVectorPainter(Icons.Filled.BrokenImage),
+    JetflixImage(
+        data = posterPath,
         placeholder = rememberVectorPainter(Icons.Default.Movie),
-        onLoading = { colorFilter = ColorFilter.tint(Color.Gray) },
-        onSuccess = {
-            colorFilter = null
-            contentScale = ContentScale.FillBounds
-        },
+        error = rememberVectorPainter(Icons.Filled.BrokenImage),
         contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
-        colorFilter = colorFilter,
-        contentScale = contentScale,
+        contentScale = ContentScale.FillWidth,
         modifier = Modifier
             .fillMaxSize()
             .align(Alignment.Center),

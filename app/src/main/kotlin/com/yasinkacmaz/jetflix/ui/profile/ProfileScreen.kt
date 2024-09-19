@@ -49,13 +49,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
+import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.openInChromeCustomTab
 
 @Composable
@@ -104,19 +103,14 @@ private fun Profile(profile: Profile) {
     ) {
         LazyColumn(state = lazyListState) {
             item {
-                AsyncImage(
+                JetflixImage(
+                    data = profile.profilePhotoUrl,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = LocalConfiguration.current.screenHeightDp.dp * 0.4f)
                         .background(MaterialTheme.colorScheme.surface)
                         .animateContentSize(),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(profile.profilePhotoUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    alignment = Alignment.TopCenter,
                 )
             }
 

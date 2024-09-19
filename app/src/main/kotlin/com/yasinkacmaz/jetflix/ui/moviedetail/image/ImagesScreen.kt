@@ -29,9 +29,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.util.JetflixImage
 
 @Composable
 fun ImagesScreen(images: List<Image>, initialPage: Int) {
@@ -59,9 +59,8 @@ private fun Poster(image: Image) {
                 .animateContentSize(),
         ) {
             Box {
-                AsyncImage(
-                    model = image.url,
-                    contentDescription = null,
+                JetflixImage(
+                    data = image.url,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -76,8 +75,8 @@ private fun Poster(image: Image) {
 
 @Composable
 private fun BlurImage(url: String) {
-    AsyncImage(
-        model = url,
+    JetflixImage(
+        data = url,
         contentDescription = stringResource(id = R.string.poster_content_description),
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
@@ -94,7 +93,7 @@ private fun BoxScope.VoteCount(voteCount: Int) {
             .wrapContentSize()
             .align(Alignment.BottomStart)
             .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f),
                 shape = RoundedCornerShape(bottomStart = 12.dp, topEnd = 12.dp),
             )
             .padding(MaterialTheme.spacing.xs),
