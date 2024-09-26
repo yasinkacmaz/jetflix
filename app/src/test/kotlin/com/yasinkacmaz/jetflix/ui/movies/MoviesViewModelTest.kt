@@ -9,6 +9,8 @@ import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -25,34 +27,45 @@ class MoviesViewModelTest {
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
 
     @Test
-    fun `Should not set search query when query is empty`() = runTest {
+    fun `Should not send search query change event when query is empty`() = runTest {
         val moviesViewModel = createViewModel()
-        val queryChanges = moviesViewModel.searchQuery.test()
+        val queryChanges = moviesViewModel.searchQueryChanges.test()
 
         moviesViewModel.onSearch("")
 
-        queryChanges.last() shouldBe ""
+        queryChanges.shouldBeEmpty()
     }
 
     @Test
-    fun `Should not set search query when query is less than threshold`() = runTest {
+    fun `Should not send search query change event when query is less than threshold`() = runTest {
         val moviesViewModel = createViewModel()
-        val queryChanges = moviesViewModel.searchQuery.test()
+        val queryChanges = moviesViewModel.searchQueryChanges.test()
 
         moviesViewModel.onSearch("qu")
 
-        queryChanges.last() shouldBe ""
+        queryChanges.shouldBeEmpty()
     }
 
     @Test
-    fun `Should set search query when query is valid`() = runTest {
+    fun `Should send search query change event when query is valid`() = runTest {
         val moviesViewModel = createViewModel()
-        val queryChanges = moviesViewModel.searchQuery.test()
+        val queryChanges = moviesViewModel.searchQueryChanges.test()
 
         val query = "query"
         moviesViewModel.onSearch(query)
 
+        queryChanges.shouldNotBeEmpty()
         queryChanges.last() shouldBe query
+    }
+
+    @Test
+    fun `Should set search query when searched`() = runTest {
+        val moviesViewModel = createViewModel()
+
+        val query = "query"
+        moviesViewModel.onSearch(query)
+
+        moviesViewModel.searchQuery.value shouldBe query
     }
 
     private fun createViewModel() =

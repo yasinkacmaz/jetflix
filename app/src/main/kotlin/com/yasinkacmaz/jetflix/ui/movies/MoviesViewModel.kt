@@ -16,11 +16,14 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.runningReduce
+import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class MoviesViewModel(
@@ -44,41 +47,48 @@ class MoviesViewModel(
     ).flow.cachedIn(viewModelScope)
     private var filterState: FilterState? = null
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
     @VisibleForTesting
-    val searchQuery = MutableStateFlow("")
+    val searchQueryChanges = MutableSharedFlow<String>()
+    private val filterStateChanges = MutableSharedFlow<FilterState>()
+    private val selectedLanguageChanges = MutableSharedFlow<Unit>()
 
-    private val _searchQueryChanges = MutableSharedFlow<Unit>()
-    private val _filterStateChanges = MutableSharedFlow<FilterState>()
-    private val _selectedLanguageChanges = MutableSharedFlow<Unit>()
-
-    val searchQueryChanges = _searchQueryChanges.asSharedFlow()
-    val filterStateChanges = _filterStateChanges.asSharedFlow()
-    val selectedLanguageChanges = _selectedLanguageChanges.asSharedFlow()
+    val stateChanges = listOf(
+        filterStateChanges.asSharedFlow(),
+        selectedLanguageChanges.asSharedFlow(),
+        searchQueryChanges.asSharedFlow().debounce(SEARCH_DEBOUNCE_MS).distinctUntilChanged(),
+    )
 
     init {
         filterDataStore.filterState
             .onEach { filterState -> this.filterState = filterState }
-            .onEach { _filterStateChanges.emit(it) }
+            .drop(1)
+            .onEach { filterStateChanges.emit(it) }
             .launchIn(viewModelScope)
 
         languageDataStore.languageCode
             .drop(1)
-            .onEach { _selectedLanguageChanges.emit(Unit) }
+            .onEach { selectedLanguageChanges.emit(Unit) }
             .launchIn(viewModelScope)
 
-        searchQuery
-            .drop(1)
-            .debounce(SEARCH_DEBOUNCE_MS)
-            .distinctUntilChanged()
-            .onEach { _searchQueryChanges.emit(Unit) }
+        _searchQuery
+            .runningReduce { previousQuery, newQuery ->
+                val isEmptySearch = previousQuery.isEmpty() && newQuery.isBlank()
+                val isSearchTooShort = previousQuery.isBlank() && newQuery.length < SEARCH_MINIMUM_LENGTH
+                if (!(isEmptySearch || isSearchTooShort)) {
+                    searchQueryChanges.emit(newQuery)
+                }
+                newQuery
+            }
             .launchIn(viewModelScope)
     }
 
     fun onSearch(query: String) {
-        if (searchQuery.value.isEmpty() && query.isBlank()) return
-        if (searchQuery.value.isBlank() && query.length < SEARCH_MINIMUM_LENGTH) return
-
-        searchQuery.tryEmit(query)
+        viewModelScope.launch {
+            _searchQuery.emit(query)
+        }
     }
 
     companion object {
