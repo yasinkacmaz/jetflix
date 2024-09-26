@@ -38,14 +38,13 @@ class MoviesViewModel(
         pagingSourceFactory = {
             MoviesPagingSource(
                 movieService,
+                filterDataStore,
                 movieMapper,
                 movieRequestOptionsMapper,
-                filterState,
                 searchQuery.value,
             )
         },
     ).flow.cachedIn(viewModelScope)
-    private var filterState: FilterState? = null
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
@@ -63,7 +62,6 @@ class MoviesViewModel(
 
     init {
         filterDataStore.filterState
-            .onEach { filterState -> this.filterState = filterState }
             .drop(1)
             .onEach { filterStateChanges.emit(it) }
             .launchIn(viewModelScope)
