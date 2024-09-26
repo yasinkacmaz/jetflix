@@ -39,7 +39,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,10 +78,9 @@ private val fullWidthSpan: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemS
 @Composable
 fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewModel) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val filterState = filterViewModel.filterState.collectAsState().value
-
-    val searchQuery = remember { mutableStateOf("") }
     var showSettingsDialog by remember { mutableStateOf(false) }
+    val filterState = filterViewModel.filterState.collectAsState().value
+    val searchQuery = moviesViewModel.searchQuery.collectAsState()
     Scaffold(
         topBar = {
             Column(
@@ -92,7 +90,7 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
                     .padding(bottom = MaterialTheme.spacing.s),
             ) {
                 JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
-                JetflixSearchBar(searchQuery, moviesViewModel::onSearch)
+                JetflixSearchBar(searchQuery.value, moviesViewModel::onSearch)
             }
         },
         floatingActionButton = {
@@ -127,11 +125,7 @@ fun MoviesGrid(contentPadding: PaddingValues, moviesViewModel: MoviesViewModel) 
     val movies = moviesViewModel.moviesPagingData.collectAsLazyPagingItems()
     val gridState = rememberLazyGridState()
     LaunchedEffect(Unit) {
-        merge(
-            moviesViewModel.searchQueryChanges,
-            moviesViewModel.filterStateChanges,
-            moviesViewModel.selectedLanguageChanges,
-        )
+        merge(*moviesViewModel.stateChanges.toTypedArray())
             .onEach {
                 gridState.scrollToItem(0)
                 movies.refresh()
@@ -231,35 +225,29 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
 }
 
 @Composable
-private fun JetflixSearchBar(searchQuery: MutableState<String>, onSearch: (String) -> Unit) {
+private fun JetflixSearchBar(searchQuery: String, onSearch: (String) -> Unit) {
     TextField(
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.s)
             .heightIn(max = 52.dp)
             .fillMaxWidth(),
-        value = searchQuery.value,
+        value = searchQuery,
         textStyle = MaterialTheme.typography.titleSmall,
         singleLine = true,
         shape = RoundedCornerShape(50),
         placeholder = { Text(stringResource(id = R.string.search_movies), color = Color.Gray) },
         leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
         trailingIcon = {
-            AnimatedVisibility(visible = searchQuery.value.isNotEmpty()) {
+            AnimatedVisibility(visible = searchQuery.isNotEmpty()) {
                 Icon(
                     imageVector = Icons.Default.HighlightOff,
                     contentDescription = null,
-                    modifier = Modifier.clickable {
-                        searchQuery.value = ""
-                        onSearch("")
-                    },
+                    modifier = Modifier.clickable { onSearch("") },
                 )
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        onValueChange = { query ->
-            searchQuery.value = query
-            onSearch(query)
-        },
+        onValueChange = { query -> onSearch(query) },
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
