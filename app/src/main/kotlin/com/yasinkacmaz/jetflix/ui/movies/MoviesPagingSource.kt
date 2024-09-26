@@ -3,23 +3,23 @@ package com.yasinkacmaz.jetflix.ui.movies
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.yasinkacmaz.jetflix.data.service.MovieService
-import com.yasinkacmaz.jetflix.ui.filter.FilterState
+import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
+import kotlinx.coroutines.flow.first
 
 class MoviesPagingSource(
     private val movieService: MovieService,
+    private val filterDataStore: FilterDataStore,
     private val movieMapper: MovieMapper,
-    movieRequestOptionsMapper: MovieRequestOptionsMapper,
-    filterState: FilterState? = null,
+    private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
     private val searchQuery: String = "",
 ) : PagingSource<Int, Movie>() {
-    private val options = movieRequestOptionsMapper.map(filterState)
-
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val page = params.key ?: 1
+            val options = movieRequestOptionsMapper.map(filterDataStore.filterState.first())
             val moviesResponse = if (searchQuery.isNotBlank()) {
                 movieService.search(page, searchQuery)
             } else {

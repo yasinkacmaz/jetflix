@@ -1,12 +1,14 @@
 package com.yasinkacmaz.jetflix.ui.movies
 
 import androidx.paging.PagingSource
-import com.yasinkacmaz.jetflix.ui.filter.FilterState
+import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.CoroutineTestRule
+import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
+import com.yasinkacmaz.jetflix.util.json
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.test.runTest
@@ -21,13 +23,14 @@ class MoviesPagingSourceTest {
 
     private val movieMapper = MovieMapper()
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
-    private val filterState = FilterState()
     private val loadParams = PagingSource.LoadParams.Refresh(1, 1, true)
+
+    private val filterDataStore = FilterDataStore(json, FakeStringDataStore())
 
     private lateinit var moviesPagingSource: MoviesPagingSource
 
     @Test
-    fun `should call movies endpoint when query is empty`() = runTest {
+    fun `Should call movies endpoint when query is empty`() = runTest {
         initPagingSource()
 
         val loadResult = moviesPagingSource.load(loadParams)
@@ -37,7 +40,7 @@ class MoviesPagingSourceTest {
     }
 
     @Test
-    fun `should call search endpoint when query is not empty`() = runTest {
+    fun `Should call search endpoint when query is not empty`() = runTest {
         val query = "query"
         initPagingSource(query)
 
@@ -49,6 +52,6 @@ class MoviesPagingSourceTest {
 
     private fun initPagingSource(query: String = "") {
         moviesPagingSource =
-            MoviesPagingSource(movieService, movieMapper, movieRequestOptionsMapper, filterState, query)
+            MoviesPagingSource(movieService, filterDataStore, movieMapper, movieRequestOptionsMapper, query)
     }
 }
