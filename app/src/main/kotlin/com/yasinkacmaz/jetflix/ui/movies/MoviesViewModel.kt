@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.runningReduce
 import kotlinx.coroutines.launch
 
@@ -30,8 +30,8 @@ class MoviesViewModel(
     private val movieService: MovieService,
     private val movieMapper: MovieMapper,
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
-    filterDataStore: FilterDataStore,
-    languageDataStore: LanguageDataStore,
+    private val filterDataStore: FilterDataStore,
+    private val languageDataStore: LanguageDataStore,
 ) : ViewModel() {
     val moviesPagingData = Pager(
         config = PagingConfig(pageSize = 20, enablePlaceholders = false),
@@ -61,16 +61,24 @@ class MoviesViewModel(
     )
 
     init {
+        listenFilterStateChanges()
+        listenSelectedLanguageChanges()
+        listenSearchQueryChanges()
+    }
+
+    private fun listenFilterStateChanges() = viewModelScope.launch {
         filterDataStore.filterState
             .drop(1)
-            .onEach { filterStateChanges.emit(it) }
-            .launchIn(viewModelScope)
+            .collectLatest { filterStateChanges.emit(it) }
+    }
 
+    private fun listenSelectedLanguageChanges() = viewModelScope.launch {
         languageDataStore.languageCode
             .drop(1)
-            .onEach { selectedLanguageChanges.emit(Unit) }
-            .launchIn(viewModelScope)
+            .collectLatest { selectedLanguageChanges.emit(Unit) }
+    }
 
+    private fun listenSearchQueryChanges() {
         _searchQuery
             .runningReduce { previousQuery, newQuery ->
                 val isEmptySearch = previousQuery.isEmpty() && newQuery.isBlank()

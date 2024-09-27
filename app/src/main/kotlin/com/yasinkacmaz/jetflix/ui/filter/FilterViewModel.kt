@@ -9,8 +9,8 @@ import com.yasinkacmaz.jetflix.util.onIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FilterViewModel(
@@ -35,14 +35,9 @@ class FilterViewModel(
         }
 
         filterDataStore.filterState
-            .onEach { _filterState.emit(it.copy(genres = genres)) }
-            .launchIn(this)
-    }
-
-    fun onResetClicked() {
-        dispatchers.onIO {
-            filterDataStore.resetFilterState()
-        }
+            .collectLatest { filterState ->
+                _filterState.update { filterState.copy(genres = genres) }
+            }
     }
 
     fun onFilterStateChanged(filterState: FilterState) {

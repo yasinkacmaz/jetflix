@@ -19,8 +19,8 @@ class FilterViewModelTest {
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    private val fakeStringDataStore = FakeStringDataStore()
-    private val filterDataStore = FilterDataStore(json, fakeStringDataStore)
+    private val fakeFilterDataStore = FakeStringDataStore()
+    private val filterDataStore = FilterDataStore(json, fakeFilterDataStore)
     private val movieService = FakeMovieClient()
     private val genreUiModelMapper = GenreUiModelMapper()
     private val genreUiModel = genreUiModelMapper.map(movieService.genre)
@@ -28,7 +28,7 @@ class FilterViewModelTest {
     @Test
     fun `Should fetch genres`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        fakeStringDataStore.set(filterState)
+        fakeFilterDataStore.set(filterState)
 
         val filterViewModel = createViewModel()
 
@@ -39,7 +39,7 @@ class FilterViewModelTest {
     fun `Should set genres as empty when fetch genres error`() = runTest {
         movieService.fetchGenresException = IOException()
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        fakeStringDataStore.set(filterState)
+        fakeFilterDataStore.set(filterState)
 
         val filterViewModel = createViewModel()
 
@@ -47,22 +47,9 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `onResetClicked should call data store resetFilterState`() = runTest {
-        val filterState = FilterState(sortBy = SortBy.REVENUE)
-        fakeStringDataStore.set(filterState)
-
-        val filterViewModel = createViewModel()
-        val filterStates = filterViewModel.filterState.test()
-        filterViewModel.onResetClicked()
-
-        filterStates[0] shouldBe filterState.copy(genres = listOf(genreUiModel))
-        filterStates[1] shouldBe FilterState().copy(genres = listOf(genreUiModel))
-    }
-
-    @Test
     fun `onFilterStateChanged should call data store onFilterStateChanged`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        fakeStringDataStore.set(filterState)
+        fakeFilterDataStore.set(filterState)
 
         val newFilterState = FilterState(sortBy = SortBy.VOTE_AVERAGE)
 
@@ -76,15 +63,15 @@ class FilterViewModelTest {
     }
 
     @Test
-    fun `filter state should change when filter data store changed`() = runTest {
+    fun `Should update filter state when filter data store changed`() = runTest {
         val filterState = FilterState(sortBy = SortBy.REVENUE)
-        fakeStringDataStore.set(filterState)
+        fakeFilterDataStore.set(filterState)
 
         val filterViewModel = createViewModel()
         val filterStates = filterViewModel.filterState.test()
 
         val changedFilterState = FilterState(sortBy = SortBy.RELEASE_DATE)
-        fakeStringDataStore.set(changedFilterState)
+        fakeFilterDataStore.set(changedFilterState)
 
         filterStates.last() shouldBe changedFilterState.copy(genres = listOf(genreUiModel))
     }
