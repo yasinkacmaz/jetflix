@@ -17,7 +17,7 @@ class LanguageDataStoreTest {
 
     @Test
     fun `Should return default language when preference is not present`() = runTest {
-        fakeStringDataStore.set("")
+        fakeStringDataStore.set("", "")
 
         val languageDataStore = createLanguageDataStore()
 

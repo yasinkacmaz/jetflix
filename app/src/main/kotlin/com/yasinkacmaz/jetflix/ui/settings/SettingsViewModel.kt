@@ -8,8 +8,7 @@ import com.yasinkacmaz.jetflix.util.onIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -23,13 +22,13 @@ class SettingsViewModel(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        languageDataStore.language
-            .onEach { selectedLanguage ->
-                _uiState.update { it.copy(selectedLanguage = selectedLanguage) }
-            }
-            .launchIn(viewModelScope)
-
         fetchLanguages()
+        listenLanguageChanges()
+    }
+
+    private fun listenLanguageChanges() = viewModelScope.launch {
+        languageDataStore.language
+            .collectLatest { language -> _uiState.update { it.copy(selectedLanguage = language) } }
     }
 
     private fun fetchLanguages() = viewModelScope.launch {
