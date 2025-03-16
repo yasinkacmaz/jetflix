@@ -3,7 +3,6 @@ package com.yasinkacmaz.jetflix.ui.settings
 import com.yasinkacmaz.jetflix.data.local.LocalDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class LanguageDataStore(private val json: Json, private val localDataStore: LocalDataStore) {

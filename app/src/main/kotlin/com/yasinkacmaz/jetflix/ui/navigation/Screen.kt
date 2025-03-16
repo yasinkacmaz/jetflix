@@ -23,4 +23,7 @@ sealed class Screen {
 
     @Serializable
     data class Profile(val personId: Int) : Screen()
+
+    @Serializable
+    data object Favorites : Screen()
 }

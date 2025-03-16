@@ -5,10 +5,12 @@ import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,21 +21,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.BrokenImage
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -103,7 +110,14 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
                 LocalMovieId provides uiState.movieDetail.id,
             ) {
                 Surface {
-                    MovieDetail(uiState.movieDetail, uiState.credits.cast, uiState.credits.crew, uiState.images)
+                    MovieDetail(
+                        movieDetail = uiState.movieDetail,
+                        cast = uiState.credits.cast,
+                        crew = uiState.credits.crew,
+                        images = uiState.images,
+                        isFavorite = uiState.isFavorite,
+                        onFavoriteClicked = movieDetailViewModel::onFavoriteClicked,
+                    )
                 }
             }
         }
@@ -111,23 +125,56 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
 }
 
 @Composable
-fun MovieDetail(movieDetail: MovieDetail, cast: List<Person>, crew: List<Person>, images: List<Image>) {
+fun MovieDetail(
+    movieDetail: MovieDetail,
+    cast: List<Person>,
+    crew: List<Person>,
+    images: List<Image>,
+    isFavorite: Boolean,
+    onFavoriteClicked: () -> Unit,
+) {
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
         GetVibrantColorFromPoster(movieDetail.posterUrl, LocalVibrantColor.current)
-        BackdropAndPoster {
-            Backdrop(backdropUrl = movieDetail.backdropUrl, movieDetail.title, Modifier.fillMaxWidth())
-            Poster(
-                movieDetail.posterUrl,
-                movieDetail.title,
-                Modifier
-                    .width(160.dp)
-                    .height(240.dp),
-            )
+        Box {
+            BackdropAndPoster {
+                Backdrop(
+                    modifier = Modifier.fillMaxWidth(),
+                    backdropUrl = movieDetail.backdropUrl,
+                    movieName = movieDetail.title,
+                )
+                Poster(
+                    movieDetail.posterUrl,
+                    movieDetail.title,
+                    Modifier
+                        .width(160.dp)
+                        .height(240.dp),
+                )
+            }
+            IconButton(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(MaterialTheme.spacing.l)
+                    .background(MaterialTheme.colorScheme.surface, shape = CircleShape)
+                    .align(Alignment.TopEnd)
+                    .zIndex(2f),
+                onClick = onFavoriteClicked,
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = if (isFavorite) {
+                        stringResource(R.string.unfavorite_content_description)
+                    } else {
+                        stringResource(R.string.favorite_content_description)
+                    },
+                    tint = if (isFavorite) LocalVibrantColor.current.value else MaterialTheme.colorScheme.onSurface,
+                )
+            }
         }
+
         Title(
             title = movieDetail.title,
             originalTitle = movieDetail.originalTitle,
@@ -216,7 +263,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
             data = backdropUrl,
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(R.string.backdrop_content_description, movieName),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             crossfade = AnimationDuration.LONG,
         )
     }

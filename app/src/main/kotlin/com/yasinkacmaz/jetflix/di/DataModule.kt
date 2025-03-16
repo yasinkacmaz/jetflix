@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.yasinkacmaz.jetflix.data.local.LocalDataStore
 import com.yasinkacmaz.jetflix.data.local.PreferencesDataStore
+import com.yasinkacmaz.jetflix.ui.favorites.FavoritesDataStore
 import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import okio.Path.Companion.toPath
@@ -24,4 +25,5 @@ val dataModule = module {
     singleOf(::PreferencesDataStore).bind(LocalDataStore::class)
     singleOf(::LanguageDataStore)
     singleOf(::FilterDataStore)
+    singleOf(::FavoritesDataStore)
 }

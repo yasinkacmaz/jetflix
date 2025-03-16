@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,12 +22,14 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.HighlightOff
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +38,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -182,46 +184,55 @@ fun MoviesGrid(contentPadding: PaddingValues, moviesViewModel: MoviesViewModel) 
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
     var isDarkTheme by LocalDarkTheme.current
+    val navController = LocalNavController.current
     val iconTint = animateColorAsState(
         if (isDarkTheme) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
         label = "appIconTint",
     ).value
-    Row(
-        Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = onSettingsClicked) {
+    TopAppBar(
+        title = {
             Icon(
-                Icons.Default.Settings,
-                contentDescription = stringResource(id = R.string.settings_content_description),
+                painter = painterResource(id = R.drawable.ic_jetflix),
+                contentDescription = stringResource(id = R.string.app_name),
                 tint = iconTint,
+                modifier = Modifier.height(24.dp),
             )
-        }
-
-        Icon(
-            painter = painterResource(id = R.drawable.ic_jetflix),
-            contentDescription = stringResource(id = R.string.app_name),
-            tint = iconTint,
-            modifier = Modifier.height(24.dp),
-        )
-
-        IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
-            val contentDescriptionResId = if (isDarkTheme) {
-                R.string.light_theme_content_description
-            } else {
-                R.string.dark_theme_content_description
+        },
+        actions = {
+            IconButton(onClick = { navController.navigate(Screen.Favorites) }) {
+                Icon(
+                    Icons.Default.Favorite,
+                    contentDescription = stringResource(id = R.string.favorites),
+                    tint = iconTint,
+                )
             }
-            Icon(
-                imageVector = if (isDarkTheme) Icons.Default.NightsStay else Icons.Default.WbSunny,
-                contentDescription = stringResource(id = contentDescriptionResId),
-                tint = iconTint,
-            )
-        }
-    }
+
+            IconButton(onClick = onSettingsClicked) {
+                Icon(
+                    Icons.Default.Settings,
+                    contentDescription = stringResource(id = R.string.settings_content_description),
+                    tint = iconTint,
+                )
+            }
+
+            IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
+                val contentDescriptionResId = if (isDarkTheme) {
+                    R.string.light_theme_content_description
+                } else {
+                    R.string.dark_theme_content_description
+                }
+                Icon(
+                    imageVector = if (isDarkTheme) Icons.Default.NightsStay else Icons.Default.WbSunny,
+                    contentDescription = stringResource(id = contentDescriptionResId),
+                    tint = iconTint,
+                )
+            }
+        },
+    )
 }
 
 @Composable

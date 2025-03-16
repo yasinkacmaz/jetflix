@@ -74,4 +74,10 @@
     <string name="also_known_as">Also known as:</string>
     <string name="open_imdb_profile">Open IMDB Profile</string>
     <string name="open_imdb_content_description">Open IMDB Profile Page</string>
+
+    <!-- favorite -->
+    <string name="favorites">Favorites</string>
+    <string name="no_favorites_found">No favorites yet!</string>
+    <string name="favorite_content_description">Favorite</string>
+    <string name="unfavorite_content_description">Unfavorite</string>
 </resources>
