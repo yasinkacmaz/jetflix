@@ -10,7 +10,7 @@ versionName = "2.0.0"
 versionCode = "5"
 
 [plugins]
-agp = { id = "com.android.application", version = "8.6.1" }
+agp = { id = "com.android.application", version = "8.9.0" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version = "1.7.0-beta02" }
