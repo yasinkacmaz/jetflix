@@ -16,7 +16,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 compose = { id = "org.jetbrains.compose", version = "1.7.0-beta02" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.2.0" }
 
 [libraries]
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
