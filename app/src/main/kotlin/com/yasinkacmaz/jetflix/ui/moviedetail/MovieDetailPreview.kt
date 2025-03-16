@@ -46,6 +46,13 @@ private fun MovieDetailPreview() {
     val vibrantColor = remember { Animatable(Color.randomColor()) }
     CompositionLocalProvider(LocalVibrantColor provides vibrantColor) {
         val images = listOf(Image("", 1), Image("", 1), Image("", 1))
-        MovieDetail(movieDetail = movieDetail, cast = credits.cast, crew = credits.crew, images = images)
+        MovieDetail(
+            movieDetail = movieDetail,
+            cast = credits.cast,
+            crew = credits.crew,
+            images = images,
+            isFavorite = true,
+            onFavoriteClicked = {},
+        )
     }
 }

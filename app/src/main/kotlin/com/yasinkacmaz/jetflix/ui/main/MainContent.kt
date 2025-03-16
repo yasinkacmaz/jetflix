@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.yasinkacmaz.jetflix.ui.favorites.FavoritesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
@@ -53,6 +54,10 @@ fun MainContent() {
 
         composable<Screen.Profile> {
             ProfileScreen(koinViewModel { parametersOf(it.toRoute<Screen.Profile>().personId) })
+        }
+
+        composable<Screen.Favorites> {
+            FavoritesScreen(favoritesViewModel = koinViewModel())
         }
     }
 }

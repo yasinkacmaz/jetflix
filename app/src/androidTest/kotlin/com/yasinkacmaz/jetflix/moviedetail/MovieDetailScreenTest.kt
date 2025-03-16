@@ -105,7 +105,14 @@ class MovieDetailScreenTest {
     ) = setTestContent {
         val dominantColor = remember(movieDetail.id) { Animatable(Color.randomColor()) }
         CompositionLocalProvider(LocalVibrantColor provides dominantColor) {
-            MovieDetail(movieDetail, credits.cast, credits.crew, listOf())
+            MovieDetail(
+                movieDetail = movieDetail,
+                cast = credits.cast,
+                crew = credits.crew,
+                images = listOf(),
+                isFavorite = false,
+                onFavoriteClicked = {},
+            )
         }
     }
 }

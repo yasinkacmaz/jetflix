@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.di
 
+import com.yasinkacmaz.jetflix.ui.favorites.FavoritesViewModel
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.movies.MoviesViewModel
@@ -14,4 +15,5 @@ val viewModelModule = module {
     viewModelOf(::FilterViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::SettingsViewModel)
+    viewModelOf(::FavoritesViewModel)
 }
