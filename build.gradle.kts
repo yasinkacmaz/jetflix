@@ -14,10 +14,12 @@ buildscript {
 }
 
 plugins {
-    alias(libs.plugins.agp) apply false
-    alias(libs.plugins.kotlin) apply false
-    alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.serialization) apply false
+    alias(libs.plugins.androidApplication) apply false
+    alias(libs.plugins.androidLibrary) apply false
+    alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.composeCompiler) apply false
+    alias(libs.plugins.composeMultiplatform) apply false
+    alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.dependencyVersions) apply true
     alias(libs.plugins.ktlint) apply true
 }
@@ -39,36 +41,36 @@ allprojects {
     }
 }
 
-subprojects {
-    afterEvaluate {
-        tasks.withType<KotlinCompile>().configureEach {
-            compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_17)
-                freeCompilerArgs.add("-Xcontext-receivers")
-            }
-        }
-
-        extensions.findByType<BaseExtension>() ?: return@afterEvaluate
-        configure<BaseExtension> {
-            compileSdkVersion(libs.versions.compileSdk.get().toInt())
-            defaultConfig {
-                minSdk = libs.versions.minSdk.get().toInt()
-                targetSdk = libs.versions.targetSdk.get().toInt()
-                versionName = libs.versions.versionName.get()
-                versionCode = libs.versions.versionCode.get().toInt()
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            }
-            compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_17
-                targetCompatibility = JavaVersion.VERSION_17
-            }
-
-            testOptions {
-                animationsDisabled = true
-            }
-        }
-    }
-}
+//subprojects {
+//    afterEvaluate {
+//        tasks.withType<KotlinCompile>().configureEach {
+//            compilerOptions {
+//                jvmTarget.set(JvmTarget.JVM_17)
+//                freeCompilerArgs.add("-Xcontext-receivers")
+//            }
+//        }
+//
+//        extensions.findByType<BaseExtension>() ?: return@afterEvaluate
+//        configure<BaseExtension> {
+//            compileSdkVersion(libs.versions.compileSdk.get().toInt())
+//            defaultConfig {
+//                minSdk = libs.versions.minSdk.get().toInt()
+//                targetSdk = libs.versions.targetSdk.get().toInt()
+//                versionName = libs.versions.versionName.get()
+//                versionCode = libs.versions.versionCode.get().toInt()
+//                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//            }
+//            compileOptions {
+//                sourceCompatibility = JavaVersion.VERSION_17
+//                targetCompatibility = JavaVersion.VERSION_17
+//            }
+//
+//            testOptions {
+//                animationsDisabled = true
+//            }
+//        }
+//    }
+//}
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     checkForGradleUpdate = true

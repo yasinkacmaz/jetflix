@@ -1,5 +1,6 @@
 rootProject.name = "jetflix"
-include(":app")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google()
@@ -15,3 +16,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+include(":composeApp")

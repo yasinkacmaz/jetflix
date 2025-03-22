@@ -1,20 +1,23 @@
 [versions]
+agp = "8.9.0"
 kotlin = "2.1.10"
+compose = "1.7.3"
 koin = "4.0.0"
 ktor = "3.1.1"
 coil = "3.1.0"
-minSdk = "28"
-targetSdk = "35"
-compileSdk = "35"
+android-minSdk = "28"
+android-targetSdk = "35"
+android-compileSdk = "35"
 versionName = "2.0.0"
 versionCode = "5"
 
 [plugins]
-agp = { id = "com.android.application", version = "8.9.0" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-compose = { id = "org.jetbrains.compose", version = "1.7.3" }
-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.2.0" }
 
