@@ -27,7 +27,6 @@ class JetflixApplication : Application() {
                 dataModule,
                 networkModule,
                 servicesModule,
-                utilityModule,
                 viewModelModule,
             )
         }

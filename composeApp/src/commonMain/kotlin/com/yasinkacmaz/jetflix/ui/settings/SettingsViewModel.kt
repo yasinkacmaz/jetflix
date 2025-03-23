@@ -3,8 +3,6 @@ package com.yasinkacmaz.jetflix.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.ConfigurationService
-import com.yasinkacmaz.jetflix.util.Dispatchers
-import com.yasinkacmaz.jetflix.util.onIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +13,6 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val configurationService: ConfigurationService,
     private val languageDataStore: LanguageDataStore,
-    private val dispatchers: Dispatchers,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
@@ -45,7 +42,7 @@ class SettingsViewModel(
     }
 
     fun onLanguageSelected(language: Language) {
-        dispatchers.onIO {
+        viewModelScope.launch {
             languageDataStore.onLanguageSelected(language)
             _uiState.update { it.copy(selectedLanguage = language) }
         }
