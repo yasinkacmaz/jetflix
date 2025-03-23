@@ -14,19 +14,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.main.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.placeholderIcon
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.person_content_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Person(person: Person, modifier: Modifier = Modifier) {
@@ -42,7 +43,7 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
                 .background(MaterialTheme.colorScheme.surfaceContainerHighest),
             data = person.profilePhotoUrl,
             placeholder = rememberVectorPainter(person.gender.placeholderIcon),
-            contentDescription = stringResource(id = R.string.person_content_description, person.name, person.role),
+            contentDescription = stringResource(Res.string.person_content_description, person.name, person.role),
             contentScale = ContentScale.FillWidth,
             transformations = listOf(CircleTopCropTransformation()),
         )

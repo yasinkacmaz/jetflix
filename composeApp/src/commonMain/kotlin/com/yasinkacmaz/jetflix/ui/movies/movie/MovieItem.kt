@@ -28,15 +28,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.rateColor
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.movie_poster_content_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClicked: (Int) -> Unit = {}) {
@@ -63,7 +64,7 @@ private fun BoxScope.MoviePoster(posterPath: String, movieName: String) {
         data = posterPath,
         placeholder = rememberVectorPainter(Icons.Default.Movie),
         error = rememberVectorPainter(Icons.Filled.BrokenImage),
-        contentDescription = stringResource(id = R.string.movie_poster_content_description, movieName),
+        contentDescription = stringResource(Res.string.movie_poster_content_description, movieName),
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
             .fillMaxSize()

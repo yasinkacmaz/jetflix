@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,20 +21,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun FilterSectionTitle(painter: Painter, @StringRes title: Int) {
+fun FilterSectionTitle(painter: Painter, title: StringResource) {
     Row(
         Modifier.padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(painter = painter, contentDescription = null, modifier = Modifier.size(28.dp))
         Text(
-            text = stringResource(id = title),
+            text = stringResource(title),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(start = MaterialTheme.spacing.s),
         )

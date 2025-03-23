@@ -22,13 +22,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.main.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.favorites
+import jetflix.composeapp.generated.resources.no_favorites_found
+import org.jetbrains.compose.resources.stringResource
 
 private const val COLUMN_COUNT = 2
 
@@ -39,7 +41,7 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
         topBar = {
             TopAppBar(
                 modifier = Modifier.statusBarsPadding(),
-                title = { Text(stringResource(R.string.favorites)) },
+                title = { Text(stringResource(Res.string.favorites)) },
             )
         },
         modifier = Modifier.fillMaxSize(),
@@ -53,7 +55,7 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
                     .padding(contentPadding),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(text = stringResource(R.string.no_favorites_found), style = MaterialTheme.typography.bodyLarge)
+                Text(text = stringResource(Res.string.no_favorites_found), style = MaterialTheme.typography.bodyLarge)
             }
         } else {
             val navController = LocalNavController.current

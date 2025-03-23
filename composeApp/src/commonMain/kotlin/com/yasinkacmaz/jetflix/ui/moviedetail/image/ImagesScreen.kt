@@ -27,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.likes_content_description
+import jetflix.composeapp.generated.resources.poster_content_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ImagesScreen(images: List<Image>, initialPage: Int) {
@@ -77,7 +79,7 @@ private fun Poster(image: Image) {
 private fun BlurImage(url: String) {
     JetflixImage(
         data = url,
-        contentDescription = stringResource(id = R.string.poster_content_description),
+        contentDescription = stringResource(Res.string.poster_content_description),
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
             .fillMaxSize()
@@ -101,7 +103,7 @@ private fun BoxScope.VoteCount(voteCount: Int) {
         Icon(
             imageVector = Icons.Filled.Favorite,
             tint = MaterialTheme.colorScheme.primary,
-            contentDescription = stringResource(id = R.string.likes_content_description),
+            contentDescription = stringResource(Res.string.likes_content_description),
             modifier = Modifier.padding(end = MaterialTheme.spacing.xs),
         )
         Text(text = voteCount.toString(), style = MaterialTheme.typography.bodyMedium)

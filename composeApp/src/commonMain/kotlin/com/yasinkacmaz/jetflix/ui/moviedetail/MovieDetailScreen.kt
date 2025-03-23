@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
@@ -59,8 +58,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -69,10 +66,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.main.LocalNavController
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
@@ -85,6 +81,27 @@ import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.openInChromeCustomTab
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.backdrop_content_description
+import jetflix.composeapp.generated.resources.cast
+import jetflix.composeapp.generated.resources.crew
+import jetflix.composeapp.generated.resources.duration
+import jetflix.composeapp.generated.resources.duration_minutes
+import jetflix.composeapp.generated.resources.favorite_content_description
+import jetflix.composeapp.generated.resources.fetching_movie_detail
+import jetflix.composeapp.generated.resources.ic_jetflix
+import jetflix.composeapp.generated.resources.images
+import jetflix.composeapp.generated.resources.poster_content_description
+import jetflix.composeapp.generated.resources.production_companies
+import jetflix.composeapp.generated.resources.production_company_logo_content_description
+import jetflix.composeapp.generated.resources.release_date
+import jetflix.composeapp.generated.resources.see_all
+import jetflix.composeapp.generated.resources.unfavorite_content_description
+import jetflix.composeapp.generated.resources.vote_average
+import jetflix.composeapp.generated.resources.votes
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color defined") }
 val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
@@ -95,7 +112,7 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
 
     when {
         uiState.loading -> {
-            LoadingColumn(stringResource(id = R.string.fetching_movie_detail))
+            LoadingColumn(stringResource(Res.string.fetching_movie_detail))
         }
 
         uiState.error != null -> {
@@ -166,9 +183,9 @@ fun MovieDetail(
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = if (isFavorite) {
-                        stringResource(R.string.unfavorite_content_description)
+                        stringResource(Res.string.unfavorite_content_description)
                     } else {
-                        stringResource(R.string.favorite_content_description)
+                        stringResource(Res.string.favorite_content_description)
                     },
                     tint = if (isFavorite) LocalVibrantColor.current.value else MaterialTheme.colorScheme.onSurface,
                 )
@@ -221,28 +238,28 @@ fun MovieDetail(
         val navController = LocalNavController.current
         MovieSection(
             items = cast,
-            headerResId = R.string.cast,
+            headerResource = Res.string.cast,
             onSeeAllClicked = { navController.navigate(Screen.MovieCast(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
         )
 
         MovieSection(
             items = crew,
-            headerResId = R.string.crew,
+            headerResource = Res.string.crew,
             onSeeAllClicked = { navController.navigate(Screen.MovieCrew(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
         )
 
         MovieSection(
             items = images,
-            headerResId = R.string.images,
+            headerResource = Res.string.images,
             onSeeAllClicked = { navController.navigate(Screen.MovieImages(movieDetail.id, 0)) },
             itemContent = { item, index -> MovieImage(item, index) },
         )
 
         MovieSection(
             items = movieDetail.productionCompanies,
-            headerResId = R.string.production_companies,
+            headerResource = Res.string.production_companies,
             onSeeAllClicked = null,
             itemContent = { item, _ -> ProductionCompany(item) },
         )
@@ -262,7 +279,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
         JetflixImage(
             data = backdropUrl,
             contentScale = ContentScale.FillHeight,
-            contentDescription = stringResource(R.string.backdrop_content_description, movieName),
+            contentDescription = stringResource(Res.string.backdrop_content_description, movieName),
             modifier = Modifier.fillMaxSize(),
             crossfade = AnimationDuration.LONG,
         )
@@ -287,7 +304,7 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
             Modifier.fillMaxSize(),
             data = posterUrl,
             contentScale = ContentScale.Fit,
-            contentDescription = stringResource(R.string.poster_content_description, movieName),
+            contentDescription = stringResource(Res.string.poster_content_description, movieName),
         )
     }
 }
@@ -366,13 +383,13 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
 @Composable
 private fun MovieFields(movieDetail: MovieDetail, modifier: Modifier) {
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.l)) {
-        MovieField(stringResource(R.string.release_date), movieDetail.releaseDate)
+        MovieField(stringResource(Res.string.release_date), movieDetail.releaseDate)
         MovieField(
-            stringResource(R.string.duration),
-            stringResource(R.string.duration_minutes, movieDetail.duration.toString()),
+            stringResource(Res.string.duration),
+            stringResource(Res.string.duration_minutes, movieDetail.duration.toString()),
         )
-        MovieField(stringResource(R.string.vote_average), movieDetail.voteAverage.toString())
-        MovieField(stringResource(R.string.votes), movieDetail.voteCount.toString())
+        MovieField(stringResource(Res.string.vote_average), movieDetail.voteAverage.toString())
+        MovieField(stringResource(Res.string.votes), movieDetail.voteCount.toString())
     }
 }
 
@@ -392,7 +409,7 @@ private fun MovieField(name: String, value: String) {
 private fun <T : Any> MovieSection(
     modifier: Modifier = Modifier,
     items: List<T>,
-    @StringRes headerResId: Int,
+    headerResource: StringResource,
     onSeeAllClicked: (() -> Unit)? = null,
     itemContent: @Composable (T, Int) -> Unit,
 ) {
@@ -401,10 +418,10 @@ private fun <T : Any> MovieSection(
             .fillMaxWidth()
             .padding(top = MaterialTheme.spacing.l),
     ) {
-        SectionHeader(headerResId, items.size, onSeeAllClicked)
+        SectionHeader(headerResource, items.size, onSeeAllClicked)
         LazyRow(
             modifier = Modifier
-                .testTag(stringResource(headerResId))
+                .testTag(stringResource(headerResource))
                 .padding(top = MaterialTheme.spacing.m),
             contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.l),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.m),
@@ -420,7 +437,7 @@ private fun <T : Any> MovieSection(
 }
 
 @Composable
-private fun SectionHeader(@StringRes headerResId: Int, count: Int, onClick: (() -> Unit)? = null) {
+private fun SectionHeader(headerResource: StringResource, count: Int, onClick: (() -> Unit)? = null) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -429,7 +446,7 @@ private fun SectionHeader(@StringRes headerResId: Int, count: Int, onClick: (() 
             .padding(horizontal = MaterialTheme.spacing.l),
     ) {
         Text(
-            text = stringResource(headerResId),
+            text = stringResource(headerResource),
             color = LocalVibrantColor.current.value,
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
         )
@@ -441,14 +458,14 @@ private fun SectionHeader(@StringRes headerResId: Int, count: Int, onClick: (() 
                     .padding(MaterialTheme.spacing.xs),
             ) {
                 Text(
-                    text = stringResource(R.string.see_all, count),
+                    text = stringResource(Res.string.see_all, count),
                     color = LocalVibrantColor.current.value,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(end = MaterialTheme.spacing.xs),
                 )
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = stringResource(R.string.see_all),
+                    contentDescription = stringResource(Res.string.see_all),
                     tint = LocalVibrantColor.current.value,
                 )
             }
@@ -471,7 +488,7 @@ private fun MovieImage(image: Image, index: Int) {
             data = image.url,
             placeholder = rememberVectorPainter(Icons.Default.Image),
             error = rememberVectorPainter(Icons.Default.BrokenImage),
-            contentDescription = stringResource(R.string.poster_content_description),
+            contentDescription = stringResource(Res.string.poster_content_description),
             contentScale = ContentScale.Crop,
         )
     }
@@ -496,9 +513,9 @@ private fun ProductionCompany(company: ProductionCompany) {
                 modifier = Modifier.size(200.dp, 120.dp),
                 data = company.logoUrl,
                 contentScale = ContentScale.Fit,
-                placeholder = painterResource(id = R.drawable.ic_jetflix),
+                placeholder = painterResource(Res.drawable.ic_jetflix),
                 contentDescription = stringResource(
-                    id = R.string.production_company_logo_content_description,
+                    Res.string.production_company_logo_content_description,
                     company.name,
                 ),
             )
