@@ -11,9 +11,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionTitle
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.include_adult
 
 data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption<Boolean> {
     override var currentValue: Boolean = defaultValue
@@ -34,7 +35,7 @@ data class IncludeAdultOption(override val defaultValue: Boolean) : FilterOption
         ) {
             FilterSectionTitle(
                 painter = rememberVectorPainter(Icons.Default.NoAdultContent),
-                title = R.string.include_adult,
+                title = Res.string.include_adult,
             )
             Switch(checked = isChecked.value, onCheckedChange = { onClick() })
         }
