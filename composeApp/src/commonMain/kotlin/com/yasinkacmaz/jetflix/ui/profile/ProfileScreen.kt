@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -44,7 +43,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
@@ -229,21 +227,4 @@ private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Colo
             color = currentVibrantColor,
         )
     }
-}
-
-@Preview(showSystemUi = true, name = "Light")
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark")
-@Composable
-private fun ProfilePreview() {
-    val profile = Profile(
-        name = "Yasin Kaçmaz",
-        biography = "Yasin Kaçmaz, Turkish actor and developer.",
-        birthday = "06.12.1994",
-        placeOfBirth = "Istanbul",
-        alsoKnownAs = listOf("Yasin"),
-        imdbProfileUrl = "https://github.com/yasinkacmaz/jetflix",
-        profilePhotoUrl = "it is not working :(",
-        knownFor = "Development, Acting",
-    )
-    Profile(profile)
 }
