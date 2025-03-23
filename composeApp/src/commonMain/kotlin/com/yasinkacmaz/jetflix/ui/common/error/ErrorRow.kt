@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.error_icon_content_description
@@ -34,10 +33,4 @@ fun ErrorRow(title: String, modifier: Modifier = Modifier) {
         )
         Text(title)
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun ErrorRowPreview() {
-    ErrorRow(title = "Oopsie!")
 }
