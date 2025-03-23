@@ -26,13 +26,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.fetching_languages
+import jetflix.composeapp.generated.resources.flag_content_description
+import jetflix.composeapp.generated.resources.language
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -48,7 +51,7 @@ fun SettingsDialogContent(uiState: SettingsViewModel.UiState, onLanguageSelected
     Card {
         Column(modifier = Modifier.padding(MaterialTheme.spacing.m), verticalArrangement = Arrangement.Center) {
             if (uiState.showLoading) {
-                LoadingRow(title = stringResource(R.string.fetching_languages))
+                LoadingRow(title = stringResource(Res.string.fetching_languages))
             } else {
                 LanguageRow(uiState = uiState, onLanguageSelected = onLanguageSelected)
             }
@@ -64,7 +67,7 @@ private fun LanguageRow(uiState: SettingsViewModel.UiState, onLanguageSelected: 
         verticalAlignment = Alignment.CenterVertically,
     ) {
         var showDropdown by remember { mutableStateOf(false) }
-        Text(stringResource(R.string.language))
+        Text(stringResource(Res.string.language))
         DropdownMenu(
             expanded = showDropdown,
             modifier = Modifier.fillMaxHeight(0.5f),
@@ -108,7 +111,7 @@ private fun DropdownItem(
             JetflixImage(
                 data = flagUrl,
                 modifier = Modifier.size(32.dp),
-                contentDescription = stringResource(id = R.string.flag_content_description, countryName),
+                contentDescription = stringResource(Res.string.flag_content_description, countryName),
             )
         },
         trailingIcon = {

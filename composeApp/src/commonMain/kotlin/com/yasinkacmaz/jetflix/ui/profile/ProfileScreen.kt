@@ -2,7 +2,6 @@ package com.yasinkacmaz.jetflix.ui.profile
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import androidx.annotation.StringRes
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -42,20 +41,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.openInChromeCustomTab
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.also_known_as
+import jetflix.composeapp.generated.resources.birthday
+import jetflix.composeapp.generated.resources.birthplace
+import jetflix.composeapp.generated.resources.fetching_profile
+import jetflix.composeapp.generated.resources.known_for
+import jetflix.composeapp.generated.resources.open_imdb_content_description
+import jetflix.composeapp.generated.resources.open_imdb_profile
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ProfileScreen(profileViewModel: ProfileViewModel) {
@@ -63,7 +70,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 
     when {
         uiState.loading -> {
-            LoadingColumn(stringResource(id = R.string.fetching_profile))
+            LoadingColumn(stringResource(Res.string.fetching_profile))
         }
 
         uiState.error != null -> {
@@ -127,15 +134,15 @@ private fun Profile(profile: Profile) {
             }
 
             item {
-                ProfileField(R.string.birthday, profile.birthday)
+                ProfileField(Res.string.birthday, profile.birthday)
             }
 
             item {
-                ProfileField(R.string.birthplace, profile.placeOfBirth)
+                ProfileField(Res.string.birthplace, profile.placeOfBirth)
             }
 
             item {
-                ProfileField(R.string.known_for, profile.knownFor)
+                ProfileField(Res.string.known_for, profile.knownFor)
             }
 
             item {
@@ -166,11 +173,11 @@ private fun Name(name: String) = Text(
 )
 
 @Composable
-private fun ProfileField(@StringRes resId: Int, field: String) {
+private fun ProfileField(resource: StringResource, field: String) {
     if (field.isEmpty()) return
 
     Text(
-        stringResource(resId, field),
+        stringResource(resource, field),
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier.padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
     )
@@ -186,7 +193,7 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
         modifier = Modifier.padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
     ) {
         item {
-            Text(stringResource(R.string.also_known_as), style = MaterialTheme.typography.bodyLarge)
+            Text(stringResource(Res.string.also_known_as), style = MaterialTheme.typography.bodyLarge)
         }
         items(alsoKnownAs) {
             Text(
@@ -212,12 +219,12 @@ private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Colo
     ) {
         Icon(
             Icons.AutoMirrored.Rounded.OpenInNew,
-            contentDescription = stringResource(id = R.string.open_imdb_content_description),
+            contentDescription = stringResource(Res.string.open_imdb_content_description),
             tint = currentVibrantColor,
             modifier = Modifier.scale(1.1f),
         )
         Text(
-            stringResource(R.string.open_imdb_profile),
+            stringResource(Res.string.open_imdb_profile),
             Modifier.padding(start = MaterialTheme.spacing.s),
             color = currentVibrantColor,
         )
