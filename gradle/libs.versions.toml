@@ -2,6 +2,7 @@
 agp = "8.9.0"
 kotlin = "2.1.10"
 compose = "1.7.3"
+coroutines = "1.10.1"
 koin = "4.0.0"
 ktor = "3.1.1"
 coil = "3.1.0"
@@ -22,34 +23,43 @@ dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.52.0" 
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.2.0" }
 
 [libraries]
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha12" }
+viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.4" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktorContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktorSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-kotlinx_datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.2" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.2" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.0" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version = "1.1.3" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.10.1" }
+
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
-jsonSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.0" }
+
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version = "5.9.1" }
+
 androidX_palette = { module = "androidx.palette:palette", version = "1.0.0" }
 androidX_browser = { module = "androidx.browser:browser", version = "1.8.0" }
-androidX_datastore = { module = "androidx.datastore:datastore-preferences", version = "1.1.3" }
 androidX_tracing = { module = "androidx.tracing:tracing", version = "1.2.0" }
 androidX-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.2.0-beta01" }
 compose_paging = { module = "androidx.paging:paging-compose", version = "3.3.6" }
-compose_activity = { module = "androidx.activity:activity-compose", version = "1.10.1" }
-compose_navigation = { module = "androidx.navigation:navigation-compose", version = "2.8.9" }
+
 compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version = "1.8.0-rc01" }
 junit = { module = "junit:junit", version = "4.13.2" }
-kotest_assertions = { module = "io.kotest:kotest-assertions-core", version = "5.9.1" }
-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.10.1" }
-
-[bundles]
-androidX = ["androidX_palette", "androidX_browser", "androidX_datastore", "androidX-splashscreen"]
-koin = ["koin-core", "koin-android", "koin-compose", "koin-compose-viewmodel"]
-coil = ["coil-compose", "coil-network-ktor"]
-io = ["jsonSerialization", "ktorCore", "ktorContentNegotiation", "ktorOkhttp", "ktorSerialization", "kotlinx_datetime"]
-test = ["junit", "kotest_assertions", "coroutinesTest"]
