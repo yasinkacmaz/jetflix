@@ -1,7 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.movies
 
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
@@ -14,11 +12,10 @@ class MoviesPagingSource(
     private val filterDataStore: FilterDataStore,
     private val movieMapper: MovieMapper,
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
-    private val searchQuery: String = "",
-) : PagingSource<Int, Movie>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+) {
+
+    suspend fun load(page: Int, searchQuery: String = ""): LoadResult {
         return try {
-            val page = params.key ?: 1
             val options = movieRequestOptionsMapper.map(filterDataStore.filterState.first())
             val moviesResponse = if (searchQuery.isNotBlank()) {
                 movieService.search(page, searchQuery)
@@ -26,20 +23,23 @@ class MoviesPagingSource(
                 movieService.fetchMovies(page, options)
             }
             val movies = moviesResponse.movies.map(movieMapper::map)
-            LoadResult.Page(
-                data = movies,
-                prevKey = if (page == 1) null else page - 1,
-                nextKey = if (page >= moviesResponse.totalPages) null else moviesResponse.page + 1,
+            LoadResult(
+                movies = movies,
+                isLastPage = page >= moviesResponse.totalPages,
+                error = null,
             )
         } catch (exception: Exception) {
-            LoadResult.Error(exception)
+            LoadResult(
+                movies = emptyList(),
+                isLastPage = false,
+                error = exception,
+            )
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-        }
-    }
+    data class LoadResult(
+        val movies: List<Movie> = emptyList(),
+        val isLastPage: Boolean = false,
+        val error: Throwable? = null,
+    )
 }
