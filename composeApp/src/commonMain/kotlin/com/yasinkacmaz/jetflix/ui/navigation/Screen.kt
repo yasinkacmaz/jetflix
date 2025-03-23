@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.navigation
 
-import kotlinx.serialization.Serializable
 
 sealed class Screen {
     @Serializable
