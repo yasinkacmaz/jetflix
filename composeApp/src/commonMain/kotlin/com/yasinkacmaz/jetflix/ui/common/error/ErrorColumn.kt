@@ -14,11 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.error_icon_content_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ErrorColumn(message: String, modifier: Modifier = Modifier) {
@@ -31,7 +32,7 @@ fun ErrorColumn(message: String, modifier: Modifier = Modifier) {
             Text(message)
             Icon(
                 imageVector = Icons.Filled.Face,
-                contentDescription = stringResource(id = R.string.error_icon_content_description),
+                contentDescription = stringResource(Res.string.error_icon_content_description),
                 modifier = Modifier
                     .size(40.dp)
                     .padding(top = MaterialTheme.spacing.l),

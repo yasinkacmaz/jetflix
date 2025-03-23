@@ -50,28 +50,38 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.yasinkacmaz.jetflix.R
+import com.yasinkacmaz.jetflix.LocalDarkTheme
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
 import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
 import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
-import com.yasinkacmaz.jetflix.ui.main.LocalDarkTheme
-import com.yasinkacmaz.jetflix.ui.main.LocalNavController
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.app_name
+import jetflix.composeapp.generated.resources.dark_theme_content_description
+import jetflix.composeapp.generated.resources.favorites
+import jetflix.composeapp.generated.resources.fetching_more_movies
+import jetflix.composeapp.generated.resources.fetching_movies
+import jetflix.composeapp.generated.resources.ic_jetflix
+import jetflix.composeapp.generated.resources.light_theme_content_description
+import jetflix.composeapp.generated.resources.search_movies
+import jetflix.composeapp.generated.resources.settings_content_description
+import jetflix.composeapp.generated.resources.title_filter_bottom_sheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 private const val COLUMN_COUNT = 2
 
@@ -102,7 +112,7 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
                     content = {
                         Icon(
                             imageVector = Icons.Default.FilterList,
-                            contentDescription = stringResource(id = R.string.title_filter_bottom_sheet),
+                            contentDescription = stringResource(Res.string.title_filter_bottom_sheet),
                         )
                     },
                 )
@@ -158,13 +168,13 @@ fun MoviesGrid(contentPadding: PaddingValues, moviesViewModel: MoviesViewModel) 
             when {
                 movies.loadState.refresh is LoadState.Loading -> {
                     item(span = fullWidthSpan) {
-                        LoadingColumn(title = stringResource(R.string.fetching_movies))
+                        LoadingColumn(title = stringResource(Res.string.fetching_movies))
                     }
                 }
 
                 movies.loadState.append is LoadState.Loading -> {
                     item(span = fullWidthSpan) {
-                        LoadingRow(title = stringResource(R.string.fetching_more_movies))
+                        LoadingRow(title = stringResource(Res.string.fetching_more_movies))
                     }
                 }
 
@@ -196,8 +206,8 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
     TopAppBar(
         title = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_jetflix),
-                contentDescription = stringResource(id = R.string.app_name),
+                painter = painterResource(Res.drawable.ic_jetflix),
+                contentDescription = stringResource(Res.string.app_name),
                 tint = iconTint,
                 modifier = Modifier.height(24.dp),
             )
@@ -206,7 +216,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             IconButton(onClick = { navController.navigate(Screen.Favorites) }) {
                 Icon(
                     Icons.Default.Favorite,
-                    contentDescription = stringResource(id = R.string.favorites),
+                    contentDescription = stringResource(Res.string.favorites),
                     tint = iconTint,
                 )
             }
@@ -214,20 +224,20 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             IconButton(onClick = onSettingsClicked) {
                 Icon(
                     Icons.Default.Settings,
-                    contentDescription = stringResource(id = R.string.settings_content_description),
+                    contentDescription = stringResource(Res.string.settings_content_description),
                     tint = iconTint,
                 )
             }
 
             IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
-                val contentDescriptionResId = if (isDarkTheme) {
-                    R.string.light_theme_content_description
+                val contentDescriptionResource = if (isDarkTheme) {
+                    Res.string.light_theme_content_description
                 } else {
-                    R.string.dark_theme_content_description
+                    Res.string.dark_theme_content_description
                 }
                 Icon(
                     imageVector = if (isDarkTheme) Icons.Default.NightsStay else Icons.Default.WbSunny,
-                    contentDescription = stringResource(id = contentDescriptionResId),
+                    contentDescription = stringResource(contentDescriptionResource),
                     tint = iconTint,
                 )
             }
@@ -246,7 +256,7 @@ private fun JetflixSearchBar(searchQuery: String, onSearch: (String) -> Unit) {
         textStyle = MaterialTheme.typography.titleSmall,
         singleLine = true,
         shape = RoundedCornerShape(50),
-        placeholder = { Text(stringResource(id = R.string.search_movies), color = Color.Gray) },
+        placeholder = { Text(stringResource(Res.string.search_movies), color = Color.Gray) },
         leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
         trailingIcon = {
             AnimatedVisibility(visible = searchQuery.isNotEmpty()) {
