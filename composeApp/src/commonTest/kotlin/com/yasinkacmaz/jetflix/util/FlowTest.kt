@@ -9,6 +9,6 @@ fun <T> Flow<T>.test(): List<T> {
     val values = mutableListOf<T>()
     this
         .onEach(values::add)
-        .launchIn(CoroutineScope(testDispatchers.main))
+        .launchIn(CoroutineScope(testAppDispatchers.main))
     return values
 }

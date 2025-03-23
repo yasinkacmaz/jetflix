@@ -9,12 +9,18 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val networkModule = module {
     singleOf(::provideHttpClientEngine)
-
+    single {
+        Json {
+            isLenient = true
+            ignoreUnknownKeys = true
+        }
+    }
     single<HttpClient> {
         HttpClient(get<HttpClientEngine>()) {
             install(ContentNegotiation) {

@@ -5,7 +5,7 @@ import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
-import com.yasinkacmaz.jetflix.util.testDispatchers
+import com.yasinkacmaz.jetflix.util.testAppDispatchers
 import io.kotest.matchers.shouldBe
 import java.io.IOException
 import kotlinx.coroutines.test.runTest
@@ -75,5 +75,5 @@ class SettingsViewModelTest {
         languageDataStore.language.test().last() shouldBe language
     }
 
-    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, testDispatchers)
+    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, testAppDispatchers)
 }

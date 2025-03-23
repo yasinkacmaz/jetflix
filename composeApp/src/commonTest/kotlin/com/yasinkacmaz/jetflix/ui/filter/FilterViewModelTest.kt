@@ -7,7 +7,7 @@ import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
-import com.yasinkacmaz.jetflix.util.testDispatchers
+import com.yasinkacmaz.jetflix.util.testAppDispatchers
 import io.kotest.matchers.shouldBe
 import java.io.IOException
 import kotlinx.coroutines.flow.first
@@ -76,5 +76,5 @@ class FilterViewModelTest {
         filterStates.last() shouldBe changedFilterState.copy(genres = listOf(genreUiModel))
     }
 
-    private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper, testDispatchers)
+    private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper, testAppDispatchers)
 }

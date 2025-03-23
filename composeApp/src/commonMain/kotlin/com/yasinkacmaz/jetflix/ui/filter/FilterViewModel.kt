@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
-import com.yasinkacmaz.jetflix.util.Dispatchers
-import com.yasinkacmaz.jetflix.util.onIO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +15,6 @@ class FilterViewModel(
     private val filterDataStore: FilterDataStore,
     private val movieService: MovieService,
     private val genreUiModelMapper: GenreUiModelMapper,
-    private val dispatchers: Dispatchers,
 ) : ViewModel() {
 
     private val _filterState: MutableStateFlow<FilterState?> = MutableStateFlow(null)
@@ -41,7 +38,7 @@ class FilterViewModel(
     }
 
     fun onFilterStateChanged(filterState: FilterState) {
-        dispatchers.onIO {
+        viewModelScope.launch {
             filterDataStore.onFilterStateChanged(filterState)
         }
     }

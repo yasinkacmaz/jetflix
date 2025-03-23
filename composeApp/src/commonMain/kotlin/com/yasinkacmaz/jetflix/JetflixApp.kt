@@ -23,7 +23,7 @@ val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
 @Preview
-fun JetflixApp(startScreen: Screen = Screen.Splash) {
+fun JetflixApp(startScreen: Screen = Screen.Movies) {
     CompositionLocalProvider(
         LocalNavController provides rememberNavController(),
         LocalDarkTheme provides mutableStateOf(isSystemInDarkTheme()),
