@@ -86,7 +86,6 @@ kotlin {
             implementation(libs.coil.compose.core)
             implementation(libs.coil.network.ktor)
 
-            implementation(libs.compose.paging)
             implementation(libs.androidx.datastore.preferences)
         }
 

@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
+import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import jetflix.composeapp.generated.resources.Res
@@ -51,7 +51,7 @@ fun SettingsDialogContent(uiState: SettingsViewModel.UiState, onLanguageSelected
     Card {
         Column(modifier = Modifier.padding(MaterialTheme.spacing.m), verticalArrangement = Arrangement.Center) {
             if (uiState.showLoading) {
-                LoadingRow(title = stringResource(Res.string.fetching_languages))
+                Loading(modifier = Modifier.fillMaxWidth(), title = stringResource(Res.string.fetching_languages))
             } else {
                 LanguageRow(uiState = uiState, onLanguageSelected = onLanguageSelected)
             }

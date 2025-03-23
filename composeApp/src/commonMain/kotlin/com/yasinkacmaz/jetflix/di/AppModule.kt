@@ -6,6 +6,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
+import com.yasinkacmaz.jetflix.ui.movies.moviesModule
 import com.yasinkacmaz.jetflix.ui.profile.ProfileMapper
 import com.yasinkacmaz.jetflix.util.AppDispatchers
 import org.koin.core.module.dsl.singleOf
@@ -20,4 +21,5 @@ val appModule = module {
     singleOf(::ImageMapper)
     singleOf(::MovieMapper)
     singleOf(::ProfileMapper)
+    includes(moviesModule)
 }

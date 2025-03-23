@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Jetflix</string>
+    <string name="try_again">Try Again</string>
 
     <!-- movies -->
     <string name="fetching_movies">Fetching Movies</string>
     <string name="fetching_more_movies">Fetching More Movies</string>
+    <string name="unable_to_fetch_movies">Unable to fetch movies. Please try again!</string>
     <string name="search_movies">Search Movies</string>
     <string name="no_movies_found">No movies found for current search</string>
 

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -42,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,14 +54,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.yasinkacmaz.jetflix.LocalDarkTheme
 import com.yasinkacmaz.jetflix.LocalNavController
-import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
-import com.yasinkacmaz.jetflix.ui.common.error.ErrorRow
-import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
-import com.yasinkacmaz.jetflix.ui.common.loading.LoadingRow
+import com.yasinkacmaz.jetflix.ui.common.Error
+import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
@@ -77,6 +75,7 @@ import jetflix.composeapp.generated.resources.light_theme_content_description
 import jetflix.composeapp.generated.resources.search_movies
 import jetflix.composeapp.generated.resources.settings_content_description
 import jetflix.composeapp.generated.resources.title_filter_bottom_sheet
+import jetflix.composeapp.generated.resources.unable_to_fetch_movies
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -93,6 +92,9 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
     var showSettingsDialog by remember { mutableStateOf(false) }
     val filterState = filterViewModel.filterState.collectAsState().value
     val searchQuery = moviesViewModel.searchQuery.collectAsState()
+    val movies = moviesViewModel.movies.collectAsState().value
+    val pagingState = moviesViewModel.pagingState.collectAsState().value
+
     Scaffold(
         topBar = {
             Column(
@@ -120,7 +122,92 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
         },
         contentWindowInsets = WindowInsets.navigationBars,
         content = { contentPadding ->
-            MoviesGrid(contentPadding, moviesViewModel)
+            val gridState = rememberLazyGridState()
+            LaunchedEffect(Unit) {
+                merge(*moviesViewModel.stateChanges.toTypedArray())
+                    .onEach {
+                        gridState.scrollToItem(0)
+                        moviesViewModel.refresh()
+                    }
+                    .launchIn(this)
+            }
+
+            val navController = LocalNavController.current
+            val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.MovieDetail(movieId)) }
+            LazyVerticalGrid(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = contentPadding.calculateTopPadding()),
+                contentPadding = PaddingValues(
+                    bottom = contentPadding.calculateBottomPadding(),
+                    start = MaterialTheme.spacing.s,
+                    end = MaterialTheme.spacing.s,
+                ),
+                columns = GridCells.Fixed(COLUMN_COUNT),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterHorizontally),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
+                state = gridState,
+                content = {
+                    items(movies) { movie ->
+                        MovieItem(movie, Modifier.height(280.dp), onMovieClicked)
+                    }
+
+                    when (pagingState) {
+                        is MoviesViewModel.PagingState.Loading -> {
+                            item(span = fullWidthSpan) {
+                                val message = if (movies.isEmpty()) {
+                                    Res.string.fetching_movies
+                                } else {
+                                    Res.string.fetching_more_movies
+                                }
+                                Loading(
+                                    modifier = if (movies.isEmpty()) {
+                                        Modifier.fillMaxSize()
+                                    } else {
+                                        Modifier.fillMaxWidth()
+                                    },
+                                    title = stringResource(message),
+                                )
+                            }
+                        }
+
+                        is MoviesViewModel.PagingState.Error -> {
+                            item(span = fullWidthSpan) {
+                                val modifier = if (movies.isEmpty()) {
+                                    Modifier.fillMaxSize()
+                                } else {
+                                    Modifier
+                                }
+                                Error(
+                                    modifier = modifier,
+                                    message = stringResource(Res.string.unable_to_fetch_movies),
+                                    onRetryClicked = moviesViewModel::retry,
+                                )
+                            }
+                        }
+
+                        else -> {}
+                    }
+                },
+            )
+
+            val shouldLoadMore = remember(movies.size) {
+                derivedStateOf {
+                    val layoutInfo = gridState.layoutInfo
+                    val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+                    movies.isNotEmpty() &&
+                            lastVisibleItemIndex >= movies.size - 5 &&
+                            pagingState !is MoviesViewModel.PagingState.Loading &&
+                            pagingState !is MoviesViewModel.PagingState.Error
+                }
+            }
+
+            LaunchedEffect(shouldLoadMore.value) {
+                if (shouldLoadMore.value) {
+                    moviesViewModel.loadMore()
+                }
+            }
+
             if (showSettingsDialog) {
                 SettingsDialog(onDialogDismissed = { showSettingsDialog = false })
             }
@@ -130,68 +217,6 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
     if (openBottomSheet) {
         FilterBottomSheet(filterState, { openBottomSheet = false }, filterViewModel::onFilterStateChanged)
     }
-}
-
-@Composable
-fun MoviesGrid(contentPadding: PaddingValues, moviesViewModel: MoviesViewModel) {
-    val movies = moviesViewModel.moviesPagingData.collectAsLazyPagingItems()
-    val gridState = rememberLazyGridState()
-    LaunchedEffect(Unit) {
-        merge(*moviesViewModel.stateChanges.toTypedArray())
-            .onEach {
-                gridState.scrollToItem(0)
-                movies.refresh()
-            }
-            .launchIn(this)
-    }
-
-    val navController = LocalNavController.current
-    val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.MovieDetail(movieId)) }
-    LazyVerticalGrid(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = contentPadding.calculateTopPadding()),
-        contentPadding = PaddingValues(
-            bottom = contentPadding.calculateBottomPadding(),
-            start = MaterialTheme.spacing.s,
-            end = MaterialTheme.spacing.s,
-        ),
-        columns = GridCells.Fixed(COLUMN_COUNT),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterHorizontally),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
-        state = gridState,
-        content = {
-            items(movies.itemCount) { index ->
-                movies[index]?.let { MovieItem(it, Modifier.height(280.dp), onMovieClicked) }
-            }
-
-            when {
-                movies.loadState.refresh is LoadState.Loading -> {
-                    item(span = fullWidthSpan) {
-                        LoadingColumn(title = stringResource(Res.string.fetching_movies))
-                    }
-                }
-
-                movies.loadState.append is LoadState.Loading -> {
-                    item(span = fullWidthSpan) {
-                        LoadingRow(title = stringResource(Res.string.fetching_more_movies))
-                    }
-                }
-
-                movies.loadState.refresh is LoadState.Error -> {
-                    item(span = fullWidthSpan) {
-                        ErrorColumn(message = (movies.loadState.refresh as LoadState.Error).error.message.orEmpty())
-                    }
-                }
-
-                movies.loadState.append is LoadState.Error -> {
-                    item(span = fullWidthSpan) {
-                        ErrorRow(title = (movies.loadState.append as? LoadState.Error)?.error?.message.orEmpty())
-                    }
-                }
-            }
-        },
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
