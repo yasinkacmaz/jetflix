@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Jetflix</string>
-    <string name="api_key">9487082a53af88e1866c341355155846</string>
 
     <!-- movies -->
     <string name="fetching_movies">Fetching Movies</string>

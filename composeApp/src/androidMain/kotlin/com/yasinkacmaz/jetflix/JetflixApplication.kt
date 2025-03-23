@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.ui.application
+package com.yasinkacmaz.jetflix
 
 import android.app.Application
 import com.yasinkacmaz.jetflix.di.appModule
