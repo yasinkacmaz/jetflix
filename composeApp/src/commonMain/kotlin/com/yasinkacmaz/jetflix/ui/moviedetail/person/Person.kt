@@ -24,7 +24,6 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.placeholderIcon
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
-import com.yasinkacmaz.jetflix.util.transformation.CircleTopCropTransformation
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.person_content_description
 import org.jetbrains.compose.resources.stringResource
@@ -45,7 +44,6 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
             placeholder = rememberVectorPainter(person.gender.placeholderIcon),
             contentDescription = stringResource(Res.string.person_content_description, person.name, person.role),
             contentScale = ContentScale.FillWidth,
-            transformations = listOf(CircleTopCropTransformation()),
         )
         Text(
             text = person.name,
