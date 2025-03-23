@@ -1,33 +1,27 @@
-package com.yasinkacmaz.jetflix.ui.main
+package com.yasinkacmaz.jetflix.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.favorites.FavoritesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen
-import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-
-val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
-val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
 private fun movieDetailViewModel(movieId: Int): MovieDetailViewModel =
     koinViewModel(key = movieId.toString()) { parametersOf(movieId) }
 
 @Composable
-fun MainContent() {
-    NavHost(navController = LocalNavController.current, startDestination = Screen.Movies) {
+fun SetupNavGraph(startScreen: Screen = Screen.Movies) {
+    NavHost(navController = LocalNavController.current, startDestination = startScreen) {
         composable<Screen.Movies> {
             MoviesScreen(moviesViewModel = koinViewModel(), filterViewModel = koinViewModel())
         }
