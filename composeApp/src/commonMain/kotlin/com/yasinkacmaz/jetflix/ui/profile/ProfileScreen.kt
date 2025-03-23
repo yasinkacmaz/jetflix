@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -45,8 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
-import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
+import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.JetflixImage
@@ -68,11 +68,11 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 
     when {
         uiState.loading -> {
-            LoadingColumn(stringResource(Res.string.fetching_profile))
+            Loading(modifier = Modifier.fillMaxSize(), title = stringResource(Res.string.fetching_profile))
         }
 
         uiState.error != null -> {
-            ErrorColumn(uiState.error.message.orEmpty())
+            Error(uiState.error.message.orEmpty())
         }
 
         uiState.profile != null -> {

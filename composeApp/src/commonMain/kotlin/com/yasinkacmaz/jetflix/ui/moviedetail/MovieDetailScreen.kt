@@ -67,8 +67,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.yasinkacmaz.jetflix.LocalNavController
-import com.yasinkacmaz.jetflix.ui.common.error.ErrorColumn
-import com.yasinkacmaz.jetflix.ui.common.loading.LoadingColumn
+import com.yasinkacmaz.jetflix.ui.common.Error
+import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.Image
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
@@ -112,11 +112,11 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
 
     when {
         uiState.loading -> {
-            LoadingColumn(stringResource(Res.string.fetching_movie_detail))
+            Loading(modifier = Modifier.fillMaxSize(), title = stringResource(Res.string.fetching_movie_detail))
         }
 
         uiState.error != null -> {
-            ErrorColumn(uiState.error.message.orEmpty())
+            Error(modifier = Modifier.fillMaxSize(), message = uiState.error.message.orEmpty())
         }
 
         uiState.movieDetail != null -> {
