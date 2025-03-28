@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
-import android.annotation.SuppressLint
-import java.util.Locale
+import androidx.compose.ui.text.intl.Locale
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,11 +11,10 @@ data class Language(
     @SerialName("name") val name: String,
 ) {
     companion object {
-        @SuppressLint("ConstantLocale")
         val default = Language(
-            englishName = Locale.getDefault().displayLanguage,
-            iso6391 = Locale.getDefault().language,
-            name = Locale.getDefault().displayLanguage,
+            englishName = "System default",
+            iso6391 = Locale.current.language,
+            name = "System default",
         )
     }
 }
