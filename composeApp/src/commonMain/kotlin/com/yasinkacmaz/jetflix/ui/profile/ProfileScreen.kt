@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -39,8 +37,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,7 +47,7 @@ import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.JetflixImage
-import com.yasinkacmaz.jetflix.util.openInChromeCustomTab
+import com.yasinkacmaz.jetflix.util.openInBrowser
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.also_known_as
 import jetflix.composeapp.generated.resources.birthday
@@ -82,7 +79,6 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun Profile(profile: Profile) {
     val lazyListState = rememberLazyListState()
@@ -113,7 +109,7 @@ private fun Profile(profile: Profile) {
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = LocalConfiguration.current.screenHeightDp.dp * 0.4f)
+                        //.heightIn(min = LocalConfiguration.current.screenHeightDp.dp * 0.4f)
                         .background(MaterialTheme.colorScheme.surface)
                         .animateContentSize(),
                 )
@@ -209,10 +205,10 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
 private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Color) {
     if (imdbProfileUrl.isNullOrBlank()) return
 
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     Row(
         Modifier
-            .clickable { imdbProfileUrl.openInChromeCustomTab(context, currentVibrantColor) }
+            .clickable { imdbProfileUrl.openInBrowser(uriHandler) }
             .padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
     ) {
         Icon(
