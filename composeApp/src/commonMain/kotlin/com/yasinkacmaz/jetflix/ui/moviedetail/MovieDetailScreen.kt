@@ -56,7 +56,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -80,7 +80,7 @@ import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
-import com.yasinkacmaz.jetflix.util.openInChromeCustomTab
+import com.yasinkacmaz.jetflix.util.openInBrowser
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.backdrop_content_description
 import jetflix.composeapp.generated.resources.cast
@@ -311,8 +311,8 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
 
 @Composable
 private fun Title(title: String, originalTitle: String, homepage: String?) {
-    val context = LocalContext.current
     val vibrantColor = LocalVibrantColor.current.value
+    val uriHandler = LocalUriHandler.current
     Column(
         Modifier
             .fillMaxWidth()
@@ -320,7 +320,7 @@ private fun Title(title: String, originalTitle: String, homepage: String?) {
             .padding(top = MaterialTheme.spacing.s)
             .clickable(enabled = !homepage.isNullOrBlank()) {
                 if (!homepage.isNullOrBlank()) {
-                    homepage.openInChromeCustomTab(context, vibrantColor)
+                    homepage.openInBrowser(uriHandler)
                 }
             },
         horizontalAlignment = Alignment.CenterHorizontally,
