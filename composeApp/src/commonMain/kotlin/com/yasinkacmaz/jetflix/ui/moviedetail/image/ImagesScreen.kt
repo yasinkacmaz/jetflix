@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -28,9 +30,12 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.ui.widget.CircleIconButton
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.likes_content_description
 import jetflix.composeapp.generated.resources.poster_content_description
 import org.jetbrains.compose.resources.stringResource
@@ -40,11 +45,21 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
     if (images.isEmpty() || initialPage !in images.indices) return
 
     val pagerState = rememberPagerState(initialPage = initialPage, initialPageOffsetFraction = 0f) { images.size }
+    val navController = LocalNavController.current
     Box(Modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 3) {
             Poster(images[it])
         }
         Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
+        CircleIconButton(
+            modifier = Modifier.statusBarsPadding().padding(horizontal = MaterialTheme.spacing.l),
+            onClick = { navController.navigateUp() },
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                contentDescription = stringResource(Res.string.back),
+            )
+        }
     }
 }
 
