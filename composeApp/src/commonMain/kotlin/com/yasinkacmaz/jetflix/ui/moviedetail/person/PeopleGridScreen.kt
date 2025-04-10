@@ -8,18 +8,26 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,34 +36,52 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
+import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
-import com.yasinkacmaz.jetflix.util.toDp
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.back
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.absoluteValue
 
 enum class ItemState { PLACING, PLACED }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PeopleGridScreen(people: List<Person>) {
-    val statusBarPadding = WindowInsets.statusBars.getTop(LocalDensity.current).toDp().dp
-    val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp().dp
-    val horizontalPadding = MaterialTheme.spacing.xs
+fun PeopleGridScreen(title: String, people: List<Person>) {
+    val horizontalPadding = MaterialTheme.spacing.l
     val columnCount = 3
     val gridState = rememberLazyGridState()
-    Surface {
+    val navController = LocalNavController.current
+    Scaffold(
+        contentWindowInsets = WindowInsets.systemBars.add(
+            WindowInsets(
+                left = horizontalPadding,
+                right = horizontalPadding,
+            ),
+        ),
+        topBar = {
+            TopAppBar(
+                title = { Text(title) },
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = stringResource(Res.string.back),
+                        )
+                    }
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+            )
+        },
+    ) { contentPadding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(columnCount),
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                start = horizontalPadding,
-                end = horizontalPadding,
-                top = statusBarPadding,
-                bottom = navigationBarPadding,
-            ),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
+            contentPadding = contentPadding,
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.l),
             horizontalArrangement = Arrangement.spacedBy(horizontalPadding),
             state = gridState,
             content = { peopleGridContent(people, columnCount, gridState) },
