@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -38,13 +40,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.ui.common.Error
 import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
@@ -71,7 +76,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
         }
 
         uiState.error != null -> {
-            Error(uiState.error.message.orEmpty())
+            Error(message = uiState.error.message.orEmpty())
         }
 
         uiState.profile != null -> {
@@ -112,12 +117,14 @@ private fun Profile(profile: Profile) {
     ) {
         LazyColumn(state = lazyListState) {
             item {
+                val screenHeight = LocalWindowInfo.current.containerSize.height
+                val imageMinimumHeight = with(LocalDensity.current) { (screenHeight * 0.45f).toDp() }
                 JetflixImage(
                     data = profile.profilePhotoUrl,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .fillMaxWidth()
-                        //.heightIn(min = LocalConfiguration.current.screenHeightDp.dp * 0.4f)
+                        .heightIn(min = imageMinimumHeight)
                         .background(MaterialTheme.colorScheme.surface)
                         .animateContentSize(),
                 )
