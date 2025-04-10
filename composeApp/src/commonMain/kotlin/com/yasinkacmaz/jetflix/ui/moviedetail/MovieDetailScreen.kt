@@ -1,8 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -75,12 +72,11 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
-import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.JetflixImage
-import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.openInBrowser
+import com.yasinkacmaz.jetflix.util.rateColor
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.backdrop_content_description
 import jetflix.composeapp.generated.resources.cast
@@ -103,7 +99,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-val LocalVibrantColor = compositionLocalOf<Animatable<Color, AnimationVector4D>> { error("No vibrant color defined") }
 val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
 
 @Composable
@@ -120,12 +115,7 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
         }
 
         uiState.movieDetail != null -> {
-            val defaultTextColor = MaterialTheme.colorScheme.onSurface
-            val vibrantColor = remember { Animatable(defaultTextColor) }
-            CompositionLocalProvider(
-                LocalVibrantColor provides vibrantColor,
-                LocalMovieId provides uiState.movieDetail.id,
-            ) {
+            CompositionLocalProvider(LocalMovieId provides uiState.movieDetail.id) {
                 Surface {
                     MovieDetail(
                         movieDetail = uiState.movieDetail,
@@ -155,7 +145,6 @@ fun MovieDetail(
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
-        GetVibrantColorFromPoster(movieDetail.posterUrl, LocalVibrantColor.current)
         Box {
             BackdropAndPoster {
                 Backdrop(
@@ -187,7 +176,7 @@ fun MovieDetail(
                     } else {
                         stringResource(Res.string.favorite_content_description)
                     },
-                    tint = if (isFavorite) LocalVibrantColor.current.value else MaterialTheme.colorScheme.onSurface,
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -218,7 +207,6 @@ fun MovieDetail(
 
         Text(
             text = movieDetail.tagline,
-            color = LocalVibrantColor.current.value,
             style = MaterialTheme.typography.titleMedium.copy(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Bold,
@@ -273,7 +261,6 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
     Card(
         elevation = CardDefaults.cardElevation(16.dp),
         shape = BottomArcShape(arcHeight = 120.dpToPx()),
-        colors = CardDefaults.cardColors(containerColor = LocalVibrantColor.current.value),
         modifier = modifier.height(360.dp),
     ) {
         JetflixImage(
@@ -281,7 +268,6 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
             contentScale = ContentScale.FillHeight,
             contentDescription = stringResource(Res.string.backdrop_content_description, movieName),
             modifier = Modifier.fillMaxSize(),
-            crossfade = AnimationDuration.LONG,
         )
     }
 }
@@ -311,7 +297,6 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
 
 @Composable
 private fun Title(title: String, originalTitle: String, homepage: String?) {
-    val vibrantColor = LocalVibrantColor.current.value
     val uriHandler = LocalUriHandler.current
     Column(
         Modifier
@@ -356,7 +341,7 @@ private fun GenreChips(genres: List<String>, modifier: Modifier) {
                 text = genre,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
-                    .border(1.25.dp, LocalVibrantColor.current.value, RoundedCornerShape(50))
+                    .border(1.25.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
                     .padding(horizontal = MaterialTheme.spacing.s, vertical = MaterialTheme.spacing.xs),
             )
         }
@@ -365,6 +350,7 @@ private fun GenreChips(genres: List<String>, modifier: Modifier) {
 
 @Composable
 private fun RateStars(voteAverage: Double, modifier: Modifier) {
+    val rateColor = Color.rateColor(voteAverage)
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.xs)) {
         val maxVote = 10
         val starCount = 5
@@ -375,7 +361,7 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
                 voteStarCount in starIndex.toDouble()..(starIndex + 1).toDouble() -> Icons.AutoMirrored.Filled.StarHalf
                 else -> Icons.Filled.StarOutline
             }
-            Icon(imageVector = asset, contentDescription = null, tint = LocalVibrantColor.current.value)
+            Icon(imageVector = asset, contentDescription = null, tint = rateColor)
         }
     }
 }
@@ -447,7 +433,6 @@ private fun SectionHeader(headerResource: StringResource, count: Int, onClick: (
     ) {
         Text(
             text = stringResource(headerResource),
-            color = LocalVibrantColor.current.value,
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
         )
         if (onClick != null) {
@@ -459,14 +444,12 @@ private fun SectionHeader(headerResource: StringResource, count: Int, onClick: (
             ) {
                 Text(
                     text = stringResource(Res.string.see_all, count),
-                    color = LocalVibrantColor.current.value,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(end = MaterialTheme.spacing.xs),
                 )
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForward,
                     contentDescription = stringResource(Res.string.see_all),
-                    tint = LocalVibrantColor.current.value,
                 )
             }
         }
@@ -500,7 +483,7 @@ private fun ProductionCompany(company: ProductionCompany) {
         Modifier
             .width(240.dp)
             .height(160.dp),
-        colors = CardDefaults.cardColors(containerColor = LocalVibrantColor.current.value.copy(alpha = 0.7f)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

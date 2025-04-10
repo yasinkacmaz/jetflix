@@ -1,6 +1,5 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -35,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
@@ -45,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
-import com.yasinkacmaz.jetflix.util.GetVibrantColorFromPoster
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.openInBrowser
 import jetflix.composeapp.generated.resources.Res
@@ -89,9 +86,6 @@ private fun Profile(profile: Profile) {
             firstVisibleItemIndex > 0 && firstVisibleItemOffset != 0
         }
     }
-    val defaultVibrantColor = MaterialTheme.colorScheme.onSurface
-    val vibrantColor = remember { Animatable(defaultVibrantColor) }
-    GetVibrantColorFromPoster(profile.profilePhotoUrl, vibrantColor)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -124,7 +118,7 @@ private fun Profile(profile: Profile) {
             }
 
             item {
-                ImdbProfileButton(profile.imdbProfileUrl, vibrantColor.value)
+                ImdbProfileButton(profile.imdbProfileUrl)
             }
 
             item {
@@ -140,7 +134,7 @@ private fun Profile(profile: Profile) {
             }
 
             item {
-                AlsoKnownAs(profile.alsoKnownAs, vibrantColor.value)
+                AlsoKnownAs(profile.alsoKnownAs)
             }
 
             item {
@@ -178,7 +172,7 @@ private fun ProfileField(resource: StringResource, field: String) {
 }
 
 @Composable
-private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
+private fun AlsoKnownAs(alsoKnownAs: List<String>) {
     if (alsoKnownAs.isEmpty()) return
 
     LazyRow(
@@ -194,7 +188,7 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
                 it,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
-                    .border(1.25.dp, vibrantColor, RoundedCornerShape(50))
+                    .border(1.25.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
                     .padding(horizontal = MaterialTheme.spacing.s, vertical = MaterialTheme.spacing.xs),
             )
         }
@@ -202,7 +196,7 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>, vibrantColor: Color) {
 }
 
 @Composable
-private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Color) {
+private fun ImdbProfileButton(imdbProfileUrl: String?) {
     if (imdbProfileUrl.isNullOrBlank()) return
 
     val uriHandler = LocalUriHandler.current
@@ -214,13 +208,11 @@ private fun ImdbProfileButton(imdbProfileUrl: String?, currentVibrantColor: Colo
         Icon(
             Icons.AutoMirrored.Rounded.OpenInNew,
             contentDescription = stringResource(Res.string.open_imdb_content_description),
-            tint = currentVibrantColor,
             modifier = Modifier.scale(1.1f),
         )
         Text(
             stringResource(Res.string.open_imdb_profile),
             Modifier.padding(start = MaterialTheme.spacing.s),
-            color = currentVibrantColor,
         )
     }
 }
