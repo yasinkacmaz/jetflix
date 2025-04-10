@@ -1,7 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -15,16 +14,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.BrokenImage
@@ -35,11 +35,13 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -53,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
@@ -72,12 +75,14 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.person.Person
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.ui.widget.BottomArcShape
+import com.yasinkacmaz.jetflix.ui.widget.CircleIconButton
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.openInBrowser
 import com.yasinkacmaz.jetflix.util.rateColor
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.backdrop_content_description
 import jetflix.composeapp.generated.resources.cast
 import jetflix.composeapp.generated.resources.crew
@@ -131,6 +136,7 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetail(
     movieDetail: MovieDetail,
@@ -140,12 +146,14 @@ fun MovieDetail(
     isFavorite: Boolean,
     onFavoriteClicked: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+    val topAppBarOffset = with(LocalDensity.current) { scrollState.value.toDp() }
     Column(
         Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(scrollState),
     ) {
-        Box {
+        Box(Modifier.zIndex(1f)) {
             BackdropAndPoster {
                 Backdrop(
                     modifier = Modifier.fillMaxWidth(),
@@ -160,25 +168,37 @@ fun MovieDetail(
                         .height(240.dp),
                 )
             }
-            IconButton(
+            val navController = LocalNavController.current
+            TopAppBar(
                 modifier = Modifier
                     .statusBarsPadding()
-                    .padding(MaterialTheme.spacing.l)
-                    .background(MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .align(Alignment.TopEnd)
-                    .zIndex(2f),
-                onClick = onFavoriteClicked,
-            ) {
-                Icon(
-                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = if (isFavorite) {
-                        stringResource(Res.string.unfavorite_content_description)
-                    } else {
-                        stringResource(Res.string.favorite_content_description)
-                    },
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
+                    .padding(horizontal = MaterialTheme.spacing.l)
+                    .offset(y = topAppBarOffset),
+                title = {},
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                navigationIcon = {
+                    CircleIconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(Res.string.back),
+                        )
+                    }
+                },
+
+                actions = {
+                    CircleIconButton(onClick = onFavoriteClicked) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = if (isFavorite) {
+                                stringResource(Res.string.unfavorite_content_description)
+                            } else {
+                                stringResource(Res.string.favorite_content_description)
+                            },
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                },
+            )
         }
 
         Title(
@@ -517,7 +537,7 @@ private fun ProductionCompany(company: ProductionCompany) {
 
 @Composable
 private fun BackdropAndPoster(content: @Composable () -> Unit) {
-    Layout(modifier = Modifier.zIndex(1f), content = content) { measurables, constraints ->
+    Layout(modifier = Modifier, content = content) { measurables, constraints ->
         val placeables = measurables.map { measurable -> measurable.measure(constraints) }
         val backdrop = placeables[0]
         val poster = placeables[1]

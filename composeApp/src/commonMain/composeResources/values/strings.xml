@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Jetflix</string>
     <string name="try_again">Try Again</string>
+    <string name="back">Back</string>
 
     <!-- movies -->
     <string name="fetching_movies">Fetching Movies</string>
@@ -51,7 +52,11 @@
     <string name="production_company_logo_content_description">Logo of %1$s</string>
     <string name="person_content_description">Photo of %1$s the %2$s</string>
 
-    <!--  images -->
+    <!-- people grid -->
+    <string name="title_cast">Cast of %1$s</string>
+    <string name="title_crew">Crew of %1$s</string>
+
+    <!-- images -->
     <string name="likes_content_description">Likes</string>
     <string name="poster_content_description">Poster</string>
 

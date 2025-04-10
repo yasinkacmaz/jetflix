@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +32,7 @@ import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.favorites
 import jetflix.composeapp.generated.resources.no_favorites_found
 import org.jetbrains.compose.resources.stringResource
@@ -39,9 +44,18 @@ private const val COLUMN_COUNT = 2
 fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
     Scaffold(
         topBar = {
+            val navController = LocalNavController.current
             TopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = { Text(stringResource(Res.string.favorites)) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = stringResource(Res.string.back),
+                        )
+                    }
+                }
             )
         },
         modifier = Modifier.fillMaxSize(),
