@@ -10,13 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import coil3.request.transformations
-import coil3.transform.Transformation
-import com.yasinkacmaz.jetflix.util.animation.AnimationDuration
 
 @Composable
 fun JetflixImage(
@@ -26,19 +20,12 @@ fun JetflixImage(
     error: Painter? = placeholder,
     contentDescription: String = "",
     contentScale: ContentScale = ContentScale.Fit,
-    transformations: List<Transformation> = emptyList(),
-    crossfade: AnimationDuration? = null,
 ) {
     var colorFilter: ColorFilter? by remember { mutableStateOf(ColorFilter.tint(Color.LightGray)) }
     var scale: ContentScale by remember { mutableStateOf(ContentScale.Fit) }
-    val imageRequest = ImageRequest.Builder(LocalContext.current)
-        .data(data)
-        .transformations(transformations)
-        .apply { if (crossfade != null) crossfade(crossfade.duration) }
-        .build()
     AsyncImage(
         modifier = modifier,
-        model = imageRequest,
+        model = data,
         colorFilter = colorFilter,
         contentScale = scale,
         placeholder = placeholder,
