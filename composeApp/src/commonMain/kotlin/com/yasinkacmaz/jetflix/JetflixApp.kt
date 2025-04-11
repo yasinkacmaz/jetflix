@@ -15,14 +15,12 @@ import coil3.util.DebugLogger
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.navigation.SetupNavGraph
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
 val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
-@Preview
 fun JetflixApp(startScreen: Screen = Screen.Movies) {
     CompositionLocalProvider(
         LocalNavController provides rememberNavController(),

@@ -43,7 +43,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidX.splashscreen)
-            implementation(libs.androidX.palette)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
             //    debugImplementation(libs.androidX.tracing)
@@ -60,7 +59,6 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
 
             // DI
             implementation(libs.navigation.compose)
@@ -92,7 +90,6 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotest.assertions)
-            implementation(libs.ktor.client.mock)
         }
 
         desktopMain.dependencies {

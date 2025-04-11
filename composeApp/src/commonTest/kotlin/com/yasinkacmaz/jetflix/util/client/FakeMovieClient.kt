@@ -8,15 +8,18 @@ import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
 import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.data.remote.MoviesResponse
 import com.yasinkacmaz.jetflix.data.service.MovieService
+import com.yasinkacmaz.jetflix.util.resource.creditsJson
+import com.yasinkacmaz.jetflix.util.resource.imagesJson
+import com.yasinkacmaz.jetflix.util.resource.movieDetailJson
 import com.yasinkacmaz.jetflix.util.parseJson
 
 class FakeMovieClient : MovieService {
     val genre = Genre(1, "Name")
     var fetchGenresException: Exception? = null
     var movieDetailException: Exception? = null
-    val movieDetailResponse: MovieDetailResponse = parseJson("movie_detail.json")
-    val creditsResponse: CreditsResponse = parseJson("credits.json")
-    val imagesResponse: ImagesResponse = parseJson("images.json")
+    val movieDetailResponse: MovieDetailResponse = parseJson(movieDetailJson)
+    val creditsResponse: CreditsResponse = parseJson(creditsJson)
+    val imagesResponse: ImagesResponse = parseJson(imagesJson)
     val moviesResponse = MoviesResponse(1, listOf(MovieResponse(1, "movie", "", "", "", "", "", 1.1, 1)), 1, 1)
     val searchResponse = MoviesResponse(1, listOf(MovieResponse(1, "search", "", "", "", "", "", 1.1, 1)), 1, 1)
 

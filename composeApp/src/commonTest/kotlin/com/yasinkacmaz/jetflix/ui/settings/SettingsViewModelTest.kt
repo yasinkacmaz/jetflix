@@ -1,20 +1,16 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
-import com.yasinkacmaz.jetflix.util.testAppDispatchers
 import io.kotest.matchers.shouldBe
-import java.io.IOException
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.io.IOException
+import kotlin.test.Test
 
-class SettingsViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
+class SettingsViewModelTest: ViewModelTest() {
 
     private val configurationService = FakeConfigurationClient()
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
@@ -75,5 +71,5 @@ class SettingsViewModelTest {
         languageDataStore.language.test().last() shouldBe language
     }
 
-    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, testAppDispatchers)
+    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore)
 }
