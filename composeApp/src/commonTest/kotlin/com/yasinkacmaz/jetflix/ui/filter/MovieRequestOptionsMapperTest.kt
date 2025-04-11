@@ -3,7 +3,7 @@ package com.yasinkacmaz.jetflix.ui.filter
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
 
 class MovieRequestOptionsMapperTest {
 

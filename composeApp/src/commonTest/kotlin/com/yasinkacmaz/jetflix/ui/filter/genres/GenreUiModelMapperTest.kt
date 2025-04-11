@@ -2,7 +2,7 @@ package com.yasinkacmaz.jetflix.ui.filter.genres
 
 import com.yasinkacmaz.jetflix.data.remote.Genre
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
 
 class GenreUiModelMapperTest {
     @Test

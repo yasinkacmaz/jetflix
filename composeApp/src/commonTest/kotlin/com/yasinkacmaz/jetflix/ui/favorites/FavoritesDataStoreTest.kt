@@ -1,19 +1,14 @@
 package com.yasinkacmaz.jetflix.ui.favorites
 
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 
 class FavoritesDataStoreTest {
-
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
 
     private val fakeStringDataStore = FakeStringDataStore()
     private val favoritesDataStore = FavoritesDataStore(json, fakeStringDataStore)

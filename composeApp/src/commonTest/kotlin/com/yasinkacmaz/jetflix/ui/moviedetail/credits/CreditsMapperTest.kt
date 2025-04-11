@@ -1,15 +1,16 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 
 import com.yasinkacmaz.jetflix.data.remote.CreditsResponse
+import com.yasinkacmaz.jetflix.util.resource.creditsJson
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toProfilePhotoUrl
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
 
 class CreditsMapperTest {
     private val mapper = CreditsMapper()
 
-    private val creditsResponse: CreditsResponse = parseJson("credits.json")
+    private val creditsResponse: CreditsResponse = parseJson(creditsJson)
 
     @Test
     fun `Map gender as male`() {

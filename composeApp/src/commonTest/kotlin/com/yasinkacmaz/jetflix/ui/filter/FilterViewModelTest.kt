@@ -2,22 +2,18 @@ package com.yasinkacmaz.jetflix.ui.filter
 
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
-import com.yasinkacmaz.jetflix.util.testAppDispatchers
 import io.kotest.matchers.shouldBe
-import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.io.IOException
+import kotlin.test.Test
 
-class FilterViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
+class FilterViewModelTest: ViewModelTest() {
 
     private val fakeFilterDataStore = FakeStringDataStore()
     private val filterDataStore = FilterDataStore(json, fakeFilterDataStore)
@@ -76,5 +72,5 @@ class FilterViewModelTest {
         filterStates.last() shouldBe changedFilterState.copy(genres = listOf(genreUiModel))
     }
 
-    private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper, testAppDispatchers)
+    private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper)
 }

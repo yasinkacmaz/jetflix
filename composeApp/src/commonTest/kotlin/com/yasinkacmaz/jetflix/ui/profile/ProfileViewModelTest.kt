@@ -1,18 +1,15 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
+import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import java.io.IOException
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.io.IOException
+import kotlin.test.Test
 
-class ProfileViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
+class ProfileViewModelTest: ViewModelTest() {
 
     private val personId = 1337
     private val personService = FakePersonClient()

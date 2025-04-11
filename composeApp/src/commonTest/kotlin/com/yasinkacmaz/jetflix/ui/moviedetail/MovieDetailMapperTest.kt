@@ -2,17 +2,18 @@ package com.yasinkacmaz.jetflix.ui.moviedetail
 
 import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
 import com.yasinkacmaz.jetflix.data.remote.ProductionCompanyResponse
+import com.yasinkacmaz.jetflix.util.resource.movieDetailJson
 import com.yasinkacmaz.jetflix.util.parseAsDate
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toBackdropUrl
 import com.yasinkacmaz.jetflix.util.toPosterUrl
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
 
 class MovieDetailMapperTest {
     private val mapper = MovieDetailMapper()
 
-    private val movieDetailResponse: MovieDetailResponse = parseJson("movie_detail.json")
+    private val movieDetailResponse: MovieDetailResponse = parseJson(movieDetailJson)
 
     @Test
     fun map() {

@@ -1,17 +1,13 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 
 class LanguageDataStoreTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
 
     private val fakeStringDataStore = FakeStringDataStore()
 

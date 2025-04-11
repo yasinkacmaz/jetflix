@@ -1,16 +1,17 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
 import com.yasinkacmaz.jetflix.data.remote.ProfileResponse
+import com.yasinkacmaz.jetflix.util.resource.personJson
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toImdbProfileUrl
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
 
 class ProfileMapperTest {
     private val mapper = ProfileMapper()
 
-    private val profileResponse = parseJson<ProfileResponse>("person.json")
+    private val profileResponse = parseJson<ProfileResponse>(personJson)
 
     @Test
     fun map() {
