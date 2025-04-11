@@ -1,15 +1,16 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
 import com.yasinkacmaz.jetflix.data.remote.ImagesResponse
+import com.yasinkacmaz.jetflix.util.resource.imagesJson
 import com.yasinkacmaz.jetflix.util.parseJson
 import com.yasinkacmaz.jetflix.util.toOriginalUrl
 import io.kotest.matchers.collections.shouldContainAll
-import org.junit.Test
+import kotlin.test.Test
 
 class ImageMapperTest {
     private val mapper = ImageMapper()
 
-    private val imagesResponse: ImagesResponse = parseJson("images.json")
+    private val imagesResponse: ImagesResponse = parseJson(imagesJson)
 
     @Test
     fun `Map backdrops and posters with original url`() {

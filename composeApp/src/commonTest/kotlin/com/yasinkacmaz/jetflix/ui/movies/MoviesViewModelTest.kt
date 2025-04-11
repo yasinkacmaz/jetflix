@@ -4,8 +4,8 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterDataStore
 import com.yasinkacmaz.jetflix.ui.filter.MovieRequestOptionsMapper
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
@@ -13,18 +13,20 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 
-class MoviesViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
-
+class MoviesViewModelTest: ViewModelTest() {
     private val movieService = FakeMovieClient()
     private val filterDataStore = FilterDataStore(json, FakeStringDataStore())
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
     private val movieMapper = MovieMapper()
     private val movieRequestOptionsMapper = MovieRequestOptionsMapper()
+    private val moviesPagingSource = MoviesPagingSource(
+        movieService,
+        filterDataStore,
+        movieMapper,
+        movieRequestOptionsMapper
+    )
 
     @Test
     fun `Should not send search query change event when query is empty`() = runTest {
@@ -69,5 +71,5 @@ class MoviesViewModelTest {
     }
 
     private fun createViewModel() =
-        MoviesViewModel(movieService, movieMapper, movieRequestOptionsMapper, filterDataStore, languageDataStore)
+        MoviesViewModel(filterDataStore, languageDataStore, moviesPagingSource)
 }

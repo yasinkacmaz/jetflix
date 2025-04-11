@@ -3,21 +3,18 @@ package com.yasinkacmaz.jetflix.ui.moviedetail
 import com.yasinkacmaz.jetflix.ui.favorites.FavoritesDataStore
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.CreditsMapper
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImageMapper
-import com.yasinkacmaz.jetflix.util.CoroutineTestRule
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import java.io.IOException
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.io.IOException
+import kotlin.test.Test
 
-class MovieDetailViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
+class MovieDetailViewModelTest: ViewModelTest() {
 
     private val movieService = FakeMovieClient()
 

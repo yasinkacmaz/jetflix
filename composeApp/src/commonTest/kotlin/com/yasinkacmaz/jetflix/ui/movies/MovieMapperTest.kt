@@ -4,7 +4,7 @@ import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
 import com.yasinkacmaz.jetflix.util.toPosterUrl
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
 
 class MovieMapperTest {
     private val movieResponse = MovieResponse(1, "", "Name", "Title", "Language", "Overview", "Poster", 1.1, 1)
