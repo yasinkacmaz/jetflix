@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.movie
+package com.yasinkacmaz.jetflix.uiTest.movie
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -8,14 +8,14 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.ui.movies.movie.Movie
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
-import com.yasinkacmaz.jetflix.util.setTestContent
-import org.junit.Test
+import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
+import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class MovieContentTest {
 
     @Test
-    fun should_render_basic_movie_information() = runComposeUiTest {
+    fun `Should render movie item correctly`() = runComposeUiTest {
         val movie = Movie(
             id = 1337,
             name = "Movie Name",
