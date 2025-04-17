@@ -1,4 +1,4 @@
-package com.yasinkacmaz.jetflix.filter
+package com.yasinkacmaz.jetflix.uiTest.filter
 
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.ComposeUiTest
@@ -18,17 +18,18 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.swipeUp
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
-import com.yasinkacmaz.jetflix.util.getString
-import com.yasinkacmaz.jetflix.util.setTestContent
-import com.yasinkacmaz.jetflix.util.withRole
-import org.junit.Test
+import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
+import com.yasinkacmaz.jetflix.uiTest.util.withRole
+import com.yasinkacmaz.jetflix.uiTest.util.withStringResource
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.include_adult
+import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class FilterBottomSheetTest {
@@ -37,7 +38,7 @@ class FilterBottomSheetTest {
     private val genres = genreNames.mapIndexed { index, name -> GenreUiModel(genre = Genre(id = index, name = name)) }
 
     @Test
-    fun testFilterComponents() = runComposeUiTest {
+    fun `Should render filter components correctly`() = runComposeUiTest {
         val filterState =
             FilterState(sortOrder = SortOrder.ASCENDING, sortBy = SortBy.REVENUE, includeAdult = true, genres = genres)
 
@@ -46,13 +47,13 @@ class FilterBottomSheetTest {
         }
 
         ensureBottomSheetFullyVisible()
-        verifySortBySelected(filterState.sortBy)
+        verifySortBySelected(withStringResource(filterState.sortBy.title))
         verifyIncludeAdult(filterState.includeAdult)
-        onNodeWithText(getString(SortOrder.DESCENDING.titleResId)).performClick()
-        onNodeWithText(getString(SortBy.POPULARITY.titleResId)).performClick()
+        onNodeWithText(withStringResource(SortOrder.DESCENDING.title)).performClick()
+        onNodeWithText(withStringResource(SortBy.POPULARITY.title)).performClick()
         includeAdultNode().performClick()
-        verifySortOrderSelected(SortOrder.DESCENDING)
-        verifySortBySelected(SortBy.POPULARITY)
+        verifySortOrderSelected(withStringResource(SortOrder.DESCENDING.title))
+        verifySortBySelected(withStringResource(SortBy.POPULARITY.title))
         verifyIncludeAdult(!filterState.includeAdult)
 
         genreNames.forEach { genreName ->
@@ -67,13 +68,11 @@ class FilterBottomSheetTest {
         includeAdultNode().performTouchInput { swipeUp() }
     }
 
-    private fun ComposeUiTest.verifySortOrderSelected(sortOrder: SortOrder) {
-        val sortOrderTitle = getString(sortOrder.titleResId)
+    private fun ComposeUiTest.verifySortOrderSelected(sortOrderTitle: String) {
         onNode(withRole(Role.RadioButton).and(isSelected()).and(hasText(sortOrderTitle))).assertIsDisplayed()
     }
 
-    private fun ComposeUiTest.verifySortBySelected(sortBy: SortBy) {
-        val sortByTitle = getString(sortBy.titleResId)
+    private fun ComposeUiTest.verifySortBySelected(sortByTitle: String) {
         onNode(withRole(Role.RadioButton).and(isSelected()).and(hasText(sortByTitle))).assertIsDisplayed()
     }
 
@@ -82,5 +81,5 @@ class FilterBottomSheetTest {
         includeAdultNode().assert(hasAnyChild(isToggleable().and(matcher)))
     }
 
-    private fun ComposeUiTest.includeAdultNode() = onNodeWithText(getString(R.string.include_adult))
+    private fun ComposeUiTest.includeAdultNode() = onNodeWithText(withStringResource(Res.string.include_adult))
 }
