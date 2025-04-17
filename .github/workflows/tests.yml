@@ -1,9 +1,9 @@
-name: Unit Test
+name: Tests
 on:
   pull_request:
   workflow_dispatch:
 jobs:
-  unit-tests:
+  tests:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
@@ -14,6 +14,11 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
+      - name: Enable KVM group permissions for emulator hardware acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: 🔍 Detect Cache Key And Paths
         id: gradle-cache
         uses: actions/github-script@v7
@@ -32,12 +37,13 @@ jobs:
         with:
           path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
-      - name: Run unit tests
-        run: ./gradlew --no-configuration-cache testDebugUnitTest --continue
-      - name: Publish Unit Test Results
+      - name: Run tests
+        continue-on-error: true
+        run: ./gradlew --no-configuration-cache desktopTest --continue
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: ${{ github.event_name == 'pull_request' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Unit Test Results
+          check_name: Test Results
           junit_files: '**/test-results/**/*.xml'
