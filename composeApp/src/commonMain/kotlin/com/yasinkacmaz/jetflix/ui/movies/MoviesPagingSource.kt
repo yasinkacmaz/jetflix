@@ -14,27 +14,25 @@ class MoviesPagingSource(
     private val movieRequestOptionsMapper: MovieRequestOptionsMapper,
 ) {
 
-    suspend fun load(page: Int, searchQuery: String = ""): LoadResult {
-        return try {
-            val options = movieRequestOptionsMapper.map(filterDataStore.filterState.first())
-            val moviesResponse = if (searchQuery.isNotBlank()) {
-                movieService.search(page, searchQuery)
-            } else {
-                movieService.fetchMovies(page, options)
-            }
-            val movies = moviesResponse.movies.map(movieMapper::map)
-            LoadResult(
-                movies = movies,
-                isLastPage = page >= moviesResponse.totalPages,
-                error = null,
-            )
-        } catch (exception: Exception) {
-            LoadResult(
-                movies = emptyList(),
-                isLastPage = false,
-                error = exception,
-            )
+    suspend fun load(page: Int, searchQuery: String = ""): LoadResult = try {
+        val options = movieRequestOptionsMapper.map(filterDataStore.filterState.first())
+        val moviesResponse = if (searchQuery.isNotBlank()) {
+            movieService.search(page, searchQuery)
+        } else {
+            movieService.fetchMovies(page, options)
         }
+        val movies = moviesResponse.movies.map(movieMapper::map)
+        LoadResult(
+            movies = movies,
+            isLastPage = page >= moviesResponse.totalPages,
+            error = null,
+        )
+    } catch (exception: Exception) {
+        LoadResult(
+            movies = emptyList(),
+            isLastPage = false,
+            error = exception,
+        )
     }
 
     data class LoadResult(

@@ -37,7 +37,4 @@ data class ProductionCompanyResponse(
 )
 
 @Serializable
-data class SpokenLanguage(
-    @SerialName("iso_639_1") val iso6391: String,
-    @SerialName("name") val name: String,
-)
+data class SpokenLanguage(@SerialName("iso_639_1") val iso6391: String, @SerialName("name") val name: String)

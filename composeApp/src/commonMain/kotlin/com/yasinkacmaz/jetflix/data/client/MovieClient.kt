@@ -13,8 +13,8 @@ import io.ktor.client.request.parameter
 
 class MovieClient(private val httpClient: HttpClient) : MovieService {
 
-    override suspend fun fetchMovies(pageNumber: Int, options: Map<String, String>): MoviesResponse {
-        return httpClient.get("discover/movie") {
+    override suspend fun fetchMovies(pageNumber: Int, options: Map<String, String>): MoviesResponse =
+        httpClient.get("discover/movie") {
             url {
                 parameters.append("page", pageNumber.toString())
                 options.forEach {
@@ -22,17 +22,15 @@ class MovieClient(private val httpClient: HttpClient) : MovieService {
                 }
             }
         }.body()
-    }
 
-    override suspend fun search(pageNumber: Int, searchQuery: String, includeAdult: Boolean): MoviesResponse {
-        return httpClient.get("search/movie") {
+    override suspend fun search(pageNumber: Int, searchQuery: String, includeAdult: Boolean): MoviesResponse =
+        httpClient.get("search/movie") {
             url {
                 parameters.append("page", pageNumber.toString())
                 parameters.append("query", searchQuery)
                 parameters.append("include_adult", includeAdult.toString())
             }
         }.body()
-    }
 
     override suspend fun fetchGenres(): GenresResponse = httpClient.get("genre/movie/list").body()
 

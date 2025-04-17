@@ -8,8 +8,8 @@ import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlinx.coroutines.test.runTest
 
 class MoviesPagingSourceTest {
 
