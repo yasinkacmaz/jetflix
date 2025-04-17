@@ -12,10 +12,10 @@ import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlinx.coroutines.test.runTest
 
-class MoviesViewModelTest: ViewModelTest() {
+class MoviesViewModelTest : ViewModelTest() {
     private val movieService = FakeMovieClient()
     private val filterDataStore = FilterDataStore(json, FakeStringDataStore())
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
@@ -25,7 +25,7 @@ class MoviesViewModelTest: ViewModelTest() {
         movieService,
         filterDataStore,
         movieMapper,
-        movieRequestOptionsMapper
+        movieRequestOptionsMapper,
     )
 
     @Test
@@ -70,6 +70,5 @@ class MoviesViewModelTest: ViewModelTest() {
         moviesViewModel.searchQuery.value shouldBe query
     }
 
-    private fun createViewModel() =
-        MoviesViewModel(filterDataStore, languageDataStore, moviesPagingSource)
+    private fun createViewModel() = MoviesViewModel(filterDataStore, languageDataStore, moviesPagingSource)
 }

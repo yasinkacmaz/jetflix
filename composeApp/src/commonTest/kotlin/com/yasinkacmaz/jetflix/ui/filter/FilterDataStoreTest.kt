@@ -4,9 +4,9 @@ import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.json
 import io.kotest.matchers.shouldBe
+import kotlin.test.Test
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
 
 class FilterDataStoreTest {
     private val fakeStringDataStore = FakeStringDataStore()

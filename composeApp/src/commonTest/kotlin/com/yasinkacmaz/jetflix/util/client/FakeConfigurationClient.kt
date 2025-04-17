@@ -7,11 +7,9 @@ class FakeConfigurationClient : ConfigurationService {
     var fetchLanguagesException: Exception? = null
     var languages = listOf<Language>()
 
-    override suspend fun fetchLanguages(): List<Language> {
-        return if (fetchLanguagesException == null) {
-            languages
-        } else {
-            throw fetchLanguagesException!!.also { fetchLanguagesException = null }
-        }
+    override suspend fun fetchLanguages(): List<Language> = if (fetchLanguagesException == null) {
+        languages
+    } else {
+        throw fetchLanguagesException!!.also { fetchLanguagesException = null }
     }
 }

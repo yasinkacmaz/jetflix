@@ -55,7 +55,7 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
                             contentDescription = stringResource(Res.string.back),
                         )
                     }
-                }
+                },
             )
         },
         modifier = Modifier.fillMaxSize(),

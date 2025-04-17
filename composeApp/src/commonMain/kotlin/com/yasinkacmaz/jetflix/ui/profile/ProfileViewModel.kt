@@ -32,9 +32,5 @@ class ProfileViewModel(
         }
     }
 
-    data class ProfileUiState(
-        val profile: Profile? = null,
-        val loading: Boolean = false,
-        val error: Throwable? = null,
-    )
+    data class ProfileUiState(val profile: Profile? = null, val loading: Boolean = false, val error: Throwable? = null)
 }

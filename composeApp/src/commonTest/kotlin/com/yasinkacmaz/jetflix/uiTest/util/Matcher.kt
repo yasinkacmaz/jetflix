@@ -13,6 +13,4 @@ fun withRole(role: Role) = SemanticsMatcher("${SemanticsProperties.Role.name} co
     roleProperty == role
 }
 
-fun withStringResource(resource: StringResource): String {
-    return runBlocking { getString(resource) }
-}
+fun withStringResource(resource: StringResource): String = runBlocking { getString(resource) }

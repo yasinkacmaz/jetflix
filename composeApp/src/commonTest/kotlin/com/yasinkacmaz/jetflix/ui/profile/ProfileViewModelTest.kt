@@ -5,11 +5,11 @@ import com.yasinkacmaz.jetflix.util.client.FakePersonClient
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
-import kotlin.test.Test
 
-class ProfileViewModelTest: ViewModelTest() {
+class ProfileViewModelTest : ViewModelTest() {
 
     private val personId = 1337
     private val personService = FakePersonClient()
