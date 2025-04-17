@@ -10,11 +10,11 @@ import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
-import kotlin.test.Test
 
-class MovieDetailViewModelTest: ViewModelTest() {
+class MovieDetailViewModelTest : ViewModelTest() {
 
     private val movieService = FakeMovieClient()
 

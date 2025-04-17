@@ -196,9 +196,9 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
                     val layoutInfo = gridState.layoutInfo
                     val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
                     movies.isNotEmpty() &&
-                            lastVisibleItemIndex >= movies.size - 5 &&
-                            pagingState !is MoviesViewModel.PagingState.Loading &&
-                            pagingState !is MoviesViewModel.PagingState.Error
+                        lastVisibleItemIndex >= movies.size - 5 &&
+                        pagingState !is MoviesViewModel.PagingState.Loading &&
+                        pagingState !is MoviesViewModel.PagingState.Error
                 }
             }
 

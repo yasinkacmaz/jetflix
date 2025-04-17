@@ -1,8 +1,5 @@
-import com.android.build.gradle.BaseExtension
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 buildscript {
@@ -40,37 +37,6 @@ allprojects {
         }
     }
 }
-
-//subprojects {
-//    afterEvaluate {
-//        tasks.withType<KotlinCompile>().configureEach {
-//            compilerOptions {
-//                jvmTarget.set(JvmTarget.JVM_17)
-//                freeCompilerArgs.add("-Xcontext-receivers")
-//            }
-//        }
-//
-//        extensions.findByType<BaseExtension>() ?: return@afterEvaluate
-//        configure<BaseExtension> {
-//            compileSdkVersion(libs.versions.compileSdk.get().toInt())
-//            defaultConfig {
-//                minSdk = libs.versions.minSdk.get().toInt()
-//                targetSdk = libs.versions.targetSdk.get().toInt()
-//                versionName = libs.versions.versionName.get()
-//                versionCode = libs.versions.versionCode.get().toInt()
-//                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//            }
-//            compileOptions {
-//                sourceCompatibility = JavaVersion.VERSION_17
-//                targetCompatibility = JavaVersion.VERSION_17
-//            }
-//
-//            testOptions {
-//                animationsDisabled = true
-//            }
-//        }
-//    }
-//}
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     checkForGradleUpdate = true

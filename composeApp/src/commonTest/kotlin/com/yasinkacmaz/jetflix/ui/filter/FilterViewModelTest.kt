@@ -8,12 +8,12 @@ import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
+import kotlin.test.Test
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
-import kotlin.test.Test
 
-class FilterViewModelTest: ViewModelTest() {
+class FilterViewModelTest : ViewModelTest() {
 
     private val fakeFilterDataStore = FakeStringDataStore()
     private val filterDataStore = FilterDataStore(json, fakeFilterDataStore)

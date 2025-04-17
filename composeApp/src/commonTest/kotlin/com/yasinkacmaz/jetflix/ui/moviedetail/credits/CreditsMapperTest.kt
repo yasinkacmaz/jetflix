@@ -1,8 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 
 import com.yasinkacmaz.jetflix.data.remote.CreditsResponse
-import com.yasinkacmaz.jetflix.util.resource.creditsJson
 import com.yasinkacmaz.jetflix.util.parseJson
+import com.yasinkacmaz.jetflix.util.resource.creditsJson
 import com.yasinkacmaz.jetflix.util.toProfilePhotoUrl
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test

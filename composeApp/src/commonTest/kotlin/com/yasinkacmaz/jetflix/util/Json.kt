@@ -7,6 +7,4 @@ val json = Json {
     ignoreUnknownKeys = true
 }
 
-inline fun <reified T : Any> parseJson(jsonContent: String): T {
-    return json.decodeFromString(jsonContent)
-}
+inline fun <reified T : Any> parseJson(jsonContent: String): T = json.decodeFromString(jsonContent)

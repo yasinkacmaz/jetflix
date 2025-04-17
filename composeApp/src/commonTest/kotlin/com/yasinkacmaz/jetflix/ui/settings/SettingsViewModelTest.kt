@@ -6,11 +6,11 @@ import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.json
 import com.yasinkacmaz.jetflix.util.test
 import io.kotest.matchers.shouldBe
+import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
-import kotlin.test.Test
 
-class SettingsViewModelTest: ViewModelTest() {
+class SettingsViewModelTest : ViewModelTest() {
 
     private val configurationService = FakeConfigurationClient()
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
