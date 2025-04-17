@@ -1,5 +1,5 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.nio.charset.Charset
 import java.util.Properties
@@ -45,8 +45,6 @@ kotlin {
             implementation(libs.androidX.splashscreen)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
-            //    debugImplementation(libs.androidX.tracing)
-//    debugImplementation(libs.compose.testManifest)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -90,6 +88,8 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotest.assertions)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
         }
 
         desktopMain.dependencies {

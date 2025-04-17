@@ -1,10 +1,5 @@
-package com.yasinkacmaz.jetflix.moviedetail
+package com.yasinkacmaz.jetflix.uiTest.moviedetail
 
-import androidx.annotation.StringRes
-import androidx.compose.animation.Animatable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertCountEquals
@@ -15,16 +10,16 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.runComposeUiTest
-import com.yasinkacmaz.jetflix.R
-import com.yasinkacmaz.jetflix.ui.moviedetail.LocalVibrantColor
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetail
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
-import com.yasinkacmaz.jetflix.util.getString
-import com.yasinkacmaz.jetflix.util.randomColor
-import com.yasinkacmaz.jetflix.util.setTestContent
-import org.junit.Test
+import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
+import com.yasinkacmaz.jetflix.uiTest.util.withStringResource
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.cast
+import jetflix.composeapp.generated.resources.crew
+import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class MovieDetailScreenTest {
@@ -41,28 +36,45 @@ class MovieDetailScreenTest {
     )
 
     @Test
-    fun should_not_render_original_title_if_same_with_name() = runComposeUiTest {
+    fun `Should not render original title if its same with title`() = runComposeUiTest {
         val title = "Title"
         val originalTitle = "Title"
 
-        renderMovieDetail(movieDetail.copy(title = title, originalTitle = originalTitle))
-
+        setTestContent {
+            MovieDetail(
+                movieDetail = movieDetail.copy(title = title, originalTitle = originalTitle),
+                cast = emptyList(),
+                crew = emptyList(),
+                images = listOf(),
+                isFavorite = false,
+                onFavoriteClicked = {},
+            )
+        }
         onAllNodesWithText(title, useUnmergedTree = false).assertCountEquals(1)
     }
 
     @Test
-    fun should_render_original_title_with_parentheses_if_different_from_name() = runComposeUiTest {
+    fun `Should render original title with parentheses if its different from title`() = runComposeUiTest {
         val title = "Title"
         val originalTitle = "Original Title"
 
-        renderMovieDetail(movieDetail.copy(title = title, originalTitle = originalTitle))
+        setTestContent {
+            MovieDetail(
+                movieDetail = movieDetail.copy(title = title, originalTitle = originalTitle),
+                cast = emptyList(),
+                crew = emptyList(),
+                images = listOf(),
+                isFavorite = false,
+                onFavoriteClicked = {},
+            )
+        }
 
         onNodeWithText(title, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText("($originalTitle)", useUnmergedTree = false).assertIsDisplayed()
     }
 
     @Test
-    fun should_render_movie_info() = runComposeUiTest {
+    fun `Should render movie detail correctly`() = runComposeUiTest {
         val person = Person(name = "", role = "", profilePhotoUrl = null, gender = Gender.FEMALE, id = 1337)
         val credits = Credits(
             cast = listOf(
@@ -74,8 +86,16 @@ class MovieDetailScreenTest {
                 person.copy("J.K. Rowling", "Novel", gender = Gender.FEMALE),
             ),
         )
-        renderMovieDetail(movieDetail, credits)
-
+        setTestContent {
+            MovieDetail(
+                movieDetail = movieDetail,
+                cast = credits.cast,
+                crew = credits.crew,
+                images = listOf(),
+                isFavorite = false,
+                onFavoriteClicked = {},
+            )
+        }
         onNodeWithText(movieDetail.releaseDate).performScrollTo()
         onNodeWithText(movieDetail.releaseDate, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText("${movieDetail.duration} min", useUnmergedTree = false).assertIsDisplayed()
@@ -86,33 +106,16 @@ class MovieDetailScreenTest {
         onNodeWithText(movieDetail.tagline, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(movieDetail.overview).performScrollTo()
         onNodeWithText(movieDetail.overview, useUnmergedTree = false).assertIsDisplayed()
-        assertPeople(R.string.cast, credits.cast)
-        assertPeople(R.string.crew, credits.crew)
+        assertPeople(withStringResource(Res.string.cast), credits.cast)
+        assertPeople(withStringResource(Res.string.crew), credits.crew)
     }
 
-    private fun ComposeUiTest.assertPeople(@StringRes tagResId: Int, people: List<Person>) {
-        val peopleLazyRow = onNodeWithTag(getString(tagResId)).performScrollTo()
+    private fun ComposeUiTest.assertPeople(tag: String, people: List<Person>) {
+        val peopleLazyRow = onNodeWithTag(tag).performScrollTo()
         people.forEachIndexed { index, person ->
             peopleLazyRow.performScrollToIndex(index)
             onNodeWithText(person.name, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
             onNodeWithText(person.role, ignoreCase = false, useUnmergedTree = false).assertIsDisplayed()
-        }
-    }
-
-    private fun ComposeUiTest.renderMovieDetail(
-        movieDetail: MovieDetail,
-        credits: Credits = Credits(emptyList(), emptyList()),
-    ) = setTestContent {
-        val dominantColor = remember(movieDetail.id) { Animatable(Color.randomColor()) }
-        CompositionLocalProvider(LocalVibrantColor provides dominantColor) {
-            MovieDetail(
-                movieDetail = movieDetail,
-                cast = credits.cast,
-                crew = credits.crew,
-                images = listOf(),
-                isFavorite = false,
-                onFavoriteClicked = {},
-            )
         }
     }
 }

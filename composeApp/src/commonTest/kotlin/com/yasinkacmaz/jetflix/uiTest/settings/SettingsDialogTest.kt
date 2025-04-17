@@ -1,19 +1,19 @@
-package com.yasinkacmaz.jetflix.settings
+package com.yasinkacmaz.jetflix.uiTest.settings
 
-import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
-import com.yasinkacmaz.jetflix.R
 import com.yasinkacmaz.jetflix.ui.settings.Language
 import com.yasinkacmaz.jetflix.ui.settings.SettingsDialogContent
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.ui.settings.displayName
-import com.yasinkacmaz.jetflix.util.getString
-import com.yasinkacmaz.jetflix.util.setTestContent
-import org.junit.Test
+import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
+import com.yasinkacmaz.jetflix.uiTest.util.withStringResource
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.fetching_languages
+import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class SettingsDialogTest {
@@ -21,25 +21,29 @@ class SettingsDialogTest {
     private val defaultLanguage = Language("Turkish", "tr", "Türkçe")
 
     @Test
-    fun should_render_loading_when_uiState_showLoading_is_true() = runComposeUiTest {
+    fun `Should render loading state`() = runComposeUiTest {
         val uiState = SettingsViewModel.UiState(showLoading = true)
 
-        showSettingsDialog(uiState)
+        setTestContent {
+            SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+        }
 
-        onNodeWithText(getString(R.string.fetching_languages), useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText(withStringResource(Res.string.fetching_languages), useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
-    fun should_render_selected_language() = runComposeUiTest {
+    fun `Should render selected language`() = runComposeUiTest {
         val uiState = SettingsViewModel.UiState(selectedLanguage = defaultLanguage)
 
-        showSettingsDialog(uiState)
+        setTestContent {
+            SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+        }
 
         onNodeWithText(defaultLanguage.displayName, substring = true, useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
-    fun should_render_languages_when_selected_language_clicked() = runComposeUiTest {
+    fun `Should render languages when selected language clicked`() = runComposeUiTest {
         val firstLanguageName = "English"
         val secondLanguageName = "Russian"
         val thirdLanguageName = "Chinese"
@@ -50,15 +54,13 @@ class SettingsDialogTest {
         )
         val uiState = SettingsViewModel.UiState(languages = languages, selectedLanguage = defaultLanguage)
 
-        showSettingsDialog(uiState)
+        setTestContent {
+            SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+        }
         onNodeWithText(defaultLanguage.displayName, substring = true, useUnmergedTree = true).performClick()
 
         languages.forEach {
             onNodeWithText(it.englishName, substring = true, useUnmergedTree = true).assertIsDisplayed()
         }
-    }
-
-    private fun ComposeUiTest.showSettingsDialog(uiState: SettingsViewModel.UiState) = setTestContent {
-        SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
     }
 }

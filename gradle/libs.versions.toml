@@ -55,7 +55,4 @@ coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.re
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version = "5.9.1" }
 
-androidX_tracing = { module = "androidx.tracing:tracing", version = "1.2.0" }
 androidX-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.2.0-beta01" }
-
-compose_testManifest = { module = "androidx.compose.ui:ui-test-manifest", version = "1.8.0-rc01" }
