@@ -37,6 +37,9 @@ jobs:
         with:
           path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
+      - name: Run tests with xvfb
+        run: |
+          xvfb-run --auto-servernum --server-args='-screen 0 720x1280x24' ./gradlew --no-configuration-cache desktopTest --continue
       - name: Run tests
         continue-on-error: true
         run: ./gradlew --no-configuration-cache desktopTest --continue
