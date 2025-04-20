@@ -12,6 +12,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
+import com.yasinkacmaz.jetflix.ui.splash.SplashScreen
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.title_cast
 import jetflix.composeapp.generated.resources.title_crew
@@ -26,6 +27,10 @@ private fun movieDetailViewModel(movieId: Int): MovieDetailViewModel =
 @Composable
 fun SetupNavGraph(startScreen: Screen = Screen.Movies) {
     NavHost(navController = LocalNavController.current, startDestination = startScreen) {
+        composable<Screen.Splash> {
+            SplashScreen()
+        }
+
         composable<Screen.Movies> {
             MoviesScreen(moviesViewModel = koinViewModel(), filterViewModel = koinViewModel())
         }

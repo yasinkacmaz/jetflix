@@ -42,7 +42,7 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
-            implementation(libs.androidX.splashscreen)
+            implementation(libs.androidx.splashscreen)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
         }

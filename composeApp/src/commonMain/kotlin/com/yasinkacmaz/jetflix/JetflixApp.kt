@@ -21,7 +21,7 @@ val LocalNavController = compositionLocalOf<NavHostController> { error("No nav c
 val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
-fun JetflixApp(startScreen: Screen = Screen.Movies) {
+fun JetflixApp(startScreen: Screen) {
     CompositionLocalProvider(
         LocalNavController provides rememberNavController(),
         LocalDarkTheme provides mutableStateOf(isSystemInDarkTheme()),
