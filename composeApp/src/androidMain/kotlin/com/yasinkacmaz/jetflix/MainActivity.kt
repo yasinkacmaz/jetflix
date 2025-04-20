@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.yasinkacmaz.jetflix.ui.navigation.Screen
 
 class MainActivity : ComponentActivity() {
 
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             enableEdgeToEdge()
-            JetflixApp()
+            JetflixApp(startScreen = Screen.Movies)
         }
     }
 }
