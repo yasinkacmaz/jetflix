@@ -38,7 +38,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -121,16 +120,14 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
 
         uiState.movieDetail != null -> {
             CompositionLocalProvider(LocalMovieId provides uiState.movieDetail.id) {
-                Surface {
-                    MovieDetail(
-                        movieDetail = uiState.movieDetail,
-                        cast = uiState.credits.cast,
-                        crew = uiState.credits.crew,
-                        images = uiState.images,
-                        isFavorite = uiState.isFavorite,
-                        onFavoriteClicked = movieDetailViewModel::onFavoriteClicked,
-                    )
-                }
+                MovieDetail(
+                    movieDetail = uiState.movieDetail,
+                    cast = uiState.credits.cast,
+                    crew = uiState.credits.crew,
+                    images = uiState.images,
+                    isFavorite = uiState.isFavorite,
+                    onFavoriteClicked = movieDetailViewModel::onFavoriteClicked,
+                )
             }
         }
     }
@@ -151,7 +148,8 @@ fun MovieDetail(
     Column(
         Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .padding(bottom = MaterialTheme.spacing.l),
     ) {
         Box(Modifier.zIndex(1f)) {
             BackdropAndPoster {
@@ -285,7 +283,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
     ) {
         JetflixImage(
             data = backdropUrl,
-            contentScale = ContentScale.FillHeight,
+            contentScale = ContentScale.Crop,
             contentDescription = stringResource(Res.string.backdrop_content_description, movieName),
             modifier = Modifier.fillMaxSize(),
         )
