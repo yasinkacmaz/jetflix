@@ -3,7 +3,6 @@ package com.yasinkacmaz.jetflix.util
 import com.yasinkacmaz.jetflix.data.local.LocalDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.serialization.encodeToString
 
 class FakeStringDataStore : LocalDataStore {
     private var values: MutableStateFlow<String> = MutableStateFlow("")

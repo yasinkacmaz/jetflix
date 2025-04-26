@@ -2,6 +2,7 @@ import java.nio.charset.Charset
 import java.util.Properties
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val applicationName = "com.yasinkacmaz.jetflix"
@@ -17,6 +18,12 @@ plugins {
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xcontext-receivers")
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
     androidTarget {
@@ -44,10 +51,21 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.splashscreen)
             implementation(libs.koin.android)
+            implementation(libs.androidx.datastore.preferences)
             implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
+            implementation(libs.androidx.datastore.preferences)
             implementation(libs.ktor.client.darwin)
+        }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.ktor.client.okhttp)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
         commonMain.dependencies {
             // Compose
@@ -80,8 +98,6 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.compose.core)
             implementation(libs.coil.network.ktor)
-
-            implementation(libs.androidx.datastore.preferences)
         }
 
         commonTest.dependencies {
@@ -90,12 +106,6 @@ kotlin {
             implementation(libs.kotest.assertions)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
-        }
-
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

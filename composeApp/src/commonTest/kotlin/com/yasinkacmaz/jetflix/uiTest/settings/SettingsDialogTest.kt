@@ -10,9 +10,6 @@ import com.yasinkacmaz.jetflix.ui.settings.SettingsDialogContent
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.ui.settings.displayName
 import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
-import com.yasinkacmaz.jetflix.uiTest.util.withStringResource
-import jetflix.composeapp.generated.resources.Res
-import jetflix.composeapp.generated.resources.fetching_languages
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -28,7 +25,7 @@ class SettingsDialogTest {
             SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
         }
 
-        onNodeWithText(withStringResource(Res.string.fetching_languages), useUnmergedTree = true).assertIsDisplayed()
+        onNodeWithText("Fetching Languages", useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
