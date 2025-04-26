@@ -15,22 +15,19 @@ import coil3.util.DebugLogger
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.navigation.SetupNavGraph
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
-import org.koin.compose.KoinContext
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
 val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
-fun JetflixApp(startScreen: Screen) {
+fun JetflixApp(startScreen: Screen, navController: NavHostController = rememberNavController()) {
     CompositionLocalProvider(
-        LocalNavController provides rememberNavController(),
+        LocalNavController provides navController,
         LocalDarkTheme provides mutableStateOf(isSystemInDarkTheme()),
     ) {
         JetflixTheme(isDarkTheme = LocalDarkTheme.current.value) {
             SetupCoilImageLoader()
-            KoinContext {
-                SetupNavGraph(startScreen)
-            }
+            SetupNavGraph(startScreen)
         }
     }
 }

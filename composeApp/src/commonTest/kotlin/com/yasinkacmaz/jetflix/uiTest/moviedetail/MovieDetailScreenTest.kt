@@ -15,10 +15,6 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Gender
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
-import com.yasinkacmaz.jetflix.uiTest.util.withStringResource
-import jetflix.composeapp.generated.resources.Res
-import jetflix.composeapp.generated.resources.cast
-import jetflix.composeapp.generated.resources.crew
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -106,8 +102,8 @@ class MovieDetailScreenTest {
         onNodeWithText(movieDetail.tagline, useUnmergedTree = false).assertIsDisplayed()
         onNodeWithText(movieDetail.overview).performScrollTo()
         onNodeWithText(movieDetail.overview, useUnmergedTree = false).assertIsDisplayed()
-        assertPeople(withStringResource(Res.string.cast), credits.cast)
-        assertPeople(withStringResource(Res.string.crew), credits.crew)
+        assertPeople("Cast", credits.cast)
+        assertPeople("Crew", credits.crew)
     }
 
     private fun ComposeUiTest.assertPeople(tag: String, people: List<Person>) {

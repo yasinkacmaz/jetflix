@@ -26,9 +26,6 @@ import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
 import com.yasinkacmaz.jetflix.ui.filter.option.SortOrder
 import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
 import com.yasinkacmaz.jetflix.uiTest.util.withRole
-import com.yasinkacmaz.jetflix.uiTest.util.withStringResource
-import jetflix.composeapp.generated.resources.Res
-import jetflix.composeapp.generated.resources.include_adult
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -47,13 +44,13 @@ class FilterBottomSheetTest {
         }
 
         ensureBottomSheetFullyVisible()
-        verifySortBySelected(withStringResource(filterState.sortBy.title))
+        verifySortBySelected("Revenue")
         verifyIncludeAdult(filterState.includeAdult)
-        onNodeWithText(withStringResource(SortOrder.DESCENDING.title)).performClick()
-        onNodeWithText(withStringResource(SortBy.POPULARITY.title)).performClick()
+        onNodeWithText("Descending").performClick()
+        onNodeWithText("Popularity").performClick()
         includeAdultNode().performClick()
-        verifySortOrderSelected(withStringResource(SortOrder.DESCENDING.title))
-        verifySortBySelected(withStringResource(SortBy.POPULARITY.title))
+        verifySortOrderSelected("Descending")
+        verifySortBySelected("Popularity")
         verifyIncludeAdult(!filterState.includeAdult)
 
         genreNames.forEach { genreName ->
@@ -81,5 +78,5 @@ class FilterBottomSheetTest {
         includeAdultNode().assert(hasAnyChild(isToggleable().and(matcher)))
     }
 
-    private fun ComposeUiTest.includeAdultNode() = onNodeWithText(withStringResource(Res.string.include_adult))
+    private fun ComposeUiTest.includeAdultNode() = onNodeWithText("Include Adult")
 }
