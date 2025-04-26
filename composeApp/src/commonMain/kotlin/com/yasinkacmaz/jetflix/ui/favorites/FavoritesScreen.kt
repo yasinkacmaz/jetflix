@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
@@ -36,8 +35,6 @@ import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.favorites
 import jetflix.composeapp.generated.resources.no_favorites_found
 import org.jetbrains.compose.resources.stringResource
-
-private const val COLUMN_COUNT = 2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,12 +80,12 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
                     start = MaterialTheme.spacing.s,
                     end = MaterialTheme.spacing.s,
                 ),
-                columns = GridCells.Fixed(COLUMN_COUNT),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterHorizontally),
+                columns = GridCells.Adaptive(minSize = 180.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
                 content = {
                     items(favorites) {
-                        MovieItem(it, Modifier.height(280.dp), onMovieClicked)
+                        MovieItem(it, onMovieClicked)
                     }
                 },
             )

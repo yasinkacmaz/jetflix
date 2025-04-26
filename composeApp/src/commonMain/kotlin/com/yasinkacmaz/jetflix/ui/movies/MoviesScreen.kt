@@ -82,9 +82,7 @@ import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-private const val COLUMN_COUNT = 2
-
-private val fullWidthSpan: (LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(COLUMN_COUNT) }
+private val fullWidthSpan: LazyGridItemSpanScope.() -> GridItemSpan = { GridItemSpan(maxLineSpan) }
 
 @Composable
 fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewModel) {
@@ -143,13 +141,13 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
                     start = MaterialTheme.spacing.s,
                     end = MaterialTheme.spacing.s,
                 ),
-                columns = GridCells.Fixed(COLUMN_COUNT),
+                columns = GridCells.Adaptive(minSize = 180.dp),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterHorizontally),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
                 state = gridState,
                 content = {
                     items(movies) { movie ->
-                        MovieItem(movie, Modifier.height(280.dp), onMovieClicked)
+                        MovieItem(movie, onMovieClicked)
                     }
 
                     when (pagingState) {
