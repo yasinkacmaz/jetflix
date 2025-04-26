@@ -108,20 +108,20 @@ val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
 
 @Composable
 fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
-    val uiState = movieDetailViewModel.uiState.collectAsState().value
+    Surface {
+        val uiState = movieDetailViewModel.uiState.collectAsState().value
 
-    when {
-        uiState.loading -> {
-            Loading(modifier = Modifier.fillMaxSize(), title = stringResource(Res.string.fetching_movie_detail))
-        }
+        when {
+            uiState.loading -> {
+                Loading(modifier = Modifier.fillMaxSize(), title = stringResource(Res.string.fetching_movie_detail))
+            }
 
-        uiState.error != null -> {
-            Error(modifier = Modifier.fillMaxSize(), message = uiState.error.message.orEmpty())
-        }
+            uiState.error != null -> {
+                Error(modifier = Modifier.fillMaxSize(), message = uiState.error.message.orEmpty())
+            }
 
-        uiState.movieDetail != null -> {
-            CompositionLocalProvider(LocalMovieId provides uiState.movieDetail.id) {
-                Surface {
+            uiState.movieDetail != null -> {
+                CompositionLocalProvider(LocalMovieId provides uiState.movieDetail.id) {
                     MovieDetail(
                         movieDetail = uiState.movieDetail,
                         cast = uiState.credits.cast,
@@ -151,7 +151,8 @@ fun MovieDetail(
     Column(
         Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .padding(bottom = MaterialTheme.spacing.l),
     ) {
         Box(Modifier.zIndex(1f)) {
             BackdropAndPoster {
@@ -285,7 +286,7 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
     ) {
         JetflixImage(
             data = backdropUrl,
-            contentScale = ContentScale.FillHeight,
+            contentScale = ContentScale.Crop,
             contentDescription = stringResource(Res.string.backdrop_content_description, movieName),
             modifier = Modifier.fillMaxSize(),
         )
