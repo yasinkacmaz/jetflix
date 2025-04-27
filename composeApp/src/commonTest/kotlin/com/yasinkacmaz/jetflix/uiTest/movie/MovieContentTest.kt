@@ -1,7 +1,7 @@
 package com.yasinkacmaz.jetflix.uiTest.movie
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
@@ -26,7 +26,11 @@ class MovieContentTest {
         )
 
         setTestContent {
-            MovieItem(movie, Modifier.fillMaxSize(0.5f))
+            LazyVerticalGrid(GridCells.Fixed(2)) {
+                item {
+                    MovieItem(movie)
+                }
+            }
         }
 
         onNodeWithText(movie.name, useUnmergedTree = true).assertIsDisplayed()
