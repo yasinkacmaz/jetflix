@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -52,7 +50,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
         }
         Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
         CircleIconButton(
-            modifier = Modifier.statusBarsPadding().padding(horizontal = MaterialTheme.spacing.l),
+            modifier = Modifier.statusBarsPadding().padding(MaterialTheme.spacing.l),
             onClick = { navController.navigateUp() },
         ) {
             Icon(
@@ -70,7 +68,7 @@ private fun Poster(image: Image) {
         Card(
             modifier = Modifier
                 .systemBarsPadding()
-                .padding(MaterialTheme.spacing.m)
+                .padding(MaterialTheme.spacing.xxl)
                 .shadow(16.dp, RoundedCornerShape(12.dp))
                 .wrapContentSize()
                 .animateContentSize(),
@@ -80,9 +78,7 @@ private fun Poster(image: Image) {
                     data = image.url,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
+                        .align(Alignment.Center),
                 )
                 VoteCount(image.voteCount)
             }
@@ -95,7 +91,7 @@ private fun BlurImage(url: String) {
     JetflixImage(
         data = url,
         contentDescription = stringResource(Res.string.poster_content_description),
-        contentScale = ContentScale.FillHeight,
+        contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxSize()
             .blur(16.dp),
