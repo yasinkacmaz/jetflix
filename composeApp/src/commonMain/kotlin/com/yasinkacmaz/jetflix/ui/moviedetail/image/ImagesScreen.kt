@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
@@ -22,10 +23,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.LocalNavController
@@ -36,6 +47,7 @@ import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.likes_content_description
 import jetflix.composeapp.generated.resources.poster_content_description
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -44,7 +56,40 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
 
     val pagerState = rememberPagerState(initialPage = initialPage, initialPageOffsetFraction = 0f) { images.size }
     val navController = LocalNavController.current
-    Box(Modifier.fillMaxSize()) {
+    val coroutineScope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
+    Box(
+        Modifier
+            .fillMaxSize()
+            .focusRequester(focusRequester)
+            .focusable()
+            .onKeyEvent {
+                if (it.type != KeyEventType.KeyDown) return@onKeyEvent false
+
+                when (it.key) {
+                    Key.DirectionLeft -> {
+                        coroutineScope.launch {
+                            val prevPage = (pagerState.currentPage - 1).coerceAtLeast(0)
+                            pagerState.animateScrollToPage(prevPage)
+                        }
+                        true
+                    }
+
+                    Key.DirectionRight -> {
+                        coroutineScope.launch {
+                            val nextPage = (pagerState.currentPage + 1).coerceAtMost(pagerState.pageCount - 1)
+                            pagerState.animateScrollToPage(nextPage)
+                        }
+                        true
+                    }
+
+                    else -> false
+                }
+            },
+    ) {
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
         HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 3) {
             Poster(images[it])
         }
