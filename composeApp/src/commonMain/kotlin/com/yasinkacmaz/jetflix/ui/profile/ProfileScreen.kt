@@ -1,43 +1,44 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Compact
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Expanded
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Medium
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
@@ -45,12 +46,14 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.common.Error
 import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.ui.widget.CircleIconButton
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.openInBrowser
 import jetflix.composeapp.generated.resources.Res
@@ -60,8 +63,6 @@ import jetflix.composeapp.generated.resources.birthday
 import jetflix.composeapp.generated.resources.birthplace
 import jetflix.composeapp.generated.resources.fetching_profile
 import jetflix.composeapp.generated.resources.known_for
-import jetflix.composeapp.generated.resources.open_imdb_content_description
-import jetflix.composeapp.generated.resources.open_imdb_profile
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -84,95 +85,117 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3WindowSizeClassApi::class,
+    ExperimentalSharedTransitionApi::class,
+)
 @Composable
 private fun Profile(profile: Profile) {
     val navController = LocalNavController.current
-    val lazyListState = rememberLazyListState()
-    val isTitleStuck by remember {
-        derivedStateOf {
-            val firstVisibleItemIndex = lazyListState.firstVisibleItemIndex
-            val firstVisibleItemOffset = lazyListState.firstVisibleItemScrollOffset
-            firstVisibleItemIndex > 0 && firstVisibleItemOffset != 0
-        }
+    val screenSize = LocalWindowInfo.current.containerSize
+    val screenSizeDp = with(LocalDensity.current) {
+        DpSize(width = screenSize.width.toDp(), height = screenSize.height.toDp())
     }
+    val windowSizeClass: WindowSizeClass = WindowSizeClass.calculateFromSize(screenSizeDp)
+    val imageMinimumHeight = with(LocalDensity.current) { (screenSize.height * 0.45f).toDp() }
     Scaffold(
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .alpha(animateFloatAsState(if (isTitleStuck) 1f else 0f, label = "").value)
-                    .shadow(8.dp),
-                title = { Name(profile.name) },
+                modifier = Modifier.statusBarsPadding().padding(horizontal = MaterialTheme.spacing.l),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                title = { },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    CircleIconButton(onClick = { navController.navigateUp() }) {
                         Icon(
-                            Icons.AutoMirrored.Default.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(Res.string.back),
                         )
+                    }
+                },
+                actions = {
+                    val uriHandler = LocalUriHandler.current
+                    CircleIconButton(onClick = { profile.imdbProfileUrl?.openInBrowser(uriHandler) }) {
+                        Icon(Icons.Default.Language, contentDescription = null)
                     }
                 },
             )
         },
     ) {
-        LazyColumn(state = lazyListState) {
-            item {
-                val screenHeight = LocalWindowInfo.current.containerSize.height
-                val imageMinimumHeight = with(LocalDensity.current) { (screenHeight * 0.45f).toDp() }
-                JetflixImage(
-                    data = profile.profilePhotoUrl,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = imageMinimumHeight)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .animateContentSize(),
-                )
-            }
-
-            item {
-                TopAppBar(
-                    windowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
-                    modifier = Modifier.alpha(animateFloatAsState(if (isTitleStuck) 0f else 1f, label = "").value),
-                    title = { Name(profile.name) },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = stringResource(Res.string.back),
+        SharedTransitionLayout {
+            AnimatedContent(
+                targetState = windowSizeClass.widthSizeClass,
+                contentKey = { if (it == Compact) "ProfileSmallUI" else "ProfileLargeUI" },
+            ) {
+                when (it) {
+                    Compact -> {
+                        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                            JetflixImage(
+                                data = profile.profilePhotoUrl,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .requiredHeight(imageMinimumHeight)
+                                    .sharedBounds(
+                                        rememberSharedContentState(key = "profileImage"),
+                                        animatedVisibilityScope = this@AnimatedContent,
+                                    ),
+                            )
+                            ProfileInformation(
+                                profile,
+                                modifier = Modifier.sharedElement(
+                                    rememberSharedContentState(key = "profileInformation"),
+                                    animatedVisibilityScope = this@AnimatedContent,
+                                ),
                             )
                         }
-                    },
-                )
-            }
+                    }
 
-            item {
-                ImdbProfileButton(profile.imdbProfileUrl)
-            }
-
-            item {
-                ProfileField(Res.string.birthday, profile.birthday)
-            }
-
-            item {
-                ProfileField(Res.string.birthplace, profile.placeOfBirth)
-            }
-
-            item {
-                ProfileField(Res.string.known_for, profile.knownFor)
-            }
-
-            item {
-                AlsoKnownAs(profile.alsoKnownAs)
-            }
-
-            item {
-                Text(
-                    text = profile.biography,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(MaterialTheme.spacing.l),
-                )
+                    Medium, Expanded -> {
+                        Row(modifier = Modifier.fillMaxSize()) {
+                            JetflixImage(
+                                data = profile.profilePhotoUrl,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .sharedBounds(
+                                        rememberSharedContentState(key = "profileImage"),
+                                        animatedVisibilityScope = this@AnimatedContent,
+                                    ),
+                            )
+                            Column(
+                                Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .verticalScroll(rememberScrollState()),
+                            ) {
+                                ProfileInformation(
+                                    profile,
+                                    modifier = Modifier.sharedElement(
+                                        rememberSharedContentState(key = "profileInformation"),
+                                        animatedVisibilityScope = this@AnimatedContent,
+                                    ),
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun ProfileInformation(profile: Profile, modifier: Modifier) {
+    Column(modifier) {
+        Name(profile.name)
+        ProfileField(Res.string.birthday, profile.birthday)
+        ProfileField(Res.string.birthplace, profile.placeOfBirth)
+        ProfileField(Res.string.known_for, profile.knownFor)
+        AlsoKnownAs(profile.alsoKnownAs)
+        Biography(profile)
     }
 }
 
@@ -186,6 +209,10 @@ private fun Name(name: String) = Text(
     ),
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
+    modifier = Modifier.padding(
+        horizontal = MaterialTheme.spacing.l,
+        vertical = MaterialTheme.spacing.xs,
+    ),
 )
 
 @Composable
@@ -224,23 +251,8 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>) {
 }
 
 @Composable
-private fun ImdbProfileButton(imdbProfileUrl: String?) {
-    if (imdbProfileUrl.isNullOrBlank()) return
-
-    val uriHandler = LocalUriHandler.current
-    Row(
-        Modifier
-            .clickable { imdbProfileUrl.openInBrowser(uriHandler) }
-            .padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
-    ) {
-        Icon(
-            Icons.AutoMirrored.Rounded.OpenInNew,
-            contentDescription = stringResource(Res.string.open_imdb_content_description),
-            modifier = Modifier.scale(1.1f),
-        )
-        Text(
-            stringResource(Res.string.open_imdb_profile),
-            Modifier.padding(start = MaterialTheme.spacing.s),
-        )
-    }
-}
+private fun Biography(profile: Profile) = Text(
+    text = profile.biography,
+    style = MaterialTheme.typography.bodyLarge,
+    modifier = Modifier.padding(MaterialTheme.spacing.l),
+)
