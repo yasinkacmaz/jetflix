@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.theme.spacing
@@ -32,7 +33,6 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun PeopleGridScreen(title: String, people: List<Person>) {
     val horizontalPadding = MaterialTheme.spacing.l
-    val columnCount = 3
     val gridState = rememberLazyGridState()
     val navController = LocalNavController.current
     Scaffold(
@@ -58,7 +58,7 @@ fun PeopleGridScreen(title: String, people: List<Person>) {
         },
     ) { contentPadding ->
         LazyVerticalGrid(
-            columns = GridCells.Fixed(columnCount),
+            columns = GridCells.Adaptive(120.dp),
             modifier = Modifier.fillMaxSize(),
             contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.l),
