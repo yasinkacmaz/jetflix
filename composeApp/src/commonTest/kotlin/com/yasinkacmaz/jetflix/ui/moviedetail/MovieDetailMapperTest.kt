@@ -24,7 +24,7 @@ class MovieDetailMapperTest {
         movieDetail.originalTitle shouldBe movieDetailResponse.originalTitle
         movieDetail.overview shouldBe movieDetailResponse.overview
         movieDetail.backdropUrl shouldBe movieDetailResponse.backdropPath.orEmpty().toBackdropUrl()
-        movieDetail.posterUrl shouldBe movieDetailResponse.posterPath.toPosterUrl()
+        movieDetail.posterUrl shouldBe movieDetailResponse.posterPath.orEmpty().toPosterUrl()
         movieDetail.genres shouldBe movieDetailResponse.genres.map { it.name }
         movieDetail.releaseDate shouldBe movieDetailResponse.releaseDate.parseAsDate()
         movieDetail.voteAverage shouldBe movieDetailResponse.voteAverage

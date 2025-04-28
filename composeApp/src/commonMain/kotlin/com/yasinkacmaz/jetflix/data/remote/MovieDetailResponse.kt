@@ -15,7 +15,7 @@ data class MovieDetailResponse(
     @SerialName("original_title") val originalTitle: String,
     @SerialName("overview") val overview: String,
     @SerialName("popularity") val popularity: Double,
-    @SerialName("poster_path") val posterPath: String,
+    @SerialName("poster_path") val posterPath: String?,
     @SerialName("production_companies") val productionCompanies: List<ProductionCompanyResponse>,
     @SerialName("release_date") val releaseDate: String? = "",
     @SerialName("revenue") val revenue: Double,
