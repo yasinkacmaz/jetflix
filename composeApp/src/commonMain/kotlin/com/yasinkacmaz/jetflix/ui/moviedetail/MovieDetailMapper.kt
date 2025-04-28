@@ -19,7 +19,7 @@ class MovieDetailMapper : Mapper<MovieDetailResponse, MovieDetail> {
             overview = input.overview,
             tagline = input.tagline.dropLastWhile { it == '.' },
             backdropUrl = input.backdropPath.orEmpty().toBackdropUrl(),
-            posterUrl = input.posterPath.toPosterUrl(),
+            posterUrl = input.posterPath.orEmpty().toPosterUrl(),
             genres = input.genres.mapNotNull(Genre::name).take(4),
             releaseDate = input.releaseDate.parseAsDate(),
             voteAverage = input.voteAverage,

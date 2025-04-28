@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.Card
@@ -92,6 +93,7 @@ import jetflix.composeapp.generated.resources.favorite_content_description
 import jetflix.composeapp.generated.resources.fetching_movie_detail
 import jetflix.composeapp.generated.resources.ic_jetflix
 import jetflix.composeapp.generated.resources.images
+import jetflix.composeapp.generated.resources.open_website_content_description
 import jetflix.composeapp.generated.resources.poster_content_description
 import jetflix.composeapp.generated.resources.production_companies
 import jetflix.composeapp.generated.resources.production_company_logo_content_description
@@ -187,6 +189,17 @@ fun MovieDetail(
                 },
 
                 actions = {
+                    if (!movieDetail.homepage.isNullOrBlank()) {
+                        val uriHandler = LocalUriHandler.current
+                        CircleIconButton(onClick = { movieDetail.homepage.openInBrowser(uriHandler) }) {
+                            Icon(
+                                Icons.Default.Language,
+                                contentDescription = stringResource(Res.string.open_website_content_description),
+                            )
+                        }
+                        Spacer(Modifier.width(MaterialTheme.spacing.l))
+                    }
+
                     CircleIconButton(onClick = onFavoriteClicked) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
@@ -205,7 +218,6 @@ fun MovieDetail(
         Title(
             title = movieDetail.title,
             originalTitle = movieDetail.originalTitle,
-            homepage = movieDetail.homepage,
         )
         GenreChips(
             movieDetail.genres,
@@ -317,18 +329,12 @@ private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
 }
 
 @Composable
-private fun Title(title: String, originalTitle: String, homepage: String?) {
-    val uriHandler = LocalUriHandler.current
+private fun Title(title: String, originalTitle: String) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.l)
-            .padding(top = MaterialTheme.spacing.s)
-            .clickable(enabled = !homepage.isNullOrBlank()) {
-                if (!homepage.isNullOrBlank()) {
-                    homepage.openInBrowser(uriHandler)
-                }
-            },
+            .padding(top = MaterialTheme.spacing.s),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
