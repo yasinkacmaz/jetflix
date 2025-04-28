@@ -5,7 +5,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-val applicationName = "com.yasinkacmaz.jetflix"
+val applicationPackageName = "com.yasinkacmaz.jetflix"
+val applicationName = "Jetflix"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -112,7 +113,7 @@ kotlin {
 }
 
 android {
-    namespace = applicationName
+    namespace = applicationPackageName
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -120,7 +121,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = applicationName
+        applicationId = applicationPackageName
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
@@ -174,12 +175,22 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "$applicationName.DesktopMainKt"
+        mainClass = "$applicationPackageName.DesktopMainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = applicationName
             packageVersion = libs.versions.versionName.get()
+
+            macOS {
+                iconFile.set(project.file("src/desktopMain/resources/mac/Jetflix.icns"))
+            }
+            windows {
+                iconFile.set(project.file("src/desktopMain/resources/windows/Jetflix.ico"))
+            }
+            linux {
+                iconFile.set(project.file("src/desktopMain/resources/linux/Jetflix.png"))
+            }
         }
     }
 }
