@@ -7,8 +7,6 @@ jobs:
   update-caches:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    env:
-      androidApiVersion: 34
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,34 +39,13 @@ jobs:
             const cacheDetectorScriptPath = '/./.github/scripts/gradle-cache-detector.js'
             const cacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${cacheDetectorScriptPath}`)
             await cacheDetectorScript({core});
-      - name: Enable KVM group permissions for emulator hardware acceleration
+      - name: Enable KVM group permissions for hardware acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: 🚧 Build
-        run: ./gradlew --no-configuration-cache assembleDebug
-      - name: 📱 Create AVD and Run UI tests
-        continue-on-error: true
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.androidApiVersion }}
-          target: aosp_atd
-          channel: stable
-          arch: x86_64
-          ram-size: 4096M
-          disk-size: 2048M
-          force-avd-creation: false
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew --no-configuration-cache connectedCheck
-      - name: 💾 📱 Save AVD Cache
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: ${{ runner.os }}-avd-${{ env.androidApiVersion }}
+        run: ./gradlew --no-configuration-cache composeApp:desktopJar --continue
       - name: 💾 🐘 Save Gradle Cache
         uses: actions/cache/save@v4
         with:
