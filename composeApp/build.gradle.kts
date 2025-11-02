@@ -17,10 +17,6 @@ plugins {
 }
 
 kotlin {
-    compilerOptions {
-        freeCompilerArgs.add("-Xcontext-receivers")
-    }
-
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()

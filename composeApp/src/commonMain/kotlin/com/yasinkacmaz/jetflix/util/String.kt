@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.util
 
 import androidx.compose.ui.platform.UriHandler
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 
 fun String.toPosterUrl() = "https://image.tmdb.org/t/p/w342$this"
 
@@ -21,14 +22,14 @@ fun String.openInBrowser(uriHandler: UriHandler) {
 }
 
 fun String?.parseAsDate(): String {
-    if (this == null) return ""
+    if (this.isNullOrBlank()) return ""
 
     val parsed = try {
         LocalDate.parse(this)
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
         return ""
     }
 
     fun Int.asTwoDigits(): String = this.toString().padStart(2, '0')
-    return "${parsed.dayOfMonth.asTwoDigits()}.${parsed.monthNumber.asTwoDigits()}.${parsed.year.asTwoDigits()}"
+    return "${parsed.day.asTwoDigits()}.${parsed.month.number.asTwoDigits()}.${parsed.year.asTwoDigits()}"
 }
