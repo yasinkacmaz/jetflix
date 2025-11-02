@@ -23,8 +23,8 @@ dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.53.0" 
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.2.0" }
 
 [libraries]
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.0-alpha17" }
-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.9.0-alpha07" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.1" }
+viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.9.5" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
@@ -47,9 +47,9 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version 
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.1" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version = "1.1.4" }
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.10.1" }
-androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.2.0-beta02" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version = "1.1.7" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.11.0" }
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.2.0-rc01" }
 
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
