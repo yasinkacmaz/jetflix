@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Jetflix</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script type="application/javascript" src="skiko.js"></script>
@@ -15,11 +18,24 @@
             padding: 0;
             background-color: white;
             overflow: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         #composeApp {
             width: 100%;
             height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            body {
+                padding-top: 0;
+            }
         }
     </style>
 </head>
