@@ -4,13 +4,14 @@ import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.parseAsDate
 import com.yasinkacmaz.jetflix.util.toPosterUrl
+import com.yasinkacmaz.jetflix.util.toSmallPosterUrl
 
 class MovieMapper : Mapper<MovieResponse, Movie> {
     override fun map(input: MovieResponse) = Movie(
         id = input.id,
         name = input.name,
         releaseDate = input.firstAirDate.parseAsDate(),
-        posterPath = input.posterPath.orEmpty().toPosterUrl(),
+        posterPath = input.posterPath.orEmpty().toSmallPosterUrl(),
         voteAverage = (input.voteAverage * 10).toInt() / 10.0,
         voteCount = input.voteCount,
     )

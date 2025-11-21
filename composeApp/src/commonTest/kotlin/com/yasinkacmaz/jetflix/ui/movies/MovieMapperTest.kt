@@ -2,7 +2,7 @@ package com.yasinkacmaz.jetflix.ui.movies
 
 import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieMapper
-import com.yasinkacmaz.jetflix.util.toPosterUrl
+import com.yasinkacmaz.jetflix.util.toSmallPosterUrl
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
@@ -15,7 +15,7 @@ class MovieMapperTest {
 
         movie.id shouldBe movieResponse.id
         movie.name shouldBe movieResponse.name
-        movie.posterPath shouldBe movieResponse.posterPath.orEmpty().toPosterUrl()
+        movie.posterPath shouldBe movieResponse.posterPath.orEmpty().toSmallPosterUrl()
         movie.voteAverage shouldBe movieResponse.voteAverage
         movie.voteCount shouldBe movieResponse.voteCount
     }

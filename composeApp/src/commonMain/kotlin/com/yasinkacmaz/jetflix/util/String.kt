@@ -4,6 +4,8 @@ import androidx.compose.ui.platform.UriHandler
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 
+fun String.toSmallPosterUrl() = "https://image.tmdb.org/t/p/w185$this"
+
 fun String.toPosterUrl() = "https://image.tmdb.org/t/p/w342$this"
 
 fun String.toBackdropUrl() = "https://image.tmdb.org/t/p/original$this"
