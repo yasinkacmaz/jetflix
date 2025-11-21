@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="theme-color" content="#E50914">
     <title>Jetflix</title>
     <link rel="icon" type="image/png" href="favicon.png">
@@ -19,36 +16,13 @@
             padding: 0;
             background-color: white;
             overflow: hidden;
-            overscroll-behavior: none;
-            position: fixed;
         }
 
         #composeApp {
             width: 100%;
             height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
         }
     </style>
-    <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                window.scrollTo(0, 1);
-            }, 100);
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (window.innerHeight < screen.height) {
-                window.scrollTo(0, 1);
-            }
-        });
-    </script>
 </head>
 <body>
 <div id="composeApp"></div>
