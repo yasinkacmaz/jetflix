@@ -14,9 +14,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'corretto'
           java-version: '17'
@@ -28,7 +28,7 @@ jobs:
       - name: 🌐Build wasm package
         run: ./gradlew wasmJsBrowserDistribution
       - name: 🌐Upload pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ${{ github.workspace }}/composeApp/build/dist/wasmJs/productionExecutable
       - name: 🌐Deploy to GitHub Pages
