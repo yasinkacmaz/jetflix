@@ -90,7 +90,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
-        HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 3) {
+        HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 5) {
             Poster(images[it])
         }
         Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
