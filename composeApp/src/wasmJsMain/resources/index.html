@@ -6,6 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#E50914">
     <title>Jetflix</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script type="application/javascript" src="skiko.js"></script>
@@ -18,8 +19,8 @@
             padding: 0;
             background-color: white;
             overflow: hidden;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+            overscroll-behavior: none;
+            position: fixed;
         }
 
         #composeApp {
@@ -30,14 +31,24 @@
             left: 0;
             right: 0;
             bottom: 0;
-        }
-
-        @supports (-webkit-touch-callout: none) {
-            body {
-                padding-top: 0;
-            }
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
     </style>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 100);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.innerHeight < screen.height) {
+                window.scrollTo(0, 1);
+            }
+        });
+    </script>
 </head>
 <body>
 <div id="composeApp"></div>
