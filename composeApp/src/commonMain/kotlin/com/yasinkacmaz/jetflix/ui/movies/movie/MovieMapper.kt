@@ -3,7 +3,6 @@ package com.yasinkacmaz.jetflix.ui.movies.movie
 import com.yasinkacmaz.jetflix.data.remote.MovieResponse
 import com.yasinkacmaz.jetflix.util.Mapper
 import com.yasinkacmaz.jetflix.util.parseAsDate
-import com.yasinkacmaz.jetflix.util.toPosterUrl
 import com.yasinkacmaz.jetflix.util.toSmallPosterUrl
 
 class MovieMapper : Mapper<MovieResponse, Movie> {

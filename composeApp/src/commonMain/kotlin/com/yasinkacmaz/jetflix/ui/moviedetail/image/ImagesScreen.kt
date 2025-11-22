@@ -1,8 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.image
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
@@ -24,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -32,17 +35,21 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.LocalNavController
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.ui.widget.CircleIconButton
 import com.yasinkacmaz.jetflix.util.JetflixImage
+import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.likes_content_description
@@ -108,24 +115,51 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
 
 @Composable
 private fun Poster(image: Image) {
+    val isScaled = remember { mutableStateOf(false) }
+    val scale = animateFloatAsState(
+        targetValue = if (isScaled.value) 2.5f else 1f,
+        animationSpec = springAnimation,
+        label = "scale",
+    ).value
+    val transformOrigin = remember { mutableStateOf(TransformOrigin.Center) }
+
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         BlurImage(image.url)
-        Card(
+        Box(
             modifier = Modifier
                 .systemBarsPadding()
                 .padding(MaterialTheme.spacing.xxl)
-                .shadow(16.dp, RoundedCornerShape(12.dp))
-                .wrapContentSize()
-                .animateContentSize(),
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                    this.transformOrigin = transformOrigin.value
+                }
+                .pointerInput(Unit) {
+                    detectTapGestures { offset ->
+                        if (!isScaled.value) {
+                            transformOrigin.value = TransformOrigin(
+                                pivotFractionX = offset.x / size.width,
+                                pivotFractionY = offset.y / size.height,
+                            )
+                        }
+                        isScaled.value = !isScaled.value
+                    }
+                },
         ) {
-            Box {
-                JetflixImage(
-                    data = image.url,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                )
-                VoteCount(image.voteCount)
+            Card(
+                modifier = Modifier
+                    .shadow(16.dp, RoundedCornerShape(12.dp))
+                    .wrapContentSize()
+                    .animateContentSize(),
+            ) {
+                Box {
+                    JetflixImage(
+                        data = image.url,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.align(Alignment.Center),
+                    )
+                    VoteCount(image.voteCount)
+                }
             }
         }
     }
