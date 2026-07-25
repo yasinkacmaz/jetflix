@@ -19,8 +19,8 @@ kotlin {
     }
     android {
         namespace = "$applicationPackageName.shared"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = 28
+        compileSdk = 37
 
         androidResources {
             enable = true
@@ -111,9 +111,12 @@ kotlin {
             }
         }
 
-        wasmJsMain.dependencies {
-            implementation(libs.ktor.client.js)
-            implementation(libs.navigation3.browser)
+        wasmJsMain {
+            kotlin.srcDir(layout.buildDirectory.dir("generated/source/version/wasmJsMain"))
+            dependencies {
+                implementation(libs.ktor.client.js)
+                implementation(libs.navigation3.browser)
+            }
         }
 
         commonTest.dependencies {
@@ -131,7 +134,8 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = applicationName
-            packageVersion = libs.versions.versionName.get()
+            packageVersion = project.findProperty("app.version.name")?.toString()
+                ?: error("app.version.name is not defined in gradle.properties")
 
             macOS {
                 iconFile.set(project.file("src/desktopMain/resources/mac/Jetflix.icns"))
@@ -157,3 +161,5 @@ compose {
         packageOfResClass = "jetflix.composeapp.generated.resources"
     }
 }
+
+apply(from = "versions-tasks.gradle.kts")

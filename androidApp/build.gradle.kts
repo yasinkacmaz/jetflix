@@ -1,6 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val applicationName = "com.yasinkacmaz.jetflix"
+val applicationVersion = project.findProperty("app.version.name")?.toString()
+    ?: error("app.version.name is not defined in gradle.properties")
+val applicationVersionCode = project.findProperty("app.version.code")?.toString()?.toIntOrNull()
+    ?: error("app.version.code is not defined in gradle.properties")
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -15,14 +19,14 @@ kotlin {
 
 android {
     namespace = applicationName
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 37
 
     defaultConfig {
         applicationId = applicationName
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.versionName.get()
+        minSdk = 28
+        targetSdk = 37
+        versionCode = applicationVersionCode
+        versionName = applicationVersion
     }
 
     signingConfigs {
