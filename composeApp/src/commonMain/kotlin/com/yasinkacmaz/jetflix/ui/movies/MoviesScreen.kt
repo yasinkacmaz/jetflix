@@ -51,7 +51,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.LocalDarkTheme
@@ -281,11 +284,19 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
 
 @Composable
 private fun JetflixSearchBar(searchQuery: String, onSearch: (String) -> Unit) {
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        focusManager.clearFocus()
+    }
+
     TextField(
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.s)
             .heightIn(max = 52.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         value = searchQuery,
         textStyle = MaterialTheme.typography.titleSmall,
         singleLine = true,
