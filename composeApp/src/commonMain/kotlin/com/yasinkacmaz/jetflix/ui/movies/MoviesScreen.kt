@@ -55,7 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.LocalDarkTheme
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.common.Error
 import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
@@ -81,11 +81,16 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 private val fullWidthSpan: LazyGridItemSpanScope.() -> GridItemSpan = { GridItemSpan(maxLineSpan) }
 
 @Composable
-fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewModel) {
+fun MoviesScreen(
+    moviesViewModel: MoviesViewModel = koinViewModel(),
+    filterViewModel: FilterViewModel = koinViewModel(),
+    onMovieSelect: ((Int) -> Unit)? = null,
+) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
     val filterState = filterViewModel.filterState.collectAsState().value
@@ -130,8 +135,14 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
                     .launchIn(this)
             }
 
-            val navController = LocalNavController.current
-            val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.MovieDetail(movieId)) }
+            val navigator = LocalNavigator.current
+            val onMovieClicked: (Int) -> Unit = { movieId ->
+                if (onMovieSelect != null) {
+                    onMovieSelect(movieId)
+                } else {
+                    navigator.navigate(Screen.MovieDetail(movieId))
+                }
+            }
             LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxSize()
@@ -221,7 +232,7 @@ fun MoviesScreen(moviesViewModel: MoviesViewModel, filterViewModel: FilterViewMo
 @Composable
 private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
     var isDarkTheme by LocalDarkTheme.current
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     val iconTint = animateColorAsState(
         if (isDarkTheme) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
         label = "appIconTint",
@@ -236,7 +247,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
             )
         },
         actions = {
-            IconButton(onClick = { navController.navigate(Screen.Favorites) }) {
+            IconButton(onClick = { navigator.navigate(Screen.Favorites) }) {
                 Icon(
                     Icons.Default.Favorite,
                     contentDescription = stringResource(Res.string.favorites),

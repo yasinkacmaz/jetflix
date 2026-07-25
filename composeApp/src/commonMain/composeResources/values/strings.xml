@@ -9,6 +9,7 @@
     <string name="unable_to_fetch_movies">Unable to fetch movies. Please try again!</string>
     <string name="search_movies">Search Movies</string>
     <string name="no_movies_found">No movies found for current search</string>
+    <string name="no_movie_selected">Select a movie to view details</string>
 
     <!-- filter -->
     <string name="loading_filter_options">Loading filter options, please wait…</string>

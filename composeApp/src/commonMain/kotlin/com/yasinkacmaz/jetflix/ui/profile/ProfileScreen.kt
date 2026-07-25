@@ -49,7 +49,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.common.Error
 import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
@@ -93,7 +93,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 )
 @Composable
 private fun Profile(profile: Profile) {
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     val screenSize = LocalWindowInfo.current.containerSize
     val screenSizeDp = with(LocalDensity.current) {
         DpSize(width = screenSize.width.toDp(), height = screenSize.height.toDp())
@@ -107,7 +107,7 @@ private fun Profile(profile: Profile) {
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 title = { },
                 navigationIcon = {
-                    CircleIconButton(onClick = { navController.navigateUp() }) {
+                    CircleIconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(Res.string.back),

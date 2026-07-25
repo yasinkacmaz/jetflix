@@ -28,8 +28,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.BrokenImage
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Star
@@ -67,7 +70,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.common.Error
 import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
@@ -109,7 +112,13 @@ import org.jetbrains.compose.resources.stringResource
 val LocalMovieId = compositionLocalOf<Int> { error("No movieId defined") }
 
 @Composable
-fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
+fun MovieDetailScreen(
+    movieDetailViewModel: MovieDetailViewModel,
+    isExpanded: Boolean = false,
+    isFullScreen: Boolean = false,
+    onBack: (() -> Unit)? = null,
+    onToggleFullScreen: (() -> Unit)? = null,
+) {
     Surface {
         val uiState = movieDetailViewModel.uiState.collectAsState().value
 
@@ -131,6 +140,10 @@ fun MovieDetailScreen(movieDetailViewModel: MovieDetailViewModel) {
                         images = uiState.images,
                         isFavorite = uiState.isFavorite,
                         onFavoriteClicked = movieDetailViewModel::onFavoriteClicked,
+                        isExpanded = isExpanded,
+                        isFullScreen = isFullScreen,
+                        onBack = onBack,
+                        onToggleFullScreen = onToggleFullScreen,
                     )
                 }
             }
@@ -147,6 +160,10 @@ fun MovieDetail(
     images: List<Image>,
     isFavorite: Boolean,
     onFavoriteClicked: () -> Unit,
+    isExpanded: Boolean,
+    isFullScreen: Boolean,
+    onBack: (() -> Unit)?,
+    onToggleFullScreen: (() -> Unit)?,
 ) {
     val scrollState = rememberScrollState()
     val topAppBarOffset = with(LocalDensity.current) { scrollState.value.toDp() }
@@ -171,7 +188,7 @@ fun MovieDetail(
                         .height(240.dp),
                 )
             }
-            val navController = LocalNavController.current
+            val navigator = LocalNavigator.current
             TopAppBar(
                 modifier = Modifier
                     .statusBarsPadding()
@@ -180,15 +197,29 @@ fun MovieDetail(
                 title = {},
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = {
-                    CircleIconButton(onClick = { navController.navigateUp() }) {
+                    CircleIconButton(onClick = { onBack?.invoke() ?: navigator.navigateUp() }) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            if (isExpanded) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(Res.string.back),
                         )
                     }
                 },
 
                 actions = {
+                    if (isExpanded && onToggleFullScreen != null) {
+                        CircleIconButton(onClick = onToggleFullScreen) {
+                            Icon(
+                                imageVector = if (isFullScreen) {
+                                    Icons.Default.FullscreenExit
+                                } else {
+                                    Icons.Default.Fullscreen
+                                },
+                                contentDescription = null,
+                            )
+                        }
+                        Spacer(Modifier.width(MaterialTheme.spacing.l))
+                    }
+
                     if (!movieDetail.homepage.isNullOrBlank()) {
                         val uriHandler = LocalUriHandler.current
                         CircleIconButton(onClick = { movieDetail.homepage.openInBrowser(uriHandler) }) {
@@ -256,25 +287,25 @@ fun MovieDetail(
                 .padding(horizontal = MaterialTheme.spacing.l),
         )
 
-        val navController = LocalNavController.current
+        val navigator = LocalNavigator.current
         MovieSection(
             items = cast,
             headerResource = Res.string.cast,
-            onSeeAllClicked = { navController.navigate(Screen.MovieCast(movieDetail.id)) },
+            onSeeAllClicked = { navigator.navigate(Screen.MovieCast(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
         )
 
         MovieSection(
             items = crew,
             headerResource = Res.string.crew,
-            onSeeAllClicked = { navController.navigate(Screen.MovieCrew(movieDetail.id)) },
+            onSeeAllClicked = { navigator.navigate(Screen.MovieCrew(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
         )
 
         MovieSection(
             items = images,
             headerResource = Res.string.images,
-            onSeeAllClicked = { navController.navigate(Screen.MovieImages(movieDetail.id, 0)) },
+            onSeeAllClicked = { navigator.navigate(Screen.MovieImages(movieDetail.id, 0)) },
             itemContent = { item, index -> MovieImage(item, index) },
         )
 
@@ -485,13 +516,13 @@ private fun SectionHeader(headerResource: StringResource, count: Int, onClick: (
 
 @Composable
 private fun MovieImage(image: Image, index: Int) {
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     val movieId = LocalMovieId.current
     Card(
         Modifier
             .width(240.dp)
             .height(200.dp)
-            .clickable { navController.navigate(Screen.MovieImages(movieId, index)) },
+            .clickable { navigator.navigate(Screen.MovieImages(movieId, index)) },
     ) {
         JetflixImage(
             modifier = Modifier.fillMaxSize(),
