@@ -146,6 +146,12 @@ compose.desktop {
     }
 }
 
+composeCompiler {
+    reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+    metricsDestination.set(layout.buildDirectory.dir("compose_compiler"))
+    stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("compose-stability-config.conf"))
+}
+
 compose {
     resources {
         packageOfResClass = "jetflix.composeapp.generated.resources"
