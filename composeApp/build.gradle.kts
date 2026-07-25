@@ -1,6 +1,3 @@
-import java.nio.charset.Charset
-import java.util.Properties
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -10,23 +7,32 @@ val applicationName = "Jetflix"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
+    android {
+        namespace = "$applicationPackageName.shared"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+        androidResources {
+            enable = true
+        }
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+            freeCompilerArgs.add("-Xexpect-actual-classes")
+        }
+    }
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         binaries.executable()
-    }
-
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
     }
 
     listOf(
@@ -42,41 +48,25 @@ kotlin {
     jvm("desktop")
 
     sourceSets {
-        val desktopMain by getting
-
-        androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.splashscreen)
-            implementation(libs.koin.android)
-            implementation(libs.androidx.datastore.preferences)
-            implementation(libs.ktor.client.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.androidx.datastore.preferences)
-            implementation(libs.ktor.client.darwin)
-        }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.androidx.datastore.preferences)
-            implementation(libs.ktor.client.okhttp)
-        }
-        wasmJsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
         commonMain.dependencies {
             // Compose
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.components.resources)
-            implementation(libs.compose.material3.windowsizeclass)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.material.icons.extended)
+            implementation(libs.compose.resources)
+            implementation(libs.compose.windowsizeclass)
+            implementation(libs.compose.adaptive)
+            implementation(libs.compose.adaptive.layout)
+            implementation(libs.compose.adaptive.navigation)
 
-            // DI
-            implementation(libs.navigation.compose)
-            implementation(libs.viewmodel.compose)
+            // Navigation & DI
+            implementation(libs.navigation3.runtime)
+            implementation(libs.navigation3.ui)
+            implementation(libs.navigationevent.compose)
+            implementation(libs.viewmodel.navigation3)
+            implementation(libs.lifecycle.compose)
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -98,74 +88,39 @@ kotlin {
             implementation(libs.coil.network.ktor)
         }
 
+        androidMain.dependencies {
+            api(libs.androidx.activity.compose)
+            api(libs.androidx.splashscreen)
+            api(libs.koin.android)
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.ktor.client.okhttp)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.ktor.client.darwin)
+        }
+
+        getByName("desktopMain") {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.androidx.datastore.preferences)
+                implementation(libs.ktor.client.okhttp)
+            }
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.ktor.client.js)
+            implementation(libs.navigation3.browser)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotest.assertions)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
         }
-    }
-}
-
-android {
-    namespace = applicationPackageName
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-
-    defaultConfig {
-        applicationId = applicationPackageName
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.versionName.get()
-    }
-
-    signingConfigs {
-        val propertiesFile = File("signing.properties")
-        if (propertiesFile.exists()) {
-            val properties = Properties()
-            properties.load(propertiesFile.reader(Charset.forName("UTF-8")))
-            create("release") {
-                storeFile = file(properties.getProperty("KEYSTORE_FILE"))
-                storePassword = properties.getProperty("KEYSTORE_PASSWORD")
-                keyAlias = properties.getProperty("KEY_ALIAS")
-                keyPassword = properties.getProperty("KEY_PASSWORD")
-            }
-        } else {
-            create("release")
-        }
-    }
-
-    buildTypes {
-        getByName("debug") {
-            isDefault = true
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
-        }
-        getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            isDebuggable = false
-            signingConfig = signingConfigs.getByName("release")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildFeatures {
-        compose = true
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
@@ -188,5 +143,11 @@ compose.desktop {
                 iconFile.set(project.file("src/desktopMain/resources/linux/Jetflix.png"))
             }
         }
+    }
+}
+
+compose {
+    resources {
+        packageOfResClass = "jetflix.composeapp.generated.resources"
     }
 }
