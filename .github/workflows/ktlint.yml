@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'corretto'
-          java-version: '17'
+          java-version: '21'
       - name: 🐶 Run Ktlint and Report with Review Dog
         uses: ScaCap/action-ktlint@master
         with:
