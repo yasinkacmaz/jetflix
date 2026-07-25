@@ -139,6 +139,16 @@ fun SettingsScreenContent(
                     currentPreference = uiState.themePreference,
                     onPreferenceSelected = onThemePreferenceSelected,
                 )
+
+                if (uiState.versionName.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
+
+                    Text(
+                        text = stringResource(Res.string.app_version, uiState.versionName),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     }
@@ -220,7 +230,13 @@ private fun LanguageSelector(
                             expanded = false
                         },
                         trailingIcon = if (selected) {
-                            { Icon(Icons.Default.Done, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+                            {
+                                Icon(
+                                    Icons.Default.Done,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
                         } else {
                             null
                         },

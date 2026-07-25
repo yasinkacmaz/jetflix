@@ -1,6 +1,7 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
+import com.yasinkacmaz.jetflix.util.PlatformInfo
 import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakeConfigurationClient
 import com.yasinkacmaz.jetflix.util.json
@@ -15,6 +16,7 @@ class SettingsViewModelTest : ViewModelTest() {
     private val configurationService = FakeConfigurationClient()
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
     private val themeDataStore = ThemeDataStore(FakeStringDataStore())
+    private val platformInfo = PlatformInfo(appVersionName = "2.0.0")
 
     @Test
     fun `Should sort languages by englishName when fetch languages succeed`() = runTest {
@@ -92,12 +94,13 @@ class SettingsViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `Should initialize state with default version name`() = runTest {
+    fun `Should initialize state with version name from platform info`() = runTest {
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
 
         uiStates.last().versionName shouldBe "2.0.0"
     }
 
-    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, themeDataStore)
+    private fun createViewModel() =
+        SettingsViewModel(configurationService, languageDataStore, themeDataStore, platformInfo)
 }
