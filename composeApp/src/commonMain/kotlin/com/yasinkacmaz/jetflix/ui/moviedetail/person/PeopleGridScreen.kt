@@ -22,7 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import jetflix.composeapp.generated.resources.Res
@@ -34,7 +34,7 @@ import org.jetbrains.compose.resources.stringResource
 fun PeopleGridScreen(title: String, people: List<Person>) {
     val horizontalPadding = MaterialTheme.spacing.l
     val gridState = rememberLazyGridState()
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     Scaffold(
         contentWindowInsets = WindowInsets.systemBars.add(
             WindowInsets(
@@ -47,7 +47,7 @@ fun PeopleGridScreen(title: String, people: List<Person>) {
                 title = { Text(title) },
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = stringResource(Res.string.back),

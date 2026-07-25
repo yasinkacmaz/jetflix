@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.placeholderIcon
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
@@ -30,9 +30,9 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Person(person: Person, modifier: Modifier = Modifier) {
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     Column(
-        modifier.clickable { navController.navigate(Screen.Profile(person.id)) },
+        modifier.clickable { navigator.navigate(Screen.Profile(person.id)) },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         JetflixImage(

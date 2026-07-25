@@ -11,7 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.ic_splash
@@ -32,11 +32,9 @@ fun SplashScreen() {
         }
     }
 
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     LaunchedEffect(Unit) {
         delay(SPLASH_DURATION_MS)
-        navController.navigate(Screen.Movies) {
-            popUpTo(Screen.Splash) { inclusive = true }
-        }
+        navigator.navigateAndClear(Screen.Movies)
     }
 }

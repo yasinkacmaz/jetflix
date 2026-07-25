@@ -4,42 +4,44 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import coil3.ImageLoader
-import coil3.compose.setSingletonImageLoaderFactory
-import coil3.request.CachePolicy
-import coil3.request.crossfade
-import coil3.util.DebugLogger
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.yasinkacmaz.jetflix.ui.navigation.BrowserHistory
+import com.yasinkacmaz.jetflix.ui.navigation.JetflixNavigator
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
-import com.yasinkacmaz.jetflix.ui.navigation.SetupNavGraph
+import com.yasinkacmaz.jetflix.ui.navigation.SetupNavDisplay
+import com.yasinkacmaz.jetflix.ui.navigation.decodeScreen
+import com.yasinkacmaz.jetflix.ui.navigation.encodeScreen
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 
-val LocalNavController = compositionLocalOf<NavHostController> { error("No nav controller") }
+val LocalNavigator = compositionLocalOf<JetflixNavigator> { error("No navigator") }
 val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
 @Composable
-fun JetflixApp(startScreen: Screen, navController: NavHostController = rememberNavController()) {
+fun JetflixApp(
+    startScreen: Screen = Screen.Movies,
+    backStack: SnapshotStateList<Screen> = rememberSaveable(
+        saver = listSaver<SnapshotStateList<Screen>, String>(
+            save = { list -> list.map { encodeScreen(it) } },
+            restore = { list -> mutableStateListOf(*list.map { decodeScreen(it) }.toTypedArray()) },
+        ),
+    ) {
+        mutableStateListOf(startScreen)
+    },
+) {
+    val navigator = remember(backStack) { JetflixNavigator(backStack) }
+    val browserHistory = remember { BrowserHistory() }
+    browserHistory.Sync(backStack, navigator)
     CompositionLocalProvider(
-        LocalNavController provides navController,
+        LocalNavigator provides navigator,
         LocalDarkTheme provides mutableStateOf(isSystemInDarkTheme()),
     ) {
         JetflixTheme(isDarkTheme = LocalDarkTheme.current.value) {
-            SetupCoilImageLoader()
-            SetupNavGraph(startScreen)
+            SetupNavDisplay(backStack = backStack, onBack = { navigator.navigateUp() })
         }
-    }
-}
-
-@Composable
-private fun SetupCoilImageLoader() {
-    setSingletonImageLoaderFactory { context ->
-        ImageLoader.Builder(context)
-            .crossfade(true)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .logger(DebugLogger())
-            .build()
     }
 }
