@@ -32,6 +32,7 @@ actual class BrowserHistory {
                     mapOf("personId" to screen.personId.toString()),
                 )
                 is Screen.Favorites -> buildBrowserHistoryFragment("favorites")
+                is Screen.Settings -> buildBrowserHistoryFragment("settings")
                 null -> null
             }
         }

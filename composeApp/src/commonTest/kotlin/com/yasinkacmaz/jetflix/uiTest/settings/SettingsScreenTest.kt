@@ -6,14 +6,14 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import com.yasinkacmaz.jetflix.ui.settings.Language
-import com.yasinkacmaz.jetflix.ui.settings.SettingsDialogContent
+import com.yasinkacmaz.jetflix.ui.settings.SettingsScreenContent
 import com.yasinkacmaz.jetflix.ui.settings.SettingsViewModel
 import com.yasinkacmaz.jetflix.ui.settings.displayName
 import com.yasinkacmaz.jetflix.uiTest.util.setTestContent
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
-class SettingsDialogTest {
+class SettingsScreenTest {
 
     private val defaultLanguage = Language("Turkish", "tr", "Türkçe")
 
@@ -22,7 +22,7 @@ class SettingsDialogTest {
         val uiState = SettingsViewModel.UiState(showLoading = true)
 
         setTestContent {
-            SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+            SettingsScreenContent(uiState = uiState)
         }
 
         onNodeWithText("Fetching Languages", useUnmergedTree = true).assertIsDisplayed()
@@ -33,7 +33,7 @@ class SettingsDialogTest {
         val uiState = SettingsViewModel.UiState(selectedLanguage = defaultLanguage)
 
         setTestContent {
-            SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+            SettingsScreenContent(uiState = uiState)
         }
 
         onNodeWithText(defaultLanguage.displayName, substring = true, useUnmergedTree = true).assertIsDisplayed()
@@ -52,7 +52,7 @@ class SettingsDialogTest {
         val uiState = SettingsViewModel.UiState(languages = languages, selectedLanguage = defaultLanguage)
 
         setTestContent {
-            SettingsDialogContent(uiState = uiState, onLanguageSelected = {})
+            SettingsScreenContent(uiState = uiState)
         }
         onNodeWithText(defaultLanguage.displayName, substring = true, useUnmergedTree = true).performClick()
 

@@ -26,10 +26,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.HighlightOff
-import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -65,16 +63,13 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterViewModel
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
-import com.yasinkacmaz.jetflix.ui.settings.SettingsDialog
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.app_name
-import jetflix.composeapp.generated.resources.dark_theme_content_description
 import jetflix.composeapp.generated.resources.favorites
 import jetflix.composeapp.generated.resources.fetching_more_movies
 import jetflix.composeapp.generated.resources.fetching_movies
 import jetflix.composeapp.generated.resources.ic_jetflix
-import jetflix.composeapp.generated.resources.light_theme_content_description
 import jetflix.composeapp.generated.resources.search_movies
 import jetflix.composeapp.generated.resources.settings_content_description
 import jetflix.composeapp.generated.resources.title_filter_bottom_sheet
@@ -95,7 +90,7 @@ fun MoviesScreen(
     onMovieSelect: ((Int) -> Unit)? = null,
 ) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var showSettingsDialog by remember { mutableStateOf(false) }
+    val navigator = LocalNavigator.current
     val filterState = filterViewModel.filterState.collectAsState().value
     val searchQuery = moviesViewModel.searchQuery.collectAsState()
     val movies = moviesViewModel.movies.collectAsState().value
@@ -109,7 +104,7 @@ fun MoviesScreen(
                     .statusBarsPadding()
                     .padding(bottom = MaterialTheme.spacing.s),
             ) {
-                JetflixAppBar(onSettingsClicked = { showSettingsDialog = true })
+                JetflixAppBar(onSettingsClicked = { navigator.navigate(Screen.Settings) })
                 JetflixSearchBar(searchQuery.value, moviesViewModel::onSearch)
             }
         },
@@ -219,10 +214,6 @@ fun MoviesScreen(
                     moviesViewModel.loadMore()
                 }
             }
-
-            if (showSettingsDialog) {
-                SettingsDialog(onDialogDismissed = { showSettingsDialog = false })
-            }
         },
     )
 
@@ -262,19 +253,6 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
                 Icon(
                     Icons.Default.Settings,
                     contentDescription = stringResource(Res.string.settings_content_description),
-                    tint = iconTint,
-                )
-            }
-
-            IconButton(onClick = { isDarkTheme = !isDarkTheme }) {
-                val contentDescriptionResource = if (isDarkTheme) {
-                    Res.string.light_theme_content_description
-                } else {
-                    Res.string.dark_theme_content_description
-                }
-                Icon(
-                    imageVector = if (isDarkTheme) Icons.Default.NightsStay else Icons.Default.WbSunny,
-                    contentDescription = stringResource(contentDescriptionResource),
                     tint = iconTint,
                 )
             }

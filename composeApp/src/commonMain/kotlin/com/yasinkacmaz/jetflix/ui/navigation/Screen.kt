@@ -37,4 +37,8 @@ sealed interface Screen : NavKey {
     @Serializable
     @SerialName("favorites")
     data object Favorites : Screen
+
+    @Serializable
+    @SerialName("settings")
+    data object Settings : Screen
 }
