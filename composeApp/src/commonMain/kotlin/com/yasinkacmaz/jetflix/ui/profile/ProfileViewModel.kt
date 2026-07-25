@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.PersonService
@@ -32,5 +33,6 @@ class ProfileViewModel(
         }
     }
 
+    @Immutable
     data class ProfileUiState(val profile: Profile? = null, val loading: Boolean = false, val error: Throwable? = null)
 }

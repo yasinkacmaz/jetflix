@@ -1,7 +1,9 @@
 package com.yasinkacmaz.jetflix.ui.movies.movie
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
+@Immutable
 @Serializable
 data class Movie(
     val id: Int,
