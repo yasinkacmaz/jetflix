@@ -11,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.navigation.compose.rememberNavController
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
+import com.yasinkacmaz.jetflix.ui.navigation.JetflixNavigator
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
 
 @OptIn(ExperimentalTestApi::class)
 fun ComposeUiTest.setTestContent(content: @Composable BoxScope.() -> Unit) = setContent {
     JetflixTheme {
-        CompositionLocalProvider(LocalNavController provides rememberNavController()) {
+        CompositionLocalProvider(LocalNavigator provides JetflixNavigator(mutableListOf())) {
             Surface(Modifier.fillMaxSize().systemBarsPadding()) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     content()

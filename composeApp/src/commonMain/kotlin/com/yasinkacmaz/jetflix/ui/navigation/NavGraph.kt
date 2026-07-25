@@ -1,16 +1,17 @@
 package com.yasinkacmaz.jetflix.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import com.yasinkacmaz.jetflix.LocalNavController
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.scene.SinglePaneSceneStrategy
+import androidx.navigation3.ui.NavDisplay
 import com.yasinkacmaz.jetflix.ui.favorites.FavoritesScreen
+import com.yasinkacmaz.jetflix.ui.main.MainScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
-import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
 import com.yasinkacmaz.jetflix.ui.splash.SplashScreen
 import jetflix.composeapp.generated.resources.Res
@@ -25,48 +26,49 @@ private fun movieDetailViewModel(movieId: Int): MovieDetailViewModel =
     koinViewModel(key = movieId.toString()) { parametersOf(movieId) }
 
 @Composable
-fun SetupNavGraph(startScreen: Screen = Screen.Movies) {
-    NavHost(navController = LocalNavController.current, startDestination = startScreen) {
-        composable<Screen.Splash> {
-            SplashScreen()
-        }
-
-        composable<Screen.Movies> {
-            MoviesScreen(moviesViewModel = koinViewModel(), filterViewModel = koinViewModel())
-        }
-
-        composable<Screen.MovieDetail> {
-            MovieDetailScreen(movieDetailViewModel(it.toRoute<Screen.MovieDetail>().movieId))
-        }
-
-        composable<Screen.MovieImages> {
-            val screen = it.toRoute<Screen.MovieImages>()
-            val images = movieDetailViewModel(screen.movieId).uiState.value.images
-            ImagesScreen(images, screen.initialPage)
-        }
-
-        composable<Screen.MovieCast> {
-            val movieDetail = movieDetailViewModel(it.toRoute<Screen.MovieCast>().movieId).uiState.value
-            PeopleGridScreen(
-                stringResource(Res.string.title_cast, movieDetail.movieDetail?.title.orEmpty()),
-                movieDetail.credits.cast,
-            )
-        }
-
-        composable<Screen.MovieCrew> {
-            val movieDetail = movieDetailViewModel(it.toRoute<Screen.MovieCast>().movieId).uiState.value
-            PeopleGridScreen(
-                stringResource(Res.string.title_crew, movieDetail.movieDetail?.title.orEmpty()),
-                movieDetail.credits.crew,
-            )
-        }
-
-        composable<Screen.Profile> {
-            ProfileScreen(koinViewModel { parametersOf(it.toRoute<Screen.Profile>().personId) })
-        }
-
-        composable<Screen.Favorites> {
-            FavoritesScreen(favoritesViewModel = koinViewModel())
-        }
-    }
+fun SetupNavDisplay(backStack: MutableList<Screen>, onBack: () -> Unit) {
+    NavDisplay(
+        backStack = backStack,
+        onBack = onBack,
+        sceneStrategies = listOf(SinglePaneSceneStrategy()),
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator(),
+        ),
+        entryProvider = { key ->
+            when (key) {
+                is Screen.Splash -> NavEntry(key) { SplashScreen() }
+                is Screen.Movies -> NavEntry(key) {
+                    MainScreen()
+                }
+                is Screen.MovieDetail -> NavEntry(key) {
+                    MovieDetailScreen(movieDetailViewModel(key.movieId))
+                }
+                is Screen.MovieImages -> NavEntry(key) {
+                    val images = movieDetailViewModel(key.movieId).uiState.value.images
+                    ImagesScreen(images, key.initialPage)
+                }
+                is Screen.MovieCast -> NavEntry(key) {
+                    val movieDetail = movieDetailViewModel(key.movieId).uiState.value
+                    PeopleGridScreen(
+                        stringResource(Res.string.title_cast, movieDetail.movieDetail?.title.orEmpty()),
+                        movieDetail.credits.cast,
+                    )
+                }
+                is Screen.MovieCrew -> NavEntry(key) {
+                    val movieDetail = movieDetailViewModel(key.movieId).uiState.value
+                    PeopleGridScreen(
+                        stringResource(Res.string.title_crew, movieDetail.movieDetail?.title.orEmpty()),
+                        movieDetail.credits.crew,
+                    )
+                }
+                is Screen.Profile -> NavEntry(key) {
+                    ProfileScreen(koinViewModel { parametersOf(key.personId) })
+                }
+                is Screen.Favorites -> NavEntry(key) {
+                    FavoritesScreen(favoritesViewModel = koinViewModel())
+                }
+            }
+        },
+    )
 }

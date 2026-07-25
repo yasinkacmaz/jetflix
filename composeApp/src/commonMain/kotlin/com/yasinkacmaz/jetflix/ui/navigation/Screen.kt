@@ -1,38 +1,40 @@
 package com.yasinkacmaz.jetflix.ui.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed class Screen {
+@Serializable
+sealed interface Screen : NavKey {
     @Serializable
     @SerialName("splash")
-    data object Splash : Screen()
+    data object Splash : Screen
 
     @Serializable
     @SerialName("movies")
-    data object Movies : Screen()
+    data object Movies : Screen
 
     @Serializable
     @SerialName("movie")
-    data class MovieDetail(val movieId: Int) : Screen()
+    data class MovieDetail(val movieId: Int) : Screen
 
     @Serializable
     @SerialName("images")
-    data class MovieImages(val movieId: Int, val initialPage: Int) : Screen()
+    data class MovieImages(val movieId: Int, val initialPage: Int) : Screen
 
     @Serializable
     @SerialName("cast")
-    data class MovieCast(val movieId: Int) : Screen()
+    data class MovieCast(val movieId: Int) : Screen
 
     @Serializable
     @SerialName("crew")
-    data class MovieCrew(val movieId: Int) : Screen()
+    data class MovieCrew(val movieId: Int) : Screen
 
     @Serializable
     @SerialName("profile")
-    data class Profile(val personId: Int) : Screen()
+    data class Profile(val personId: Int) : Screen
 
     @Serializable
     @SerialName("favorites")
-    data object Favorites : Screen()
+    data object Favorites : Screen
 }

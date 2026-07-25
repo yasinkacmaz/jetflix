@@ -26,7 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.movies.movie.MovieItem
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
@@ -39,14 +39,14 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
+    val navigator = LocalNavigator.current
     Scaffold(
         topBar = {
-            val navController = LocalNavController.current
             TopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = { Text(stringResource(Res.string.favorites)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = stringResource(Res.string.back),
@@ -69,8 +69,7 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
                 Text(text = stringResource(Res.string.no_favorites_found), style = MaterialTheme.typography.bodyLarge)
             }
         } else {
-            val navController = LocalNavController.current
-            val onMovieClicked: (Int) -> Unit = { movieId -> navController.navigate(Screen.MovieDetail(movieId)) }
+            val onMovieClicked: (Int) -> Unit = { movieId -> navigator.navigate(Screen.MovieDetail(movieId)) }
             LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxSize()
