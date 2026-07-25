@@ -15,6 +15,7 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.moviedetail.image.ImagesScreen
 import com.yasinkacmaz.jetflix.ui.moviedetail.person.PeopleGridScreen
 import com.yasinkacmaz.jetflix.ui.profile.ProfileScreen
+import com.yasinkacmaz.jetflix.ui.settings.SettingsScreen
 import com.yasinkacmaz.jetflix.ui.splash.SplashScreen
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.title_cast
@@ -69,6 +70,9 @@ fun SetupNavDisplay(backStack: MutableList<Screen>, onBack: () -> Unit) {
                 }
                 is Screen.Favorites -> NavEntry(key) {
                     FavoritesScreen(favoritesViewModel = koinViewModel())
+                }
+                is Screen.Settings -> NavEntry(key) {
+                    SettingsScreen()
                 }
             }
         },
