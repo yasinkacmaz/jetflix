@@ -24,6 +24,12 @@ plugins {
 }
 
 allprojects {
+    tasks.withType<KotlinCompilationTask<*>>().configureEach {
+        compilerOptions {
+            allWarningsAsErrors.set(true)
+        }
+    }
+
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     ktlint {

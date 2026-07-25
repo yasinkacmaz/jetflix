@@ -14,6 +14,9 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     android {
         namespace = "$applicationPackageName.shared"
         minSdk = libs.versions.android.minSdk.get().toInt()
