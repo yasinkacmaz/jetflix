@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.ConfigurationService
@@ -48,6 +49,7 @@ class SettingsViewModel(
         }
     }
 
+    @Immutable
     data class UiState(
         val showLoading: Boolean = false,
         val languages: List<Language> = emptyList(),

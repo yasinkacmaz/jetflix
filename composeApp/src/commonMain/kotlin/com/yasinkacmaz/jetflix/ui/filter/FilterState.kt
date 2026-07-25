@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.filter
 
+import androidx.compose.runtime.Immutable
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.filter.option.FilterOption
 import com.yasinkacmaz.jetflix.ui.filter.option.GenresFilterOption
@@ -13,6 +14,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+@Immutable
 @Serializable
 data class FilterState(
     @SerialName("sort_order") val sortOrder: SortOrder = SortOrder.DESCENDING,

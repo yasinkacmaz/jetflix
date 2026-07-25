@@ -1,11 +1,13 @@
 package com.yasinkacmaz.jetflix.ui.filter.genres
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.util.randomColor
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+@Immutable
 @Serializable
 data class GenreUiModel(val genre: Genre = Genre(-1, "")) {
     @Transient

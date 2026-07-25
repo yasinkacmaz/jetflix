@@ -1,5 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class MovieDetail(
     val id: Int,
     val title: String = "",
@@ -17,4 +20,5 @@ data class MovieDetail(
     val homepage: String? = null,
 )
 
+@Immutable
 data class ProductionCompany(val name: String, val logoUrl: String)

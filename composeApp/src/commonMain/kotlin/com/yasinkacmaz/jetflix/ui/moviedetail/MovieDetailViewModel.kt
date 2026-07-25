@@ -1,5 +1,6 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.MovieService
@@ -75,6 +76,7 @@ class MovieDetailViewModel(
         }
     }
 
+    @Immutable
     data class MovieDetailUiState(
         val movieDetail: MovieDetail? = null,
         val credits: Credits = Credits(listOf(), listOf()),

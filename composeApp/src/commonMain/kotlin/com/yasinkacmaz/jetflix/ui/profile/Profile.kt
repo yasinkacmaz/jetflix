@@ -1,5 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.profile
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Profile(
     val name: String,
     val biography: String,

@@ -1,9 +1,11 @@
 package com.yasinkacmaz.jetflix.ui.settings
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.intl.Locale
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Immutable
 @Serializable
 data class Language(
     @SerialName("english_name") val englishName: String,
