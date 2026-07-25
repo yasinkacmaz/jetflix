@@ -70,6 +70,10 @@
     <string name="back_icon_content_description">Go Back</string>
     <string name="settings_content_description">Settings</string>
     <string name="title_settings">Settings</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system_default">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
     <string name="dark_theme_content_description">Use dark theme</string>
     <string name="light_theme_content_description">Use light theme</string>
     <string name="flag_content_description">Flag of the %1$s</string>

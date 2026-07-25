@@ -14,6 +14,7 @@ class SettingsViewModelTest : ViewModelTest() {
 
     private val configurationService = FakeConfigurationClient()
     private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
+    private val themeDataStore = ThemeDataStore(FakeStringDataStore())
 
     @Test
     fun `Should sort languages by englishName when fetch languages succeed`() = runTest {
@@ -71,5 +72,32 @@ class SettingsViewModelTest : ViewModelTest() {
         languageDataStore.language.test().last() shouldBe language
     }
 
-    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore)
+    @Test
+    fun `Should update theme preference when preference selected`() = runTest {
+        val settingsViewModel = createViewModel()
+
+        settingsViewModel.onThemePreferenceSelected(ThemePreference.DARK)
+
+        themeDataStore.themePreference.test().last() shouldBe ThemePreference.DARK
+    }
+
+    @Test
+    fun `Should update ui state when theme preference updated`() = runTest {
+        val settingsViewModel = createViewModel()
+        val uiStates = settingsViewModel.uiState.test()
+
+        settingsViewModel.onThemePreferenceSelected(ThemePreference.LIGHT)
+
+        uiStates.last().themePreference shouldBe ThemePreference.LIGHT
+    }
+
+    @Test
+    fun `Should initialize state with default version name`() = runTest {
+        val settingsViewModel = createViewModel()
+        val uiStates = settingsViewModel.uiState.test()
+
+        uiStates.last().versionName shouldBe "2.0.0"
+    }
+
+    private fun createViewModel() = SettingsViewModel(configurationService, languageDataStore, themeDataStore)
 }

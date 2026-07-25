@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
@@ -52,6 +54,10 @@ import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.fetching_languages
 import jetflix.composeapp.generated.resources.ic_jetflix
 import jetflix.composeapp.generated.resources.language
+import jetflix.composeapp.generated.resources.theme
+import jetflix.composeapp.generated.resources.theme_dark
+import jetflix.composeapp.generated.resources.theme_light
+import jetflix.composeapp.generated.resources.theme_system_default
 import jetflix.composeapp.generated.resources.title_settings
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -66,6 +72,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = koinViewModel()) {
         uiState = uiState,
         onBackClicked = { navigator.navigateUp() },
         onLanguageSelected = settingsViewModel::onLanguageSelected,
+        onThemePreferenceSelected = settingsViewModel::onThemePreferenceSelected,
     )
 }
 
@@ -75,6 +82,7 @@ fun SettingsScreenContent(
     uiState: SettingsViewModel.UiState,
     onBackClicked: () -> Unit = {},
     onLanguageSelected: (Language) -> Unit = {},
+    onThemePreferenceSelected: (ThemePreference) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
@@ -123,6 +131,13 @@ fun SettingsScreenContent(
                     selectedLanguage = uiState.selectedLanguage,
                     languages = uiState.languages,
                     onLanguageSelected = onLanguageSelected,
+                )
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.l))
+
+                ThemeSelector(
+                    currentPreference = uiState.themePreference,
+                    onPreferenceSelected = onThemePreferenceSelected,
                 )
             }
         }

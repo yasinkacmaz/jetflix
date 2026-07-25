@@ -3,7 +3,9 @@ package com.yasinkacmaz.jetflix
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,7 +18,10 @@ import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.navigation.SetupNavDisplay
 import com.yasinkacmaz.jetflix.ui.navigation.decodeScreen
 import com.yasinkacmaz.jetflix.ui.navigation.encodeScreen
+import com.yasinkacmaz.jetflix.ui.settings.ThemeDataStore
+import com.yasinkacmaz.jetflix.ui.settings.ThemePreference
 import com.yasinkacmaz.jetflix.ui.theme.JetflixTheme
+import org.koin.compose.koinInject
 
 val LocalNavigator = compositionLocalOf<JetflixNavigator> { error("No navigator") }
 val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
@@ -36,11 +41,21 @@ fun JetflixApp(
     val navigator = remember(backStack) { JetflixNavigator(backStack) }
     val browserHistory = remember { BrowserHistory() }
     browserHistory.Sync(backStack, navigator)
+
+    val themeDataStore: ThemeDataStore = koinInject()
+    val themePreference by themeDataStore.themePreference.collectAsState(ThemePreference.SYSTEM_DEFAULT)
+    val systemInDark = isSystemInDarkTheme()
+    val isDarkTheme = when (themePreference) {
+        ThemePreference.DARK -> true
+        ThemePreference.LIGHT -> false
+        ThemePreference.SYSTEM_DEFAULT -> systemInDark
+    }
+
     CompositionLocalProvider(
         LocalNavigator provides navigator,
-        LocalDarkTheme provides mutableStateOf(isSystemInDarkTheme()),
+        LocalDarkTheme provides mutableStateOf(isDarkTheme),
     ) {
-        JetflixTheme(isDarkTheme = LocalDarkTheme.current.value) {
+        JetflixTheme(isDarkTheme = isDarkTheme) {
             SetupNavDisplay(backStack = backStack, onBack = { navigator.navigateUp() })
         }
     }
