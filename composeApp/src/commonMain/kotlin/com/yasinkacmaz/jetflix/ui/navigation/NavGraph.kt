@@ -1,6 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -45,21 +47,21 @@ fun SetupNavDisplay(backStack: MutableList<Screen>, onBack: () -> Unit) {
                     MovieDetailScreen(movieDetailViewModel(key.movieId))
                 }
                 is Screen.MovieImages -> NavEntry(key) {
-                    val images = movieDetailViewModel(key.movieId).uiState.value.images
-                    ImagesScreen(images, key.initialPage)
+                    val uiState by movieDetailViewModel(key.movieId).uiState.collectAsState()
+                    ImagesScreen(uiState.images, key.initialPage)
                 }
                 is Screen.MovieCast -> NavEntry(key) {
-                    val movieDetail = movieDetailViewModel(key.movieId).uiState.value
+                    val uiState by movieDetailViewModel(key.movieId).uiState.collectAsState()
                     PeopleGridScreen(
-                        stringResource(Res.string.title_cast, movieDetail.movieDetail?.title.orEmpty()),
-                        movieDetail.credits.cast,
+                        stringResource(Res.string.title_cast, uiState.movieDetail?.title.orEmpty()),
+                        uiState.credits.cast,
                     )
                 }
                 is Screen.MovieCrew -> NavEntry(key) {
-                    val movieDetail = movieDetailViewModel(key.movieId).uiState.value
+                    val uiState by movieDetailViewModel(key.movieId).uiState.collectAsState()
                     PeopleGridScreen(
-                        stringResource(Res.string.title_crew, movieDetail.movieDetail?.title.orEmpty()),
-                        movieDetail.credits.crew,
+                        stringResource(Res.string.title_crew, uiState.movieDetail?.title.orEmpty()),
+                        uiState.credits.crew,
                     )
                 }
                 is Screen.Profile -> NavEntry(key) {
