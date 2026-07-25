@@ -9,11 +9,6 @@ koin = "4.2.2"
 ktor = "3.5.1"
 coil = "3.5.0"
 lifecycle = "2.11.0"
-android-minSdk = "28"
-android-targetSdk = "37"
-android-compileSdk = "37"
-versionName = "2.0.0"
-versionCode = "5"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

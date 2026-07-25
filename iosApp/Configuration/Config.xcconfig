@@ -1,3 +1,5 @@
+#include "Version.xcconfig"
+
 TEAM_ID=
 BUNDLE_ID=com.yasinkacmaz.jetflix
 APP_NAME=Jetflix
