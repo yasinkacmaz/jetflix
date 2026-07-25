@@ -72,6 +72,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             // Data & Network
+            implementation(libs.androidx.datastore.preferences)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.logging)
@@ -92,12 +93,10 @@ kotlin {
             api(libs.androidx.activity.compose)
             api(libs.androidx.splashscreen)
             api(libs.koin.android)
-            implementation(libs.androidx.datastore.preferences)
             implementation(libs.ktor.client.okhttp)
         }
 
         iosMain.dependencies {
-            implementation(libs.androidx.datastore.preferences)
             implementation(libs.ktor.client.darwin)
         }
 
@@ -105,13 +104,11 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinx.coroutines.swing)
-                implementation(libs.androidx.datastore.preferences)
                 implementation(libs.ktor.client.okhttp)
             }
         }
 
         wasmJsMain.dependencies {
-            implementation(libs.androidx.datastore.preferences)
             implementation(libs.ktor.client.js)
             implementation(libs.navigation3.browser)
         }

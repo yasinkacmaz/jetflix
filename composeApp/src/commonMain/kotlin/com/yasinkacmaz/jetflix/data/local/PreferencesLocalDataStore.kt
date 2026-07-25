@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class IOSDataStore(private val preferences: DataStore<Preferences>) : LocalDataStore {
+class PreferencesLocalDataStore(private val preferences: DataStore<Preferences>) : LocalDataStore {
 
     override fun get(key: String): Flow<String?> = preferences.data.map { it[stringPreferencesKey(key)] }
 
