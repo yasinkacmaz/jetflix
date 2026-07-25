@@ -45,7 +45,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.yasinkacmaz.jetflix.LocalNavController
+import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.ui.widget.CircleIconButton
 import com.yasinkacmaz.jetflix.util.JetflixImage
@@ -62,7 +62,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
     if (images.isEmpty() || initialPage !in images.indices) return
 
     val pagerState = rememberPagerState(initialPage = initialPage, initialPageOffsetFraction = 0f) { images.size }
-    val navController = LocalNavController.current
+    val navigator = LocalNavigator.current
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     Box(
@@ -103,7 +103,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
         Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
         CircleIconButton(
             modifier = Modifier.statusBarsPadding().padding(MaterialTheme.spacing.l),
-            onClick = { navController.navigateUp() },
+            onClick = { navigator.navigateUp() },
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
