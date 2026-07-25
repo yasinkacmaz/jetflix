@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val configurationService: ConfigurationService,
     private val languageDataStore: LanguageDataStore,
+    private val themeDataStore: ThemeDataStore,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
@@ -22,11 +23,17 @@ class SettingsViewModel(
     init {
         fetchLanguages()
         listenLanguageChanges()
+        listenThemeChanges()
     }
 
     private fun listenLanguageChanges() = viewModelScope.launch {
         languageDataStore.language
             .collectLatest { language -> _uiState.update { it.copy(selectedLanguage = language) } }
+    }
+
+    private fun listenThemeChanges() = viewModelScope.launch {
+        themeDataStore.themePreference
+            .collectLatest { preference -> _uiState.update { it.copy(themePreference = preference) } }
     }
 
     private fun fetchLanguages() = viewModelScope.launch {
@@ -49,10 +56,19 @@ class SettingsViewModel(
         }
     }
 
+    fun onThemePreferenceSelected(themePreference: ThemePreference) {
+        viewModelScope.launch {
+            themeDataStore.setThemePreference(themePreference)
+            _uiState.update { it.copy(themePreference = themePreference) }
+        }
+    }
+
     @Immutable
     data class UiState(
         val showLoading: Boolean = false,
         val languages: List<Language> = emptyList(),
         val selectedLanguage: Language = Language.default,
+        val themePreference: ThemePreference = ThemePreference.SYSTEM_DEFAULT,
+        val versionName: String = "2.0.0",
     )
 }
