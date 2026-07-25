@@ -60,4 +60,16 @@ class SettingsScreenTest {
             onNodeWithText(it.englishName, substring = true, useUnmergedTree = true).assertIsDisplayed()
         }
     }
+
+    @Test
+    fun `Should render app version`() = runComposeUiTest {
+        val versionName = "2.0.0"
+        val uiState = SettingsViewModel.UiState(versionName = versionName)
+
+        setTestContent {
+            SettingsScreenContent(uiState = uiState)
+        }
+
+        onNodeWithText("Version $versionName", substring = true, useUnmergedTree = true).assertIsDisplayed()
+    }
 }

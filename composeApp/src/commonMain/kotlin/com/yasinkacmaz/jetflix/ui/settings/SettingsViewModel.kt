@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.ConfigurationService
+import com.yasinkacmaz.jetflix.util.PlatformInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,9 +16,12 @@ class SettingsViewModel(
     private val configurationService: ConfigurationService,
     private val languageDataStore: LanguageDataStore,
     private val themeDataStore: ThemeDataStore,
+    private val platformInfo: PlatformInfo,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
+        UiState(versionName = platformInfo.appVersionName),
+    )
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
@@ -69,6 +73,6 @@ class SettingsViewModel(
         val languages: List<Language> = emptyList(),
         val selectedLanguage: Language = Language.default,
         val themePreference: ThemePreference = ThemePreference.SYSTEM_DEFAULT,
-        val versionName: String = "2.0.0",
+        val versionName: String = "",
     )
 }
