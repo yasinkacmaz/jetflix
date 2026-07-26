@@ -2,6 +2,7 @@ package com.yasinkacmaz.jetflix.ui.filter
 
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
 import com.yasinkacmaz.jetflix.ui.filter.option.SortBy
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import com.yasinkacmaz.jetflix.util.FakeStringDataStore
 import com.yasinkacmaz.jetflix.util.ViewModelTest
 import com.yasinkacmaz.jetflix.util.client.FakeMovieClient
@@ -17,6 +18,7 @@ class FilterViewModelTest : ViewModelTest() {
 
     private val fakeFilterDataStore = FakeStringDataStore()
     private val filterDataStore = FilterDataStore(json, fakeFilterDataStore)
+    private val languageDataStore = LanguageDataStore(json, FakeStringDataStore())
     private val movieService = FakeMovieClient()
     private val genreUiModelMapper = GenreUiModelMapper()
     private val genreUiModel = genreUiModelMapper.map(movieService.genre)
@@ -72,5 +74,6 @@ class FilterViewModelTest : ViewModelTest() {
         filterStates.last() shouldBe changedFilterState.copy(genres = listOf(genreUiModel))
     }
 
-    private fun createViewModel() = FilterViewModel(filterDataStore, movieService, genreUiModelMapper)
+    private fun createViewModel() =
+        FilterViewModel(filterDataStore, languageDataStore, movieService, genreUiModelMapper)
 }

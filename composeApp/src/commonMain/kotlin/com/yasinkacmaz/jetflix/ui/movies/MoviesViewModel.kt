@@ -69,7 +69,14 @@ class MoviesViewModel(
     private fun listenSelectedLanguageChanges() = viewModelScope.launch {
         languageDataStore.languageCode
             .drop(1)
-            .collectLatest { selectedLanguageChanges.emit(Unit) }
+            .distinctUntilChanged()
+            .collectLatest {
+                _pagingState.value = PagingState.Refreshing
+                currentPage = 1
+                isLastPage = false
+                fetchMovies(currentPage)
+                selectedLanguageChanges.emit(Unit)
+            }
     }
 
     private fun listenSearchQueryChanges() {
