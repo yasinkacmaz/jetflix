@@ -18,9 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,12 +55,15 @@ import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.openInBrowser
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.also_known_as
+import jetflix.composeapp.generated.resources.arrow_back
 import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.birthday
 import jetflix.composeapp.generated.resources.birthplace
 import jetflix.composeapp.generated.resources.fetching_profile
 import jetflix.composeapp.generated.resources.known_for
+import jetflix.composeapp.generated.resources.language
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -109,7 +109,7 @@ private fun Profile(profile: Profile) {
                 navigationIcon = {
                     CircleIconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            painter = painterResource(Res.drawable.arrow_back),
                             contentDescription = stringResource(Res.string.back),
                         )
                     }
@@ -117,7 +117,7 @@ private fun Profile(profile: Profile) {
                 actions = {
                     val uriHandler = LocalUriHandler.current
                     CircleIconButton(onClick = { profile.imdbProfileUrl?.openInBrowser(uriHandler) }) {
-                        Icon(Icons.Default.Language, contentDescription = null)
+                        Icon(painter = painterResource(Res.drawable.language), contentDescription = null)
                     }
                 },
             )

@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +25,7 @@ import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.person_content_description
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -41,7 +41,7 @@ fun Person(person: Person, modifier: Modifier = Modifier) {
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surfaceContainerHighest),
             data = person.profilePhotoUrl,
-            placeholder = rememberVectorPainter(person.gender.placeholderIcon),
+            placeholder = painterResource(person.gender.placeholderIcon),
             contentDescription = stringResource(Res.string.person_content_description, person.name, person.role),
             contentScale = ContentScale.FillWidth,
         )

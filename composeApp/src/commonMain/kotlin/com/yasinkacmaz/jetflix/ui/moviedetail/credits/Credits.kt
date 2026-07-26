@@ -1,9 +1,10 @@
 package com.yasinkacmaz.jetflix.ui.moviedetail.credits
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Man
-import androidx.compose.material.icons.rounded.Woman
 import androidx.compose.runtime.Immutable
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.man
+import jetflix.composeapp.generated.resources.woman
+import org.jetbrains.compose.resources.DrawableResource
 
 @Immutable
 data class Credits(val cast: List<Person>, val crew: List<Person>)
@@ -13,8 +14,8 @@ data class Person(val name: String, val role: String, val profilePhotoUrl: Strin
 
 enum class Gender { MALE, FEMALE }
 
-val Gender.placeholderIcon
+val Gender.placeholderIcon: DrawableResource
     get() = when (this) {
-        Gender.MALE -> Icons.Rounded.Man
-        Gender.FEMALE -> Icons.Rounded.Woman
+        Gender.MALE -> Res.drawable.man
+        Gender.FEMALE -> Res.drawable.woman
     }

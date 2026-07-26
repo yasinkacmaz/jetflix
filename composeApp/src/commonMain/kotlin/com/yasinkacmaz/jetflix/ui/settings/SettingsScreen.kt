@@ -16,12 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -50,10 +44,14 @@ import com.yasinkacmaz.jetflix.util.JetflixImage
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.app_name
 import jetflix.composeapp.generated.resources.app_version
+import jetflix.composeapp.generated.resources.arrow_back
 import jetflix.composeapp.generated.resources.back
+import jetflix.composeapp.generated.resources.check
 import jetflix.composeapp.generated.resources.fetching_languages
 import jetflix.composeapp.generated.resources.ic_jetflix
+import jetflix.composeapp.generated.resources.keyboard_arrow_down
 import jetflix.composeapp.generated.resources.language
+import jetflix.composeapp.generated.resources.palette
 import jetflix.composeapp.generated.resources.theme
 import jetflix.composeapp.generated.resources.theme_dark
 import jetflix.composeapp.generated.resources.theme_light
@@ -93,7 +91,7 @@ fun SettingsScreenContent(
                 navigationIcon = {
                     IconButton(onClick = onBackClicked) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            painter = painterResource(Res.drawable.arrow_back),
                             contentDescription = stringResource(Res.string.back),
                         )
                     }
@@ -172,7 +170,7 @@ private fun LanguageSelector(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
         ) {
             Icon(
-                imageVector = Icons.Default.Language,
+                painter = painterResource(Res.drawable.language),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -203,7 +201,7 @@ private fun LanguageSelector(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f),
                     )
-                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
+                    Icon(painter = painterResource(Res.drawable.keyboard_arrow_down), contentDescription = null)
                 }
             }
 
@@ -232,7 +230,7 @@ private fun LanguageSelector(
                         trailingIcon = if (selected) {
                             {
                                 Icon(
-                                    Icons.Default.Done,
+                                    painter = painterResource(Res.drawable.check),
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.primary,
                                 )
@@ -261,7 +259,7 @@ private fun ThemeSelector(currentPreference: ThemePreference, onPreferenceSelect
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
         ) {
             Icon(
-                imageVector = Icons.Default.Palette,
+                painter = painterResource(Res.drawable.palette),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -286,7 +284,7 @@ private fun ThemeSelector(currentPreference: ThemePreference, onPreferenceSelect
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f),
                     )
-                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
+                    Icon(painter = painterResource(Res.drawable.keyboard_arrow_down), contentDescription = null)
                 }
             }
 
@@ -301,7 +299,7 @@ private fun ThemeSelector(currentPreference: ThemePreference, onPreferenceSelect
                         trailingIcon = if (preference == currentPreference) {
                             {
                                 Icon(
-                                    Icons.Default.Done,
+                                    painter = painterResource(Res.drawable.check),
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.primary,
                                 )

@@ -23,20 +23,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.StarHalf
-import androidx.compose.material.icons.filled.BrokenImage
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.FullscreenExit
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
@@ -86,25 +71,38 @@ import com.yasinkacmaz.jetflix.util.dpToPx
 import com.yasinkacmaz.jetflix.util.openInBrowser
 import com.yasinkacmaz.jetflix.util.rateColor
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.arrow_back
+import jetflix.composeapp.generated.resources.arrow_forward
 import jetflix.composeapp.generated.resources.back
 import jetflix.composeapp.generated.resources.backdrop_content_description
+import jetflix.composeapp.generated.resources.broken_image
 import jetflix.composeapp.generated.resources.cast
+import jetflix.composeapp.generated.resources.close
+import jetflix.composeapp.generated.resources.close_fullscreen
 import jetflix.composeapp.generated.resources.crew
 import jetflix.composeapp.generated.resources.duration
 import jetflix.composeapp.generated.resources.duration_minutes
+import jetflix.composeapp.generated.resources.favorite
+import jetflix.composeapp.generated.resources.favorite_border
 import jetflix.composeapp.generated.resources.favorite_content_description
 import jetflix.composeapp.generated.resources.fetching_movie_detail
 import jetflix.composeapp.generated.resources.ic_jetflix
+import jetflix.composeapp.generated.resources.image
 import jetflix.composeapp.generated.resources.images
+import jetflix.composeapp.generated.resources.language
+import jetflix.composeapp.generated.resources.open_in_full
 import jetflix.composeapp.generated.resources.open_website_content_description
 import jetflix.composeapp.generated.resources.poster_content_description
 import jetflix.composeapp.generated.resources.production_companies
 import jetflix.composeapp.generated.resources.production_company_logo_content_description
 import jetflix.composeapp.generated.resources.release_date
 import jetflix.composeapp.generated.resources.see_all
+import jetflix.composeapp.generated.resources.star
+import jetflix.composeapp.generated.resources.star_half
 import jetflix.composeapp.generated.resources.unfavorite_content_description
 import jetflix.composeapp.generated.resources.vote_average
 import jetflix.composeapp.generated.resources.votes
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -199,7 +197,9 @@ fun MovieDetail(
                 navigationIcon = {
                     CircleIconButton(onClick = { onBack?.invoke() ?: navigator.navigateUp() }) {
                         Icon(
-                            if (isExpanded) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
+                            painter = painterResource(
+                                if (isExpanded) Res.drawable.close else Res.drawable.arrow_back,
+                            ),
                             contentDescription = stringResource(Res.string.back),
                         )
                     }
@@ -209,11 +209,13 @@ fun MovieDetail(
                     if (isExpanded && onToggleFullScreen != null) {
                         CircleIconButton(onClick = onToggleFullScreen) {
                             Icon(
-                                imageVector = if (isFullScreen) {
-                                    Icons.Default.FullscreenExit
-                                } else {
-                                    Icons.Default.Fullscreen
-                                },
+                                painter = painterResource(
+                                    if (isFullScreen) {
+                                        Res.drawable.close_fullscreen
+                                    } else {
+                                        Res.drawable.open_in_full
+                                    },
+                                ),
                                 contentDescription = null,
                             )
                         }
@@ -224,7 +226,7 @@ fun MovieDetail(
                         val uriHandler = LocalUriHandler.current
                         CircleIconButton(onClick = { movieDetail.homepage.openInBrowser(uriHandler) }) {
                             Icon(
-                                Icons.Default.Language,
+                                painter = painterResource(Res.drawable.language),
                                 contentDescription = stringResource(Res.string.open_website_content_description),
                             )
                         }
@@ -233,7 +235,9 @@ fun MovieDetail(
 
                     CircleIconButton(onClick = onFavoriteClicked) {
                         Icon(
-                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            painter = painterResource(
+                                if (isFavorite) Res.drawable.favorite else Res.drawable.favorite_border,
+                            ),
                             contentDescription = if (isFavorite) {
                                 stringResource(Res.string.unfavorite_content_description)
                             } else {
@@ -414,12 +418,12 @@ private fun RateStars(voteAverage: Double, modifier: Modifier) {
         val starCount = 5
         repeat(starCount) { starIndex ->
             val voteStarCount = voteAverage / (maxVote / starCount)
-            val asset = when {
-                voteStarCount >= starIndex + 1 -> Icons.Filled.Star
-                voteStarCount in starIndex.toDouble()..(starIndex + 1).toDouble() -> Icons.AutoMirrored.Filled.StarHalf
-                else -> Icons.Filled.StarOutline
+            val asset: DrawableResource = when {
+                voteStarCount >= starIndex + 1 -> Res.drawable.star
+                voteStarCount in starIndex.toDouble()..(starIndex + 1).toDouble() -> Res.drawable.star_half
+                else -> Res.drawable.star
             }
-            Icon(imageVector = asset, contentDescription = null, tint = rateColor)
+            Icon(painter = painterResource(asset), contentDescription = null, tint = rateColor)
         }
     }
 }
@@ -506,7 +510,7 @@ private fun SectionHeader(headerResource: StringResource, count: Int, onClick: (
                     modifier = Modifier.padding(end = MaterialTheme.spacing.xs),
                 )
                 Icon(
-                    Icons.AutoMirrored.Filled.ArrowForward,
+                    painter = painterResource(Res.drawable.arrow_forward),
                     contentDescription = stringResource(Res.string.see_all),
                 )
             }
@@ -527,8 +531,8 @@ private fun MovieImage(image: Image, index: Int) {
         JetflixImage(
             modifier = Modifier.fillMaxSize(),
             data = image.url,
-            placeholder = rememberVectorPainter(Icons.Default.Image),
-            error = rememberVectorPainter(Icons.Default.BrokenImage),
+            placeholder = painterResource(Res.drawable.image),
+            error = painterResource(Res.drawable.broken_image),
             contentDescription = stringResource(Res.string.poster_content_description),
             contentScale = ContentScale.Crop,
         )

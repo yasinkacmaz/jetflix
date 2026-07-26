@@ -9,8 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,7 +24,9 @@ import com.yasinkacmaz.jetflix.LocalNavigator
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Person
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.arrow_back
 import jetflix.composeapp.generated.resources.back
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +49,7 @@ fun PeopleGridScreen(title: String, people: List<Person>) {
                 navigationIcon = {
                     IconButton(onClick = { navigator.navigateUp() }) {
                         Icon(
-                            Icons.AutoMirrored.Default.ArrowBack,
+                            painter = painterResource(Res.drawable.arrow_back),
                             contentDescription = stringResource(Res.string.back),
                         )
                     }
