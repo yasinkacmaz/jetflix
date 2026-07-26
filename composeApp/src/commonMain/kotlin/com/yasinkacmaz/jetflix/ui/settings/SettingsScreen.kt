@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.LocalNavigator
-import com.yasinkacmaz.jetflix.ui.common.Loading
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import jetflix.composeapp.generated.resources.Res
@@ -103,53 +103,45 @@ fun SettingsScreenContent(
         },
         modifier = Modifier.fillMaxSize(),
     ) { paddingValues ->
-        if (uiState.showLoading) {
-            Loading(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                title = stringResource(Res.string.fetching_languages),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .navigationBarsPadding()
+                .verticalScroll(scrollState)
+                .padding(MaterialTheme.spacing.l),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Icon(
+                painter = painterResource(Res.drawable.ic_jetflix),
+                contentDescription = stringResource(Res.string.app_name),
+                tint = MaterialTheme.colorScheme.primary,
             )
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .navigationBarsPadding()
-                    .verticalScroll(scrollState)
-                    .padding(MaterialTheme.spacing.l),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_jetflix),
-                    contentDescription = stringResource(Res.string.app_name),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
 
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
+
+            LanguageSelector(
+                selectedLanguage = uiState.selectedLanguage,
+                languages = uiState.languages,
+                showLoading = uiState.showLoading,
+                onLanguageSelected = onLanguageSelected,
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.l))
+
+            ThemeSelector(
+                currentPreference = uiState.themePreference,
+                onPreferenceSelected = onThemePreferenceSelected,
+            )
+
+            if (uiState.versionName.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
 
-                LanguageSelector(
-                    selectedLanguage = uiState.selectedLanguage,
-                    languages = uiState.languages,
-                    onLanguageSelected = onLanguageSelected,
+                Text(
+                    text = stringResource(Res.string.app_version, uiState.versionName),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.l))
-
-                ThemeSelector(
-                    currentPreference = uiState.themePreference,
-                    onPreferenceSelected = onThemePreferenceSelected,
-                )
-
-                if (uiState.versionName.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.xl))
-
-                    Text(
-                        text = stringResource(Res.string.app_version, uiState.versionName),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
             }
         }
     }
@@ -159,6 +151,7 @@ fun SettingsScreenContent(
 private fun LanguageSelector(
     selectedLanguage: Language,
     languages: List<Language>,
+    showLoading: Boolean,
     onLanguageSelected: (Language) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -182,7 +175,7 @@ private fun LanguageSelector(
 
         Box {
             OutlinedCard(
-                onClick = { expanded = !expanded },
+                onClick = { if (!showLoading) expanded = !expanded },
                 colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = Modifier.requiredWidth(IntrinsicSize.Min).widthIn(min = 180.dp),
             ) {
@@ -191,20 +184,35 @@ private fun LanguageSelector(
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (selectedLanguage.flagUrl.isNotEmpty()) {
-                        JetflixImage(
-                            data = selectedLanguage.flagUrl,
-                            modifier = Modifier.size(24.dp),
+                    if (showLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary,
                         )
+                        Text(
+                            text = stringResource(Res.string.fetching_languages),
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f),
+                        )
+                    } else {
+                        if (selectedLanguage.flagUrl.isNotEmpty()) {
+                            JetflixImage(
+                                data = selectedLanguage.flagUrl,
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
+                        Text(
+                            text = selectedLanguage.displayName,
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Icon(painter = painterResource(Res.drawable.keyboard_arrow_down), contentDescription = null)
                     }
-                    Text(
-                        text = selectedLanguage.displayName,
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f),
-                    )
-                    Icon(painter = painterResource(Res.drawable.keyboard_arrow_down), contentDescription = null)
                 }
             }
 
