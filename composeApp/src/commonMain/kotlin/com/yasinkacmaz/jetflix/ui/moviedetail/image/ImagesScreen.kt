@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,10 +48,13 @@ import com.yasinkacmaz.jetflix.ui.widget.CircleIconButton
 import com.yasinkacmaz.jetflix.util.JetflixImage
 import com.yasinkacmaz.jetflix.util.animation.springAnimation
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.arrow_back
 import jetflix.composeapp.generated.resources.back
+import jetflix.composeapp.generated.resources.favorite
 import jetflix.composeapp.generated.resources.likes_content_description
 import jetflix.composeapp.generated.resources.poster_content_description
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -106,7 +106,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
             onClick = { navigator.navigateUp() },
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                painter = painterResource(Res.drawable.arrow_back),
                 contentDescription = stringResource(Res.string.back),
             )
         }
@@ -191,7 +191,7 @@ private fun BoxScope.VoteCount(voteCount: Int) {
             .padding(MaterialTheme.spacing.xs),
     ) {
         Icon(
-            imageVector = Icons.Filled.Favorite,
+            painter = painterResource(Res.drawable.favorite),
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = stringResource(Res.string.likes_content_description),
             modifier = Modifier.padding(end = MaterialTheme.spacing.xs),

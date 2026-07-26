@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Category
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionDivider
@@ -33,7 +30,9 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.category
 import jetflix.composeapp.generated.resources.genres
+import org.jetbrains.compose.resources.painterResource
 
 typealias GenresFilterOption = Pair<List<GenreUiModel>, MutableList<Int>>
 
@@ -48,7 +47,7 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
     @Composable
     override fun Render(onChanged: () -> Unit) {
         val (genreUiModels, selectedGenreIds) = currentValue
-        FilterSectionTitle(painter = rememberVectorPainter(image = Icons.Default.Category), title = Res.string.genres)
+        FilterSectionTitle(painter = painterResource(Res.drawable.category), title = Res.string.genres)
         FlowRow(
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.m),

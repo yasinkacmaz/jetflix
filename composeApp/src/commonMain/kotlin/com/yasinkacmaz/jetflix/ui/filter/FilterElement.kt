@@ -10,9 +10,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RadioButtonChecked
-import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +21,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.radio_button_checked
+import jetflix.composeapp.generated.resources.radio_button_unchecked
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -49,13 +50,19 @@ fun FilterRadioItem(title: String, selected: Boolean, onClick: () -> Unit) {
             .fillMaxWidth()
             .selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
     ) {
-        val radioIcon = if (selected) Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked
+        val radioIcon = if (selected) {
+            painterResource(
+                Res.drawable.radio_button_checked,
+            )
+        } else {
+            painterResource(Res.drawable.radio_button_unchecked)
+        }
         val color = if (selected) {
             MaterialTheme.colorScheme.secondary
         } else {
             MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         }
-        Icon(imageVector = radioIcon, contentDescription = null, tint = color)
+        Icon(painter = radioIcon, contentDescription = null, tint = color)
         Text(
             text = title,
             style = MaterialTheme.typography.bodyLarge,

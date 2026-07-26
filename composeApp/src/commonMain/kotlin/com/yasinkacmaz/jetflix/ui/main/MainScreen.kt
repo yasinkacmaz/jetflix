@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -55,9 +53,11 @@ import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetailViewModel
 import com.yasinkacmaz.jetflix.ui.movies.MoviesScreen
 import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.movie
 import jetflix.composeapp.generated.resources.no_movie_selected
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -214,7 +214,7 @@ fun MainScreen() {
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
-                                imageVector = Icons.Rounded.Movie,
+                                painter = painterResource(Res.drawable.movie),
                                 contentDescription = null,
                                 modifier = Modifier.size(64.dp),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),

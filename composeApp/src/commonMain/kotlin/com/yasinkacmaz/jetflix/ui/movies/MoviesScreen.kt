@@ -22,12 +22,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.HighlightOff
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -66,11 +60,16 @@ import com.yasinkacmaz.jetflix.ui.navigation.Screen
 import com.yasinkacmaz.jetflix.ui.theme.spacing
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.app_name
+import jetflix.composeapp.generated.resources.favorite
 import jetflix.composeapp.generated.resources.favorites
 import jetflix.composeapp.generated.resources.fetching_more_movies
 import jetflix.composeapp.generated.resources.fetching_movies
+import jetflix.composeapp.generated.resources.filter_list
+import jetflix.composeapp.generated.resources.highlight_off
 import jetflix.composeapp.generated.resources.ic_jetflix
+import jetflix.composeapp.generated.resources.search
 import jetflix.composeapp.generated.resources.search_movies
+import jetflix.composeapp.generated.resources.settings
 import jetflix.composeapp.generated.resources.settings_content_description
 import jetflix.composeapp.generated.resources.title_filter_bottom_sheet
 import jetflix.composeapp.generated.resources.unable_to_fetch_movies
@@ -114,7 +113,7 @@ fun MoviesScreen(
                     onClick = { openBottomSheet = true },
                     content = {
                         Icon(
-                            imageVector = Icons.Default.FilterList,
+                            painter = painterResource(Res.drawable.filter_list),
                             contentDescription = stringResource(Res.string.title_filter_bottom_sheet),
                         )
                     },
@@ -243,7 +242,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
         actions = {
             IconButton(onClick = { navigator.navigate(Screen.Favorites) }) {
                 Icon(
-                    Icons.Default.Favorite,
+                    painter = painterResource(Res.drawable.favorite),
                     contentDescription = stringResource(Res.string.favorites),
                     tint = iconTint,
                 )
@@ -251,7 +250,7 @@ private fun JetflixAppBar(onSettingsClicked: () -> Unit) {
 
             IconButton(onClick = onSettingsClicked) {
                 Icon(
-                    Icons.Default.Settings,
+                    painter = painterResource(Res.drawable.settings),
                     contentDescription = stringResource(Res.string.settings_content_description),
                     tint = iconTint,
                 )
@@ -280,11 +279,11 @@ private fun JetflixSearchBar(searchQuery: String, onSearch: (String) -> Unit) {
         singleLine = true,
         shape = RoundedCornerShape(50),
         placeholder = { Text(stringResource(Res.string.search_movies), color = Color.Gray) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
+        leadingIcon = { Icon(painter = painterResource(Res.drawable.search), contentDescription = null) },
         trailingIcon = {
             AnimatedVisibility(visible = searchQuery.isNotEmpty()) {
                 Icon(
-                    imageVector = Icons.Default.HighlightOff,
+                    painter = painterResource(Res.drawable.highlight_off),
                     contentDescription = null,
                     modifier = Modifier.clickable { onSearch("") },
                 )

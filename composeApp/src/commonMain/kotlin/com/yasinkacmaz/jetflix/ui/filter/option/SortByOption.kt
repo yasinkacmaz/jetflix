@@ -1,17 +1,15 @@
 package com.yasinkacmaz.jetflix.ui.filter.option
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import com.yasinkacmaz.jetflix.ui.filter.FilterGrid
 import com.yasinkacmaz.jetflix.ui.filter.FilterRadioItem
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionDivider
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionTitle
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import jetflix.composeapp.generated.resources.Res
+import jetflix.composeapp.generated.resources.sort
 import jetflix.composeapp.generated.resources.sort_by
 import jetflix.composeapp.generated.resources.sort_by_original_title
 import jetflix.composeapp.generated.resources.sort_by_popularity
@@ -21,6 +19,7 @@ import jetflix.composeapp.generated.resources.sort_by_vote_average
 import jetflix.composeapp.generated.resources.sort_by_vote_count
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 data class SortByOption(override val defaultValue: SortBy) : FilterOption<SortBy> {
@@ -31,12 +30,8 @@ data class SortByOption(override val defaultValue: SortBy) : FilterOption<SortBy
     @Composable
     override fun Render(onChanged: () -> Unit) {
         val sortByState = remember(defaultValue) { mutableStateOf(currentValue) }
-        FilterSectionTitle(
-            painter = rememberVectorPainter(image = Icons.AutoMirrored.Default.Sort),
-            title = Res.string.sort_by,
-        )
-        val sortByValues = SortBy.entries
-        FilterGrid(sortByValues) { sortBy ->
+        FilterSectionTitle(painter = painterResource(Res.drawable.sort), title = Res.string.sort_by)
+        FilterGrid(SortBy.entries) { sortBy ->
             val selected = sortByState.value == sortBy
             FilterRadioItem(title = stringResource(sortBy.title), selected = selected) {
                 currentValue = sortBy

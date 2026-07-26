@@ -1,11 +1,8 @@
 package com.yasinkacmaz.jetflix.ui.filter.option
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import com.yasinkacmaz.jetflix.ui.filter.FilterGrid
 import com.yasinkacmaz.jetflix.ui.filter.FilterRadioItem
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionDivider
@@ -15,8 +12,10 @@ import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.sort_order
 import jetflix.composeapp.generated.resources.sort_order_ascending
 import jetflix.composeapp.generated.resources.sort_order_descending
+import jetflix.composeapp.generated.resources.swap_vert
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<SortOrder> {
@@ -27,12 +26,8 @@ data class SortOrderOption(override val defaultValue: SortOrder) : FilterOption<
     @Composable
     override fun Render(onChanged: () -> Unit) {
         val sortOrderState = remember(defaultValue) { mutableStateOf(currentValue) }
-        FilterSectionTitle(
-            painter = rememberVectorPainter(image = Icons.Default.SwapVert),
-            title = Res.string.sort_order,
-        )
-        val sortOrderValues = SortOrder.entries
-        FilterGrid(sortOrderValues) { sortOrder ->
+        FilterSectionTitle(painter = painterResource(Res.drawable.swap_vert), title = Res.string.sort_order)
+        FilterGrid(SortOrder.entries) { sortOrder ->
             val selected = sortOrderState.value == sortOrder
             FilterRadioItem(title = stringResource(sortOrder.title), selected = selected) {
                 currentValue = sortOrder
