@@ -28,7 +28,8 @@ class SettingsViewModelTest : ViewModelTest() {
 
         val sortedLanguages =
             listOf(Language.default, Language(englishName = "1", "", ""), Language(englishName = "2", "", ""))
-        uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false, sortedLanguages)
+        uiStates.last() shouldBe
+            SettingsViewModel.UiState(showLoading = false, languages = sortedLanguages, versionName = "2.0.0")
     }
 
     @Test
@@ -50,7 +51,7 @@ class SettingsViewModelTest : ViewModelTest() {
         val settingsViewModel = createViewModel()
         val uiStates = settingsViewModel.uiState.test()
 
-        uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false)
+        uiStates.last() shouldBe SettingsViewModel.UiState(showLoading = false, versionName = "2.0.0")
     }
 
     @Test

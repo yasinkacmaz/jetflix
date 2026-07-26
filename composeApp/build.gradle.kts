@@ -122,6 +122,7 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotest.assertions)
+            implementation(libs.compose.ui.test)
         }
     }
 }
