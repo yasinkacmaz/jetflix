@@ -158,10 +158,10 @@ fun MovieDetail(
     images: List<Image>,
     isFavorite: Boolean,
     onFavoriteClicked: () -> Unit,
-    isExpanded: Boolean,
-    isFullScreen: Boolean,
-    onBack: (() -> Unit)?,
-    onToggleFullScreen: (() -> Unit)?,
+    isExpanded: Boolean = false,
+    isFullScreen: Boolean = false,
+    onBack: (() -> Unit)? = null,
+    onToggleFullScreen: (() -> Unit)? = null,
 ) {
     val scrollState = rememberScrollState()
     val topAppBarOffset = with(LocalDensity.current) { scrollState.value.toDp() }

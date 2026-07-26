@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import com.yasinkacmaz.jetflix.ui.moviedetail.MovieDetail
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Credits
 import com.yasinkacmaz.jetflix.ui.moviedetail.credits.Gender

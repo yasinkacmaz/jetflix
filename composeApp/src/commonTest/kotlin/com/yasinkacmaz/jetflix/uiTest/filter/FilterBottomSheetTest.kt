@@ -16,8 +16,8 @@ import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.test.v2.runComposeUiTest
 import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
