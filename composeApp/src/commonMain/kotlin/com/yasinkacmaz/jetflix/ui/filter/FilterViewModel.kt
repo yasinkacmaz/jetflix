@@ -4,15 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinkacmaz.jetflix.data.service.MovieService
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModelMapper
+import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FilterViewModel(
     private val filterDataStore: FilterDataStore,
+    private val languageDataStore: LanguageDataStore,
     private val movieService: MovieService,
     private val genreUiModelMapper: GenreUiModelMapper,
 ) : ViewModel() {
@@ -25,16 +28,19 @@ class FilterViewModel(
     }
 
     private fun listenFilterStateChanges() = viewModelScope.launch {
-        val genres = try {
-            movieService.fetchGenres().genres.map(genreUiModelMapper::map)
-        } catch (exception: Exception) {
-            emptyList()
-        }
-
-        filterDataStore.filterState
-            .collectLatest { filterState ->
-                _filterState.update { filterState.copy(genres = genres) }
+        combine(
+            filterDataStore.filterState,
+            languageDataStore.languageCode,
+        ) { filterState, _ ->
+            filterState
+        }.collectLatest { filterState ->
+            val genres = try {
+                movieService.fetchGenres().genres.map(genreUiModelMapper::map)
+            } catch (_: Exception) {
+                emptyList()
             }
+            _filterState.update { filterState.copy(genres = genres) }
+        }
     }
 
     fun onFilterStateChanged(filterState: FilterState) {
