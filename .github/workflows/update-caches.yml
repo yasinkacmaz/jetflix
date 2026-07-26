@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -33,7 +33,7 @@ jobs:
           BRANCH: ${{ github.ref_name }}
       - name: 🔍 Detect Cache Key And Paths
         id: gradle-cache
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const cacheDetectorScriptPath = '/./.github/scripts/gradle-cache-detector.js'
@@ -47,17 +47,17 @@ jobs:
       - name: 🚧 Build
         run: ./gradlew --no-configuration-cache composeApp:desktopJar --continue
       - name: 💾 🐘 Save Gradle Cache
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: ${{ steps.gradle-cache.outputs['gradle-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['gradle-cache-key'] }}
       - name: 💾 🐘 Save Gradle Build Cache
-        uses: actions/cache/save/@v4
+        uses: actions/cache/save@v6
         with:
           path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
       - name: 💌 Send email report
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}

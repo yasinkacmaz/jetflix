@@ -6,9 +6,9 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'corretto'
           java-version: '21'
@@ -26,7 +26,7 @@ jobs:
       - name: Build release apk and bundle
         run: ./gradlew --no-configuration-cache assembleRelease bundleRelease
       - name: Share build output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-output
           path: |
