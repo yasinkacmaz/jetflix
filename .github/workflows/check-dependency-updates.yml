@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -25,7 +25,7 @@ jobs:
       - name: Log dependency update report
         run: cat build/dependencyUpdates/dependency_update_report.txt
       - name: 💌 Send email report
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
@@ -37,7 +37,7 @@ jobs:
             const mailSenderScript = require(`${process.env.GITHUB_WORKSPACE}${mailSenderScriptPath}`)
             mailSenderScript(subject, report)
       - name: Share dependency update reports
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dependency-update-reports
           path: build/dependencyUpdates

@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -21,19 +21,19 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: 🔍 Detect Cache Key And Paths
         id: gradle-cache
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const cacheDetectorScriptPath = '/./.github/scripts/gradle-cache-detector.js'
             const cacheDetectorScript = require(`${process.env.GITHUB_WORKSPACE}${cacheDetectorScriptPath}`)
             await cacheDetectorScript({core});
       - name: 🐘 Fetch gradle cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: ${{ steps.gradle-cache.outputs['gradle-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['gradle-cache-key'] }}
       - name: 🐘 Fetch build cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: ${{ steps.gradle-cache.outputs['build-cache-paths'] }}
           key: ${{ steps.gradle-cache.outputs['build-cache-key'] }}
