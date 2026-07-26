@@ -19,9 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.yasinkacmaz.jetflix.ui.filter.FilterSectionDivider
@@ -81,10 +81,14 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
         val animatedColors = List(colors.size) { i ->
             animateColorAsState(if (selected) colors[i] else colors[i].copy(alpha = 0f), label = "GenreColor").value
         }
-        val scale = animateFloatAsState(if (selected) 1.1f else 1f, label = "GenreScale").value
+        val scale by animateFloatAsState(if (selected) 1.1f else 1f, label = "GenreScale")
+        val shadowElevation by animateDpAsState(if (selected) 8.dp else 4.dp, label = "GenreShadow")
         val modifier = Modifier
-            .scale(scale)
-            .shadow(animateDpAsState(if (selected) 8.dp else 4.dp, label = "GenreShadow").value, shape)
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
+            .shadow(shadowElevation, shape)
             .background(MaterialTheme.colorScheme.surface)
             .border(1.5.dp, Brush.horizontalGradient(colors), shape)
             .background(Brush.horizontalGradient(animatedColors), shape)

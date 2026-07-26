@@ -154,7 +154,7 @@ fun MoviesScreen(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
                 state = gridState,
                 content = {
-                    items(movies) { movie ->
+                    items(movies, key = { it.id }) { movie ->
                         MovieItem(movie, onMovieClicked)
                     }
 

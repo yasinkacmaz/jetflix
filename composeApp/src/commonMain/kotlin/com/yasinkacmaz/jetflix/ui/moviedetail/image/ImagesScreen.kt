@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -97,7 +98,7 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
-        HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 5) {
+        HorizontalPager(state = pagerState, key = { images[it].url + it }, beyondViewportPageCount = 1) {
             Poster(images[it])
         }
         Index(position = pagerState.currentPage + 1, imageCount = pagerState.pageCount)
@@ -116,11 +117,11 @@ fun ImagesScreen(images: List<Image>, initialPage: Int) {
 @Composable
 private fun Poster(image: Image) {
     val isScaled = remember { mutableStateOf(false) }
-    val scale = animateFloatAsState(
+    val scale by animateFloatAsState(
         targetValue = if (isScaled.value) 2.5f else 1f,
         animationSpec = springAnimation,
         label = "scale",
-    ).value
+    )
     val transformOrigin = remember { mutableStateOf(TransformOrigin.Center) }
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {

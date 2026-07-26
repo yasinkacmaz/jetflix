@@ -79,7 +79,7 @@ fun <T : Any> FilterGrid(items: List<T>, itemContent: @Composable (T) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s, Alignment.CenterVertically),
         contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
     ) {
-        items(items) {
+        items(items, key = { it }) {
             itemContent(it)
         }
     }

@@ -238,7 +238,7 @@ private fun AlsoKnownAs(alsoKnownAs: List<String>) {
         item {
             Text(stringResource(Res.string.also_known_as), style = MaterialTheme.typography.bodyLarge)
         }
-        items(alsoKnownAs) {
+        items(alsoKnownAs, key = { it }) {
             Text(
                 it,
                 style = MaterialTheme.typography.bodyMedium,

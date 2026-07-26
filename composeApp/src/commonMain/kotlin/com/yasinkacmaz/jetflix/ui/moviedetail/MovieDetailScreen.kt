@@ -36,12 +36,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
@@ -295,6 +296,7 @@ fun MovieDetail(
         MovieSection(
             items = cast,
             headerResource = Res.string.cast,
+            key = { index, person -> "${person.id}_$index" },
             onSeeAllClicked = { navigator.navigate(Screen.MovieCast(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
         )
@@ -302,6 +304,7 @@ fun MovieDetail(
         MovieSection(
             items = crew,
             headerResource = Res.string.crew,
+            key = { index, person -> "${person.id}_$index" },
             onSeeAllClicked = { navigator.navigate(Screen.MovieCrew(movieDetail.id)) },
             itemContent = { item, _ -> Person(item, Modifier.width(140.dp)) },
         )
@@ -309,6 +312,7 @@ fun MovieDetail(
         MovieSection(
             items = images,
             headerResource = Res.string.images,
+            key = { _, image -> image.url },
             onSeeAllClicked = { navigator.navigate(Screen.MovieImages(movieDetail.id, 0)) },
             itemContent = { item, index -> MovieImage(item, index) },
         )
@@ -316,6 +320,7 @@ fun MovieDetail(
         MovieSection(
             items = movieDetail.productionCompanies,
             headerResource = Res.string.production_companies,
+            key = { index, company -> "${company.name}_$index" },
             onSeeAllClicked = null,
             itemContent = { item, _ -> ProductionCompany(item) },
         )
@@ -343,15 +348,18 @@ private fun Backdrop(backdropUrl: String, movieName: String, modifier: Modifier)
 @Composable
 private fun Poster(posterUrl: String, movieName: String, modifier: Modifier) {
     val isScaled = remember { mutableStateOf(false) }
-    val scale = animateFloatAsState(
+    val scale by animateFloatAsState(
         targetValue = if (isScaled.value) 2.2f else 1f,
         animationSpec = springAnimation,
         label = "scale",
-    ).value
+    )
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 24.dp),
-        modifier = modifier.scale(scale),
+        modifier = modifier.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+        },
         onClick = { isScaled.value = !isScaled.value },
     ) {
         JetflixImage(
@@ -454,11 +462,12 @@ private fun MovieField(name: String, value: String) {
 }
 
 @Composable
-private fun <T : Any> MovieSection(
-    modifier: Modifier = Modifier,
+private fun <T> MovieSection(
     items: List<T>,
     headerResource: StringResource,
     onSeeAllClicked: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    key: ((index: Int, item: T) -> Any)? = null,
     itemContent: @Composable (T, Int) -> Unit,
 ) {
     Column(
@@ -476,6 +485,7 @@ private fun <T : Any> MovieSection(
         ) {
             items(
                 count = items.size,
+                key = if (key != null) { index -> key(index, items[index]) } else null,
                 itemContent = { index ->
                     itemContent(items[index], index)
                 },

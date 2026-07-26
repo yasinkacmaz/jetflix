@@ -133,9 +133,12 @@ class MoviesViewModel(
             }
             if (loadResult.movies.isNotEmpty()) {
                 _movies.update { currentItems ->
-                    if (page == 1) currentItems.clear()
-                    currentItems.addAll(loadResult.movies)
-                    currentItems
+                    val combined = if (page == 1) {
+                        loadResult.movies
+                    } else {
+                        currentItems + loadResult.movies
+                    }
+                    combined.distinctBy { it.id }.toMutableList()
                 }
                 currentPage = page
                 isLastPage = loadResult.isLastPage
