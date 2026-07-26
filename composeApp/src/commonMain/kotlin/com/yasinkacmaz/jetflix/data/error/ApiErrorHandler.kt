@@ -19,6 +19,7 @@ class ApiErrorHandler {
         -> ApiError.NoNetworkConnection
 
         is CancellationException -> error
+
         else -> ApiError.Unknown("${error::class.simpleName}: ${error.message.orEmpty()}")
     }
 }

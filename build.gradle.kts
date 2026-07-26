@@ -33,6 +33,7 @@ allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     ktlint {
+        version.set("1.8.0")
         reporters {
             reporter(ReporterType.CHECKSTYLE)
         }

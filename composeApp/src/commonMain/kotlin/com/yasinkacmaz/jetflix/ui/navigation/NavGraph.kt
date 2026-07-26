@@ -41,16 +41,20 @@ fun SetupNavDisplay(backStack: MutableList<Screen>, onBack: () -> Unit) {
         entryProvider = { key ->
             when (key) {
                 is Screen.Splash -> NavEntry(key) { SplashScreen() }
+
                 is Screen.Movies -> NavEntry(key) {
                     MainScreen()
                 }
+
                 is Screen.MovieDetail -> NavEntry(key) {
                     MovieDetailScreen(movieDetailViewModel(key.movieId))
                 }
+
                 is Screen.MovieImages -> NavEntry(key) {
                     val uiState by movieDetailViewModel(key.movieId).uiState.collectAsState()
                     ImagesScreen(uiState.images, key.initialPage)
                 }
+
                 is Screen.MovieCast -> NavEntry(key) {
                     val uiState by movieDetailViewModel(key.movieId).uiState.collectAsState()
                     PeopleGridScreen(
@@ -58,6 +62,7 @@ fun SetupNavDisplay(backStack: MutableList<Screen>, onBack: () -> Unit) {
                         uiState.credits.cast,
                     )
                 }
+
                 is Screen.MovieCrew -> NavEntry(key) {
                     val uiState by movieDetailViewModel(key.movieId).uiState.collectAsState()
                     PeopleGridScreen(
@@ -65,12 +70,15 @@ fun SetupNavDisplay(backStack: MutableList<Screen>, onBack: () -> Unit) {
                         uiState.credits.crew,
                     )
                 }
+
                 is Screen.Profile -> NavEntry(key) {
                     ProfileScreen(koinViewModel { parametersOf(key.personId) })
                 }
+
                 is Screen.Favorites -> NavEntry(key) {
                     FavoritesScreen(favoritesViewModel = koinViewModel())
                 }
+
                 is Screen.Settings -> NavEntry(key) {
                     SettingsScreen()
                 }
