@@ -6,8 +6,8 @@ import com.yasinkacmaz.jetflix.data.remote.ImagesResponse
 import com.yasinkacmaz.jetflix.data.remote.MovieDetailResponse
 import com.yasinkacmaz.jetflix.data.remote.MoviesResponse
 import com.yasinkacmaz.jetflix.data.service.MovieService
+import com.yasinkacmaz.jetflix.util.parseBody
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
@@ -21,7 +21,7 @@ class MovieClient(private val httpClient: HttpClient) : MovieService {
                     parameter(it.key, it.value)
                 }
             }
-        }.body()
+        }.parseBody()
 
     override suspend fun search(pageNumber: Int, searchQuery: String, includeAdult: Boolean): MoviesResponse =
         httpClient.get("search/movie") {
@@ -30,14 +30,16 @@ class MovieClient(private val httpClient: HttpClient) : MovieService {
                 parameters.append("query", searchQuery)
                 parameters.append("include_adult", includeAdult.toString())
             }
-        }.body()
+        }.parseBody()
 
-    override suspend fun fetchGenres(): GenresResponse = httpClient.get("genre/movie/list").body()
+    override suspend fun fetchGenres(): GenresResponse = httpClient.get("genre/movie/list").parseBody()
 
-    override suspend fun fetchMovieDetail(movieId: Int): MovieDetailResponse = httpClient.get("movie/$movieId").body()
+    override suspend fun fetchMovieDetail(movieId: Int): MovieDetailResponse =
+        httpClient.get("movie/$movieId").parseBody()
 
     override suspend fun fetchMovieCredits(movieId: Int): CreditsResponse =
-        httpClient.get("movie/$movieId/credits").body()
+        httpClient.get("movie/$movieId/credits").parseBody()
 
-    override suspend fun fetchMovieImages(movieId: Int): ImagesResponse = httpClient.get("movie/$movieId/images").body()
+    override suspend fun fetchMovieImages(movieId: Int): ImagesResponse =
+        httpClient.get("movie/$movieId/images").parseBody()
 }
