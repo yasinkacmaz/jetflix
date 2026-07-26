@@ -29,10 +29,6 @@ android {
         versionName = applicationVersion
     }
 
-    signingConfigs {
-        create("release")
-    }
-
     buildTypes {
         getByName("debug") {
             isDefault = true
@@ -43,7 +39,6 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             isDebuggable = false
-            signingConfig = signingConfigs.getByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
