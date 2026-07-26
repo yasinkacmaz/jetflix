@@ -8,7 +8,7 @@ val generateVersionFiles = tasks.register("generateVersionFiles") {
     description = "Generates all version-derived files (xcconfig, WasmVersionInfo)"
 
     val xconfigFile = layout.projectDirectory.file("../iosApp/Configuration/Version.xcconfig").asFile
-    val wasmOutputDir = layout.buildDirectory.dir("generated/source/version/wasmJsMain")
+    val wasmOutputDir = layout.buildDirectory.dir("generated/source/version/wasmJsMain").get().asFile
 
     inputs.property("versionName", appVersionName)
     inputs.property("versionCode", appVersionCode)
@@ -40,7 +40,7 @@ val generateVersionFiles = tasks.register("generateVersionFiles") {
                 const val VERSION_CODE = $code
             }
             """.trimIndent()
-        val wasmFile = wasmOutputDir.get().asFile.resolve("com/yasinkacmaz/jetflix/util/WasmVersionInfo.kt")
+        val wasmFile = wasmOutputDir.resolve("com/yasinkacmaz/jetflix/util/WasmVersionInfo.kt")
         wasmFile.parentFile.mkdirs()
         if (!wasmFile.exists() || wasmFile.readText() != wasmContent) {
             wasmFile.writeText(wasmContent)
@@ -67,7 +67,8 @@ tasks.named<Sync>("wasmJsBrowserDistribution") {
     inputs.property("versionName", appVersionName)
     doLast {
         val name = inputs.properties["versionName"] as String
-        val versionFile = file("$destinationDir/version.txt")
+        val destDir = destinationDir
+        val versionFile = destDir.resolve("version.txt")
         versionFile.writeText(name)
     }
     finalizedBy("wasmJsBrowserDistributionZip")
@@ -77,7 +78,8 @@ tasks.named<Sync>("wasmJsBrowserDevelopmentExecutableDistribution") {
     inputs.property("versionName", appVersionName)
     doLast {
         val name = inputs.properties["versionName"] as String
-        val versionFile = file("$destinationDir/version.txt")
+        val destDir = destinationDir
+        val versionFile = destDir.resolve("version.txt")
         versionFile.writeText(name)
     }
 }
