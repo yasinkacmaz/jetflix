@@ -31,7 +31,7 @@ fun FilterBottomSheet(filterState: FilterState?, onDismiss: () -> Unit, onFilter
                     title = stringResource(Res.string.loading_filter_options),
                 )
             } else {
-                val filterOptions = remember(filterState.genres.size) { filterState.toFilterOptions() }
+                val filterOptions = remember(filterState) { filterState.toFilterOptions() }
                 filterOptions.forEach { filterOption ->
                     filterOption.Render {
                         val newState = filterOption.modifyFilterState(filterState)

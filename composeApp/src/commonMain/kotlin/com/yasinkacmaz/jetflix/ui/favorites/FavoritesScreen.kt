@@ -83,7 +83,7 @@ fun FavoritesScreen(favoritesViewModel: FavoritesViewModel) {
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
                 content = {
-                    items(favorites) {
+                    items(favorites, key = { it.id }) {
                         MovieItem(it, onMovieClicked)
                     }
                 },
