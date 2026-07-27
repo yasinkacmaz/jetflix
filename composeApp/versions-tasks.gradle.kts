@@ -39,6 +39,7 @@ val generateVersionFiles = tasks.register("generateVersionFiles") {
                 const val VERSION_NAME = "$name"
                 const val VERSION_CODE = $code
             }
+            
             """.trimIndent()
         val wasmFile = wasmOutputDir.resolve("com/yasinkacmaz/jetflix/util/WasmVersionInfo.kt")
         wasmFile.parentFile.mkdirs()

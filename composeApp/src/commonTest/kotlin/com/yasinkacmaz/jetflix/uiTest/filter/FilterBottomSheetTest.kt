@@ -18,7 +18,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.v2.runComposeUiTest
-import com.yasinkacmaz.jetflix.data.remote.Genre
 import com.yasinkacmaz.jetflix.ui.filter.FilterBottomSheet
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
@@ -32,7 +31,7 @@ import kotlin.test.Test
 class FilterBottomSheetTest {
 
     private val genreNames = listOf("Action", "Drama", "Animation", "Comedy")
-    private val genres = genreNames.mapIndexed { index, name -> GenreUiModel(genre = Genre(id = index, name = name)) }
+    private val genres = genreNames.mapIndexed { index, name -> GenreUiModel(id = index, name = name) }
 
     @Test
     fun `Should render filter components correctly`() = runComposeUiTest {
