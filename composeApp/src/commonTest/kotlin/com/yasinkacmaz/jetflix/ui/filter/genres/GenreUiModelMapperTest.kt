@@ -12,6 +12,7 @@ class GenreUiModelMapperTest {
 
         val uiModel = mapper.map(input)
 
-        uiModel.genre shouldBe input
+        uiModel.id shouldBe input.id
+        uiModel.name shouldBe input.name
     }
 }

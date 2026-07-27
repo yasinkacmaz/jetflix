@@ -17,10 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,6 +29,7 @@ import com.yasinkacmaz.jetflix.ui.filter.FilterSectionTitle
 import com.yasinkacmaz.jetflix.ui.filter.FilterState
 import com.yasinkacmaz.jetflix.ui.filter.genres.GenreUiModel
 import com.yasinkacmaz.jetflix.ui.theme.spacing
+import com.yasinkacmaz.jetflix.util.randomColor
 import jetflix.composeapp.generated.resources.Res
 import jetflix.composeapp.generated.resources.category
 import jetflix.composeapp.generated.resources.genres
@@ -46,7 +47,10 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Render(onChanged: () -> Unit) {
-        val (genreUiModels, selectedGenreIds) = currentValue
+        val (genreUiModels, initialSelectedGenreIds) = defaultValue
+        val selectedGenreIdsState = remember(initialSelectedGenreIds) {
+            mutableStateOf(initialSelectedGenreIds.toSet())
+        }
         FilterSectionTitle(painter = painterResource(Res.drawable.category), title = Res.string.genres)
         FlowRow(
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.l, vertical = MaterialTheme.spacing.xs),
@@ -54,13 +58,17 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.s),
         ) {
             genreUiModels.forEach { genreUiModel ->
-                val genreId = genreUiModel.genre.id
-                GenreChip(uiModel = genreUiModel) { selected ->
-                    selectedGenreIds.removeAll { it == genreId }
+                val genreId = genreUiModel.id
+                val isSelected = genreId in selectedGenreIdsState.value
+                GenreChip(uiModel = genreUiModel, selected = isSelected) { selected ->
+                    val newSet = selectedGenreIdsState.value.toMutableSet()
                     if (selected) {
-                        selectedGenreIds.add(genreId)
+                        newSet.add(genreId)
+                    } else {
+                        newSet.remove(genreId)
                     }
-                    currentValue = currentValue.copy(second = selectedGenreIds)
+                    selectedGenreIdsState.value = newSet
+                    currentValue = currentValue.copy(second = newSet.toMutableList())
                     onChanged()
                 }
             }
@@ -69,15 +77,11 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
     }
 
     @Composable
-    private fun GenreChip(uiModel: GenreUiModel, onClicked: (Boolean) -> Unit) {
-        val colors = listOf(uiModel.primaryColor, uiModel.secondaryColor)
+    private fun GenreChip(uiModel: GenreUiModel, selected: Boolean, onClicked: (Boolean) -> Unit) {
+        val primaryColor = remember(uiModel.name) { Color.randomColor() }
+        val secondaryColor = remember(uiModel.name) { Color.randomColor() }
+        val colors = listOf(primaryColor, secondaryColor)
         val shape = RoundedCornerShape(percent = 50)
-        // I've added only genreId and selectedGenreIds to remember because genres does not change.
-        // I also am concerned(trying to reduce) about the slot table memory footprint.
-        // IMHO this is the fine tuned option of remembering the genre chip selection state.
-        var selected by remember(uiModel.genre.id, selectedGenreIds) {
-            mutableStateOf(uiModel.genre.id in currentValue.second)
-        }
         val animatedColors = List(colors.size) { i ->
             animateColorAsState(if (selected) colors[i] else colors[i].copy(alpha = 0f), label = "GenreColor").value
         }
@@ -95,14 +99,13 @@ class GenresOption(override val defaultValue: GenresFilterOption) : FilterOption
             .selectable(
                 selected,
                 onClick = {
-                    selected = selected.not()
-                    onClicked(selected)
+                    onClicked(!selected)
                 },
             )
             .padding(horizontal = MaterialTheme.spacing.s, vertical = MaterialTheme.spacing.xs)
 
         Text(
-            text = uiModel.genre.name.orEmpty(),
+            text = uiModel.name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge,
