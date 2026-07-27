@@ -8,8 +8,8 @@ import com.yasinkacmaz.jetflix.ui.settings.LanguageDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -28,19 +28,12 @@ class FilterViewModel(
     }
 
     private fun listenFilterStateChanges() = viewModelScope.launch {
-        combine(
-            filterDataStore.filterState,
-            languageDataStore.languageCode,
-        ) { filterState, _ ->
-            filterState
-        }.collectLatest { filterState ->
-            val genres = try {
-                movieService.fetchGenres().genres.map(genreUiModelMapper::map)
-            } catch (_: Exception) {
-                emptyList()
-            }
-            _filterState.update { filterState.copy(genres = genres) }
+        val genresFlow = languageDataStore.languageCode.map {
+            runCatching { movieService.fetchGenres().genres.map(genreUiModelMapper::map) }.getOrDefault(emptyList())
         }
+
+        combine(filterDataStore.filterState, genresFlow) { filterState, genres -> filterState.copy(genres = genres) }
+            .collect { updatedFilterState -> _filterState.update { updatedFilterState } }
     }
 
     fun onFilterStateChanged(filterState: FilterState) {
